@@ -6,6 +6,7 @@ export const site = {
   nav: [
     { label: "Home", href: "/" },
     { label: "Products", href: "/products/" },
+    { label: "Migration", href: "/migration/" },
     { label: "Trust", href: "/trust/" },
     { label: "Docs", href: "/docs/" }
   ],
@@ -123,7 +124,8 @@ export const site = {
       status: "planned",
       notes: "Tools pages should preserve browser-local utility boundaries."
     }
-  ]
+  ],
+  migrationLedgerPath: "/migration/"
 };
 
 export const pages = [
@@ -138,7 +140,7 @@ export const pages = [
     heading: "ComplyEaze Public",
     summary:
       "A standalone public repo for the pages people can inspect, cite, fork, and review without crossing into tenant data, portal automation, or private app infrastructure.",
-    primaryCta: { label: "View migration map", href: "/docs/" },
+    primaryCta: { label: "View migration ledger", href: "/migration/" },
     secondaryCta: { label: "Review trust policy", href: "/trust/" },
     sections: [
       {
@@ -168,6 +170,19 @@ export const pages = [
     heading: "Route by job, then show the boundary before action",
     summary:
       "A unified story does not mean one visual costume for everything. It means readers can see why Axal, Pack, Tools, and Sanchika exist together without confusing workspace custody, browser-local drafts, extension behavior, or design-system proof.",
+    sections: []
+  },
+  {
+    slug: "migration",
+    outputPath: "migration/index.html",
+    urlPath: "/migration/",
+    title: "Route Migration Ledger - ComplyEaze Public",
+    description:
+      "Public route migration ledger for moving ComplyEaze-family pages out of the private app.",
+    eyebrow: "Migration ledger",
+    heading: "No cleanup before route evidence",
+    summary:
+      "Every public route family needs a destination, source evidence, cleanup rule, and rollback path before private-app pages are removed or redirected.",
     sections: []
   },
   {

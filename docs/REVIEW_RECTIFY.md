@@ -40,6 +40,10 @@ pnpm metadata:check
 git diff --check
 ```
 
+The GitHub `Review gate` status enforces unresolved review-thread and
+requested-changes blockers. It does not replace the review-rectify table in the
+pull request or the maintainer's current-diff review.
+
 ## Visual Gate
 
 Visual review must cover:
