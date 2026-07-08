@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { createServer } from "node:http";
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { chromium } from "playwright";
 import { pages } from "../src/site-data.mjs";
@@ -92,11 +93,20 @@ function contentType(filePath) {
 }
 
 function browserLaunchOptions() {
+  const homeChromiumShell = path.join(
+    os.homedir(),
+    "Library",
+    "Caches",
+    "ms-playwright",
+    "chromium_headless_shell-1193",
+    "chrome-mac",
+    "headless_shell"
+  );
   const executablePath = [
     process.env.PUBLIC_CHROMIUM_EXECUTABLE,
     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
     "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
-    "/Users/tapishkhandelwal/Library/Caches/ms-playwright/chromium_headless_shell-1193/chrome-mac/headless_shell"
+    homeChromiumShell
   ].find((candidate) => candidate && existsSync(candidate));
 
   return executablePath ? { executablePath } : {};
