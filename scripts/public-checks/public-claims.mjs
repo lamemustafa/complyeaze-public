@@ -16,6 +16,8 @@ const publicClaimScanFiles = [
   ...contentDataFiles,
   "AGENTS.md",
   "README.md",
+  "PRODUCT.md",
+  "DESIGN.md",
   "CONTRIBUTING.md",
   "SECURITY.md",
   "SUPPORT.md",
@@ -40,10 +42,10 @@ const publicClaimScanFiles = [
 
 const riskyClaimPatterns = [
   { label: "government approval claim", pattern: /\bgovernment[- ]approved\b/i },
-  { label: "portal-operator approval claim", pattern: /\b(?:GSTN|CBIC)\s+(?:approved|certified|endorsed)\b/i },
-  { label: "official product claim", pattern: /\bofficial\s+(?:ComplyEaze|Axal|Pack|Tools|Sanchika)\s+(?:product|site|service|app|tool|page|surface)\b/i },
+  { label: "portal-operator approval claim", pattern: /\b(?:GSTN|CBIC)[\s-]+(?:approved|certified|endorsed)\b/i },
+  { label: "official product claim", pattern: /\bofficial\s+(?:ComplyEaze|Axal|Pack|Tools|Sanchika)[\s-]+(?:product|site|service|app|tool|page|surface)\b/i },
   { label: "brand endorsement claim", pattern: /\b(?:endorsed|certified|approved)\s+by\s+(?:ComplyEaze|Axal|Pack|Tools|Sanchika)\b/i },
-  { label: "brand certification claim", pattern: /\b(?:ComplyEaze|Axal|Pack|Tools|Sanchika)\s+(?:certified|approved|endorsed)\b/i },
+  { label: "brand certification claim", pattern: /\b(?:ComplyEaze|Axal|Pack|Tools|Sanchika)[\s-]+(?:certified|approved|endorsed)\b/i },
   { label: "powered-by brand claim", pattern: /\bpowered\s+by\s+(?:ComplyEaze|Axal|Pack|Tools|Sanchika)\b/i },
   { label: "certified GST filing claim", pattern: /\bcertified GST filing\b/i },
   { label: "production-ready claim", pattern: /\bproduction[- ]ready\b/i },
@@ -63,22 +65,25 @@ const policyExampleFiles = new Set([
 export function assertNoRiskyClaimsOutsidePolicy(root, findings) {
   for (const filePath of publicClaimScanFiles) {
     const text = readFile(root, filePath);
-    const lines = text.split(/\r?\n/);
-    const state = { inFence: false, inExplicitDenySection: false };
-    for (const [index, line] of lines.entries()) {
-      if (isPolicyExampleLine(filePath, line, state)) continue;
-      for (const { label, pattern } of riskyClaimPatterns) {
-        if (pattern.test(line)) {
-          findings.push(`${filePath}:${index + 1}: unsupported ${label}`);
-        }
+    const maskedText = maskPolicyExamples(filePath, text);
+    for (const { label, pattern } of riskyClaimPatterns) {
+      for (const match of maskedText.matchAll(toGlobalPattern(pattern))) {
+        findings.push(`${filePath}:${lineForOffset(maskedText, match.index ?? 0)}: unsupported ${label}`);
       }
     }
   }
 }
 
-function isPolicyExampleLine(filePath, line, state) {
-  if (!policyExampleFiles.has(filePath)) return false;
+function maskPolicyExamples(filePath, text) {
+  if (!policyExampleFiles.has(filePath)) return text;
 
+  const lines = text.split(/(\r?\n)/);
+  const state = { inFence: false, inExplicitDenySection: false };
+  return lines.map((line) => shouldMaskPolicyLine(filePath, line, state) ? maskLine(line) : line).join("");
+}
+
+function shouldMaskPolicyLine(filePath, line, state) {
+  if (/^\r?\n$/.test(line)) return false;
   const trimmed = line.trim();
   if (/^```/.test(trimmed)) {
     state.inFence = !state.inFence;
@@ -87,15 +92,37 @@ function isPolicyExampleLine(filePath, line, state) {
   if (state.inFence) return true;
 
   if (/^##\s+/.test(trimmed)) {
-    state.inExplicitDenySection = /^##\s+(Banned Without Separate Review|Not Allowed)\b/i.test(trimmed);
-    return false;
+    state.inExplicitDenySection = isExplicitDenyHeading(filePath, trimmed);
+    return state.inExplicitDenySection;
   }
   if (/^Not allowed:\s*$/i.test(trimmed)) {
-    state.inExplicitDenySection = true;
-    return false;
+    return true;
   }
 
   return state.inExplicitDenySection;
+}
+
+function isExplicitDenyHeading(filePath, trimmed) {
+  if (filePath === "docs/PUBLIC_CLAIM_POLICY.md") {
+    return /^##\s+Banned Without Separate Review\b/i.test(trimmed);
+  }
+  if (filePath === "TRADEMARKS.md") {
+    return /^##\s+Not Allowed\b/i.test(trimmed);
+  }
+  return false;
+}
+
+function maskLine(line) {
+  return line.replace(/[^\r\n]/g, " ");
+}
+
+function toGlobalPattern(pattern) {
+  const flags = pattern.flags.includes("g") ? pattern.flags : `${pattern.flags}g`;
+  return new RegExp(pattern.source, flags);
+}
+
+function lineForOffset(text, offset) {
+  return text.slice(0, offset).split(/\r?\n/).length;
 }
 
 function readFile(root, filePath) {
