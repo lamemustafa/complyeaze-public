@@ -93,6 +93,7 @@ function assertNoForbiddenContent() {
 
 function assertVisualPolicy() {
   const text = readFileSync(path.join(root, "docs/VISUAL_TESTING.md"), "utf8");
+  const visualCheck = readFileSync(path.join(root, "scripts/visual-check.mjs"), "utf8");
   const requiredTerms = [
     "desktop",
     "tablet",
@@ -112,6 +113,20 @@ function assertVisualPolicy() {
   const missing = requiredTerms.filter((term) => !text.toLowerCase().includes(term));
   if (missing.length > 0) {
     throw new Error(`Visual policy is missing terms: ${missing.join(", ")}`);
+  }
+  const requiredExecutableTerms = [
+    "reducedMotion",
+    "prefers-reduced-motion",
+    "focusTarget",
+    "visible focus indicator",
+    "broken images",
+    "blank content blocks",
+    "horizontally clipped controls",
+    "overlapped first-viewport controls"
+  ];
+  const missingExecutableTerms = requiredExecutableTerms.filter((term) => !visualCheck.includes(term));
+  if (missingExecutableTerms.length > 0) {
+    throw new Error(`Visual check is missing executable coverage: ${missingExecutableTerms.join(", ")}`);
   }
 }
 

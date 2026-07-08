@@ -141,7 +141,7 @@ const policySections = {
     {
       title: "Visual artifacts",
       body:
-        "scripts/visual-check.mjs renders every public page at desktop, tablet, and mobile widths, writes screenshots under test-results/public-visual, and records a summary for review. CI retains this as the public-visual-evidence artifact."
+        "scripts/visual-check.mjs renders every public page at desktop, tablet, and mobile widths, writes screenshots under test-results/public-visual, and records reduced-motion state, focus targets, overflow, link, touch-target, image, blank-section, clipping, and first-viewport overlap evidence for review. CI retains this as the public-visual-evidence artifact."
     },
     {
       title: "Build artifacts",

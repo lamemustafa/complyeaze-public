@@ -32,7 +32,9 @@ Each release should record:
 - CI artifact `public-site-build`, containing the generated `dist` build output
   retained for 14 days.
 - CI artifact `public-visual-evidence`, containing rendered screenshots and
-  visual summaries retained for 30 days.
+  visual summaries with reduced-motion state, focus target, overflow, link,
+  touch-target, image, blank-section, clipping, and overlap evidence retained
+  for 30 days.
 - Route manifest generated at `dist/route-manifest.json`, matched to
   `src/site-data.mjs`, rendered HTML files, canonical URLs, and `sitemap.xml`.
 - Desktop and mobile screenshots.
