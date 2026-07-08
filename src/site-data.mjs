@@ -13,32 +13,115 @@ export const site = {
     {
       name: "ComplyEaze",
       role: "Umbrella trust and learning surface",
+      promise:
+        "Keeps the public product-family story separate from authenticated app operations.",
+      proof:
+        "Public pages, migration docs, and review gates live in this open-source repository.",
+      boundary:
+        "No private app runtime, taxpayer data, credential, document, portal session, or workspace custody.",
       status: "Public content boundary",
       href: "/"
     },
     {
       name: "Axal",
-      role: "CA practice operating system",
-      status: "Private app remains separate",
+      role: "Practice operating system",
+      promise:
+        "Turns matters, obligations, evidence, clients, documents, and tasks into a reviewable desk for CA teams.",
+      proof: "Workspace-first, permission-aware, source-led compliance work.",
+      boundary: "Account, workspace, roles, saved operational context.",
+      status: "Firm workbench",
       href: "https://axal.complyeaze.com"
     },
     {
       name: "Pack",
-      role: "Local-first GST portal utility",
-      status: "Public pages and release evidence only",
+      role: "GST Portal evidence utility",
+      promise:
+        "Keeps the narrow filed-return collection job local, source-first, and separate from the full practice system.",
+      proof: "No-login public posture; no backend upload or telemetry claim.",
+      boundary: "Browser extension, local artifact control, no custody claim.",
+      status: "GST evidence utility",
       href: "https://pack.complyeaze.com"
     },
     {
       name: "Tools",
       role: "Browser-local compliance utilities",
-      status: "Static public utility surface",
+      promise:
+        "Creates quick compliance review artifacts from pasted rows or plain text without needing an account.",
+      proof: "Utility surfaces stay browser-local until a deeper product lane exists.",
+      boundary: "Browser-local drafts; no account, upload, or tenant state.",
+      status: "Public utility bench",
       href: "https://tools.complyeaze.com"
     },
     {
       name: "Sanchika",
-      role: "Design-system SDK and public adoption story",
-      status: "Independent open-source repo",
-      href: "https://github.com/lamemustafa/sanchika"
+      role: "Design harness",
+      promise:
+        "Defines the trust and design brief loop before visual language spreads across the product family.",
+      proof:
+        "Live gallery deploys from master, with smoke checks for stale public proof.",
+      boundary: "Design contracts and static artifacts; no compliance truth.",
+      status: "Evidence loop",
+      href: "https://sanchika.complyeaze.com/"
+    }
+  ],
+  proofLedger: [
+    {
+      label: "Authoritative design host",
+      value: "sanchika.complyeaze.com",
+      detail: "Static gallery deployed from Sanchika master."
+    },
+    {
+      label: "Public story surface",
+      value: "complyeaze.com",
+      detail: "Routes the family by job, boundary, and proof."
+    },
+    {
+      label: "Adoption rule",
+      value: "Pilot first",
+      detail: "Contracts follow browser-tested surfaces, not taste alone."
+    }
+  ],
+  trustSignals: [
+    {
+      title: "Source before confidence",
+      body:
+        "Every product surface should reveal where a state came from before asking a professional to act on it."
+    },
+    {
+      title: "Boundaries stay visible",
+      body:
+        "Pack remains local-first, Axal remains workspace-scoped, Tools stays browser-local, and Sanchika stays a harness."
+    },
+    {
+      title: "Craft must be proven",
+      body:
+        "The next design system step is rendered pilots with browser evidence, not a bigger pile of aspirational tokens."
+    }
+  ],
+  migrationRoutes: [
+    {
+      source: "src/app/(main)/page.tsx",
+      destination: "/",
+      status: "seeded",
+      notes: "Root public story and product-family map seeded into complyeaze-public."
+    },
+    {
+      source: "src/app/(axal)/(marketing)/axal/page.tsx",
+      destination: "/products/#axal",
+      status: "planned",
+      notes: "Public Axal story can migrate after auth callbacks and clean host routing stay private."
+    },
+    {
+      source: "src/app/(pack)/**",
+      destination: "/products/#pack",
+      status: "planned",
+      notes: "Pack source/status/support pages need release-facts import before route ownership moves."
+    },
+    {
+      source: "src/app/(tools)/**",
+      destination: "/products/#tools",
+      status: "planned",
+      notes: "Tools pages should preserve browser-local utility boundaries."
     }
   ]
 };
@@ -61,7 +144,7 @@ export const pages = [
       {
         title: "What moves here",
         body:
-          "Marketing, docs, trust, policy, status, changelog, release evidence, public SEO assets, and synthetic screenshots belong in this repo."
+          "Marketing, docs, trust, policy, status, changelog, release evidence, public SEO assets, product-family maps, and synthetic screenshots belong in this repo."
       },
       {
         title: "What stays private",
@@ -82,9 +165,9 @@ export const pages = [
     title: "Product Family - ComplyEaze Public",
     description: "Public map of ComplyEaze, Axal, Pack, Tools, and Sanchika.",
     eyebrow: "Product family",
-    heading: "One public map, separate operating boundaries",
+    heading: "Route by job, then show the boundary before action",
     summary:
-      "The public site explains each surface without pretending that one repository owns every runtime. Public pages can link to private or external products while keeping the source boundary honest.",
+      "A unified story does not mean one visual costume for everything. It means readers can see why Axal, Pack, Tools, and Sanchika exist together without confusing workspace custody, browser-local drafts, extension behavior, or design-system proof.",
     sections: []
   },
   {
@@ -105,9 +188,9 @@ export const pages = [
           "Screenshots, fixtures, demos, and issue reports must avoid real taxpayer identifiers, documents, credentials, portal responses, and customer details."
       },
       {
-        title: "Narrow claims",
+        title: "Source before confidence",
         body:
-          "Security, privacy, release, store, browser-local, and statutory claims must point to source, release, runtime, or official evidence."
+          "Security, privacy, release, store, browser-local, and statutory claims must point to source, release, runtime, or official evidence before asking a professional to act."
       },
       {
         title: "Reserved marks",

@@ -15,6 +15,7 @@ export function renderPage(page) {
     <meta property="og:type" content="website">
     <meta property="og:url" content="${canonical}">
     <link rel="stylesheet" href="/assets/styles.css">
+    ${page.slug === "products" ? '<link rel="stylesheet" href="/assets/products.css">' : ""}
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
@@ -71,22 +72,61 @@ function renderSections(sections) {
 }
 
 function renderProducts() {
-  return `<section class="product-table-section" aria-label="ComplyEaze product-family map">
+  return `<section class="proof-ledger" aria-label="Public proof ledger">
+    ${site.proofLedger
+      .map(
+        (item) => `<article>
+          <p>${escapeHtml(item.label)}</p>
+          <strong>${escapeHtml(item.value)}</strong>
+          <span>${escapeHtml(item.detail)}</span>
+        </article>`,
+      )
+      .join("")}
+  </section>
+  <section class="product-map" aria-label="ComplyEaze product-family map">
+    ${site.products
+      .map(
+        (product) => `<article id="${escapeHtml(product.name.toLowerCase())}">
+          <a class="product-name" href="${escapeHtml(product.href)}">${escapeHtml(product.name)}</a>
+          <p class="product-role">${escapeHtml(product.role)}</p>
+          <dl>
+            <div><dt>Promise</dt><dd>${escapeHtml(product.promise)}</dd></div>
+            <div><dt>Proof</dt><dd>${escapeHtml(product.proof)}</dd></div>
+            <div><dt>Boundary</dt><dd>${escapeHtml(product.boundary)}</dd></div>
+            <div><dt>Status</dt><dd>${escapeHtml(product.status)}</dd></div>
+          </dl>
+        </article>`,
+      )
+      .join("")}
+  </section>
+  <section class="trust-signal-grid" aria-label="Trust signals">
+    ${site.trustSignals
+      .map(
+        (signal) => `<article>
+          <h2>${escapeHtml(signal.title)}</h2>
+          <p>${escapeHtml(signal.body)}</p>
+        </article>`,
+      )
+      .join("")}
+  </section>
+  <section class="product-table-section" aria-label="Public migration inventory">
     <table>
       <thead>
         <tr>
-          <th scope="col">Surface</th>
-          <th scope="col">Public role</th>
-          <th scope="col">Boundary</th>
+          <th scope="col">Source</th>
+          <th scope="col">Destination</th>
+          <th scope="col">Status</th>
+          <th scope="col">Notes</th>
         </tr>
       </thead>
       <tbody>
-        ${site.products
+        ${site.migrationRoutes
           .map(
-            (product) => `<tr>
-              <th scope="row" data-label="Surface"><a href="${product.href}">${escapeHtml(product.name)}</a></th>
-              <td data-label="Public role">${escapeHtml(product.role)}</td>
-              <td data-label="Boundary">${escapeHtml(product.status)}</td>
+            (route) => `<tr>
+              <th scope="row" data-label="Source">${escapeHtml(route.source)}</th>
+              <td data-label="Destination">${escapeHtml(route.destination)}</td>
+              <td data-label="Status">${escapeHtml(route.status)}</td>
+              <td data-label="Notes">${escapeHtml(route.notes)}</td>
             </tr>`,
           )
           .join("")}
