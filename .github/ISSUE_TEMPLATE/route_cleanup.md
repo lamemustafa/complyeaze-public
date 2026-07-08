@@ -7,7 +7,9 @@ labels: route-cleanup
 
 ## Route Inventory
 
+- Source host:
 - Source route:
+- Destination host:
 - Public destination:
 - Route family:
 

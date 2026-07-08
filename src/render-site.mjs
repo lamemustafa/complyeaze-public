@@ -156,11 +156,14 @@ function renderMigrationRoutes(routes = []) {
     <table>
       <thead>
         <tr>
+          <th scope="col">Source host</th>
           <th scope="col">Source route</th>
+          <th scope="col">Destination host</th>
           <th scope="col">Destination</th>
           <th scope="col">Cleanup</th>
           <th scope="col">Evidence</th>
           <th scope="col">Redirect</th>
+          <th scope="col">Cleanup PR</th>
           <th scope="col">Rollback</th>
         </tr>
       </thead>
@@ -168,12 +171,15 @@ function renderMigrationRoutes(routes = []) {
         ${routes
           .map(
             (route) => `<tr>
-              <th scope="row" data-label="Source route">${escapeHtml(route.sourceRoute)}</th>
+              <th scope="row" data-label="Source host">${escapeHtml(route.sourceHost)}</th>
+              <td data-label="Source route">${escapeHtml(route.sourceRoute)}</td>
+              <td data-label="Destination host">${escapeHtml(route.destinationHost)}</td>
               <td data-label="Destination">${escapeHtml(route.destinationRoute)}</td>
               <td data-label="Cleanup">${escapeHtml(route.cleanupStatus)}</td>
-              <td data-label="Evidence">${escapeHtml(route.evidenceStatus)}</td>
-              <td data-label="Redirect">${escapeHtml(route.redirectStatus)}</td>
-              <td data-label="Rollback">${escapeHtml(route.rollback)}</td>
+              <td data-label="Evidence">${escapeHtml(route.evidenceStatus)}; hosted evidence: ${escapeHtml(route.hostedEvidenceUrl)}</td>
+              <td data-label="Redirect">${escapeHtml(route.redirectStatus)}; plan: ${escapeHtml(route.redirectPlan)}</td>
+              <td data-label="Cleanup PR">${escapeHtml(route.parentCleanupPr)}</td>
+              <td data-label="Rollback">${escapeHtml(route.rollback)}; owner/path: ${escapeHtml(route.rollbackCommandOrOwner)}</td>
             </tr>`,
           )
           .join("")}
