@@ -16,6 +16,7 @@ import {
 } from "./public-checks/migration-ledger.mjs";
 import { assertPolicyPages } from "./public-checks/policy-pages.mjs";
 import { requiredFiles } from "./public-checks/required-files.mjs";
+import { assertRepositorySettings } from "./public-checks/repository-settings.mjs";
 import {
   assertReviewGateFixturePolicy,
   assertReviewGateFixtures
@@ -267,6 +268,7 @@ function run() {
     assertDeployWorkflow(root);
     assertHostedRoutesPolicy(root);
     assertLegalGovernance(root);
+    assertRepositorySettings(root);
     assertReviewGateFixturePolicy(root);
     assertRouteCleanupGovernance(root);
   }
