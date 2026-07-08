@@ -48,6 +48,8 @@ build, links, metadata, and rendered screenshots.
 
 - `/about/` explains the public repo boundary and product-family proof model.
 - `/contact/` routes public-site, security, and private-product inquiries without collecting form data.
+- `/products/pack/` routes to Pack-owned source, release, privacy, security, and support facts without copying extension claims.
+- `/products/tools/` routes to Tools-owned utility runtime and release evidence without copying utility implementation.
 - `/privacy/` defines the public-repo privacy boundary.
 - `/terms/` defines public-site and open-source usage boundaries.
 - `/status/` reports repository and static-site readiness, not private app uptime.

@@ -1,4 +1,5 @@
 import { axalPages } from "./axal-data.mjs";
+import { gatewayPages } from "./gateway-data.mjs";
 import { policyPages } from "./policy-data.mjs";
 import { rootResourcePages } from "./root-resource-data.mjs";
 
@@ -136,4 +137,10 @@ const corePages = [
   }
 ];
 
-export const pages = [...corePages, ...rootResourcePages, ...policyPages, ...axalPages];
+export const pages = [
+  ...corePages,
+  ...rootResourcePages,
+  ...policyPages,
+  ...gatewayPages,
+  ...axalPages
+];

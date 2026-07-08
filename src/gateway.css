@@ -1,0 +1,66 @@
+.gateway-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.gateway-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  padding-top: clamp(2rem, 5vw, 4rem);
+}
+
+.gateway-grid article {
+  background: rgba(255, 255, 255, 0.74);
+  border: 2px solid var(--line);
+  display: grid;
+  gap: 0.85rem;
+  min-height: 15rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+}
+
+.gateway-grid h2 {
+  font-size: clamp(1.25rem, 2.8vw, 2rem);
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.gateway-grid p {
+  color: var(--muted-ink);
+  line-height: 1.62;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.gateway-evidence {
+  border-block: 2px solid var(--ink);
+  margin-top: clamp(1rem, 4vw, 2rem);
+  padding: clamp(1.25rem, 4vw, 2rem) 0;
+}
+
+.gateway-evidence h2 {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: clamp(1.65rem, 4vw, 3.2rem);
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  margin: 0 0 1rem;
+  text-wrap: balance;
+}
+
+.gateway-evidence ol {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+  padding-left: 1.4rem;
+}
+
+.gateway-evidence li {
+  color: var(--muted-ink);
+  line-height: 1.6;
+  max-width: 78ch;
+  padding-left: 0.25rem;
+}

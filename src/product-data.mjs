@@ -29,7 +29,7 @@ export const products = [
     proof: "No-login public posture; no backend upload or telemetry claim.",
     boundary: "Browser extension, local artifact control, no custody claim.",
     status: "GST evidence utility",
-    href: "https://pack.complyeaze.com"
+    href: "/products/pack/"
   },
   {
     name: "Tools",
@@ -39,7 +39,7 @@ export const products = [
     proof: "Utility surfaces stay browser-local until a deeper product lane exists.",
     boundary: "Browser-local drafts; no account, upload, or tenant state.",
     status: "Public utility bench",
-    href: "https://tools.complyeaze.com"
+    href: "/products/tools/"
   },
   {
     name: "Sanchika",
@@ -105,14 +105,14 @@ export const migrationRoutes = [
   },
   {
     source: "src/app/(pack)/**",
-    destination: "/products/#pack",
-    status: "planned",
-    notes: "Pack source/status/support pages need release-facts import before route ownership moves."
+    destination: "/products/pack/",
+    status: "gateway seeded",
+    notes: "Family-level Pack gateway seeded; Pack host still owns source/status/support/release facts before route ownership moves."
   },
   {
     source: "src/app/(tools)/**",
-    destination: "/products/#tools",
-    status: "planned",
-    notes: "Tools pages should preserve browser-local utility boundaries."
+    destination: "/products/tools/",
+    status: "gateway seeded",
+    notes: "Family-level Tools gateway seeded; utility host still owns browser-local runtime and release evidence."
   }
 ];
