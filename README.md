@@ -35,6 +35,7 @@ build, links, metadata, and rendered screenshots.
 
 ## Governance
 
+- Source license: [Apache License 2.0](LICENSE)
 - [Contributing](CONTRIBUTING.md)
 - [Security](SECURITY.md)
 - [Support](SUPPORT.md)

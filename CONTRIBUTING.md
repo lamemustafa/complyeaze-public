@@ -42,6 +42,13 @@ Dependency and GitHub Actions updates must follow
 review release evidence when the dependency affects build, browser automation,
 CI, artifacts, or deployment, and do not auto-merge dependency PRs.
 
+## License And Trademark Boundaries
+
+The source license is Apache License 2.0, but ComplyEaze-family marks remain
+reserved. Review [LICENSE.brand.md](LICENSE.brand.md) and
+[TRADEMARKS.md](TRADEMARKS.md) before changing brand, fork attribution,
+endorsement, or compatibility language.
+
 ## Pull Requests
 
 Use the pull request template and fill every applicable section. Before review:
