@@ -4,56 +4,13 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { assertAxalPages } from "./public-checks/axal-pages.mjs";
+import { assertPolicyPages } from "./public-checks/policy-pages.mjs";
+import { requiredFiles } from "./public-checks/required-files.mjs";
 import { migrationLedger } from "../src/migration-data.mjs";
 import { pages } from "../src/site-data.mjs";
 
 const root = process.cwd();
 const mode = process.argv.find((arg) => arg.startsWith("--")) ?? "--all";
-
-const requiredFiles = [
-  "AGENTS.md",
-  "README.md",
-  "CONTRIBUTING.md",
-  "CODE_OF_CONDUCT.md",
-  "SECURITY.md",
-  "SUPPORT.md",
-  "LICENSE",
-  "LICENSE.brand.md",
-  "TRADEMARKS.md",
-  "PRODUCT.md",
-  "DESIGN.md",
-  "docs/MIGRATION.md",
-  "docs/REVIEW_RECTIFY.md",
-  "docs/ROUTE_MIGRATION_LEDGER.md",
-  "docs/PUBLIC_CLAIM_POLICY.md",
-  "docs/RELEASE_GATES.md",
-  "docs/REPOSITORY_SETTINGS.md",
-  "docs/VISUAL_TESTING.md",
-  ".github/PULL_REQUEST_TEMPLATE.md",
-  ".github/CODEOWNERS",
-  ".github/ISSUE_TEMPLATE/bug_report.md",
-  ".github/ISSUE_TEMPLATE/content_or_claim.md",
-  ".github/ISSUE_TEMPLATE/page_request.md",
-  ".github/ISSUE_TEMPLATE/config.yml",
-  ".github/workflows/ci.yml",
-  ".github/workflows/review-gate.yml",
-  "scripts/check-pr-review-gate.mjs",
-  "scripts/sync-review-gate-status.mjs",
-  "scripts/build-site.mjs",
-  "scripts/visual-check.mjs",
-  "scripts/public-checks/axal-pages.mjs",
-  "src/site-data.mjs",
-  "src/migration-data.mjs",
-  "src/product-data.mjs",
-  "src/axal-data.mjs",
-  "src/axal-more-data.mjs",
-  "src/render-site.mjs",
-  "src/render-axal.mjs",
-  "src/styles.css",
-  "src/products.css",
-  "src/migration.css",
-  "src/axal.css"
-];
 
 const forbiddenPatterns = [
   { label: "secret-like env assignment", pattern: /\b[A-Z0-9_]*(SECRET|TOKEN|PASSWORD|PRIVATE_KEY|COOKIE)[A-Z0-9_]*\s*=\s*["']?[^"'\s]+/i },
@@ -236,7 +193,7 @@ function assertPublicPages() {
     const html = readFileSync(path.join(root, "dist", page.outputPath), "utf8");
     if (!html.includes("<main")) findings.push(`${page.outputPath}: missing main landmark`);
     if (!html.includes(page.heading)) findings.push(`${page.outputPath}: missing page heading`);
-    if (/Prisma|Redis|BullMQ|portal automation/.test(html) && page.slug !== "index") {
+    if (/Prisma|Redis|BullMQ|portal automation/.test(html) && page.slug !== "index" && page.type !== "policy") {
       findings.push(`${page.outputPath}: private-app boundary terms outside overview page`);
     }
   }
@@ -284,6 +241,7 @@ function run() {
   if (["--all", "--public"].includes(mode)) {
     assertPublicPages();
     assertMigrationLedger();
+    assertPolicyPages(root);
     assertAxalPages();
   }
   if (["--all", "--links"].includes(mode)) {

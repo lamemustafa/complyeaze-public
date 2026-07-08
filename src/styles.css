@@ -209,11 +209,23 @@ h1 {
   margin: 0;
 }
 
+.site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .site-footer a {
   align-items: center;
   display: inline-flex;
   font-weight: 800;
   min-height: 44px;
+}
+
+.site-footer a[aria-current="page"] {
+  background: var(--ink);
+  color: white;
+  padding-inline: 0.65rem;
 }
 
 @media (max-width: 680px) {

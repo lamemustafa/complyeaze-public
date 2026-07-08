@@ -59,8 +59,9 @@
   color: white;
   font-size: 0.82rem;
   font-weight: 800;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   padding: 0.35rem 0.55rem;
-  white-space: nowrap;
 }
 
 .migration-ledger dl {
