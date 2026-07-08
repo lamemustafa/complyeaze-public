@@ -57,7 +57,7 @@ const policySections = {
     {
       title: "Governance posture",
       body:
-        "Legal governance, repository-settings gates, contributor-intake rules, CODEOWNERS, and issue contact links are now checked by scripts/check-public-repo.mjs so source-license, trademark, review, and public-issue boundaries cannot drift silently."
+        "Legal governance, repository-settings gates, contributor-intake rules, dependency-surface policy, CODEOWNERS, and issue contact links are now checked by scripts/check-public-repo.mjs so source-license, trademark, supply-chain, review, and public-issue boundaries cannot drift silently."
     },
     {
       title: "Migration posture",
@@ -76,6 +76,11 @@ const policySections = {
     }
   ],
   changelog: [
+    {
+      title: "2026-07-08 - Dependency surface policy",
+      body:
+        "Extended scripts/public-checks/dependency-policy.mjs so package.json, pnpm-lock.yaml, Dependabot update blocks, workflow pnpm and Node versions, lifecycle scripts, runtime dependencies, and pinned external GitHub Actions stay aligned with the public static-site trust boundary."
+    },
     {
       title: "2026-07-08 - Contributor intake governance",
       body:
@@ -146,7 +151,12 @@ const policySections = {
     {
       title: "Claim and safety checks",
       body:
-        "scripts/check-public-repo.mjs rejects secret-like assignments, PAN-like and GSTIN-like identifiers, missing governance files, unsupported policy scope, broken route metadata, incomplete migration-ledger evidence, missing legal governance anchors, missing repository-settings gates, missing contributor-intake guardrails, and missing route-cleanup governance prompts."
+        "scripts/check-public-repo.mjs rejects secret-like assignments, PAN-like and GSTIN-like identifiers, missing governance files, unsupported policy scope, broken route metadata, incomplete migration-ledger evidence, missing legal governance anchors, missing repository-settings gates, missing contributor-intake guardrails, missing dependency-surface policy, and missing route-cleanup governance prompts."
+    },
+    {
+      title: "Dependency surface evidence",
+      body:
+        "scripts/public-checks/dependency-policy.mjs keeps package.json private, blocks runtime dependencies and lifecycle scripts, limits reviewed devDependencies to Playwright, verifies pnpm-lock.yaml stays within the current Playwright surface, checks Dependabot groups and reviewers, aligns pnpm@10.28.2 and Node 24 across workflows, and requires every external GitHub Action to be pinned to a reviewed SHA."
     },
     {
       title: "Contributor intake evidence",
