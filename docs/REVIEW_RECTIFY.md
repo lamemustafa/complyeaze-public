@@ -7,9 +7,10 @@ Use this policy for every non-trivial change before commit, PR, or deployment.
 - Critical: secret or real taxpayer data exposure, misleading government or
   statutory claim, malicious link/download behavior, or trademark misuse that
   implies official endorsement.
-- High: unsupported security/privacy/release claim, broken primary public route,
-  inaccessible critical page state, unsafe form behavior, or failed visual gate
-  on a launch-critical page.
+- High: unsupported security/privacy/release claim, unsupported parent-route
+  cleanup or cutover claim, broken primary public route, inaccessible critical
+  page state, unsafe form behavior, or failed visual gate on a launch-critical
+  page.
 - Medium: broken secondary link, incomplete responsive state, weak empty/error
   state, unclear evidence, stale copy, or maintainability issue with realistic
   public impact.
