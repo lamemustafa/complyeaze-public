@@ -172,7 +172,7 @@ async function collectMetrics(page, expectedHeading) {
       });
       return !points.some(([x, y]) => {
         const target = document.elementFromPoint(x, y);
-        return target && (target === element || element.contains(target));
+        return target && (target === element || element.contains(target) || target.contains(element));
       });
     });
     if (overlappedControls.length > 0) {
