@@ -1,27 +1,6 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
-
-const contentDataFiles = [
-  "src/site-data.mjs",
-  "src/gateway-data.mjs",
-  "src/root-resource-data.mjs",
-  "src/product-data.mjs",
-  "src/axal-data.mjs",
-  "src/axal-more-data.mjs",
-  "src/migration-data.mjs"
-];
-
-const riskyClaimPatterns = [
-  { label: "government approval claim", pattern: /\bgovernment approved\b/i },
-  { label: "GSTN approval claim", pattern: /\bGSTN (approved|certified|endorsed)\b/i },
-  { label: "CBIC approval claim", pattern: /\bCBIC (approved|certified|endorsed)\b/i },
-  { label: "official ComplyEaze claim", pattern: /\bofficial ComplyEaze product\b/i },
-  { label: "ComplyEaze endorsement claim", pattern: /\bendorsed by ComplyEaze\b/i },
-  { label: "certified GST filing claim", pattern: /\bcertified GST filing\b/i },
-  { label: "audit-proof claim", pattern: /\baudit-proof\b/i },
-  { label: "CA verification claim", pattern: /\bCA verified\b/i },
-  { label: "absolute local-only claim", pattern: /\bnothing leaves your device\b/i }
-];
+import { assertNoRiskyClaimsOutsidePolicy } from "./public-claims.mjs";
 
 const requiredFiles = {
   sourceLicense: "LICENSE",
@@ -247,17 +226,6 @@ export function assertLegalGovernance(root) {
 
   if (findings.length > 0) {
     throw new Error(`Legal governance findings:\n${findings.join("\n")}`);
-  }
-}
-
-function assertNoRiskyClaimsOutsidePolicy(root, findings) {
-  for (const filePath of contentDataFiles) {
-    const text = readFile(root, filePath);
-    for (const { label, pattern } of riskyClaimPatterns) {
-      if (pattern.test(text)) {
-        findings.push(`${filePath}: unsupported ${label}`);
-      }
-    }
   }
 }
 
