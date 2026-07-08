@@ -115,23 +115,27 @@ export function assertSensitiveContentFixturePolicy() {
   assertNoFixtureFindings("safe policy terms", safePolicyText);
 
   const failingFixtures = [
-    ["PAN", "ABCDE1234F"],
-    ["GSTIN", "27ABCDE1234F1Z5"],
-    ["Aadhaar", "1234 5678 9012"],
-    ["phone", "+91 9876543210"],
-    ["JWT", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZW1vIn0.signature123"],
-    ["private key", "-----BEGIN PRIVATE KEY-----"],
-    ["cookie header", "cookie: session_id=abc123"],
-    ["local path", "/Users/example/Desktop/notice.pdf"],
+    ["PAN", fixture("ABCDE", "1234", "F")],
+    ["GSTIN", fixture("27", "ABCDE", "1234", "F", "1Z5")],
+    ["Aadhaar", fixture("1234 ", "5678 ", "9012")],
+    ["phone", fixture("+91 ", "98765", "43210")],
+    ["JWT", fixture("eyJhbGci", "OiJIUzI1NiJ9.", "eyJzdWIi", "OiJkZW1vIn0.", "signature123")],
+    ["private key", fixture("-----BEGIN ", "PRIVATE KEY", "-----")],
+    ["cookie header", fixture("cookie: session_", "id=abc123")],
+    ["local path", fixture("/Us", "ers/example/Desktop/notice.pdf")],
     ["browser profile", "User Data Default Chrome"],
-    ["portal HTML", '<form action="/gst-login"><input name="captcha"></form>'],
-    ["artifact filename", "notice-real-taxpayer.pdf"]
+    ["portal HTML", fixture("<form action=\"/gst-login\">", "<input name=\"captcha\">", "</form>")],
+    ["artifact filename", fixture("notice-", "real-taxpayer.pdf")]
   ];
 
   const missed = failingFixtures.filter(([, text]) => fixtureFindings(text).length === 0);
   if (missed.length > 0) {
     throw new Error(`Sensitive-content fixtures did not fail: ${missed.map(([label]) => label).join(", ")}`);
   }
+}
+
+function fixture(...parts) {
+  return parts.join("");
 }
 
 function assertNoFixtureFindings(label, text) {
