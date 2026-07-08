@@ -34,6 +34,7 @@
 - [ ] `pnpm links:check`
 - [ ] `pnpm metadata:check`
 - [ ] `git diff --check`
+- [ ] Review-gate fixture checks passed when review policy or gate scripts changed.
 
 ## Review-Rectify
 

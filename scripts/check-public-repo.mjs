@@ -9,6 +9,10 @@ import { assertDeployWorkflow } from "./public-checks/deploy-workflow.mjs";
 import { assertGatewayPages } from "./public-checks/gateway-pages.mjs";
 import { assertPolicyPages } from "./public-checks/policy-pages.mjs";
 import { requiredFiles } from "./public-checks/required-files.mjs";
+import {
+  assertReviewGateFixturePolicy,
+  assertReviewGateFixtures
+} from "./public-checks/review-gate-fixtures.mjs";
 import { assertRootResourcePages } from "./public-checks/root-resource-pages.mjs";
 import { assertRouteManifest } from "./public-checks/route-manifest.mjs";
 import { migrationLedger } from "../src/migration-data.mjs";
@@ -234,6 +238,9 @@ function run() {
   if (["--all", "--lint", "--test", "--public"].includes(mode)) {
     assertNoForbiddenContent();
   }
+  if (["--all", "--test"].includes(mode)) {
+    assertReviewGateFixtures(root);
+  }
   if (["--all", "--typecheck"].includes(mode)) {
     assertScriptSyntax();
   }
@@ -255,6 +262,7 @@ function run() {
     assertAxalPages();
     assertCiArtifacts(root);
     assertDeployWorkflow(root);
+    assertReviewGateFixturePolicy(root);
   }
   if (["--all", "--links"].includes(mode)) {
     assertLinks();

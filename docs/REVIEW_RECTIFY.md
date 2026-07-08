@@ -47,6 +47,12 @@ The GitHub `Review gate` status enforces unresolved review-thread and
 requested-changes blockers. It does not replace the review-rectify table in the
 pull request or the maintainer's current-diff review.
 
+`pnpm test` runs `scripts/test-review-gate-fixtures.mjs`, which proves the local
+review gate fails unresolved threads, current-head requested changes, and
+missing strict current-head reviews while allowing current-head approvals that
+clear stale requested changes. This fixture test is offline and must not require
+GitHub tokens or live PR state.
+
 ## Visual Gate
 
 Visual review must cover:
