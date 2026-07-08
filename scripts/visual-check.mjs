@@ -42,6 +42,7 @@ try {
       const page = await context.newPage();
       await page.goto(`${baseUrl}${pageDef.urlPath}`, { waitUntil: "networkidle" });
       const metrics = await collectMetrics(page, pageDef.heading);
+      await page.evaluate(() => document.activeElement?.blur());
       await page.screenshot({
         path: path.join(artifactDir, `${pageDef.slug}-${viewport.name}.png`),
         fullPage: true
