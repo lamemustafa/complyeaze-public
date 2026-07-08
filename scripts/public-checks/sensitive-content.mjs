@@ -18,6 +18,9 @@ const textExtensions = new Set([
 ]);
 const checkedArtifactExtensions = new Set([".gif", ".har", ".jpeg", ".jpg", ".pdf", ".png", ".webp", ".zip"]);
 const allowedArtifactFiles = new Set([]);
+const jwtPrefix = ["e", "y", "J"].join("");
+const privateKeyLabel = ["PRIVATE", " KEY"].join("");
+const privateKeyHeaderPattern = ["-{5}BEGIN (?:RSA |EC |OPENSSH |DSA |)?", privateKeyLabel, "-{5}"].join("");
 
 const sensitivePatterns = [
   {
@@ -42,11 +45,11 @@ const sensitivePatterns = [
   },
   {
     label: "JWT-like token",
-    pattern: /\beyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\b/g
+    pattern: new RegExp(`\\b${jwtPrefix}[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}\\b`, "g")
   },
   {
     label: "private key block",
-    pattern: /-----BEGIN (?:RSA |EC |OPENSSH |DSA |)?PRIVATE KEY-----/g
+    pattern: new RegExp(privateKeyHeaderPattern, "g")
   },
   {
     label: "cookie header",
@@ -119,8 +122,8 @@ export function assertSensitiveContentFixturePolicy() {
     ["GSTIN", fixture("27", "ABCDE", "1234", "F", "1Z5")],
     ["Aadhaar", fixture("1234 ", "5678 ", "9012")],
     ["phone", fixture("+91 ", "98765", "43210")],
-    ["JWT", fixture("eyJhbGci", "OiJIUzI1NiJ9.", "eyJzdWIi", "OiJkZW1vIn0.", "signature123")],
-    ["private key", fixture("-----BEGIN ", "PRIVATE KEY", "-----")],
+    ["JWT", fixture(jwtPrefix, "hbGci", "OiJIUzI1NiJ9.", jwtPrefix, "zdWIi", "OiJkZW1vIn0.", "signature123")],
+    ["private key", fixture("-----BEGIN ", privateKeyLabel, "-----")],
     ["cookie header", fixture("cookie: session_", "id=abc123")],
     ["local path", fixture("/Us", "ers/example/Desktop/notice.pdf")],
     ["browser profile", "User Data Default Chrome"],
