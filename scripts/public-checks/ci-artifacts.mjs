@@ -8,10 +8,7 @@ const visualTestingPath = "docs/VISUAL_TESTING.md";
 const reviewRectifyPath = "docs/REVIEW_RECTIFY.md";
 const policyDataPath = "src/policy-data.mjs";
 
-const uploadAction = "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02";
-
 const requiredArtifactSnippets = [
-  uploadAction,
   "if: ${{ always() }}",
   "name: public-site-build",
   "path: |",
@@ -22,6 +19,8 @@ const requiredArtifactSnippets = [
   "test-results/public-visual",
   "retention-days: 30"
 ];
+
+const requiredPinnedActions = ["actions/upload-artifact"];
 
 const forbiddenArtifactSnippets = [
   "node_modules",
@@ -50,6 +49,12 @@ export function assertCiArtifacts(root) {
   for (const snippet of requiredArtifactSnippets) {
     if (!ciWorkflow.includes(snippet)) {
       findings.push(`${ciWorkflowPath}: missing artifact control ${snippet}`);
+    }
+  }
+  for (const actionName of requiredPinnedActions) {
+    const pattern = new RegExp(`uses: ${escapeRegex(actionName)}@[a-f0-9]{40}`, "g");
+    if (![...ciWorkflow.matchAll(pattern)].length) {
+      findings.push(`${ciWorkflowPath}: ${actionName} must be pinned to a 40-character SHA`);
     }
   }
   const alwaysUploadCount = [...ciWorkflow.matchAll(/if: \$\{\{ always\(\) \}\}/g)].length;
@@ -81,4 +86,8 @@ export function assertCiArtifacts(root) {
   if (findings.length > 0) {
     throw new Error(`CI artifact findings:\n${findings.join("\n")}`);
   }
+}
+
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
