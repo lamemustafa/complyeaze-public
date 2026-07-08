@@ -35,6 +35,14 @@
 - [ ] `pnpm metadata:check`
 - [ ] `git diff --check`
 - [ ] Review-gate fixture checks passed when review policy or gate scripts changed.
+- [ ] Dependency-policy review completed when npm, lockfile, or GitHub Actions changed.
+
+## Dependency Updates, If Any
+
+- [ ] Changelog, release notes, source diff, or advisory evidence reviewed.
+- [ ] GitHub Actions remain pinned to reviewed SHAs.
+- [ ] No private app, tenant-data, portal automation, document-storage, Prisma,
+      Redis, BullMQ, telemetry, or credential-handling dependency was added.
 
 ## Review-Rectify
 

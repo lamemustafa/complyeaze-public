@@ -29,6 +29,9 @@ Include:
 - Links, downloads, redirects, and forms must avoid unsafe targets and misleading
   collection of sensitive data.
 - Forks must not imply official ComplyEaze operation or endorsement.
+- Dependency and GitHub Actions security updates must follow
+  [docs/DEPENDENCY_POLICY.md](docs/DEPENDENCY_POLICY.md), stay scoped to public
+  repo needs, and preserve pinned Actions plus the full public gate.
 
 ## Verification
 
