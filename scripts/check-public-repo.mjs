@@ -4,6 +4,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { assertAxalPages } from "./public-checks/axal-pages.mjs";
+import { assertGatewayPages } from "./public-checks/gateway-pages.mjs";
 import { assertPolicyPages } from "./public-checks/policy-pages.mjs";
 import { requiredFiles } from "./public-checks/required-files.mjs";
 import { assertRootResourcePages } from "./public-checks/root-resource-pages.mjs";
@@ -242,6 +243,7 @@ function run() {
   if (["--all", "--public"].includes(mode)) {
     assertPublicPages();
     assertMigrationLedger();
+    assertGatewayPages(root);
     assertPolicyPages(root);
     assertRootResourcePages(root);
     assertAxalPages();

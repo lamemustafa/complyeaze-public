@@ -26,17 +26,17 @@ on the rendered `/migration/` page.
 ## Pack Public Pages
 
 - Source: `src/app/(pack)/{source,status,changelog,support,security,privacy,terms,acceptable-use,docs,release-automation,gst}/page.tsx`
-- Destination: `pack.complyeaze.com` for product pages, with `complyeaze-public` carrying only family-level context
-- Status: planned
+- Destination: `/products/pack/` for family-level context, then `pack.complyeaze.com` for product-owned source, install, release, privacy, security, and support facts
+- Status: gateway seeded; cleanup blocked
 - Cleanup rule: do not copy extension permissions, release claims, or store-readiness language without Pack release evidence.
-- Evidence: Pack remains a separate public extension repository with local-first safety rules.
+- Evidence: family-level Pack gateway is seeded without copying parent Pack pages; Pack remains a separate public extension repository and host for runtime/release facts.
 - Rollback: keep parent Pack pages or redirects until Pack-hosted pages and release-facts checks are green.
 
 ## Tools Public Utilities
 
 - Source: `src/app/(tools)/evidence-packet/page.tsx` and `src/app/(tools)/sanchika/page.tsx`
-- Destination: `tools.complyeaze.com` for utility pages, with `complyeaze-public` carrying family-level context
-- Status: planned
+- Destination: `/products/tools/` for family-level context, then `tools.complyeaze.com` for utility-owned runtime and release evidence
+- Status: gateway seeded; cleanup blocked
 - Cleanup rule: do not add account, upload, backend, or document-custody behavior to this repository.
-- Evidence: Tools surfaces should stay browser-local and source-backed before any parent cleanup.
+- Evidence: family-level Tools gateway is seeded without copying parent utility implementation; Tools surfaces should stay browser-local and source-backed before any parent cleanup.
 - Rollback: keep parent Tools routes until the static utility host serves equivalent public pages.

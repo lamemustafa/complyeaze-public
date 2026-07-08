@@ -32,12 +32,12 @@ export const migrationLedger = [
     source:
       "src/app/(pack)/{source,status,changelog,support,security,privacy,terms,acceptable-use,docs,release-automation,gst}/page.tsx",
     destination:
-      "pack.complyeaze.com for product pages, with complyeaze-public carrying only family-level context",
-    status: "planned",
+      "/products/pack/ for family-level context, then pack.complyeaze.com for product-owned source, install, release, privacy, security, and support facts",
+    status: "gateway seeded; cleanup blocked",
     cleanup:
       "Do not copy extension permissions, release claims, or store-readiness language without Pack release evidence.",
     evidence:
-      "Pack remains a separate public extension repository with local-first safety rules.",
+      "Family-level Pack gateway is seeded without copying parent Pack pages; Pack remains a separate public extension repository and host for runtime/release facts.",
     rollback:
       "Keep parent Pack pages or redirects until Pack-hosted pages and release-facts checks are green."
   },
@@ -46,12 +46,12 @@ export const migrationLedger = [
     source:
       "src/app/(tools)/evidence-packet/page.tsx and src/app/(tools)/sanchika/page.tsx",
     destination:
-      "tools.complyeaze.com for utility pages, with complyeaze-public carrying family-level context",
-    status: "planned",
+      "/products/tools/ for family-level context, then tools.complyeaze.com for utility-owned runtime and release evidence",
+    status: "gateway seeded; cleanup blocked",
     cleanup:
       "Do not add account, upload, backend, or document-custody behavior to this repository.",
     evidence:
-      "Tools surfaces should stay browser-local and source-backed before any parent cleanup.",
+      "Family-level Tools gateway is seeded without copying parent utility implementation; Tools surfaces should stay browser-local and source-backed before any parent cleanup.",
     rollback:
       "Keep parent Tools routes until the static utility host serves equivalent public pages."
   }
