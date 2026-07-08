@@ -9,6 +9,7 @@ const pullRequestTemplatePath = ".github/PULL_REQUEST_TEMPLATE.md";
 const releaseGatesPath = "docs/RELEASE_GATES.md";
 const reviewRectifyPath = "docs/REVIEW_RECTIFY.md";
 const packageJsonPath = "package.json";
+const githubSettingsScriptPath = "scripts/check-github-repository-settings.mjs";
 
 const requiredRepositoryTerms = [
   "GitHub repository: `lamemustafa/complyeaze-public`",
@@ -23,6 +24,8 @@ const requiredRepositoryTerms = [
   "No branch deletion",
   "No non-fast-forward updates",
   "Pull request required",
+  "One approving review required",
+  "Code-owner review required",
   "Stale reviews dismissed on push",
   "Review thread resolution required",
   "Squash merge only",
@@ -35,7 +38,9 @@ const requiredRepositoryTerms = [
   "GitHub Pages is configured to use GitHub Actions",
   "`github-pages` environment has been reviewed",
   "Do not enable Projects or Wiki",
-  "Do not make `main` directly pushable"
+  "Do not make `main` directly pushable",
+  "pnpm github:settings",
+  "Live Settings Audit"
 ];
 
 const requiredCiTerms = [
@@ -61,6 +66,7 @@ const requiredCiTerms = [
 
 const requiredPackageTerms = [
   "\"verify\"",
+  "\"github:settings\"",
   "pnpm lint",
   "pnpm typecheck",
   "pnpm test",
@@ -70,6 +76,18 @@ const requiredPackageTerms = [
   "pnpm links:check",
   "pnpm metadata:check",
   "git diff --check"
+];
+
+const requiredGithubSettingsScriptTerms = [
+  "lamemustafa/complyeaze-public",
+  "Protect main",
+  "refs/heads/main",
+  "allowed_merge_methods",
+  "required_approving_review_count",
+  "require_code_owner_review",
+  "required_status_checks",
+  "Public site gates",
+  "Review gate"
 ];
 
 const requiredReviewGateTerms = [
@@ -108,7 +126,18 @@ const requiredPullRequestTerms = [
   "Latest review has no open Critical or High findings"
 ];
 
-const requiredReleaseAndReviewTerms = [
+const requiredReleaseTerms = [
+  "Public site gates",
+  "Review gate",
+  "public-site-build",
+  "public-visual-evidence",
+  "ENABLE_GITHUB_PAGES_DEPLOY",
+  "pnpm github:settings",
+  "git diff --check",
+  "not replace the review-rectify table"
+];
+
+const requiredReviewRectifyTerms = [
   "Public site gates",
   "Review gate",
   "public-site-build",
@@ -128,6 +157,7 @@ export function assertRepositorySettings(root) {
   const releaseGates = readFile(root, releaseGatesPath);
   const reviewRectify = readFile(root, reviewRectifyPath);
   const packageJson = readFile(root, packageJsonPath);
+  const githubSettingsScript = readFile(root, githubSettingsScriptPath);
 
   assertTerms(repositorySettingsPath, repositorySettings, requiredRepositoryTerms, findings);
   assertTerms(ciWorkflowPath, ciWorkflow, requiredCiTerms, findings);
@@ -135,13 +165,10 @@ export function assertRepositorySettings(root) {
   assertTerms(pagesDeployWorkflowPath, pagesDeployWorkflow, requiredPagesDeployTerms, findings);
   assertTerms(pullRequestTemplatePath, pullRequestTemplate, requiredPullRequestTerms, findings);
   assertTerms(packageJsonPath, packageJson, requiredPackageTerms, findings);
+  assertTerms(githubSettingsScriptPath, githubSettingsScript, requiredGithubSettingsScriptTerms, findings);
 
-  for (const [filePath, text] of [
-    [releaseGatesPath, releaseGates],
-    [reviewRectifyPath, reviewRectify]
-  ]) {
-    assertTerms(filePath, text, requiredReleaseAndReviewTerms, findings);
-  }
+  assertTerms(releaseGatesPath, releaseGates, requiredReleaseTerms, findings);
+  assertTerms(reviewRectifyPath, reviewRectify, requiredReviewRectifyTerms, findings);
 
   if (!/uses: actions\/checkout@[a-f0-9]{40}/.test(ciWorkflow)) {
     findings.push(`${ciWorkflowPath}: checkout action must stay pinned to a 40-character SHA`);
