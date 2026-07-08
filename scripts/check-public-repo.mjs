@@ -105,7 +105,16 @@ function assertVisualPolicy() {
     "clipped controls",
     "overlapped first-viewport controls",
     "overlapped first-viewport content blocks",
-    "active motion styles under reduced-motion"
+    "active motion styles under reduced-motion",
+    "assertVisualArtifacts",
+    "visual screenshots",
+    "expected one main landmark",
+    "unnamed buttons",
+    "assertVisualSummarySchema",
+    "markdownCell",
+    "writeIncompleteSummary",
+    "Disposition",
+    "Failures"
   ];
   const missingExecutableTerms = requiredExecutableTerms.filter((term) => !visualCheck.includes(term));
   if (missingExecutableTerms.length > 0) {
