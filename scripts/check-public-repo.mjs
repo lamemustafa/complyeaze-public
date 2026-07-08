@@ -8,6 +8,7 @@ import { assertGatewayPages } from "./public-checks/gateway-pages.mjs";
 import { assertPolicyPages } from "./public-checks/policy-pages.mjs";
 import { requiredFiles } from "./public-checks/required-files.mjs";
 import { assertRootResourcePages } from "./public-checks/root-resource-pages.mjs";
+import { assertRouteManifest } from "./public-checks/route-manifest.mjs";
 import { migrationLedger } from "../src/migration-data.mjs";
 import { pages } from "../src/site-data.mjs";
 
@@ -156,6 +157,9 @@ function assertMetadata() {
   if (!existsSync(path.join(root, "dist", "sitemap.xml"))) {
     findings.push("dist/sitemap.xml: missing");
   }
+  if (!existsSync(path.join(root, "dist", "route-manifest.json"))) {
+    findings.push("dist/route-manifest.json: missing");
+  }
   if (findings.length > 0) {
     throw new Error(`Metadata findings:\n${findings.join("\n")}`);
   }
@@ -253,6 +257,7 @@ function run() {
   }
   if (["--all", "--metadata"].includes(mode)) {
     assertMetadata();
+    assertRouteManifest(root);
   }
 
   console.log(`complyeaze-public ${mode.slice(2)} check passed`);

@@ -7,6 +7,23 @@ import { renderPage } from "../src/render-site.mjs";
 const root = process.cwd();
 const dist = path.join(root, "dist");
 
+function routeManifest() {
+  return {
+    schemaVersion: 1,
+    origin: "https://complyeaze.com",
+    pageCount: pages.length,
+    routes: pages.map((page) => ({
+      slug: page.slug,
+      type: page.type ?? "core",
+      urlPath: page.urlPath,
+      outputPath: page.outputPath,
+      canonical: `https://complyeaze.com${page.urlPath}`,
+      title: page.title,
+      description: page.description
+    }))
+  };
+}
+
 rmSync(dist, { recursive: true, force: true });
 mkdirSync(path.join(dist, "assets"), { recursive: true });
 
@@ -33,6 +50,12 @@ writeFileSync(
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages
     .map((page) => `  <url><loc>https://complyeaze.com${page.urlPath}</loc></url>`)
     .join("\n")}\n</urlset>\n`,
+  "utf8",
+);
+
+writeFileSync(
+  path.join(dist, "route-manifest.json"),
+  `${JSON.stringify(routeManifest(), null, 2)}\n`,
   "utf8",
 );
 

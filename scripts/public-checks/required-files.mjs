@@ -34,6 +34,7 @@ export const requiredFiles = [
   "scripts/public-checks/policy-pages.mjs",
   "scripts/public-checks/required-files.mjs",
   "scripts/public-checks/root-resource-pages.mjs",
+  "scripts/public-checks/route-manifest.mjs",
   "src/site-data.mjs",
   "src/gateway-data.mjs",
   "src/migration-data.mjs",

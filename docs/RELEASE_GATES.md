@@ -24,7 +24,8 @@ Each release should record:
 
 - Commit SHA.
 - Build command and artifact path.
-- Route manifest.
+- Route manifest generated at `dist/route-manifest.json`, matched to
+  `src/site-data.mjs`, rendered HTML files, canonical URLs, and `sitemap.xml`.
 - Desktop and mobile screenshots.
 - Accessibility and link-check results.
 - Metadata, robots, sitemap, canonical, and redirect results.
