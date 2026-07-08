@@ -34,6 +34,8 @@ Each release should record:
 - Accessibility and link-check results.
 - Metadata, robots, sitemap, canonical, and redirect results.
 - Public claim evidence.
+- Review-gate fixture evidence from `scripts/test-review-gate-fixtures.mjs`
+  when governance, review policy, or review-gate scripts change.
 - Pages deploy evidence: Actions run URL, skipped/disabled guard status when
   `ENABLE_GITHUB_PAGES_DEPLOY` is not true, Pages environment URL when enabled,
   and confirmation that no `CNAME` or custom-domain cutover changed in the
