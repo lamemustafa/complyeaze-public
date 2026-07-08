@@ -52,7 +52,12 @@ const policySections = {
     {
       title: "Build posture",
       body:
-        "The public site is intended to remain static by default. Release gates require lint, typecheck, tests, build, visual screenshots, public-content checks, link checks, metadata checks, and review-thread clearance."
+        "The public site is intended to remain static by default. Release gates require lint, typecheck, tests, build, visual screenshots, public-content checks, link checks, metadata checks, git diff --check, and review-thread clearance."
+    },
+    {
+      title: "Governance posture",
+      body:
+        "Legal governance, repository-settings gates, contributor-intake rules, CODEOWNERS, and issue contact links are now checked by scripts/check-public-repo.mjs so source-license, trademark, review, and public-issue boundaries cannot drift silently."
     },
     {
       title: "Migration posture",
@@ -71,6 +76,21 @@ const policySections = {
     }
   ],
   changelog: [
+    {
+      title: "2026-07-08 - Contributor intake governance",
+      body:
+        "Expanded CODEOWNERS and issue contact links for owner-reviewed governance paths, private security and sensitive-data reports, conduct reports, and support boundaries, then added scripts/public-checks/contributor-intake.mjs to keep those intake guardrails enforced."
+    },
+    {
+      title: "2026-07-08 - Repository settings gates",
+      body:
+        "Added scripts/public-checks/repository-settings.mjs, aligned pnpm verify and CI with git diff --check, pinned protected-check names, Pages guard prerequisites, review-gate posture, and custom-domain cutover blockers."
+    },
+    {
+      title: "2026-07-08 - Legal governance checks",
+      body:
+        "Added scripts/public-checks/legal-governance.mjs so Apache-2.0 source-license boundaries, ComplyEaze-family trademark reservations, anti-endorsement language, fork/operator clarity, and contributor safety templates remain enforced."
+    },
     {
       title: "2026-07-08 - Route cleanup governance",
       body:
@@ -126,7 +146,22 @@ const policySections = {
     {
       title: "Claim and safety checks",
       body:
-        "scripts/check-public-repo.mjs rejects secret-like assignments, PAN-like and GSTIN-like identifiers, missing governance files, unsupported policy scope, broken route metadata, incomplete migration-ledger evidence, and missing route-cleanup governance prompts."
+        "scripts/check-public-repo.mjs rejects secret-like assignments, PAN-like and GSTIN-like identifiers, missing governance files, unsupported policy scope, broken route metadata, incomplete migration-ledger evidence, missing legal governance anchors, missing repository-settings gates, missing contributor-intake guardrails, and missing route-cleanup governance prompts."
+    },
+    {
+      title: "Contributor intake evidence",
+      body:
+        "CODEOWNERS keeps governance, release, policy, route data, rendering, docs, scripts, and package changes owner-reviewed. Issue contact links route security or sensitive-data reports, sensitive conduct reports, and support-boundary questions away from unsafe public issue content."
+    },
+    {
+      title: "Repository settings evidence",
+      body:
+        "scripts/public-checks/repository-settings.mjs pins the documented public repo posture, protected check names, review-gate workflow posture, Pages guard prerequisites, pinned checkout actions, CNAME cutover blocking, and git diff --check alignment across pnpm verify and CI."
+    },
+    {
+      title: "Legal governance evidence",
+      body:
+        "scripts/public-checks/legal-governance.mjs keeps Apache-2.0 source-license terms separate from ComplyEaze-family trademark rights, blocks unsupported government/GSTN/CBIC endorsement claims in content data, and preserves fork/operator clarity."
     },
     {
       title: "Hosted route evidence",
