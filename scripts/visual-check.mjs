@@ -125,6 +125,54 @@ async function collectMetrics(page, expectedHeading) {
         .slice(0, 80);
     }
 
+    function visibleInViewport(element) {
+      const rect = element.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0 && rect.bottom > 0 && rect.top < window.innerHeight;
+    }
+
+    function clippedByOverflowAncestor(element) {
+      const rect = element.getBoundingClientRect();
+      let parent = element.parentElement;
+      while (parent && parent !== document.body) {
+        const style = window.getComputedStyle(parent);
+        const clipsOverflow = /(hidden|clip|auto|scroll)/.test(`${style.overflow} ${style.overflowX} ${style.overflowY}`);
+        if (clipsOverflow) {
+          const parentRect = parent.getBoundingClientRect();
+          if (parentRect.width > 0 && parentRect.height > 0 && (rect.left < parentRect.left - 1 || rect.right > parentRect.right + 1 || rect.top < parentRect.top - 1 || rect.bottom > parentRect.bottom + 1)) {
+            return true;
+          }
+        }
+        parent = parent.parentElement;
+      }
+      return false;
+    }
+
+    function hitTestPasses(element) {
+      const points = [...element.getClientRects()].flatMap((lineRect) => {
+        if (lineRect.width === 0 || lineRect.height === 0 || lineRect.bottom < 0 || lineRect.top > window.innerHeight) {
+          return [];
+        }
+        const insetX = Math.min(8, lineRect.width / 4);
+        const insetY = Math.min(8, lineRect.height / 4);
+        const xs = [lineRect.left + insetX, lineRect.left + lineRect.width / 2, lineRect.right - insetX];
+        const ys = [lineRect.top + insetY, lineRect.top + lineRect.height / 2, lineRect.bottom - insetY];
+        return xs.flatMap((x) => ys.map((y) => [x, y]));
+      });
+      return points.some(([x, y]) => {
+        const target = document.elementFromPoint(x, y);
+        return target && (target === element || element.contains(target) || target.contains(element));
+      });
+    }
+
+    function durationSeconds(value) {
+      return value
+        .split(",")
+        .map((part) => part.trim())
+        .filter(Boolean)
+        .map((part) => (part.endsWith("ms") ? Number.parseFloat(part) / 1000 : Number.parseFloat(part)))
+        .filter((duration) => Number.isFinite(duration));
+    }
+
     const issues = [];
     const main = document.querySelector("main");
     if (!main) issues.push("missing main landmark");
@@ -141,7 +189,10 @@ async function collectMetrics(page, expectedHeading) {
       (link) => !(link.textContent ?? "").trim() && !link.getAttribute("aria-label"),
     );
     if (unnamedLinks.length > 0) issues.push(`${unnamedLinks.length} unnamed links`);
-    const brokenImages = [...document.querySelectorAll("img")].filter((image) => !image.complete || image.naturalWidth === 0);
+    const brokenImages = [...document.querySelectorAll("img")].filter((image) => {
+      if (!image.complete) return image.loading !== "lazy";
+      return image.naturalWidth === 0;
+    });
     if (brokenImages.length > 0) issues.push(`${brokenImages.length} broken images`);
     const blankBlocks = [...document.querySelectorAll("main section, main article")].filter((element) => {
       const rect = element.getBoundingClientRect();
@@ -156,32 +207,22 @@ async function collectMetrics(page, expectedHeading) {
     if (smallTargets.length > 0) issues.push(`${smallTargets.length} small interactive targets`);
     const clippedControls = [...document.querySelectorAll("a, button")].filter((element) => {
       const rect = element.getBoundingClientRect();
-      return rect.width > 0 && rect.height > 0 && (rect.left < -1 || rect.right > window.innerWidth + 1);
+      return visibleInViewport(element) && (rect.left < -1 || rect.right > window.innerWidth + 1 || rect.top < -1 || clippedByOverflowAncestor(element));
     });
-    if (clippedControls.length > 0) issues.push(`${clippedControls.length} horizontally clipped controls`);
+    if (clippedControls.length > 0) issues.push(`${clippedControls.length} clipped controls`);
     const overlappedControls = [...document.querySelectorAll("a, button")].filter((element) => {
-      const rect = element.getBoundingClientRect();
-      if (rect.width === 0 || rect.height === 0 || rect.bottom < 0 || rect.top > window.innerHeight) {
-        return false;
-      }
-      const points = [...element.getClientRects()].flatMap((lineRect) => {
-        if (lineRect.width === 0 || lineRect.height === 0 || lineRect.bottom < 0 || lineRect.top > window.innerHeight) {
-          return [];
-        }
-        const insetX = Math.min(8, lineRect.width / 4);
-        const insetY = Math.min(8, lineRect.height / 4);
-        const xs = [lineRect.left + insetX, lineRect.left + lineRect.width / 2, lineRect.right - insetX];
-        const ys = [lineRect.top + insetY, lineRect.top + lineRect.height / 2, lineRect.bottom - insetY];
-        return xs.flatMap((x) => ys.map((y) => [x, y]));
-      });
-      return !points.some(([x, y]) => {
-        const target = document.elementFromPoint(x, y);
-        return target && (target === element || element.contains(target) || target.contains(element));
-      });
+      return visibleInViewport(element) && !hitTestPasses(element);
     });
     if (overlappedControls.length > 0) {
       const labels = overlappedControls.map((element) => controlLabel(element)).join(", ");
       issues.push(`${overlappedControls.length} overlapped first-viewport controls: ${labels}`);
+    }
+    const overlappedContent = [...document.querySelectorAll("main h1, main h2, main h3, main article")].filter((element) => {
+      return visibleInViewport(element) && !hitTestPasses(element);
+    });
+    if (overlappedContent.length > 0) {
+      const labels = overlappedContent.map((element) => controlLabel(element)).join(", ");
+      issues.push(`${overlappedContent.length} overlapped first-viewport content blocks: ${labels}`);
     }
     const hero = document.querySelector(".hero");
     const heroRect = hero?.getBoundingClientRect();
@@ -191,6 +232,15 @@ async function collectMetrics(page, expectedHeading) {
     }
     if (!hasReducedMotionRule()) {
       issues.push("missing prefers-reduced-motion stylesheet rule");
+    }
+    const activeMotionElements = [...document.querySelectorAll("body *")].filter((element) => {
+      const style = window.getComputedStyle(element);
+      const animationDurations = durationSeconds(style.animationDuration);
+      const transitionDurations = durationSeconds(style.transitionDuration);
+      return [...animationDurations, ...transitionDurations].some((duration) => duration > 0);
+    });
+    if (activeMotionElements.length > 0) {
+      issues.push(`${activeMotionElements.length} active motion styles under reduced-motion`);
     }
 
     return {
@@ -202,29 +252,48 @@ async function collectMetrics(page, expectedHeading) {
       issues
     };
   }, expectedHeading);
-  await page.keyboard.press("Tab");
-  const focusState = await page.evaluate(() => {
-    const element = document.activeElement;
-    if (!element || element === document.body) {
-      return { label: "body", visible: false };
+  const focusStates = [];
+  for (let index = 0; index < 16; index += 1) {
+    await page.keyboard.press("Tab");
+    const focusState = await page.evaluate(() => {
+      function focusLabel(element) {
+        return [element.tagName.toLowerCase(), element.getAttribute("href") ?? element.getAttribute("aria-label") ?? element.textContent?.trim()]
+          .filter(Boolean)
+          .join(" ")
+          .slice(0, 80);
+      }
+
+      function isVisibleFocus(element) {
+        const rect = element.getBoundingClientRect();
+        const style = window.getComputedStyle(element);
+        const outlineWidth = Number.parseFloat(style.outlineWidth) || 0;
+        const hasOutline = style.outlineStyle !== "none" && outlineWidth >= 2;
+        const hasShadow = style.boxShadow !== "none";
+        return rect.width > 0 && rect.height > 0 && (hasOutline || hasShadow);
+      }
+
+      const element = document.activeElement;
+      if (!element || element === document.body) {
+        return { label: "body", visible: false };
+      }
+      return {
+        label: focusLabel(element),
+        visible: isVisibleFocus(element)
+      };
+    });
+    if (focusStates.some((state) => state.label === focusState.label)) {
+      break;
     }
-    const rect = element.getBoundingClientRect();
-    const style = window.getComputedStyle(element);
-    const outlineWidth = Number.parseFloat(style.outlineWidth) || 0;
-    const hasOutline = style.outlineStyle !== "none" && outlineWidth >= 2;
-    const hasShadow = style.boxShadow !== "none";
-    const label = [element.tagName.toLowerCase(), element.getAttribute("href") ?? element.getAttribute("aria-label") ?? element.textContent?.trim()]
-      .filter(Boolean)
-      .join(" ");
-    return {
-      label: label.slice(0, 80),
-      visible: rect.width > 0 && rect.height > 0 && (hasOutline || hasShadow)
-    };
-  });
-  if (!focusState.visible) {
-    metrics.issues.push(`focused ${focusState.label} lacks a visible focus indicator`);
+    focusStates.push(focusState);
   }
-  return { ...metrics, focusTarget: focusState.label };
+  const invisibleFocusStates = focusStates.filter((state) => !state.visible);
+  if (invisibleFocusStates.length > 0) {
+    metrics.issues.push(`focused controls lack visible focus indicators: ${invisibleFocusStates.map((state) => state.label).join(", ")}`);
+  }
+  if (focusStates.length < 2) {
+    metrics.issues.push("keyboard focus check did not reach controls beyond the skip link");
+  }
+  return { ...metrics, focusTargets: focusStates.map((state) => state.label), focusTarget: focusStates[0]?.label ?? "none" };
 }
 
 function writeSummary(summary) {
@@ -233,14 +302,14 @@ function writeSummary(summary) {
   const rows = summary
     .map(
       (item) =>
-        `| ${item.page} | ${item.viewport} | ${item.scrollWidth}/${item.viewportWidth} | ${item.reducedMotion ? "yes" : "no"} | ${item.focusTarget} | ${item.issues.length} |`,
+        `| ${item.page} | ${item.viewport} | ${item.scrollWidth}/${item.viewportWidth} | ${item.reducedMotion ? "yes" : "no"} | ${item.focusTargets.join("; ")} | ${item.issues.length} |`,
     )
     .join("\n");
   mkdirSync(path.dirname(jsonPath), { recursive: true });
   writeFileSync(jsonPath, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
   writeFileSync(
     markdownPath,
-    `# Public Visual Check\n\n| Page | Viewport | Scroll/Viewport | Reduced Motion | Focus Target | Issues |\n| --- | --- | --- | --- | --- | --- |\n${rows}\n`,
+    `# Public Visual Check\n\n| Page | Viewport | Scroll/Viewport | Reduced Motion | Focus Targets | Issues |\n| --- | --- | --- | --- | --- | --- |\n${rows}\n`,
     "utf8",
   );
 }

@@ -117,12 +117,14 @@ function assertVisualPolicy() {
   const requiredExecutableTerms = [
     "reducedMotion",
     "prefers-reduced-motion",
-    "focusTarget",
+    "focusTargets",
     "visible focus indicator",
     "broken images",
     "blank content blocks",
-    "horizontally clipped controls",
-    "overlapped first-viewport controls"
+    "clipped controls",
+    "overlapped first-viewport controls",
+    "overlapped first-viewport content blocks",
+    "active motion styles under reduced-motion"
   ];
   const missingExecutableTerms = requiredExecutableTerms.filter((term) => !visualCheck.includes(term));
   if (missingExecutableTerms.length > 0) {
