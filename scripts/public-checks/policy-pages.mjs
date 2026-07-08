@@ -76,6 +76,12 @@ const requiredChangelogTerms = [
 ];
 
 const requiredReleaseEvidenceTerms = [
+  "Visual artifacts",
+  "reduced-motion state",
+  "focus targets",
+  "touch-target",
+  "blank-section",
+  "first-viewport overlap evidence",
   "missing dependency-surface policy",
   "Dependency surface evidence",
   "scripts/public-checks/dependency-policy.mjs",

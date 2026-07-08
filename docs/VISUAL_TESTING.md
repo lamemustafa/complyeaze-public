@@ -34,8 +34,11 @@ Rendered checks should include:
 Store visual evidence as CI artifacts or reviewed local artifacts:
 
 - PNG screenshots for each route and viewport.
-- JSON metrics for overflow, contrast, focus, and accessibility checks.
-- Summary markdown with failures and dispositions.
+- JSON metrics for overflow, reduced-motion emulation, keyboard focus targets,
+  named links, touch-target size, broken images, blank sections, clipped
+  controls, and first-viewport overlap heuristics.
+- Summary markdown with reduced-motion state, focus target, failures, and
+  dispositions.
 - GitHub Actions artifact `public-site-build` for the rendered `dist` output
   that generated the screenshots.
 - GitHub Actions artifact `public-visual-evidence` for PR and `main` runs.
