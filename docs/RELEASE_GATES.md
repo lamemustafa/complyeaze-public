@@ -30,11 +30,20 @@ Each release should record:
 - Accessibility and link-check results.
 - Metadata, robots, sitemap, canonical, and redirect results.
 - Public claim evidence.
+- Pages deploy evidence: Actions run URL, skipped/disabled guard status when
+  `ENABLE_GITHUB_PAGES_DEPLOY` is not true, Pages environment URL when enabled,
+  and confirmation that no `CNAME` or custom-domain cutover changed in the
+  release.
 - Rollback path.
 
 ## Deployment Posture
 
 - Static hosting is preferred unless a reviewed feature requires server runtime.
+- `Pages deploy` is readiness-only until `ENABLE_GITHUB_PAGES_DEPLOY=true`,
+  GitHub Pages is configured for GitHub Actions, and hosted route, canonical,
+  redirect, and rollback evidence is recorded.
+- The Pages workflow must run `pnpm verify` before deploying and may upload only
+  the generated `dist` artifact.
 - No production database, Redis, worker, portal, credential, or document storage
   dependency is allowed by default.
 - If containerized, deployments should use immutable image digests.
