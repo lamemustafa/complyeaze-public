@@ -1,0 +1,26 @@
+{
+  "name": "complyeaze-public",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Public website, documentation, trust, release, policy, and brand surfaces for the ComplyEaze product family.",
+  "type": "module",
+  "packageManager": "pnpm@10.28.2",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "lint": "node scripts/check-public-repo.mjs --lint",
+    "typecheck": "node scripts/check-public-repo.mjs --typecheck",
+    "test": "node scripts/check-public-repo.mjs --test",
+    "build": "node scripts/build-site.mjs",
+    "visual:check": "node scripts/visual-check.mjs",
+    "public:check": "node scripts/check-public-repo.mjs --public",
+    "links:check": "node scripts/check-public-repo.mjs --links",
+    "metadata:check": "node scripts/check-public-repo.mjs --metadata",
+    "review:gate": "node scripts/check-pr-review-gate.mjs",
+    "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm visual:check && pnpm public:check && pnpm links:check && pnpm metadata:check"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1"
+  }
+}
