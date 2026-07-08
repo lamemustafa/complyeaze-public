@@ -17,6 +17,7 @@
     "public:check": "node scripts/check-public-repo.mjs --public",
     "links:check": "node scripts/check-public-repo.mjs --links",
     "metadata:check": "node scripts/check-public-repo.mjs --metadata",
+    "hosted:check": "node scripts/check-hosted-routes.mjs",
     "review:gate": "node scripts/check-pr-review-gate.mjs",
     "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm visual:check && pnpm public:check && pnpm links:check && pnpm metadata:check"
   },

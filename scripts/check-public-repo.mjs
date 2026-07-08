@@ -8,6 +8,7 @@ import { assertCiArtifacts } from "./public-checks/ci-artifacts.mjs";
 import { assertDependencyPolicy } from "./public-checks/dependency-policy.mjs";
 import { assertDeployWorkflow } from "./public-checks/deploy-workflow.mjs";
 import { assertGatewayPages } from "./public-checks/gateway-pages.mjs";
+import { assertHostedRoutesPolicy } from "./public-checks/hosted-routes.mjs";
 import { assertPolicyPages } from "./public-checks/policy-pages.mjs";
 import { requiredFiles } from "./public-checks/required-files.mjs";
 import {
@@ -264,6 +265,7 @@ function run() {
     assertCiArtifacts(root);
     assertDependencyPolicy(root);
     assertDeployWorkflow(root);
+    assertHostedRoutesPolicy(root);
     assertReviewGateFixturePolicy(root);
   }
   if (["--all", "--links"].includes(mode)) {
