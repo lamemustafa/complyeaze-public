@@ -41,3 +41,6 @@ For each migrated surface, record:
 - Metadata, robots, sitemap, canonical, and redirect results.
 - Public claim evidence.
 - Rollback path.
+
+The current route-family ledger lives in `docs/ROUTE_MIGRATION_LEDGER.md` and
+is rendered at `/migration/`. Keep both aligned through `src/site-data.mjs`.

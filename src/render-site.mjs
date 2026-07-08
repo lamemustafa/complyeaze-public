@@ -1,4 +1,5 @@
 import { site } from "./site-data.mjs";
+import { migrationLedger } from "./migration-data.mjs";
 
 export function renderPage(page) {
   const canonical = new URL(page.urlPath, site.origin).href;
@@ -16,6 +17,7 @@ export function renderPage(page) {
     <meta property="og:url" content="${canonical}">
     <link rel="stylesheet" href="/assets/styles.css">
     ${page.slug === "products" ? '<link rel="stylesheet" href="/assets/products.css">' : ""}
+    ${page.slug === "migration" ? '<link rel="stylesheet" href="/assets/migration.css">' : ""}
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
@@ -40,7 +42,7 @@ export function renderPage(page) {
         <p class="hero-summary">${escapeHtml(page.summary)}</p>
         ${renderCtas(page)}
       </section>
-      ${page.slug === "products" ? renderProducts() : renderSections(page.sections)}
+      ${renderPageBody(page)}
     </main>
     <footer class="site-footer">
       <p>Open-source public surfaces. Private app data stays outside this repository.</p>
@@ -58,6 +60,12 @@ function renderCtas(page) {
   </div>`;
 }
 
+function renderPageBody(page) {
+  if (page.slug === "products") return renderProducts();
+  if (page.slug === "migration") return renderMigration();
+  return renderSections(page.sections);
+}
+
 function renderSections(sections) {
   return `<section class="evidence-grid" aria-label="Public boundary evidence">
     ${sections
@@ -65,6 +73,42 @@ function renderSections(sections) {
         (section) => `<article>
           <h2>${escapeHtml(section.title)}</h2>
           <p>${escapeHtml(section.body)}</p>
+        </article>`,
+      )
+      .join("")}
+  </section>`;
+}
+
+function renderMigration() {
+  return `<section class="migration-summary" aria-label="Migration rules">
+    <article>
+      <strong>1</strong>
+      <span>Inventory the parent route and public destination.</span>
+    </article>
+    <article>
+      <strong>2</strong>
+      <span>Ship visual, link, metadata, and public-claim evidence.</span>
+    </article>
+    <article>
+      <strong>3</strong>
+      <span>Only then remove, redirect, or archive the parent route.</span>
+    </article>
+  </section>
+  <section class="migration-ledger" aria-label="Route migration ledger">
+    ${migrationLedger
+      .map(
+        (entry) => `<article>
+          <header>
+            <h2>${escapeHtml(entry.family)}</h2>
+            <span>${escapeHtml(entry.status)}</span>
+          </header>
+          <dl>
+            <div><dt>Source</dt><dd>${escapeHtml(entry.source)}</dd></div>
+            <div><dt>Destination</dt><dd>${escapeHtml(entry.destination)}</dd></div>
+            <div><dt>Cleanup rule</dt><dd>${escapeHtml(entry.cleanup)}</dd></div>
+            <div><dt>Evidence</dt><dd>${escapeHtml(entry.evidence)}</dd></div>
+            <div><dt>Rollback</dt><dd>${escapeHtml(entry.rollback)}</dd></div>
+          </dl>
         </article>`,
       )
       .join("")}

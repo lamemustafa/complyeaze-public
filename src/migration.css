@@ -1,0 +1,99 @@
+.migration-summary {
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-top: clamp(2rem, 5vw, 4rem);
+}
+
+.migration-summary article {
+  background: var(--ink);
+  color: white;
+  display: grid;
+  gap: 0.75rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+}
+
+.migration-summary strong {
+  align-items: center;
+  border: 2px solid currentColor;
+  display: inline-flex;
+  font-size: 1.1rem;
+  height: 2.5rem;
+  justify-content: center;
+  width: 2.5rem;
+}
+
+.migration-summary span {
+  line-height: 1.5;
+}
+
+.migration-ledger {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.migration-ledger article {
+  background: rgba(255, 255, 255, 0.78);
+  border: 2px solid var(--line);
+  padding: clamp(1rem, 3vw, 1.5rem);
+}
+
+.migration-ledger header {
+  align-items: start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.migration-ledger h2 {
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  line-height: 1.1;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.migration-ledger header span {
+  background: var(--rust);
+  color: white;
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 0.35rem 0.55rem;
+  white-space: nowrap;
+}
+
+.migration-ledger dl {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+}
+
+.migration-ledger div {
+  border-top: 1px solid var(--line);
+  padding-top: 0.85rem;
+}
+
+.migration-ledger dt {
+  color: var(--rust);
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.migration-ledger dd {
+  color: var(--muted-ink);
+  line-height: 1.55;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 680px) {
+  .migration-ledger header {
+    display: grid;
+  }
+
+  .migration-ledger header span {
+    justify-self: start;
+  }
+}

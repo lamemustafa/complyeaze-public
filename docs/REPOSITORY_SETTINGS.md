@@ -31,6 +31,10 @@ Required for `refs/heads/main`:
   - `Public site gates`
   - `Review gate`
 
+`Review gate` enforces unresolved review-thread and requested-changes blockers.
+It is not a substitute for the PR template's review-rectify evidence or a
+maintainer review of the current diff.
+
 The maintainer bypass path is limited to pull requests, matching the repo-family
 pattern used by Sanchika.
 
@@ -39,8 +43,8 @@ pattern used by Sanchika.
 - Keep `Public site gates` aligned with `pnpm verify`.
 - Keep `Review gate` pinned to the GitHub Actions integration when rulesets are
   edited.
-- Keep pull-request review-gate sync at zero wait while there is no guaranteed
-  current-head Codex reviewer app for this repository. The status still reports
-  missing current-head review as an audit signal.
+- Keep pull-request review-gate sync at zero wait so it reports blocker-thread
+  state quickly. Do not describe it as current-head Codex review enforcement
+  unless a guaranteed reviewer integration is installed and required.
 - Do not enable Projects or Wiki unless the public contribution model changes.
 - Do not make `main` directly pushable after the initial bootstrap commit.
