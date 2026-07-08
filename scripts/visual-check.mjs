@@ -168,7 +168,11 @@ async function collectMetrics(page, expectedHeading) {
         if (lineRect.width === 0 || lineRect.height === 0 || lineRect.bottom < 0 || lineRect.top > window.innerHeight) {
           return [];
         }
-        return [[lineRect.left + lineRect.width / 2, lineRect.top + lineRect.height / 2]];
+        const insetX = Math.min(8, lineRect.width / 4);
+        const insetY = Math.min(8, lineRect.height / 4);
+        const xs = [lineRect.left + insetX, lineRect.left + lineRect.width / 2, lineRect.right - insetX];
+        const ys = [lineRect.top + insetY, lineRect.top + lineRect.height / 2, lineRect.bottom - insetY];
+        return xs.flatMap((x) => ys.map((y) => [x, y]));
       });
       return !points.some(([x, y]) => {
         const target = document.elementFromPoint(x, y);
