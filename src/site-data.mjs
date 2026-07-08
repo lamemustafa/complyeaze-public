@@ -1,5 +1,6 @@
 import { axalPages } from "./axal-data.mjs";
 import { policyPages } from "./policy-data.mjs";
+import { rootResourcePages } from "./root-resource-data.mjs";
 
 export const site = {
   origin: "https://complyeaze.com",
@@ -8,6 +9,7 @@ export const site = {
     "Public website, trust, release, policy, and brand surfaces for the ComplyEaze product family.",
   nav: [
     { label: "Home", href: "/" },
+    { label: "About", href: "/about/" },
     { label: "Products", href: "/products/" },
     { label: "Migration", href: "/migration/" },
     { label: "Trust", href: "/trust/" },
@@ -134,4 +136,4 @@ const corePages = [
   }
 ];
 
-export const pages = [...corePages, ...policyPages, ...axalPages];
+export const pages = [...corePages, ...rootResourcePages, ...policyPages, ...axalPages];

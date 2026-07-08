@@ -6,6 +6,7 @@ import process from "node:process";
 import { assertAxalPages } from "./public-checks/axal-pages.mjs";
 import { assertPolicyPages } from "./public-checks/policy-pages.mjs";
 import { requiredFiles } from "./public-checks/required-files.mjs";
+import { assertRootResourcePages } from "./public-checks/root-resource-pages.mjs";
 import { migrationLedger } from "../src/migration-data.mjs";
 import { pages } from "../src/site-data.mjs";
 
@@ -242,6 +243,7 @@ function run() {
     assertPublicPages();
     assertMigrationLedger();
     assertPolicyPages(root);
+    assertRootResourcePages(root);
     assertAxalPages();
   }
   if (["--all", "--links"].includes(mode)) {
