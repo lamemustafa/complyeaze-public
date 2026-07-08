@@ -12,12 +12,22 @@ backed.
   rendered visual evidence.
 - GitHub Actions required for checkout, Node/pnpm setup, Pages readiness,
   artifact retention, and review-gate status sync.
+- Current package surface: no runtime `dependencies`, no lifecycle scripts, and
+  `playwright` as the only reviewed `devDependency` unless this policy and the
+  static dependency check are updated in the same PR.
+- `packageManager` must stay pinned to `pnpm@10.28.2`, CI must use pnpm
+  `10.28.2`, and Node workflow versions must stay aligned with the public
+  package engine.
 
 ## Not Allowed By Default
 
 - Runtime dependencies that require private app secrets, tenant data, Prisma,
   Redis, BullMQ, portal automation, document storage, browser profile access, or
   authenticated product infrastructure.
+- New runtime `dependencies` in `package.json` without a public-site design,
+  review evidence, and static check update.
+- Package lifecycle scripts such as `preinstall`, `install`, `postinstall`,
+  `prepare`, `prepublish`, or `prepack`.
 - Unreviewed telemetry, analytics, session replay, remote configuration,
   download execution, or user-data collection packages.
 - Floating GitHub Actions. Actions must stay pinned to reviewed SHAs.
