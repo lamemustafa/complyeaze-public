@@ -43,5 +43,5 @@ For each migrated surface, record:
 - Public claim evidence.
 - Rollback path.
 
-The current route-family ledger lives in `docs/ROUTE_MIGRATION_LEDGER.md` and
-is rendered at `/migration/`. Keep both aligned through `src/site-data.mjs`.
+The current route-family ledger lives in `src/migration-data.mjs`, is rendered
+at `/migration/`, and is summarized in `docs/ROUTE_MIGRATION_LEDGER.md`.

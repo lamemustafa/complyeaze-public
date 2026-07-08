@@ -89,6 +89,39 @@
   overflow-wrap: anywhere;
 }
 
+.route-ledger {
+  border-top: 2px solid var(--line);
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+}
+
+.route-ledger h3 {
+  color: var(--ink);
+  font-size: 1rem;
+  margin: 0 0 0.75rem;
+  text-transform: uppercase;
+}
+
+.route-ledger table {
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  width: 100%;
+}
+
+.route-ledger th,
+.route-ledger td {
+  border-top: 1px solid var(--line);
+  color: var(--muted-ink);
+  line-height: 1.45;
+  padding: 0.65rem 0.5rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.route-ledger th {
+  color: var(--ink);
+}
+
 @media (max-width: 680px) {
   .migration-ledger header {
     display: grid;
@@ -96,5 +129,36 @@
 
   .migration-ledger header span {
     justify-self: start;
+  }
+
+  .route-ledger thead {
+    display: none;
+  }
+
+  .route-ledger tr,
+  .route-ledger th,
+  .route-ledger td {
+    display: block;
+  }
+
+  .route-ledger tr {
+    border-top: 1px solid var(--line);
+    padding: 0.55rem 0;
+  }
+
+  .route-ledger th,
+  .route-ledger td {
+    border: 0;
+    padding: 0.25rem 0;
+  }
+
+  .route-ledger th::before,
+  .route-ledger td::before {
+    color: var(--rust);
+    content: attr(data-label) ": ";
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
   }
 }

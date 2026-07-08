@@ -9,6 +9,10 @@ import { assertDependencyPolicy } from "./public-checks/dependency-policy.mjs";
 import { assertDeployWorkflow } from "./public-checks/deploy-workflow.mjs";
 import { assertGatewayPages } from "./public-checks/gateway-pages.mjs";
 import { assertHostedRoutesPolicy } from "./public-checks/hosted-routes.mjs";
+import {
+  assertMigrationLedger,
+  assertRenderedMigrationLedger
+} from "./public-checks/migration-ledger.mjs";
 import { assertPolicyPages } from "./public-checks/policy-pages.mjs";
 import { requiredFiles } from "./public-checks/required-files.mjs";
 import {
@@ -17,7 +21,6 @@ import {
 } from "./public-checks/review-gate-fixtures.mjs";
 import { assertRootResourcePages } from "./public-checks/root-resource-pages.mjs";
 import { assertRouteManifest } from "./public-checks/route-manifest.mjs";
-import { migrationLedger } from "../src/migration-data.mjs";
 import { pages } from "../src/site-data.mjs";
 
 const root = process.cwd();
@@ -111,27 +114,6 @@ function assertReleaseGates() {
   }
 }
 
-function assertMigrationLedger() {
-  const docsText = readFileSync(path.join(root, "docs/ROUTE_MIGRATION_LEDGER.md"), "utf8");
-  const normalizedDocsText = docsText.toLowerCase();
-  const requiredFamilies = ["Root public pages", "Axal marketing", "Pack public pages", "Tools public utilities"];
-  const missingDocs = requiredFamilies.filter((family) => !normalizedDocsText.includes(family.toLowerCase()));
-  const missingData = requiredFamilies.filter((family) => !migrationLedger.some((entry) => entry.family.toLowerCase() === family.toLowerCase()));
-  const requiredFields = ["source", "destination", "status", "cleanup", "evidence", "rollback"];
-  const incompleteEntries = migrationLedger.filter((entry) => requiredFields.some((field) => !entry[field])).map((entry) => entry.family || "Unnamed migration entry");
-
-  const findings = [];
-  if (missingDocs.length > 0) findings.push(`docs missing families: ${missingDocs.join(", ")}`);
-  if (missingData.length > 0) findings.push(`site data missing families: ${missingData.join(", ")}`);
-  if (incompleteEntries.length > 0) {
-    findings.push(`ledger entries missing required cutover fields: ${incompleteEntries.join(", ")}`);
-  }
-
-  if (findings.length > 0) {
-    throw new Error(`Migration ledger findings:\n${findings.join("\n")}`);
-  }
-}
-
 function assertBuiltPages() {
   const missing = pages
     .map((page) => path.join("dist", page.outputPath))
@@ -211,6 +193,7 @@ function assertPublicPages() {
       findings.push(`${page.outputPath}: private-app boundary terms outside overview page`);
     }
   }
+  assertRenderedMigrationLedger(root, findings);
   if (findings.length > 0) {
     throw new Error(`Public page findings:\n${findings.join("\n")}`);
   }
@@ -257,7 +240,7 @@ function run() {
   }
   if (["--all", "--public"].includes(mode)) {
     assertPublicPages();
-    assertMigrationLedger();
+    assertMigrationLedger(root);
     assertGatewayPages(root);
     assertPolicyPages(root);
     assertRootResourcePages(root);

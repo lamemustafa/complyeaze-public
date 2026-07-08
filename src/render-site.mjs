@@ -138,13 +138,48 @@ function renderMigration() {
             <div><dt>Source</dt><dd>${escapeHtml(entry.source)}</dd></div>
             <div><dt>Destination</dt><dd>${escapeHtml(entry.destination)}</dd></div>
             <div><dt>Cleanup rule</dt><dd>${escapeHtml(entry.cleanup)}</dd></div>
+            <div><dt>Parent cleanup</dt><dd>${escapeHtml(entry.parentCleanup)}</dd></div>
             <div><dt>Evidence</dt><dd>${escapeHtml(entry.evidence)}</dd></div>
             <div><dt>Rollback</dt><dd>${escapeHtml(entry.rollback)}</dd></div>
           </dl>
+          ${renderMigrationRoutes(entry.routes)}
         </article>`,
       )
       .join("")}
   </section>`;
+}
+
+function renderMigrationRoutes(routes = []) {
+  if (routes.length === 0) return "";
+  return `<div class="route-ledger" aria-label="Source route cleanup evidence">
+    <h3>Route-level cleanup blockers</h3>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Source route</th>
+          <th scope="col">Destination</th>
+          <th scope="col">Cleanup</th>
+          <th scope="col">Evidence</th>
+          <th scope="col">Redirect</th>
+          <th scope="col">Rollback</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${routes
+          .map(
+            (route) => `<tr>
+              <th scope="row" data-label="Source route">${escapeHtml(route.sourceRoute)}</th>
+              <td data-label="Destination">${escapeHtml(route.destinationRoute)}</td>
+              <td data-label="Cleanup">${escapeHtml(route.cleanupStatus)}</td>
+              <td data-label="Evidence">${escapeHtml(route.evidenceStatus)}</td>
+              <td data-label="Redirect">${escapeHtml(route.redirectStatus)}</td>
+              <td data-label="Rollback">${escapeHtml(route.rollback)}</td>
+            </tr>`,
+          )
+          .join("")}
+      </tbody>
+    </table>
+  </div>`;
 }
 
 function renderProducts() {

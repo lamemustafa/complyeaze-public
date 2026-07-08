@@ -5,8 +5,9 @@ Public pages must be true, source-backed, and narrow.
 ## Evidence Requirements
 
 Any claim about security, privacy, release status, store status, browser-local
-behavior, statutory coverage, professional review, integrations, or production
-readiness must point to one of:
+behavior, statutory coverage, professional review, integrations, production
+readiness, route ownership transfer, route cleanup readiness, redirect
+readiness, or rollback readiness must point to one of:
 
 - Local source code in this repository.
 - A public release, changelog, or status artifact.
