@@ -31,6 +31,7 @@ export const requiredFiles = [
   "scripts/build-site.mjs",
   "scripts/visual-check.mjs",
   "scripts/public-checks/axal-pages.mjs",
+  "scripts/public-checks/ci-artifacts.mjs",
   "scripts/public-checks/deploy-workflow.mjs",
   "scripts/public-checks/gateway-pages.mjs",
   "scripts/public-checks/policy-pages.mjs",

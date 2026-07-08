@@ -24,7 +24,10 @@ Use this policy for every non-trivial change before commit, PR, or deployment.
    and reason.
 5. Re-run focused checks.
 6. Run the full public gate.
-7. Repeat until the review has no open Critical or High findings.
+7. Link or cite the `public-site-build` and `public-visual-evidence` CI
+   artifacts when the change affects routes, rendering, release evidence, or
+   deployment posture.
+8. Repeat until the review has no open Critical or High findings.
 
 ## Full Public Gate
 

@@ -48,3 +48,6 @@
 ## Screenshots Or Runtime Evidence
 
 Use synthetic data only.
+
+- `public-site-build` artifact:
+- `public-visual-evidence` artifact:
