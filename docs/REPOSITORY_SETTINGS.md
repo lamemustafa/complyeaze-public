@@ -23,6 +23,8 @@ Required for `refs/heads/main`:
 - No branch deletion.
 - No non-fast-forward updates.
 - Pull request required.
+- One approving review required.
+- Code-owner review required.
 - Stale reviews dismissed on push.
 - Review thread resolution required.
 - Squash merge only.
@@ -41,6 +43,9 @@ pattern used by Sanchika.
 ## Maintenance Notes
 
 - Keep `Public site gates` aligned with `pnpm verify`.
+- Run `pnpm github:settings` after changing repository settings, branch
+  rulesets, required checks, merge policy, topics, homepage, issues, Projects,
+  Wiki, or Pages readiness.
 - Keep `Review gate` pinned to the GitHub Actions integration when rulesets are
   edited.
 - Keep `Pages deploy` non-required until GitHub Pages is intentionally enabled
@@ -50,6 +55,28 @@ pattern used by Sanchika.
   unless a guaranteed reviewer integration is installed and required.
 - Do not enable Projects or Wiki unless the public contribution model changes.
 - Do not make `main` directly pushable after the initial bootstrap commit.
+
+## Live Settings Audit
+
+Command:
+
+```bash
+pnpm github:settings
+```
+
+The audit uses the GitHub CLI to verify the live
+`lamemustafa/complyeaze-public` repository metadata and `Protect main` ruleset:
+public visibility, default branch, homepage, issue/project/wiki posture, topic
+set, squash merge support, active `refs/heads/main` ruleset enforcement, branch
+deletion and non-fast-forward protection, pull-request requirement, one approving
+review, code-owner review, stale review dismissal, review-thread resolution,
+`allowed_merge_methods: ["squash"]`, strict required checks, and the required
+`Public site gates` and `Review gate` contexts.
+
+This command is intentionally separate from `pnpm verify` because it requires
+authenticated GitHub API access. A clean local gate proves the repository files
+are internally consistent; `pnpm github:settings` proves GitHub still matches
+the documented governance posture.
 
 ## GitHub Pages Deploy Guard
 

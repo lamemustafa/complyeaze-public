@@ -23,6 +23,16 @@ pnpm metadata:check
 git diff --check
 ```
 
+Repository governance changes also require the authenticated GitHub settings
+audit:
+
+```bash
+pnpm github:settings
+```
+
+This live audit is separate from `pnpm verify` because it uses the GitHub API to
+confirm repository metadata and branch-ruleset state.
+
 ## Release Evidence
 
 Each release should record:
@@ -47,6 +57,9 @@ Each release should record:
   pnpm lockfile, or GitHub Actions dependencies change.
 - Review-gate fixture evidence from `scripts/test-review-gate-fixtures.mjs`
   when governance, review policy, or review-gate scripts change.
+- Live repository settings evidence from `pnpm github:settings` when repository
+  settings, branch rulesets, required checks, merge policy, topics, homepage,
+  issues, Projects, Wiki, or Pages readiness change.
 - Pages deploy evidence: Actions run URL, skipped/disabled guard status when
   `ENABLE_GITHUB_PAGES_DEPLOY` is not true, Pages environment URL when enabled,
   and confirmation that no `CNAME` or custom-domain cutover changed in the

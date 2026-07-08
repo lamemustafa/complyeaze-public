@@ -30,6 +30,7 @@ export const requiredFiles = [
   ".github/workflows/pages-deploy.yml",
   ".github/workflows/review-gate.yml",
   "scripts/check-pr-review-gate.mjs",
+  "scripts/check-github-repository-settings.mjs",
   "scripts/sync-review-gate-status.mjs",
   "scripts/build-site.mjs",
   "scripts/test-review-gate-fixtures.mjs",
