@@ -41,7 +41,7 @@
 
 - [ ] No private-app route removal or redirect is claimed by this PR.
 - [ ] Route-level migration ledger rows updated in `src/migration-data.mjs`.
-- [ ] `docs/ROUTE_MIGRATION_LEDGER.md` mirrors the changed source and destination routes.
+- [ ] `docs/ROUTE_MIGRATION_LEDGER.md` mirrors the changed source host, source route, destination host, and destination route.
 - [ ] Rendered `/migration/` evidence reviewed when route ledger rows changed.
 - [ ] Destination route exists in `dist/route-manifest.json` when parent-route cleanup is proposed.
 - [ ] `scripts/check-hosted-routes.mjs --base-url <url>` evidence attached when hosted routes changed.

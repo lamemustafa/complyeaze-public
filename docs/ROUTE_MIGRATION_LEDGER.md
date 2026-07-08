@@ -6,81 +6,86 @@ its destination, evidence, cleanup rule, and rollback path are recorded here and
 on the rendered `/migration/` page.
 
 Family-level entries do not authorize cleanup by themselves. Each source route
-being removed or redirected needs its own hosted route 200, canonical, sitemap,
-redirect, and rollback evidence.
+being removed or redirected needs its own source host, source route, destination
+host, destination route, hosted route 200, canonical, sitemap, redirect, cleanup
+PR, and rollback evidence.
 
-## Root Public Pages
+Host-aware rows are intentional: Pack and Tools routes are root-relative on their
+own hosts, not `/pack/*` or `/tools/*` paths on `complyeaze.com`.
 
-- Source: root public URLs `/`, `/about-us`, `/contact-us`, `/privacy-policy`, and `/terms-and-conditions`
-- Destination: `/`, `/about/`, `/contact/`, `/privacy/`, `/terms/`, `/status/`, `/changelog/`, and `/release-evidence/` in `complyeaze-public`
+## Root public pages
+
+- Source: Root public URLs on complyeaze.com: /, /resources/about-us, /resources/contact-us, /resources/privacy-policy, and /resources/terms-and-conditions
+- Destination: complyeaze-public routes on complyeaze.com: /, /about/, /contact/, /privacy/, /terms/, /status/, /changelog/, and /release-evidence/
 - Status: root resource and policy/status/release pages seeded; cleanup blocked
-- Cleanup rule: do not remove parent routes until production host routing, canonical URLs, rollback redirects, and `scripts/check-hosted-routes.mjs` evidence are recorded.
-- Parent cleanup: blocked; requires separate private-app cleanup PR after hosted and redirect evidence.
-- Evidence: seed intent recorded. Hosted route, visual artifact, redirect, and private-app cleanup PR evidence are pending.
-- Rollback: keep parent routes available until the public static deploy serves matching routes and metadata, with hosted route evidence attached.
+- Cleanup rule: Do not remove parent routes until production host routing, canonical URLs, rollback redirects, and scripts/check-hosted-routes.mjs evidence are recorded.
+- Parent cleanup: blocked; requires separate private-app cleanup PR after hosted and redirect evidence
+- Evidence: Seed intent recorded. Hosted route, visual artifact, redirect, and private-app cleanup PR evidence are pending.
+- Rollback: Keep parent routes available until the public static deploy serves matching routes and metadata, with hosted route evidence attached.
 
-| Source route | Destination | Cleanup | Evidence | Redirect | Rollback |
-| --- | --- | --- | --- | --- | --- |
-| `/` | `/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending | no redirect planned until production host cutover | keep parent route until redirect rollback is tested |
-| `/about-us` | `/about/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/contact-us` | `/contact/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/privacy-policy` | `/privacy/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/terms-and-conditions` | `/terms/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
+| Source host | Source route | Destination host | Destination route | Cleanup | Evidence | Redirect | Cleanup PR | Rollback |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `complyeaze.com` | `/` | `complyeaze.com` | `/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | no redirect planned until production host cutover; plan: no redirect planned until production host cutover | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `complyeaze.com` | `/resources/about-us` | `complyeaze.com` | `/about/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `complyeaze.com` | `/resources/contact-us` | `complyeaze.com` | `/contact/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `complyeaze.com` | `/resources/privacy-policy` | `complyeaze.com` | `/privacy/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `complyeaze.com` | `/resources/terms-and-conditions` | `complyeaze.com` | `/terms/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
 
-## Axal Marketing
+## Axal marketing
 
-- Source: Axal public marketing URLs `/axal` and `/axal/<slug>`
-- Destination: `/products/axal/` plus five `/products/axal/<slug>/` static public pages
+- Source: Axal public marketing URLs on axal.complyeaze.com: / and /<slug>
+- Destination: complyeaze-public routes on complyeaze.com: /products/axal/ plus five /products/axal/<slug>/ static public pages
 - Status: seeded; cleanup blocked
-- Cleanup rule: do not move login, signup, reset, callback, or workspace flows into this repository.
-- Parent cleanup: blocked; requires separate private-app cleanup PR after hosted and redirect evidence.
-- Evidence: seed intent recorded. Hosted route, visual artifact, redirect, and private-app cleanup PR evidence are pending.
-- Rollback: preserve parent rewrites until Axal clean-route redirects and crawler metadata pass hosted route checks.
+- Cleanup rule: Do not move login, signup, reset, callback, or workspace flows into this repository.
+- Parent cleanup: blocked; requires separate private-app cleanup PR after hosted and redirect evidence
+- Evidence: Seed intent recorded. Hosted route, visual artifact, redirect, and private-app cleanup PR evidence are pending.
+- Rollback: Preserve parent rewrites until Axal clean-route redirects and crawler metadata pass hosted route checks.
 
-| Source route | Destination | Cleanup | Evidence | Redirect | Rollback |
-| --- | --- | --- | --- | --- | --- |
-| `/axal` | `/products/axal/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/axal/ca-practice-management-software` | `/products/axal/ca-practice-management-software/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/axal/gst-notice-management-software` | `/products/axal/gst-notice-management-software/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/axal/compliance-calendar-software-india` | `/products/axal/compliance-calendar-software-india/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/axal/gst-reconciliation-evidence-review` | `/products/axal/gst-reconciliation-evidence-review/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/axal/client-document-collection-portal-access` | `/products/axal/client-document-collection-portal-access/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
+| Source host | Source route | Destination host | Destination route | Cleanup | Evidence | Redirect | Cleanup PR | Rollback |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `axal.complyeaze.com` | `/` | `complyeaze.com` | `/products/axal/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `axal.complyeaze.com` | `/ca-practice-management-software` | `complyeaze.com` | `/products/axal/ca-practice-management-software/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `axal.complyeaze.com` | `/gst-notice-management-software` | `complyeaze.com` | `/products/axal/gst-notice-management-software/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `axal.complyeaze.com` | `/compliance-calendar-software-india` | `complyeaze.com` | `/products/axal/compliance-calendar-software-india/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `axal.complyeaze.com` | `/gst-reconciliation-evidence-review` | `complyeaze.com` | `/products/axal/gst-reconciliation-evidence-review/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `axal.complyeaze.com` | `/client-document-collection-portal-access` | `complyeaze.com` | `/products/axal/client-document-collection-portal-access/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
 
-## Pack Public Pages
+## Pack public pages
 
-- Source: Pack public URLs under `/pack/*`
-- Destination: `/products/pack/` for family-level context, then `pack.complyeaze.com` for product-owned source, install, release, privacy, security, and support facts
+- Source: Pack public URLs on pack.complyeaze.com: /, /source, /status, /changelog, /support, /security, /privacy, /terms, /acceptable-use, /docs, /release-automation, and /gst
+- Destination: /products/pack/ for family-level context, then pack.complyeaze.com for product-owned source, install, release, privacy, security, and support facts
 - Status: gateway seeded; cleanup blocked
-- Cleanup rule: do not copy extension permissions, release claims, or store-readiness language without Pack release evidence.
-- Parent cleanup: blocked; requires separate private-app cleanup PR after hosted and redirect evidence.
-- Evidence: seed intent recorded. Pack-hosted route, release-facts, redirect, and private-app cleanup PR evidence are pending.
-- Rollback: keep parent Pack pages or redirects until Pack-hosted pages, release-facts checks, and hosted route evidence are green.
+- Cleanup rule: Do not copy extension permissions, release claims, or store-readiness language without Pack release evidence.
+- Parent cleanup: blocked; requires separate private-app cleanup PR after hosted and redirect evidence
+- Evidence: Seed intent recorded. Pack-hosted route, release-facts, redirect, and private-app cleanup PR evidence are pending.
+- Rollback: Keep parent Pack pages or redirects until Pack-hosted pages, release-facts checks, and hosted route evidence are green.
 
-| Source route | Destination | Cleanup | Evidence | Redirect | Rollback |
-| --- | --- | --- | --- | --- | --- |
-| `/pack/source` | `https://pack.complyeaze.com/source` | cleanup blocked | Pack-hosted route and release-facts evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/pack/status` | `https://pack.complyeaze.com/status` | cleanup blocked | Pack-hosted route and release-facts evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/pack/changelog` | `https://pack.complyeaze.com/changelog` | cleanup blocked | Pack-hosted route and release-facts evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/pack/support` | `https://pack.complyeaze.com/support` | cleanup blocked | Pack-hosted route and release-facts evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/pack/security` | `https://pack.complyeaze.com/security` | cleanup blocked | Pack-hosted route and release-facts evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/pack/privacy` | `https://pack.complyeaze.com/privacy` | cleanup blocked | Pack-hosted route and release-facts evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/pack/terms` | `https://pack.complyeaze.com/terms` | cleanup blocked | Pack-hosted route and release-facts evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/pack/acceptable-use` | `https://pack.complyeaze.com/acceptable-use` | cleanup blocked | Pack-hosted route and release-facts evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/pack/docs` | `https://pack.complyeaze.com/docs` | cleanup blocked | Pack-hosted route and release-facts evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/pack/release-automation` | `https://pack.complyeaze.com/release-automation` | cleanup blocked | Pack-hosted route and release-facts evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/pack/gst` | `https://pack.complyeaze.com/gst` | cleanup blocked | Pack-hosted route and release-facts evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
+| Source host | Source route | Destination host | Destination route | Cleanup | Evidence | Redirect | Cleanup PR | Rollback |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `pack.complyeaze.com` | `/` | `pack.complyeaze.com` | `/` | cleanup blocked | Pack-hosted route and release-facts evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `pack.complyeaze.com` | `/source` | `pack.complyeaze.com` | `/source` | cleanup blocked | Pack-hosted route and release-facts evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `pack.complyeaze.com` | `/status` | `pack.complyeaze.com` | `/status` | cleanup blocked | Pack-hosted route and release-facts evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `pack.complyeaze.com` | `/changelog` | `pack.complyeaze.com` | `/changelog` | cleanup blocked | Pack-hosted route and release-facts evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `pack.complyeaze.com` | `/support` | `pack.complyeaze.com` | `/support` | cleanup blocked | Pack-hosted route and release-facts evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `pack.complyeaze.com` | `/security` | `pack.complyeaze.com` | `/security` | cleanup blocked | Pack-hosted route and release-facts evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `pack.complyeaze.com` | `/privacy` | `pack.complyeaze.com` | `/privacy` | cleanup blocked | Pack-hosted route and release-facts evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `pack.complyeaze.com` | `/terms` | `pack.complyeaze.com` | `/terms` | cleanup blocked | Pack-hosted route and release-facts evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `pack.complyeaze.com` | `/acceptable-use` | `pack.complyeaze.com` | `/acceptable-use` | cleanup blocked | Pack-hosted route and release-facts evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `pack.complyeaze.com` | `/docs` | `pack.complyeaze.com` | `/docs` | cleanup blocked | Pack-hosted route and release-facts evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `pack.complyeaze.com` | `/release-automation` | `pack.complyeaze.com` | `/release-automation` | cleanup blocked | Pack-hosted route and release-facts evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `pack.complyeaze.com` | `/gst` | `pack.complyeaze.com` | `/gst` | cleanup blocked | Pack-hosted route and release-facts evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
 
-## Tools Public Utilities
+## Tools public utilities
 
-- Source: Tools public URLs `/tools/evidence-packet` and `/tools/sanchika`
-- Destination: `/products/tools/` for family-level context, then `tools.complyeaze.com` for utility-owned runtime and release evidence
+- Source: Tools public URLs on tools.complyeaze.com: /evidence-packet and /sanchika
+- Destination: /products/tools/ for family-level context, then tools.complyeaze.com for utility-owned runtime and release evidence
 - Status: gateway seeded; cleanup blocked
-- Cleanup rule: do not add account, upload, backend, or document-custody behavior to this repository.
-- Parent cleanup: blocked; requires separate private-app cleanup PR after hosted and redirect evidence.
-- Evidence: seed intent recorded. Tools-hosted route, local-only runtime, redirect, and private-app cleanup PR evidence are pending.
-- Rollback: keep parent Tools routes until the static utility host serves equivalent public pages and hosted route evidence is recorded.
+- Cleanup rule: Do not add account, upload, backend, or document-custody behavior to this repository.
+- Parent cleanup: blocked; requires separate private-app cleanup PR after hosted and redirect evidence
+- Evidence: Seed intent recorded. Tools-hosted route, local-only runtime, redirect, and private-app cleanup PR evidence are pending.
+- Rollback: Keep parent Tools routes until the static utility host serves equivalent public pages and hosted route evidence is recorded.
 
-| Source route | Destination | Cleanup | Evidence | Redirect | Rollback |
-| --- | --- | --- | --- | --- | --- |
-| `/tools/evidence-packet` | `https://tools.complyeaze.com/evidence-packet` | cleanup blocked | Tools-hosted route and local-only evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
-| `/tools/sanchika` | `https://tools.complyeaze.com/sanchika` | cleanup blocked | Tools-hosted route and Sanchika adoption evidence pending | redirect not configured | keep parent route until redirect rollback is tested |
+| Source host | Source route | Destination host | Destination route | Cleanup | Evidence | Redirect | Cleanup PR | Rollback |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `tools.complyeaze.com` | `/evidence-packet` | `tools.complyeaze.com` | `/evidence-packet` | cleanup blocked | Tools-hosted route and local-only evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `tools.complyeaze.com` | `/sanchika` | `tools.complyeaze.com` | `/sanchika` | cleanup blocked | Tools-hosted route and Sanchika adoption evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |

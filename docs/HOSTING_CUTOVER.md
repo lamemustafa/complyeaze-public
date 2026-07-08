@@ -74,7 +74,8 @@ are true:
 - Canonical URLs and sitemap entries point to the intended production origin.
 - The old route redirect is tested and reversible.
 - `docs/ROUTE_MIGRATION_LEDGER.md` and the rendered `/migration/` page identify
-  the source route, destination route, cleanup rule, evidence, and rollback.
+  the source host, source route, destination host, destination route, cleanup
+  rule, evidence, and rollback.
 - The latest review-rectify pass is clean for Critical and High findings.
 
 If any item is missing, keep cleanup blocked and narrow the release to static

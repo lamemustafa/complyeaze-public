@@ -34,7 +34,7 @@ the private app after production cutover is verified.
 
 For each migrated surface, record:
 
-- Source route and destination route.
+- Source host, source route, destination host, and destination route.
 - Changed files in both repositories.
 - Rendered desktop and mobile screenshots.
 - Accessibility and link-check results.

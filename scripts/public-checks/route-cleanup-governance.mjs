@@ -17,6 +17,8 @@ const requiredTemplateTerms = [
   "scripts/check-hosted-routes.mjs --base-url <url>",
   "docs/ROUTE_MIGRATION_LEDGER.md",
   "src/migration-data.mjs",
+  "source host",
+  "destination host",
   "Rendered `/migration/` evidence",
   "dist/route-manifest.json",
   "Redirect behavior",
@@ -27,7 +29,9 @@ const requiredTemplateTerms = [
 ];
 
 const requiredIssueTerms = [
+  "Source host",
   "Source route",
+  "Destination host",
   "Public destination",
   "dist/route-manifest.json",
   "scripts/check-hosted-routes.mjs --base-url <url>",
