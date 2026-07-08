@@ -82,10 +82,16 @@ const requiredGithubSettingsScriptTerms = [
   "lamemustafa/complyeaze-public",
   "Protect main",
   "refs/heads/main",
+  "Protect main included refs",
+  "Protect main excluded refs",
+  "pull_request-only",
   "allowed_merge_methods",
   "required_approving_review_count",
   "require_code_owner_review",
   "required_status_checks",
+  "required status check contexts",
+  "Review gate integration",
+  "15368",
   "Public site gates",
   "Review gate"
 ];

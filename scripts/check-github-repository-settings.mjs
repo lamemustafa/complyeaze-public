@@ -6,6 +6,7 @@ const repository = process.argv[2] ?? "lamemustafa/complyeaze-public";
 const expectedTopics = ["complyeaze", "public-site", "compliance", "open-source", "trust"];
 const expectedRequiredChecks = ["Public site gates", "Review gate"];
 const expectedRuleTypes = ["deletion", "non_fast_forward", "pull_request", "required_status_checks"];
+const reviewGateIntegrationId = 15368;
 
 function run() {
   const findings = [];
@@ -48,10 +49,10 @@ function run() {
   } else {
     const ruleset = ghJson(["api", `repos/${repository}/rulesets/${protectMain.id}`]);
     assertEqual("Protect main enforcement", ruleset.enforcement, "active", findings);
-    const include = ruleset.conditions?.ref_name?.include ?? [];
-    if (!include.includes("refs/heads/main")) {
-      findings.push("Protect main ruleset must include refs/heads/main");
-    }
+    assertArrayEqual("Protect main included refs", ruleset.conditions?.ref_name?.include, ["refs/heads/main"], findings);
+    assertArrayEqual("Protect main excluded refs", ruleset.conditions?.ref_name?.exclude, [], findings);
+    assertPullRequestOnlyBypass(ruleset.bypass_actors ?? [], findings);
+
     const rulesByType = new Map((ruleset.rules ?? []).map((rule) => [rule.type, rule]));
     for (const ruleType of expectedRuleTypes) {
       if (!rulesByType.has(ruleType)) findings.push(`Protect main ruleset missing rule: ${ruleType}`);
@@ -68,10 +69,7 @@ function run() {
     const checksRule = rulesByType.get("required_status_checks");
     const checksParameters = checksRule?.parameters ?? {};
     assertEqual("strict required status checks", checksParameters.strict_required_status_checks_policy, true, findings);
-    const checks = new Set((checksParameters.required_status_checks ?? []).map((check) => check.context));
-    for (const check of expectedRequiredChecks) {
-      if (!checks.has(check)) findings.push(`Protect main required check missing: ${check}`);
-    }
+    assertRequiredChecks(checksParameters.required_status_checks ?? [], findings);
   }
 
   if (findings.length > 0) {
@@ -101,6 +99,22 @@ function assertArrayEqual(label, actual, expected, findings) {
   if (actualJson !== expectedJson) {
     findings.push(`${label}: expected ${expectedJson}, got ${actualJson}`);
   }
+}
+
+function assertPullRequestOnlyBypass(bypassActors, findings) {
+  for (const actor of bypassActors) {
+    if (actor.bypass_mode !== "pull_request") {
+      findings.push(`Protect main bypass actor ${actor.actor_id} must be pull_request-only`);
+    }
+  }
+}
+
+function assertRequiredChecks(requiredChecks, findings) {
+  const contexts = requiredChecks.map((check) => check.context).sort();
+  assertArrayEqual("required status check contexts", contexts, [...expectedRequiredChecks].sort(), findings);
+
+  const reviewGate = requiredChecks.find((check) => check.context === "Review gate");
+  assertEqual("Review gate integration", reviewGate?.integration_id, reviewGateIntegrationId, findings);
 }
 
 run();
