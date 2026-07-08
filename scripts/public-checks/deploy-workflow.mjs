@@ -19,10 +19,13 @@ const requiredJobSnippets = [
   "if: ${{ github.ref == 'refs/heads/main' && vars.ENABLE_GITHUB_PAGES_DEPLOY == 'true' }}",
   "name: github-pages",
   "pnpm verify",
-  "actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b",
-  "actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa",
   "path: dist",
-  "actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e"
+];
+
+const requiredPinnedActions = [
+  "actions/configure-pages",
+  "actions/upload-pages-artifact",
+  "actions/deploy-pages"
 ];
 
 const forbiddenSnippets = [
@@ -77,6 +80,12 @@ export function assertDeployWorkflow(root) {
       findings.push(`${workflowPath}: build-and-deploy job missing ${snippet}`);
     }
   }
+  for (const actionName of requiredPinnedActions) {
+    const pattern = new RegExp(`uses: ${escapeRegex(actionName)}@[a-f0-9]{40}`);
+    if (!pattern.test(deployJob)) {
+      findings.push(`${workflowPath}: ${actionName} must be pinned to a 40-character SHA`);
+    }
+  }
 
   for (const snippet of forbiddenSnippets) {
     if (workflow.includes(snippet)) {
@@ -99,4 +108,8 @@ export function assertDeployWorkflow(root) {
   if (findings.length > 0) {
     throw new Error(`Deploy workflow findings:\n${findings.join("\n")}`);
   }
+}
+
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
