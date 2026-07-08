@@ -8,10 +8,10 @@ on the rendered `/migration/` page.
 ## Root Public Pages
 
 - Source: `src/app/(main)/page.tsx` and `src/app/(main)/resources/{about-us,contact-us,privacy-policy,terms-and-conditions}`
-- Destination: `/`, `/privacy/`, `/terms/`, `/status/`, `/changelog/`, and `/release-evidence/` in `complyeaze-public`; `/about/` and `/contact/` still pending review
-- Status: policy/status/release pages seeded; cleanup blocked
+- Destination: `/`, `/about/`, `/contact/`, `/privacy/`, `/terms/`, `/status/`, `/changelog/`, and `/release-evidence/` in `complyeaze-public`
+- Status: root resource and policy/status/release pages seeded; cleanup blocked
 - Cleanup rule: do not remove parent routes until production host routing, canonical URLs, and rollback redirects are recorded.
-- Evidence: root story, product-family map, and public-repo-specific policy/status/release routes are seeded; parent about/contact/legal pages still need public-safe copy review before any direct migration.
+- Evidence: root story, product-family map, public-safe about/contact routing, and public-repo-specific policy/status/release routes are seeded; parent components were not copied because they include form submission, contact details, profile links, and broad compliance claims.
 - Rollback: keep parent routes available until the public static deploy serves matching routes and metadata.
 
 ## Axal Marketing

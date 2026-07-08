@@ -3,6 +3,7 @@ import { migrationLedger } from "./migration-data.mjs";
 import { products, proofLedger, trustSignals, migrationRoutes } from "./product-data.mjs";
 import { renderAxalPage } from "./render-axal.mjs";
 import { renderPolicyPage } from "./render-policy.mjs";
+import { renderRootResourcePage } from "./render-root-resource.mjs";
 
 export function renderPage(page) {
   const canonical = new URL(page.urlPath, site.origin).href;
@@ -10,7 +11,8 @@ export function renderPage(page) {
     { label: "Trust policy", href: "/trust/" },
     { label: "Privacy", href: "/privacy/" },
     { label: "Terms", href: "/terms/" },
-    { label: "Status", href: "/status/" }
+    { label: "Status", href: "/status/" },
+    { label: "Contact", href: "/contact/" }
   ];
   return `<!doctype html>
 <html lang="en">
@@ -27,6 +29,7 @@ export function renderPage(page) {
     <link rel="stylesheet" href="/assets/styles.css">
     ${page.slug === "products" ? '<link rel="stylesheet" href="/assets/products.css">' : ""}
     ${page.slug === "migration" ? '<link rel="stylesheet" href="/assets/migration.css">' : ""}
+    ${page.type === "rootResource" ? '<link rel="stylesheet" href="/assets/root-resource.css">' : ""}
     ${page.type === "policy" ? '<link rel="stylesheet" href="/assets/policy.css">' : ""}
     ${page.type?.startsWith("axal") ? '<link rel="stylesheet" href="/assets/axal.css">' : ""}
   </head>
@@ -81,6 +84,7 @@ function renderCtas(page) {
 function renderPageBody(page) {
   if (page.slug === "products") return renderProducts();
   if (page.slug === "migration") return renderMigration();
+  if (page.type === "rootResource") return renderRootResourcePage(page, escapeHtml);
   if (page.type === "policy") return renderPolicyPage(page, escapeHtml);
   if (page.type?.startsWith("axal")) return renderAxalPage(page, escapeHtml);
   return renderSections(page.sections);

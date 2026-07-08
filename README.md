@@ -46,6 +46,8 @@ build, links, metadata, and rendered screenshots.
 
 ## Public Pages
 
+- `/about/` explains the public repo boundary and product-family proof model.
+- `/contact/` routes public-site, security, and private-product inquiries without collecting form data.
 - `/privacy/` defines the public-repo privacy boundary.
 - `/terms/` defines public-site and open-source usage boundaries.
 - `/status/` reports repository and static-site readiness, not private app uptime.
