@@ -45,6 +45,7 @@ export const requiredFiles = [
   "scripts/public-checks/legal-governance.mjs",
   "scripts/public-checks/migration-ledger.mjs",
   "scripts/public-checks/policy-pages.mjs",
+  "scripts/public-checks/public-claims.mjs",
   "scripts/public-checks/required-files.mjs",
   "scripts/public-checks/repository-settings.mjs",
   "scripts/public-checks/review-gate-fixtures.mjs",
