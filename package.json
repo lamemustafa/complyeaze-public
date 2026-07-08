@@ -21,6 +21,6 @@
     "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm visual:check && pnpm public:check && pnpm links:check && pnpm metadata:check"
   },
   "devDependencies": {
-    "playwright": "1.56.1"
+    "playwright": "1.61.1"
   }
 }
