@@ -19,6 +19,7 @@ import {
   assertReviewGateFixturePolicy,
   assertReviewGateFixtures
 } from "./public-checks/review-gate-fixtures.mjs";
+import { assertRouteCleanupGovernance } from "./public-checks/route-cleanup-governance.mjs";
 import { assertRootResourcePages } from "./public-checks/root-resource-pages.mjs";
 import { assertRouteManifest } from "./public-checks/route-manifest.mjs";
 import { pages } from "../src/site-data.mjs";
@@ -250,6 +251,7 @@ function run() {
     assertDeployWorkflow(root);
     assertHostedRoutesPolicy(root);
     assertReviewGateFixturePolicy(root);
+    assertRouteCleanupGovernance(root);
   }
   if (["--all", "--links"].includes(mode)) {
     assertLinks();
