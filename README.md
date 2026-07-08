@@ -43,3 +43,11 @@ build, links, metadata, and rendered screenshots.
 - [Trademark policy](TRADEMARKS.md)
 - [Review-rectify policy](docs/REVIEW_RECTIFY.md)
 - [Migration plan](docs/MIGRATION.md)
+
+## Public Pages
+
+- `/privacy/` defines the public-repo privacy boundary.
+- `/terms/` defines public-site and open-source usage boundaries.
+- `/status/` reports repository and static-site readiness, not private app uptime.
+- `/changelog/` records source-backed migration slices.
+- `/release-evidence/` lists the evidence expected before release or cleanup.

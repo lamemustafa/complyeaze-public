@@ -2,9 +2,16 @@ import { site } from "./site-data.mjs";
 import { migrationLedger } from "./migration-data.mjs";
 import { products, proofLedger, trustSignals, migrationRoutes } from "./product-data.mjs";
 import { renderAxalPage } from "./render-axal.mjs";
+import { renderPolicyPage } from "./render-policy.mjs";
 
 export function renderPage(page) {
   const canonical = new URL(page.urlPath, site.origin).href;
+  const footerLinks = [
+    { label: "Trust policy", href: "/trust/" },
+    { label: "Privacy", href: "/privacy/" },
+    { label: "Terms", href: "/terms/" },
+    { label: "Status", href: "/status/" }
+  ];
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -20,6 +27,7 @@ export function renderPage(page) {
     <link rel="stylesheet" href="/assets/styles.css">
     ${page.slug === "products" ? '<link rel="stylesheet" href="/assets/products.css">' : ""}
     ${page.slug === "migration" ? '<link rel="stylesheet" href="/assets/migration.css">' : ""}
+    ${page.type === "policy" ? '<link rel="stylesheet" href="/assets/policy.css">' : ""}
     ${page.type?.startsWith("axal") ? '<link rel="stylesheet" href="/assets/axal.css">' : ""}
   </head>
   <body>
@@ -49,7 +57,14 @@ export function renderPage(page) {
     </main>
     <footer class="site-footer">
       <p>Open-source public surfaces. Private app data stays outside this repository.</p>
-      <a href="/trust/">Trust policy</a>
+      <nav aria-label="Footer navigation">
+        ${footerLinks
+          .map(
+            (item) =>
+              `<a href="${item.href}"${item.href === page.urlPath ? ' aria-current="page"' : ""}>${escapeHtml(item.label)}</a>`,
+          )
+          .join("")}
+      </nav>
     </footer>
   </body>
 </html>`;
@@ -66,6 +81,7 @@ function renderCtas(page) {
 function renderPageBody(page) {
   if (page.slug === "products") return renderProducts();
   if (page.slug === "migration") return renderMigration();
+  if (page.type === "policy") return renderPolicyPage(page, escapeHtml);
   if (page.type?.startsWith("axal")) return renderAxalPage(page, escapeHtml);
   return renderSections(page.sections);
 }

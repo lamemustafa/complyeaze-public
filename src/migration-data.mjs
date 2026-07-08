@@ -4,12 +4,12 @@ export const migrationLedger = [
     source:
       "src/app/(main)/page.tsx and src/app/(main)/resources/{about-us,contact-us,privacy-policy,terms-and-conditions}",
     destination:
-      "/, /about/, /contact/, /privacy/, and /terms/ in complyeaze-public",
-    status: "partially seeded",
+      "/, /privacy/, /terms/, /status/, /changelog/, and /release-evidence/ in complyeaze-public; /about/ and /contact/ still pending review",
+    status: "policy/status/release pages seeded; cleanup blocked",
     cleanup:
       "Do not remove parent routes until production host routing, canonical URLs, and rollback redirects are recorded.",
     evidence:
-      "Root story and product-family map are seeded; resource pages still need public-safe copy review.",
+      "Root story, product-family map, and public-repo-specific policy/status/release routes are seeded; parent about/contact/legal pages still need public-safe copy review before any direct migration.",
     rollback:
       "Keep parent routes available until the public static deploy serves matching routes and metadata."
   },

@@ -1,4 +1,5 @@
 import { axalPages } from "./axal-data.mjs";
+import { policyPages } from "./policy-data.mjs";
 
 export const site = {
   origin: "https://complyeaze.com",
@@ -10,6 +11,7 @@ export const site = {
     { label: "Products", href: "/products/" },
     { label: "Migration", href: "/migration/" },
     { label: "Trust", href: "/trust/" },
+    { label: "Status", href: "/status/" },
     { label: "Docs", href: "/docs/" }
   ],
   migrationLedgerPath: "/migration/"
@@ -132,4 +134,4 @@ const corePages = [
   }
 ];
 
-export const pages = [...corePages, ...axalPages];
+export const pages = [...corePages, ...policyPages, ...axalPages];
