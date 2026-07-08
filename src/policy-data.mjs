@@ -57,7 +57,12 @@ const policySections = {
     {
       title: "Migration posture",
       body:
-        "Root story, product-family, trust, migration, Axal marketing, and public policy/status/release routes are seeded. Parent-route cleanup remains blocked until hosted routing, canonical URLs, redirect behavior, and rollback evidence are reviewed."
+        "Root story, product-family, trust, migration, Axal marketing, and public policy/status/release routes are seeded. Route-level cleanup rows now stay blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
+    },
+    {
+      title: "Hosting posture",
+      body:
+        "Pages deploy is gated and readiness-only behind ENABLE_GITHUB_PAGES_DEPLOY. A successful preview or artifact upload does not authorize cleanup because it is not production-host or parent-route cleanup evidence."
     },
     {
       title: "Incident language",
@@ -66,6 +71,21 @@ const policySections = {
     }
   ],
   changelog: [
+    {
+      title: "2026-07-08 - Route cleanup governance",
+      body:
+        "Added route-cleanup issue intake, parent-route impact prompts, PR-template cutover checks, and static public checks so cleanup requests require hosted, redirect, rollback, ledger, and separate private-app cleanup PR evidence."
+    },
+    {
+      title: "2026-07-08 - Route-level migration ledger",
+      body:
+        "Expanded the migration ledger from family summaries to source-route rows, rendered those blockers on /migration/, and added checks for duplicate routes, pending evidence, blocked cleanup, markdown alignment, and private-app PR requirements."
+    },
+    {
+      title: "2026-07-08 - Hosted route cutover checks",
+      body:
+        "Added scripts/check-hosted-routes.mjs and the hosting cutover runbook so reviewers can verify hosted destination routes, robots, sitemap, route manifest, canonical tags, and preview-vs-production origin boundaries without enabling Pages by default."
+    },
     {
       title: "2026-07-08 - Public policy/status/release routes",
       body:
@@ -106,7 +126,17 @@ const policySections = {
     {
       title: "Claim and safety checks",
       body:
-        "scripts/check-public-repo.mjs rejects secret-like assignments, PAN-like and GSTIN-like identifiers, missing governance files, unsupported policy scope, broken route metadata, and incomplete migration-ledger evidence."
+        "scripts/check-public-repo.mjs rejects secret-like assignments, PAN-like and GSTIN-like identifiers, missing governance files, unsupported policy scope, broken route metadata, incomplete migration-ledger evidence, and missing route-cleanup governance prompts."
+    },
+    {
+      title: "Hosted route evidence",
+      body:
+        "scripts/check-hosted-routes.mjs verifies hosted destination pages against dist/route-manifest.json, robots.txt, sitemap.xml, canonical tags, metadata, and main landmarks. Its summaries explicitly say redirect evidence is not checked by that script and preview hosts do not prove production cutover."
+    },
+    {
+      title: "Route cleanup governance",
+      body:
+        "Route cleanup proposals need route-level ledger rows, rendered /migration/ evidence, hosted route summaries, redirect behavior, rollback evidence, and a separate private-app cleanup PR before any parent ComplyEaze route is removed or redirected. Public evidence pages do not authorize cleanup by themselves."
     },
     {
       title: "Pages deploy guard",
