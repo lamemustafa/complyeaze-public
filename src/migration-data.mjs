@@ -18,12 +18,12 @@ export const migrationLedger = [
     source:
       "src/app/(axal)/(marketing)/axal/page.tsx and src/app/(axal)/(marketing)/axal/[slug]/page.tsx",
     destination:
-      "Axal public host plus complyeaze-public product-family and migration context",
-    status: "inventory only",
+      "/products/axal/ plus five /products/axal/<slug>/ static public pages",
+    status: "seeded; cleanup blocked",
     cleanup:
       "Do not move login, signup, reset, callback, or workspace flows into this repository.",
     evidence:
-      "Parent route registry lists five clean Axal marketing paths for later public-host verification.",
+      "Five Axal SEO pages are seeded as public-safe static pages with narrowed claims and visual checks required before merge.",
     rollback:
       "Preserve parent rewrites until Axal clean-route redirects and crawler metadata pass hosted checks."
   },

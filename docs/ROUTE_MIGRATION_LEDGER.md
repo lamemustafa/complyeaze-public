@@ -17,10 +17,10 @@ on the rendered `/migration/` page.
 ## Axal Marketing
 
 - Source: `src/app/(axal)/(marketing)/axal/page.tsx` and `src/app/(axal)/(marketing)/axal/[slug]/page.tsx`
-- Destination: Axal public host plus `complyeaze-public` product-family and migration context
-- Status: inventory only
+- Destination: `/products/axal/` plus five `/products/axal/<slug>/` static public pages
+- Status: seeded; cleanup blocked
 - Cleanup rule: do not move login, signup, reset, callback, or workspace flows into this repository.
-- Evidence: parent route registry lists five clean Axal marketing paths for later public-host verification.
+- Evidence: five Axal SEO pages are seeded as public-safe static pages with narrowed claims and visual checks required before merge.
 - Rollback: preserve parent rewrites until Axal clean-route redirects and crawler metadata pass hosted checks.
 
 ## Pack Public Pages
