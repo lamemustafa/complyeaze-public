@@ -96,7 +96,12 @@ const policySections = {
     {
       title: "Visual artifacts",
       body:
-        "scripts/visual-check.mjs renders every public page at desktop, tablet, and mobile widths, writes screenshots under test-results/public-visual, and records a summary for review."
+        "scripts/visual-check.mjs renders every public page at desktop, tablet, and mobile widths, writes screenshots under test-results/public-visual, and records a summary for review. CI retains this as the public-visual-evidence artifact."
+    },
+    {
+      title: "Build artifacts",
+      body:
+        "CI retains the generated dist output as the public-site-build artifact so reviewers can inspect the route manifest, robots.txt, sitemap.xml, static HTML, and copied assets without treating the artifact as hosted cutover evidence."
     },
     {
       title: "Claim and safety checks",

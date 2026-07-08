@@ -62,3 +62,23 @@ jobs:
 
       - name: Metadata check
         run: pnpm metadata:check
+
+      - name: Upload static build evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: public-site-build
+          path: |
+            dist
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload visual review evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: public-visual-evidence
+          path: |
+            test-results/public-visual
+          if-no-files-found: error
+          retention-days: 30
