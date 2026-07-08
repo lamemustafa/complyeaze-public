@@ -7,11 +7,11 @@ export const migrationLedger = [
       "/, /about/, /contact/, /privacy/, /terms/, /status/, /changelog/, and /release-evidence/ in complyeaze-public",
     status: "root resource and policy/status/release pages seeded; cleanup blocked",
     cleanup:
-      "Do not remove parent routes until production host routing, canonical URLs, and rollback redirects are recorded.",
+      "Do not remove parent routes until production host routing, canonical URLs, rollback redirects, and scripts/check-hosted-routes.mjs evidence are recorded.",
     evidence:
       "Root story, product-family map, public-safe about/contact routing, and public-repo-specific policy/status/release routes are seeded; parent components were not copied because they include form submission, contact details, profile links, and broad compliance claims.",
     rollback:
-      "Keep parent routes available until the public static deploy serves matching routes and metadata."
+      "Keep parent routes available until the public static deploy serves matching routes and metadata, with hosted route evidence attached."
   },
   {
     family: "Axal marketing",
@@ -25,7 +25,7 @@ export const migrationLedger = [
     evidence:
       "Five Axal SEO pages are seeded as public-safe static pages with narrowed claims and visual checks required before merge.",
     rollback:
-      "Preserve parent rewrites until Axal clean-route redirects and crawler metadata pass hosted checks."
+      "Preserve parent rewrites until Axal clean-route redirects and crawler metadata pass hosted route checks."
   },
   {
     family: "Pack public pages",
@@ -39,7 +39,7 @@ export const migrationLedger = [
     evidence:
       "Family-level Pack gateway is seeded without copying parent Pack pages; Pack remains a separate public extension repository and host for runtime/release facts.",
     rollback:
-      "Keep parent Pack pages or redirects until Pack-hosted pages and release-facts checks are green."
+      "Keep parent Pack pages or redirects until Pack-hosted pages, release-facts checks, and hosted route evidence are green."
   },
   {
     family: "Tools public utilities",
@@ -53,6 +53,6 @@ export const migrationLedger = [
     evidence:
       "Family-level Tools gateway is seeded without copying parent utility implementation; Tools surfaces should stay browser-local and source-backed before any parent cleanup.",
     rollback:
-      "Keep parent Tools routes until the static utility host serves equivalent public pages."
+      "Keep parent Tools routes until the static utility host serves equivalent public pages and hosted route evidence is recorded."
   }
 ];

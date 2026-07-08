@@ -43,6 +43,7 @@ build, links, metadata, and rendered screenshots.
 - [Trademark policy](TRADEMARKS.md)
 - [Review-rectify policy](docs/REVIEW_RECTIFY.md)
 - [Dependency policy](docs/DEPENDENCY_POLICY.md)
+- [Hosting cutover runbook](docs/HOSTING_CUTOVER.md)
 - [Migration plan](docs/MIGRATION.md)
 
 ## Public Pages

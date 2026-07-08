@@ -39,6 +39,7 @@ For each migrated surface, record:
 - Rendered desktop and mobile screenshots.
 - Accessibility and link-check results.
 - Metadata, robots, sitemap, canonical, and redirect results.
+- Hosted route evidence from `scripts/check-hosted-routes.mjs --base-url <url>`.
 - Public claim evidence.
 - Rollback path.
 

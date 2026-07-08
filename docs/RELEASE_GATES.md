@@ -33,6 +33,8 @@ Each release should record:
 - Desktop and mobile screenshots.
 - Accessibility and link-check results.
 - Metadata, robots, sitemap, canonical, and redirect results.
+- Hosted route evidence from `scripts/check-hosted-routes.mjs --base-url <url>`
+  before any parent-route cleanup or production-host cutover.
 - Public claim evidence.
 - Dependency review evidence from `docs/DEPENDENCY_POLICY.md` when npm,
   pnpm lockfile, or GitHub Actions dependencies change.
@@ -50,6 +52,8 @@ Each release should record:
 - `Pages deploy` is readiness-only until `ENABLE_GITHUB_PAGES_DEPLOY=true`,
   GitHub Pages is configured for GitHub Actions, and hosted route, canonical,
   redirect, and rollback evidence is recorded.
+- Hosted route evidence should write `test-results/hosted-routes/summary.json`
+  and `test-results/hosted-routes/summary.md` for review.
 - The Pages workflow must run `pnpm verify` before deploying and may upload only
   the generated `dist` artifact.
 - No production database, Redis, worker, portal, credential, or document storage
