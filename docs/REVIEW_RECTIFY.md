@@ -48,6 +48,12 @@ The GitHub `Review gate` status enforces unresolved review-thread and
 requested-changes blockers. It does not replace the review-rectify table in the
 pull request or the maintainer's current-diff review.
 
+The GitHub `Public site gates` status should run the full public gate for every
+pull request and `main` push. A skipped or successful Pages deploy is not
+release or cleanup evidence unless `ENABLE_GITHUB_PAGES_DEPLOY` is intentionally
+enabled and the hosted-route, redirect, rollback, and migration-ledger evidence
+is reviewed.
+
 `pnpm test` runs `scripts/test-review-gate-fixtures.mjs`, which proves the local
 review gate fails unresolved threads, current-head requested changes, and
 missing strict current-head reviews while allowing current-head approvals that

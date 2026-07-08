@@ -63,6 +63,9 @@ jobs:
       - name: Metadata check
         run: pnpm metadata:check
 
+      - name: Whitespace check
+        run: git diff --check
+
       - name: Upload static build evidence
         if: ${{ always() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a

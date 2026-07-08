@@ -6,6 +6,11 @@ uploads, or authenticated app infrastructure.
 
 ## Required Checks
 
+The protected `main` ruleset should require the GitHub `Public site gates` and
+`Review gate` checks. `Public site gates` should stay aligned with the local
+gate below; `Review gate` complements, but does not replace the review-rectify
+table and maintainer review of the current diff.
+
 ```bash
 pnpm lint
 pnpm typecheck
