@@ -40,6 +40,7 @@ export const requiredFiles = [
   "scripts/public-checks/deploy-workflow.mjs",
   "scripts/public-checks/gateway-pages.mjs",
   "scripts/public-checks/hosted-routes.mjs",
+  "scripts/public-checks/legal-governance.mjs",
   "scripts/public-checks/migration-ledger.mjs",
   "scripts/public-checks/policy-pages.mjs",
   "scripts/public-checks/required-files.mjs",

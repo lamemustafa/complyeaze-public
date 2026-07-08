@@ -20,6 +20,12 @@ readiness, or rollback readiness must point to one of:
 Do not claim:
 
 - Government approval.
+- GSTN, CBIC, or other official portal-operator endorsement.
+- ComplyEaze, Axal, Pack, Tools, or Sanchika trademark rights beyond
+  [LICENSE.brand.md](../LICENSE.brand.md) and [TRADEMARKS.md](../TRADEMARKS.md).
+- ComplyEaze endorsement, ownership, operation, partnership, or affiliation for
+  forks or downstream deployments unless the maintainers explicitly operate
+  that surface.
 - DPDP compliance.
 - Certified GST filing behavior.
 - Audit-proof output.

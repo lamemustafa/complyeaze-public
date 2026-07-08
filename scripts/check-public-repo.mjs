@@ -9,6 +9,7 @@ import { assertDependencyPolicy } from "./public-checks/dependency-policy.mjs";
 import { assertDeployWorkflow } from "./public-checks/deploy-workflow.mjs";
 import { assertGatewayPages } from "./public-checks/gateway-pages.mjs";
 import { assertHostedRoutesPolicy } from "./public-checks/hosted-routes.mjs";
+import { assertLegalGovernance } from "./public-checks/legal-governance.mjs";
 import {
   assertMigrationLedger,
   assertRenderedMigrationLedger
@@ -90,7 +91,22 @@ function assertNoForbiddenContent() {
 
 function assertVisualPolicy() {
   const text = readFileSync(path.join(root, "docs/VISUAL_TESTING.md"), "utf8");
-  const requiredTerms = ["desktop", "mobile", "accessibility", "screenshots", "synthetic data"];
+  const requiredTerms = [
+    "desktop",
+    "tablet",
+    "mobile",
+    "first viewport",
+    "keyboard focus",
+    "reduced-motion",
+    "horizontal overflow",
+    "broken images",
+    "blank sections",
+    "overlapping",
+    "clipped controls",
+    "accessibility",
+    "screenshots",
+    "synthetic data"
+  ];
   const missing = requiredTerms.filter((term) => !text.toLowerCase().includes(term));
   if (missing.length > 0) {
     throw new Error(`Visual policy is missing terms: ${missing.join(", ")}`);
@@ -250,6 +266,7 @@ function run() {
     assertDependencyPolicy(root);
     assertDeployWorkflow(root);
     assertHostedRoutesPolicy(root);
+    assertLegalGovernance(root);
     assertReviewGateFixturePolicy(root);
     assertRouteCleanupGovernance(root);
   }
