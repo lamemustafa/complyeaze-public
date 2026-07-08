@@ -22,6 +22,22 @@
       production screenshots.
 - [ ] Public claims are backed by source, release, or runtime evidence.
 - [ ] Trademark and affiliation boundaries are preserved.
+- [ ] I have the right to submit this contribution.
+- [ ] I understand intentional contributions are submitted under Apache License
+      2.0 section 5 unless I explicitly state otherwise or a separate written
+      agreement applies.
+- [ ] No proprietary, confidential, copied, unlicensed, or third-party content
+      is included unless license, source, attribution, and inclusion rationale
+      are listed in the disclosure section below.
+
+## Third-Party Or Proprietary Content Disclosure
+
+List any third-party, proprietary, generated, copied, licensed, or attributed
+content included in this PR. If none, write `None`.
+
+| Content | License / permission | Source | Attribution | Inclusion rationale |
+| --- | --- | --- | --- | --- |
+| | | | | |
 
 ## Verification
 
