@@ -39,5 +39,8 @@ pattern used by Sanchika.
 - Keep `Public site gates` aligned with `pnpm verify`.
 - Keep `Review gate` pinned to the GitHub Actions integration when rulesets are
   edited.
+- Keep pull-request review-gate sync at zero wait while there is no guaranteed
+  current-head Codex reviewer app for this repository. The status still reports
+  missing current-head review as an audit signal.
 - Do not enable Projects or Wiki unless the public contribution model changes.
 - Do not make `main` directly pushable after the initial bootstrap commit.
