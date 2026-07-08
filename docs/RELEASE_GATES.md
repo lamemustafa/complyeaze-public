@@ -34,6 +34,8 @@ Each release should record:
 - Accessibility and link-check results.
 - Metadata, robots, sitemap, canonical, and redirect results.
 - Public claim evidence.
+- Dependency review evidence from `docs/DEPENDENCY_POLICY.md` when npm,
+  pnpm lockfile, or GitHub Actions dependencies change.
 - Review-gate fixture evidence from `scripts/test-review-gate-fixtures.mjs`
   when governance, review policy, or review-gate scripts change.
 - Pages deploy evidence: Actions run URL, skipped/disabled guard status when

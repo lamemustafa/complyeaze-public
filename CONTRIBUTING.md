@@ -35,6 +35,13 @@ git diff --check
 
 Visual changes require desktop and mobile rendered evidence with synthetic data.
 
+## Dependency Changes
+
+Dependency and GitHub Actions updates must follow
+[docs/DEPENDENCY_POLICY.md](docs/DEPENDENCY_POLICY.md). Keep updates scoped,
+review release evidence when the dependency affects build, browser automation,
+CI, artifacts, or deployment, and do not auto-merge dependency PRs.
+
 ## Pull Requests
 
 Use the pull request template and fill every applicable section. Before review:

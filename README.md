@@ -42,6 +42,7 @@ build, links, metadata, and rendered screenshots.
 - [Brand and trademark notice](LICENSE.brand.md)
 - [Trademark policy](TRADEMARKS.md)
 - [Review-rectify policy](docs/REVIEW_RECTIFY.md)
+- [Dependency policy](docs/DEPENDENCY_POLICY.md)
 - [Migration plan](docs/MIGRATION.md)
 
 ## Public Pages
