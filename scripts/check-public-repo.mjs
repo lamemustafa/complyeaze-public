@@ -4,6 +4,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { assertAxalPages } from "./public-checks/axal-pages.mjs";
+import { assertDeployWorkflow } from "./public-checks/deploy-workflow.mjs";
 import { assertGatewayPages } from "./public-checks/gateway-pages.mjs";
 import { assertPolicyPages } from "./public-checks/policy-pages.mjs";
 import { requiredFiles } from "./public-checks/required-files.mjs";
@@ -251,6 +252,7 @@ function run() {
     assertPolicyPages(root);
     assertRootResourcePages(root);
     assertAxalPages();
+    assertDeployWorkflow(root);
   }
   if (["--all", "--links"].includes(mode)) {
     assertLinks();

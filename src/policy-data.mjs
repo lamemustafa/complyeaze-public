@@ -104,6 +104,11 @@ const policySections = {
         "scripts/check-public-repo.mjs rejects secret-like assignments, PAN-like and GSTIN-like identifiers, missing governance files, unsupported policy scope, broken route metadata, and incomplete migration-ledger evidence."
     },
     {
+      title: "Pages deploy guard",
+      body:
+        "The GitHub Pages workflow is readiness-only unless it runs on main with ENABLE_GITHUB_PAGES_DEPLOY set to true. It runs the full verify gate before uploading only dist, and it is not parent-route cleanup evidence without hosted route, canonical, redirect, and rollback review."
+    },
+    {
       title: "Review gate",
       body:
         "The GitHub Review gate is designed to block unresolved review threads and requested-changes states. It complements, but does not replace, rendered review and the manual review-rectify loop."
