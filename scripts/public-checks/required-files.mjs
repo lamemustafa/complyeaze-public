@@ -50,6 +50,7 @@ export const requiredFiles = [
   "scripts/public-checks/route-cleanup-governance.mjs",
   "scripts/public-checks/root-resource-pages.mjs",
   "scripts/public-checks/route-manifest.mjs",
+  "scripts/public-checks/sensitive-content.mjs",
   "src/site-data.mjs",
   "src/gateway-data.mjs",
   "src/migration-data.mjs",

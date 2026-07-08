@@ -25,16 +25,14 @@ import {
 import { assertRouteCleanupGovernance } from "./public-checks/route-cleanup-governance.mjs";
 import { assertRootResourcePages } from "./public-checks/root-resource-pages.mjs";
 import { assertRouteManifest } from "./public-checks/route-manifest.mjs";
+import {
+  assertSensitiveContent,
+  assertSensitiveContentFixturePolicy
+} from "./public-checks/sensitive-content.mjs";
 import { pages } from "../src/site-data.mjs";
 
 const root = process.cwd();
 const mode = process.argv.find((arg) => arg.startsWith("--")) ?? "--all";
-
-const forbiddenPatterns = [
-  { label: "secret-like env assignment", pattern: /\b[A-Z0-9_]*(SECRET|TOKEN|PASSWORD|PRIVATE_KEY|COOKIE)[A-Z0-9_]*\s*=\s*["']?[^"'\s]+/i },
-  { label: "Indian PAN-like identifier", pattern: /\b[A-Z]{5}[0-9]{4}[A-Z]\b/g },
-  { label: "Indian GSTIN-like identifier", pattern: /\b[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]\b/g }
-];
 
 const textExtensions = new Set([
   ".css",
@@ -71,23 +69,6 @@ function assertRequiredFiles() {
   const missing = requiredFiles.filter((file) => !existsSync(path.join(root, file)));
   if (missing.length > 0) {
     throw new Error(`Missing required public-repo files:\n${missing.join("\n")}`);
-  }
-}
-
-function assertNoForbiddenContent() {
-  const findings = [];
-  for (const filePath of walk(root)) {
-    const relative = path.relative(root, filePath);
-    const text = readFileSync(filePath, "utf8");
-    for (const { label, pattern } of forbiddenPatterns) {
-      if (pattern.test(text)) {
-        findings.push(`${relative}: ${label}`);
-      }
-      pattern.lastIndex = 0;
-    }
-  }
-  if (findings.length > 0) {
-    throw new Error(`Forbidden public-repo content found:\n${findings.join("\n")}`);
   }
 }
 
@@ -257,9 +238,10 @@ function run() {
   assertRequiredFiles();
 
   if (["--all", "--lint", "--test", "--public"].includes(mode)) {
-    assertNoForbiddenContent();
+    assertSensitiveContent(root);
   }
   if (["--all", "--test"].includes(mode)) {
+    assertSensitiveContentFixturePolicy();
     assertReviewGateFixtures(root);
   }
   if (["--all", "--typecheck"].includes(mode)) {
