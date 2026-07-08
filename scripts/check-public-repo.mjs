@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
+import { assertAxalPages } from "./public-checks/axal-pages.mjs";
 import { migrationLedger } from "../src/migration-data.mjs";
 import { pages } from "../src/site-data.mjs";
 
@@ -40,12 +41,18 @@ const requiredFiles = [
   "scripts/sync-review-gate-status.mjs",
   "scripts/build-site.mjs",
   "scripts/visual-check.mjs",
+  "scripts/public-checks/axal-pages.mjs",
   "src/site-data.mjs",
   "src/migration-data.mjs",
+  "src/product-data.mjs",
+  "src/axal-data.mjs",
+  "src/axal-more-data.mjs",
   "src/render-site.mjs",
+  "src/render-axal.mjs",
   "src/styles.css",
   "src/products.css",
-  "src/migration.css"
+  "src/migration.css",
+  "src/axal.css"
 ];
 
 const forbiddenPatterns = [
@@ -141,13 +148,9 @@ function assertMigrationLedger() {
   const normalizedDocsText = docsText.toLowerCase();
   const requiredFamilies = ["Root public pages", "Axal marketing", "Pack public pages", "Tools public utilities"];
   const missingDocs = requiredFamilies.filter((family) => !normalizedDocsText.includes(family.toLowerCase()));
-  const missingData = requiredFamilies.filter((family) =>
-    !migrationLedger.some((entry) => entry.family.toLowerCase() === family.toLowerCase())
-  );
+  const missingData = requiredFamilies.filter((family) => !migrationLedger.some((entry) => entry.family.toLowerCase() === family.toLowerCase()));
   const requiredFields = ["source", "destination", "status", "cleanup", "evidence", "rollback"];
-  const incompleteEntries = migrationLedger
-    .filter((entry) => requiredFields.some((field) => !entry[field]))
-    .map((entry) => entry.family || "Unnamed migration entry");
+  const incompleteEntries = migrationLedger.filter((entry) => requiredFields.some((field) => !entry[field])).map((entry) => entry.family || "Unnamed migration entry");
 
   const findings = [];
   if (missingDocs.length > 0) findings.push(`docs missing families: ${missingDocs.join(", ")}`);
@@ -281,6 +284,7 @@ function run() {
   if (["--all", "--public"].includes(mode)) {
     assertPublicPages();
     assertMigrationLedger();
+    assertAxalPages();
   }
   if (["--all", "--links"].includes(mode)) {
     assertLinks();

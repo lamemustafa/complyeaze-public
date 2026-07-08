@@ -1,5 +1,7 @@
 import { site } from "./site-data.mjs";
 import { migrationLedger } from "./migration-data.mjs";
+import { products, proofLedger, trustSignals, migrationRoutes } from "./product-data.mjs";
+import { renderAxalPage } from "./render-axal.mjs";
 
 export function renderPage(page) {
   const canonical = new URL(page.urlPath, site.origin).href;
@@ -18,6 +20,7 @@ export function renderPage(page) {
     <link rel="stylesheet" href="/assets/styles.css">
     ${page.slug === "products" ? '<link rel="stylesheet" href="/assets/products.css">' : ""}
     ${page.slug === "migration" ? '<link rel="stylesheet" href="/assets/migration.css">' : ""}
+    ${page.type?.startsWith("axal") ? '<link rel="stylesheet" href="/assets/axal.css">' : ""}
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
@@ -63,6 +66,7 @@ function renderCtas(page) {
 function renderPageBody(page) {
   if (page.slug === "products") return renderProducts();
   if (page.slug === "migration") return renderMigration();
+  if (page.type?.startsWith("axal")) return renderAxalPage(page, escapeHtml);
   return renderSections(page.sections);
 }
 
@@ -117,7 +121,7 @@ function renderMigration() {
 
 function renderProducts() {
   return `<section class="proof-ledger" aria-label="Public proof ledger">
-    ${site.proofLedger
+    ${proofLedger
       .map(
         (item) => `<article>
           <p>${escapeHtml(item.label)}</p>
@@ -128,7 +132,7 @@ function renderProducts() {
       .join("")}
   </section>
   <section class="product-map" aria-label="ComplyEaze product-family map">
-    ${site.products
+    ${products
       .map(
         (product) => `<article id="${escapeHtml(product.name.toLowerCase())}">
           <a class="product-name" href="${escapeHtml(product.href)}">${escapeHtml(product.name)}</a>
@@ -144,7 +148,7 @@ function renderProducts() {
       .join("")}
   </section>
   <section class="trust-signal-grid" aria-label="Trust signals">
-    ${site.trustSignals
+    ${trustSignals
       .map(
         (signal) => `<article>
           <h2>${escapeHtml(signal.title)}</h2>
@@ -164,7 +168,7 @@ function renderProducts() {
         </tr>
       </thead>
       <tbody>
-        ${site.migrationRoutes
+        ${migrationRoutes
           .map(
             (route) => `<tr>
               <th scope="row" data-label="Source">${escapeHtml(route.source)}</th>
