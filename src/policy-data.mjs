@@ -91,7 +91,7 @@ const policySections = {
     {
       title: "Route manifest",
       body:
-        "The build script writes one static HTML file for each entry in src/site-data.mjs and emits robots.txt plus sitemap.xml. Metadata and link checks read the rendered dist output."
+        "The build script writes one static HTML file for each entry in src/site-data.mjs and emits dist/route-manifest.json, robots.txt, and sitemap.xml. Metadata checks compare the manifest with source route data, rendered files, canonical URLs, and sitemap entries."
     },
     {
       title: "Visual artifacts",
