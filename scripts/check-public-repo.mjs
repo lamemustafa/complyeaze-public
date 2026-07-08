@@ -5,6 +5,7 @@ import path from "node:path";
 import process from "node:process";
 import { assertAxalPages } from "./public-checks/axal-pages.mjs";
 import { assertCiArtifacts } from "./public-checks/ci-artifacts.mjs";
+import { assertContributorIntake } from "./public-checks/contributor-intake.mjs";
 import { assertDependencyPolicy } from "./public-checks/dependency-policy.mjs";
 import { assertDeployWorkflow } from "./public-checks/deploy-workflow.mjs";
 import { assertGatewayPages } from "./public-checks/gateway-pages.mjs";
@@ -264,6 +265,7 @@ function run() {
     assertRootResourcePages(root);
     assertAxalPages();
     assertCiArtifacts(root);
+    assertContributorIntake(root);
     assertDependencyPolicy(root);
     assertDeployWorkflow(root);
     assertHostedRoutesPolicy(root);

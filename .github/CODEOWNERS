@@ -1,2 +1,30 @@
-# Keep public-site governance, release gates, and trust copy owner-reviewed.
+# Single-maintainer bootstrap owner for public-site changes.
+#
+# Keep public-site governance, release gates, source data, migration ledgers, and
+# trust copy owner-reviewed until a real maintainer team exists. Do not add
+# placeholder teams or users that cannot approve.
 * @lamemustafa
+
+# Release, policy, and governance.
+/.github/ @lamemustafa
+/AGENTS.md @lamemustafa
+/README.md @lamemustafa
+/CONTRIBUTING.md @lamemustafa
+/CODE_OF_CONDUCT.md @lamemustafa
+/SECURITY.md @lamemustafa
+/SUPPORT.md @lamemustafa
+/LICENSE @lamemustafa
+/LICENSE.brand.md @lamemustafa
+/TRADEMARKS.md @lamemustafa
+/PRODUCT.md @lamemustafa
+/DESIGN.md @lamemustafa
+/docs/ @lamemustafa
+/scripts/ @lamemustafa
+/package.json @lamemustafa
+/pnpm-lock.yaml @lamemustafa
+
+# Public route data and rendering.
+/src/*-data.mjs @lamemustafa
+/src/site-data.mjs @lamemustafa
+/src/render-*.mjs @lamemustafa
+/src/*.css @lamemustafa
