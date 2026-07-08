@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { cpSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { pages } from "../src/site-data.mjs";
 import { renderPage } from "../src/render-site.mjs";
@@ -10,7 +10,11 @@ const dist = path.join(root, "dist");
 rmSync(dist, { recursive: true, force: true });
 mkdirSync(path.join(dist, "assets"), { recursive: true });
 
-cpSync(path.join(root, "src", "styles.css"), path.join(dist, "assets", "styles.css"));
+for (const asset of readdirSync(path.join(root, "src"))) {
+  if (asset.endsWith(".css")) {
+    cpSync(path.join(root, "src", asset), path.join(dist, "assets", asset));
+  }
+}
 
 for (const page of pages) {
   const outputPath = path.join(dist, page.outputPath);
