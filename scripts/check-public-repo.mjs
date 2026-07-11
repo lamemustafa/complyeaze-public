@@ -4,7 +4,10 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { assertAxalPages } from "./public-checks/axal-pages.mjs";
-import { assertCiArtifacts } from "./public-checks/ci-artifacts.mjs";
+import {
+  assertCiArtifactPolicyFixtures,
+  assertCiArtifacts
+} from "./public-checks/ci-artifacts.mjs";
 import { assertContributorIntake } from "./public-checks/contributor-intake.mjs";
 import { assertDependencyPolicy } from "./public-checks/dependency-policy.mjs";
 import { assertDeployWorkflow } from "./public-checks/deploy-workflow.mjs";
@@ -251,7 +254,11 @@ function run() {
   }
   if (["--all", "--test"].includes(mode)) {
     assertSensitiveContentFixturePolicy();
+    assertCiArtifactPolicyFixtures();
     assertReviewGateFixtures(root);
+  }
+  if (["--all", "--test", "--public"].includes(mode)) {
+    assertReviewGateFixturePolicy(root);
   }
   if (["--all", "--typecheck"].includes(mode)) {
     assertScriptSyntax();
@@ -279,7 +286,6 @@ function run() {
     assertHostedRoutesPolicy(root);
     assertLegalGovernance(root);
     assertRepositorySettings(root);
-    assertReviewGateFixturePolicy(root);
     assertRouteCleanupGovernance(root);
   }
   if (["--all", "--links"].includes(mode)) {

@@ -3,23 +3,79 @@ name: Review findings gate
 on:
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review, edited]
+  pull_request_review:
+    types: [submitted, edited, dismissed]
+  pull_request_review_comment:
+    types: [created, edited, deleted]
   schedule:
-    - cron: "*/10 * * * *"
-
-permissions:
-  contents: read
-  pull-requests: read
-  statuses: write
-
-concurrency:
-  group: review-gate-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+    - cron: "23 4 * * *"
 
 jobs:
+  plan-review-gate:
+    name: Plan review gate reconciliation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      pull_requests: ${{ steps.targets.outputs.pull_requests }}
+
+    steps:
+      - name: Checkout trusted default branch for daily enumeration
+        if: ${{ github.event_name == 'schedule' }}
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+
+      - name: Plan reconciliation targets
+        id: targets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+        run: |
+          set -euo pipefail
+
+          if [ "${EVENT_NAME}" = "schedule" ]; then
+            if [ ! -f scripts/sync-review-gate-status.mjs ]; then
+              echo "Review gate script is not present on the trusted default branch yet; skipping bootstrap schedule."
+              pull_requests="[]"
+            else
+              pull_requests="$(node scripts/sync-review-gate-status.mjs --repo "${GITHUB_REPOSITORY}" --list-open)"
+            fi
+          elif [ "${EVENT_NAME}" = "pull_request_target" ] || [ "${HEAD_REPOSITORY}" = "${GITHUB_REPOSITORY}" ]; then
+            if [[ ! "${PR_NUMBER}" =~ ^[1-9][0-9]*$ ]]; then
+              echo "Could not determine pull request number." >&2
+              exit 1
+            fi
+            pull_requests="[${PR_NUMBER}]"
+          else
+            pull_requests="[]"
+          fi
+
+          echo "pull_requests=${pull_requests}" >> "${GITHUB_OUTPUT}"
+
   review-gate:
-    name: Review gate status sync
+    name: Review gate status sync (${{ matrix.pr }})
+    needs: plan-review-gate
+    if: ${{ needs.plan-review-gate.outputs.pull_requests != '[]' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        pr: ${{ fromJSON(needs.plan-review-gate.outputs.pull_requests) }}
+    concurrency:
+      group: review-gate-${{ github.workflow }}-${{ matrix.pr }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     timeout-minutes: 8
+    permissions:
+      contents: read
+      pull-requests: read
+      statuses: write
 
     steps:
       - name: Checkout trusted default branch
@@ -34,7 +90,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           EVENT_NAME: ${{ github.event_name }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_NUMBER: ${{ matrix.pr }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           set -euo pipefail
@@ -46,17 +102,13 @@ jobs:
 
           args=(
             --repo "${GITHUB_REPOSITORY}"
+            --pr "${PR_NUMBER}"
             --run-url "${RUN_URL}"
+            --wait-head-review-ms 0
           )
 
           if [ "${EVENT_NAME}" = "schedule" ]; then
-            args+=(--all-open --wait-head-review-ms 0 --skip-pending-status)
-          else
-            if [ -z "${PR_NUMBER}" ]; then
-              echo "Could not determine pull request number." >&2
-              exit 1
-            fi
-            args+=(--pr "${PR_NUMBER}" --wait-head-review-ms 0)
+            args+=(--repair --skip-pending-status)
           fi
 
           node scripts/sync-review-gate-status.mjs "${args[@]}"

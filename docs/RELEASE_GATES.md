@@ -33,6 +33,14 @@ pnpm github:settings
 This live audit is separate from `pnpm verify` because it uses the GitHub API to
 confirm repository metadata and branch-ruleset state.
 
+Same-repository lifecycle, review, and inline review-comment events reconcile
+`Review gate` immediately. Fork review/comment events may receive read-only
+tokens, and review-thread resolution or reopening has no dedicated ordinary
+event in this workflow. A later trusted lifecycle event or the daily all-open
+repair reconciles those cases, so the expected worst-case recovery delay is one
+daily interval. Daily repairs and event-driven reconciliation are serialized per
+pull request so an older repair cannot publish after a newer event result.
+
 ## Release Evidence
 
 Each release should record:
