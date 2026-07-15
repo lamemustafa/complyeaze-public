@@ -1,5 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import rawManifest from "../../packages/public-content/src/complyeaze.routes.json" with { type: "json" };
+import { definePublicRouteManifest } from "../../packages/public-content/src/schema.ts";
 import { policyPages } from "../../src/policy-data.mjs";
 import { pages } from "../../src/site-data.mjs";
 
@@ -87,11 +89,14 @@ const requiredReleaseEvidenceTerms = [
   "scripts/public-checks/dependency-policy.mjs",
   "package.json private",
   "blocks runtime dependencies and lifecycle scripts",
-  "reviewed devDependencies",
+  "reviews devDependencies",
   "devDependencies",
   "Playwright",
+  "Astro",
+  "Astro Check",
+  "TypeScript",
   "pnpm-lock.yaml",
-  "current Playwright surface",
+  "workspace dependency surface",
   "Dependabot groups and reviewers",
   "pnpm@10.28.2",
   "Node 24",
@@ -132,6 +137,44 @@ const requiredReleaseEvidenceTerms = [
   "separate private-app cleanup PR"
 ];
 
+export function assertPolicyPageSources(root) {
+  const manifest = definePublicRouteManifest(rawManifest);
+  const canonicalRoutes = manifest.routes.filter((route) => route.kind === "policy");
+  const findings = [];
+  if (policyPages.length !== canonicalRoutes.length) {
+    findings.push("legacy policy adapter must map every canonical policy route exactly once");
+  }
+  for (const route of canonicalRoutes) {
+    const page = policyPages.find((candidate) => candidate.urlPath === route.urlPath);
+    if (!page) {
+      findings.push(`${route.urlPath}: missing from legacy policy adapter`);
+      continue;
+    }
+    for (const field of [
+      "description",
+      "eyebrow",
+      "heading",
+      "policySummary",
+      "sections",
+      "slug",
+      "summary",
+      "title",
+      "urlPath",
+    ]) {
+      if (JSON.stringify(page[field]) !== JSON.stringify(route[field])) {
+        findings.push(`${route.urlPath}: legacy policy adapter diverges on ${field}`);
+      }
+    }
+  }
+  const source = readFileSync(path.join(root, "src/policy-data.mjs"), "utf8");
+  if (source.includes("const policySections")) {
+    findings.push("src/policy-data.mjs: duplicated policy content must move to the canonical manifest");
+  }
+  if (findings.length > 0) {
+    throw new Error(`Policy source findings:\n${findings.join("\n")}`);
+  }
+}
+
 export function assertPolicyPages(root) {
   const pagePaths = new Set(pages.map((page) => page.urlPath));
   const dataPaths = new Set(policyPages.map((page) => page.urlPath));
@@ -144,27 +187,51 @@ export function assertPolicyPages(root) {
 
   for (const page of policyPages) {
     const htmlPath = path.join(root, "dist", page.outputPath);
-    const html = readFileSync(htmlPath, "utf8");
-    if (!html.includes("/privacy/") || !html.includes("/terms/")) {
-      findings.push(`${page.outputPath}: footer policy links missing`);
-    }
-    if (page.urlPath === "/status/" && !html.includes("not app uptime")) {
-      findings.push(`${page.outputPath}: status page must disclaim private app uptime`);
+    const renderedOutputs = [
+      [page.outputPath, readFileSync(htmlPath, "utf8")],
+      [
+        `apps/complyeaze/dist/${page.outputPath}`,
+        readFileSync(path.join(root, "apps", "complyeaze", "dist", page.outputPath), "utf8"),
+      ],
+    ];
+    for (const [outputPath, html] of renderedOutputs) {
+      for (const [label, value] of Object.entries(page.policySummary)) {
+        if (!html.includes(value)) {
+          findings.push(`${outputPath}: rendered policy summary diverges on ${label}`);
+        }
+      }
+      if (!html.includes("/privacy/") || !html.includes("/terms/")) {
+        findings.push(`${outputPath}: footer policy links missing`);
+      }
+      if (page.urlPath === "/status/" && !html.includes("not app uptime")) {
+        findings.push(`${outputPath}: status page must disclaim private app uptime`);
+      }
+      if (page.urlPath === "/status/") {
+        assertTerms(outputPath, html, requiredStatusTerms, findings);
+      }
+      if (page.urlPath === "/changelog/") {
+        assertTerms(outputPath, html, requiredChangelogTerms, findings);
+      }
+      if (page.urlPath === "/release-evidence/") {
+        assertTerms(outputPath, html, requiredReleaseEvidenceTerms, findings);
+      }
+      for (const pattern of unsafeClaims) {
+        if (pattern.test(html)) findings.push(`${outputPath}: unsafe unsupported claim ${pattern}`);
+      }
     }
     if (page.urlPath === "/status/") {
-      assertTerms(page.outputPath, html, requiredStatusTerms, findings);
-      assertTerms("src/policy-data.mjs status", pageText(page), requiredStatusTerms, findings);
+      assertTerms("canonical policy data status", pageText(page), requiredStatusTerms, findings);
     }
     if (page.urlPath === "/changelog/") {
-      assertTerms(page.outputPath, html, requiredChangelogTerms, findings);
-      assertTerms("src/policy-data.mjs changelog", pageText(page), requiredChangelogTerms, findings);
+      assertTerms("canonical policy data changelog", pageText(page), requiredChangelogTerms, findings);
     }
     if (page.urlPath === "/release-evidence/") {
-      assertTerms(page.outputPath, html, requiredReleaseEvidenceTerms, findings);
-      assertTerms("src/policy-data.mjs releaseEvidence", pageText(page), requiredReleaseEvidenceTerms, findings);
-    }
-    for (const pattern of unsafeClaims) {
-      if (pattern.test(html)) findings.push(`${page.outputPath}: unsafe unsupported claim ${pattern}`);
+      assertTerms(
+        "canonical policy data releaseEvidence",
+        pageText(page),
+        requiredReleaseEvidenceTerms,
+        findings,
+      );
     }
   }
 

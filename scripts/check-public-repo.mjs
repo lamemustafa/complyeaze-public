@@ -29,7 +29,10 @@ import {
   assertMigrationLedger,
   assertRenderedMigrationLedger
 } from "./public-checks/migration-ledger.mjs";
-import { assertPolicyPages } from "./public-checks/policy-pages.mjs";
+import {
+  assertPolicyPageSources,
+  assertPolicyPages
+} from "./public-checks/policy-pages.mjs";
 import { requiredFiles } from "./public-checks/required-files.mjs";
 import { assertRepositorySettings } from "./public-checks/repository-settings.mjs";
 import {
@@ -37,7 +40,11 @@ import {
   assertReviewGateFixtures
 } from "./public-checks/review-gate-fixtures.mjs";
 import { assertRouteCleanupGovernance } from "./public-checks/route-cleanup-governance.mjs";
-import { assertRootResourcePages } from "./public-checks/root-resource-pages.mjs";
+import { assertCanonicalManifestClaimFixture } from "./public-checks/public-claims.mjs";
+import {
+  assertRootResourcePageSources,
+  assertRootResourcePages
+} from "./public-checks/root-resource-pages.mjs";
 import { assertRouteManifest } from "./public-checks/route-manifest.mjs";
 import {
   assertSensitiveContent,
@@ -267,6 +274,9 @@ function run() {
     assertAstroWorkspace(root);
     assertAstroCoreRouteSources(root);
     assertAstroCoreRouteFixtures();
+    assertCanonicalManifestClaimFixture();
+    assertPolicyPageSources(root);
+    assertRootResourcePageSources();
     assertAstroBuildOutputFixtures();
     assertWorkspaceDependencySurfaceFixtures();
     assertSensitiveContentFixturePolicy();

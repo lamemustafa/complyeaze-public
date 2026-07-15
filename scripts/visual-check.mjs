@@ -94,7 +94,10 @@ try {
         pageDef.signalTerms,
       );
       const screenshot = `${pageDef.slug}-${viewport.name}.png`;
-      await page.evaluate(() => document.activeElement?.blur());
+      await page.evaluate(() => {
+        document.activeElement?.blur();
+        window.scrollTo(0, 0);
+      });
       await page.screenshot({
         path: path.join(artifactDir, screenshot),
         fullPage: true
@@ -265,10 +268,17 @@ async function collectMetrics(page, expectedHeading, profile, signalTerms) {
         if (lineRect.width === 0 || lineRect.height === 0 || lineRect.bottom < 0 || lineRect.top > window.innerHeight) {
           return [];
         }
-        const insetX = Math.min(8, lineRect.width / 4);
-        const insetY = Math.min(8, lineRect.height / 4);
-        const xs = [lineRect.left + insetX, lineRect.left + lineRect.width / 2, lineRect.right - insetX];
-        const ys = [lineRect.top + insetY, lineRect.top + lineRect.height / 2, lineRect.bottom - insetY];
+        const visibleLeft = Math.max(lineRect.left, 0);
+        const visibleRight = Math.min(lineRect.right, window.innerWidth);
+        const visibleTop = Math.max(lineRect.top, 0);
+        const visibleBottom = Math.min(lineRect.bottom, window.innerHeight);
+        const visibleWidth = visibleRight - visibleLeft;
+        const visibleHeight = visibleBottom - visibleTop;
+        if (visibleWidth <= 0 || visibleHeight <= 0) return [];
+        const insetX = Math.min(8, visibleWidth / 4);
+        const insetY = Math.min(8, visibleHeight / 4);
+        const xs = [visibleLeft + insetX, visibleLeft + visibleWidth / 2, visibleRight - insetX];
+        const ys = [visibleTop + insetY, visibleTop + visibleHeight / 2, visibleBottom - insetY];
         return xs.flatMap((x) => ys.map((y) => [x, y]));
       });
       return points.some(([x, y]) => {

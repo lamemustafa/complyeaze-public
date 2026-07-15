@@ -9,21 +9,37 @@ export interface PublicSection {
   title: string;
 }
 
-export interface PublicRoute {
+export interface PublicRouteBase {
   description: string;
   eyebrow: string;
   heading: string;
-  primaryAction: PublicAction;
-  proof: string[];
+  kind: "policy" | "resource";
   robots: "noindex, nofollow";
   sections: PublicSection[];
-  secondaryAction: PublicAction;
   signalTerms: string[];
   slug: string;
   summary: string;
   title: string;
   urlPath: string;
 }
+
+export interface PublicResourceRoute extends PublicRouteBase {
+  kind: "resource";
+  primaryAction: PublicAction;
+  proof: string[];
+  secondaryAction: PublicAction;
+}
+
+export interface PublicPolicyRoute extends PublicRouteBase {
+  kind: "policy";
+  policySummary: {
+    evidence: string;
+    excluded: string;
+    scope: string;
+  };
+}
+
+export type PublicRoute = PublicPolicyRoute | PublicResourceRoute;
 
 export interface PublicRouteManifest {
   app: string;
@@ -62,12 +78,21 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
   );
   assert(slug === urlPath.slice(1, -1), `${label}.slug must match urlPath`);
   assert(value.robots === "noindex, nofollow", `${label}.robots must stay noindex before cutover`);
-  validateAction(value.primaryAction, `${label}.primaryAction`);
-  validateAction(value.secondaryAction, `${label}.secondaryAction`);
   assert(Array.isArray(value.sections) && value.sections.length > 0, `${label}.sections must not be empty`);
   value.sections.forEach((section, index) => validateSection(section, `${label}.sections[${index}]`));
-  assertStringArray(value.proof, `${label}.proof`);
   assertStringArray(value.signalTerms, `${label}.signalTerms`);
+  if (value.kind === "resource") {
+    assert(value.policySummary === undefined, `${label}.policySummary is only valid for policy routes`);
+    validateAction(value.primaryAction, `${label}.primaryAction`);
+    validateAction(value.secondaryAction, `${label}.secondaryAction`);
+    assertStringArray(value.proof, `${label}.proof`);
+    return;
+  }
+  assert(value.kind === "policy", `${label}.kind must be policy or resource`);
+  for (const field of ["primaryAction", "proof", "secondaryAction"] as const) {
+    assert(value[field] === undefined, `${label}.${field} is only valid for resource routes`);
+  }
+  validatePolicySummary(value.policySummary, `${label}.policySummary`);
 }
 
 function validateAction(value: unknown, label: string): asserts value is PublicAction {
@@ -81,6 +106,13 @@ function validateSection(value: unknown, label: string): asserts value is Public
   assertString(value.title, `${label}.title`);
   assertString(value.body, `${label}.body`);
   if (value.meta !== undefined) assertString(value.meta, `${label}.meta`);
+}
+
+function validatePolicySummary(value: unknown, label: string): void {
+  assertRecord(value, label);
+  for (const field of ["evidence", "excluded", "scope"] as const) {
+    assertString(value[field], `${label}.${field}`);
+  }
 }
 
 function assertStringArray(value: unknown, label: string): asserts value is string[] {

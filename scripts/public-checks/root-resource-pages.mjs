@@ -14,6 +14,28 @@ const unsafePatterns = [
   { label: "unsupported shield claim", pattern: /shield you from|fines or lawsuits|hassle-free compliance/i }
 ];
 
+export function assertRootResourcePageSources() {
+  const manifest = definePublicRouteManifest(rawManifest);
+  const canonicalRoutes = manifest.routes.filter((route) => route.kind === "resource");
+  const findings = [];
+  if (rootResourcePages.length !== canonicalRoutes.length) {
+    findings.push("legacy root resources must adapt every canonical resource route exactly once");
+  }
+  for (const route of canonicalRoutes) {
+    const page = rootResourcePages.find((candidate) => candidate.urlPath === route.urlPath);
+    if (!page) {
+      findings.push(`${route.urlPath}: missing from legacy root-resource adapter`);
+      continue;
+    }
+    for (const field of ["slug", "urlPath", "title", "description", "eyebrow", "heading", "summary"]) {
+      if (page[field] !== route[field]) findings.push(`${route.urlPath}: legacy adapter diverges on ${field}`);
+    }
+  }
+  if (findings.length > 0) {
+    throw new Error(`Root resource source findings:\n${findings.join("\n")}`);
+  }
+}
+
 export function assertRootResourcePages(root) {
   const manifest = definePublicRouteManifest(rawManifest);
   const pagePaths = new Set(pages.map((page) => page.urlPath));
@@ -25,11 +47,12 @@ export function assertRootResourcePages(root) {
     if (!dataPaths.has(route)) findings.push(`${route}: missing from root resource data`);
   }
 
-  if (rootResourcePages.length !== manifest.routes.length) {
-    findings.push("legacy root resources must adapt every typed manifest route exactly once");
+  const resourceRoutes = manifest.routes.filter((route) => route.kind === "resource");
+  if (rootResourcePages.length !== resourceRoutes.length) {
+    findings.push("legacy root resources must adapt every canonical resource route exactly once");
   }
 
-  for (const route of manifest.routes) {
+  for (const route of resourceRoutes) {
     const page = rootResourcePages.find((candidate) => candidate.urlPath === route.urlPath);
     if (!page) continue;
     for (const field of ["slug", "urlPath", "title", "description", "eyebrow", "heading", "summary"]) {

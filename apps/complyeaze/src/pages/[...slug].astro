@@ -4,6 +4,8 @@ import {
   definePublicRouteManifest,
   type PublicRoute,
 } from "@complyeaze-public/content";
+import PublicPolicyPage from "../components/PublicPolicyPage.astro";
+import PublicResourcePage from "../components/PublicResourcePage.astro";
 import PublicPageLayout from "../layouts/PublicPageLayout.astro";
 
 interface Props {
@@ -22,4 +24,6 @@ export function getStaticPaths() {
 const { origin, route } = Astro.props;
 ---
 
-<PublicPageLayout {origin} {route} />
+<PublicPageLayout {origin} {route}>
+  {route.kind === "policy" ? <PublicPolicyPage {route} /> : <PublicResourcePage {route} />}
+</PublicPageLayout>
