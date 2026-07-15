@@ -18,17 +18,22 @@ Use this policy for every non-trivial change before commit, PR, or deployment.
 
 ## Loop
 
-1. Review the diff, rendered pages, screenshots, and current branch.
-2. Record findings with severity, file or URL, evidence, and proposed fix.
-3. Fix all Critical and High findings.
-4. Fix Medium findings when low-cost; otherwise record a follow-up with owner
+1. Keep one repository and one open implementation PR active at a time.
+2. Review the diff, rendered pages, screenshots, and current branch.
+3. Record findings with severity, file or URL, evidence, and proposed fix.
+4. Fix all Critical and High findings.
+5. Fix Medium findings when low-cost; otherwise record a follow-up with owner
    and reason.
-5. Re-run focused checks.
-6. Run the full public gate.
-7. Link or cite the `public-site-build` and `public-visual-evidence` CI
+6. Re-run focused checks.
+7. Run the full public gate.
+8. Before every commit, run a local Codex review over the complete intended
+   diff. Rectify valid findings and rerun affected checks before committing.
+9. After every push, request a current-head GitHub Codex review. Reply to and
+   resolve addressed threads, then repeat the loop for any valid finding.
+10. Link or cite the `public-site-build` and `public-visual-evidence` CI
    artifacts when the change affects routes, rendering, release evidence, or
    deployment posture.
-8. Repeat until the review has no open Critical or High findings.
+11. Repeat until the review has no open Critical or High findings.
 
 ## Full Public Gate
 

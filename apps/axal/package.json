@@ -1,0 +1,19 @@
+{
+  "name": "@complyeaze-public/axal",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "typecheck": "ASTRO_TELEMETRY_DISABLED=1 astro check"
+  },
+  "devDependencies": {
+    "@astrojs/check": "catalog:",
+    "astro": "catalog:",
+    "typescript": "catalog:"
+  }
+}

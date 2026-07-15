@@ -1,4 +1,13 @@
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import {
+  existsSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  statSync,
+  writeFileSync
+} from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 
 const ignoredDirectories = new Set([".git", "node_modules", "dist", "out", ".next", "test-results"]);
@@ -12,6 +21,7 @@ const textExtensions = new Set([
   ".mjs",
   ".ts",
   ".tsx",
+  ".astro",
   ".txt",
   ".yml",
   ".yaml"
@@ -134,6 +144,25 @@ export function assertSensitiveContentFixturePolicy() {
   const missed = failingFixtures.filter(([, text]) => fixtureFindings(text).length === 0);
   if (missed.length > 0) {
     throw new Error(`Sensitive-content fixtures did not fail: ${missed.map(([label]) => label).join(", ")}`);
+  }
+
+  assertAstroSourceFixture();
+}
+
+function assertAstroSourceFixture() {
+  const root = mkdtempSync(path.join(tmpdir(), "public-sensitive-astro-"));
+  const pagePath = path.join(root, "fixture.astro");
+  writeFileSync(pagePath, fixture("---\nconst pan = \"", "ABCDE", "1234", "F\";\n---\n"), "utf8");
+  let rejected = false;
+  try {
+    assertSensitiveContent(root);
+  } catch (error) {
+    rejected = String(error.message).includes("Indian PAN-like identifier");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+  if (!rejected) {
+    throw new Error("Sensitive-content Astro source fixture did not fail");
   }
 }
 

@@ -9,10 +9,14 @@ const reviewRectifyPath = "docs/REVIEW_RECTIFY.md";
 const policyDataPath = "src/policy-data.mjs";
 
 const requiredArtifacts = [
-  { name: "public-site-build", path: "dist", retentionDays: 7 },
+  {
+    name: "public-site-build",
+    paths: ["dist", "apps/complyeaze/dist", "apps/axal/dist", "apps/pack/dist"],
+    retentionDays: 7,
+  },
   {
     name: "public-visual-evidence",
-    path: "test-results/public-visual",
+    paths: ["test-results/public-visual"],
     retentionDays: 7,
   },
 ];
@@ -85,13 +89,6 @@ export function assertCiArtifactPolicyFixtures() {
     artifactFixtureWorkflow({ retentionLines: ['          retention-days: "7"'] }),
     false,
   );
-  for (const [name, pathLines] of [
-    ["scalar path", ["          path: dist"]],
-    ["double-quoted scalar path", ['          path: "dist"']],
-    ["single-quoted scalar path", ["          path: 'dist'"]],
-  ]) {
-    assertArtifactFixture(name, artifactFixtureWorkflow({ pathLines }), false);
-  }
 
   const invalidFixtures = [
     [
@@ -113,6 +110,10 @@ export function assertCiArtifactPolicyFixtures() {
       }),
     ],
     ["wrong artifact path", artifactFixtureWorkflow({ pathLines: ["          path: wrong"] })],
+    [
+      "missing Astro app outputs",
+      artifactFixtureWorkflow({ pathLines: ["          path: |", "            dist"] }),
+    ],
     ["empty artifact path", artifactFixtureWorkflow({ pathLines: ["          path:"] })],
     ["expression artifact path", artifactFixtureWorkflow({ pathLines: ["          path: ${{ github.workspace }}"] })],
     [
@@ -170,8 +171,8 @@ function artifactWorkflowFindings(workflow) {
     const step = matches[0];
     const inputs = parseStepInputs(step);
     const paths = literalPathList(inputs, "path");
-    if (paths.length !== 1 || paths[0] !== artifact.path) {
-      findings.push(`${ciWorkflowPath}: ${artifact.name} must upload only ${artifact.path}`);
+    if (paths.join("\n") !== artifact.paths.join("\n")) {
+      findings.push(`${ciWorkflowPath}: ${artifact.name} must upload only ${artifact.paths.join(", ")}`);
     }
     if (scalarInput(inputs, "if-no-files-found") !== "error") {
       findings.push(`${ciWorkflowPath}: ${artifact.name} must fail when evidence is missing`);
@@ -301,7 +302,13 @@ function assertArtifactFixture(name, workflow, shouldFail) {
 
 function artifactFixtureWorkflow({
   retentionLines = ["          retention-days: 7"],
-  pathLines = ["          path: |", "            dist"],
+  pathLines = [
+    "          path: |",
+    "            dist",
+    "            apps/complyeaze/dist",
+    "            apps/axal/dist",
+    "            apps/pack/dist",
+  ],
 } = {}) {
   return [
     artifactFixtureStep("public-site-build", pathLines, retentionLines),

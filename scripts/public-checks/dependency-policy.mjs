@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { assertWorkspaceDependencySurface } from "./dependency-workspace.mjs";
 
 const dependabotPath = ".github/dependabot.yml";
 const policyPath = "docs/DEPENDENCY_POLICY.md";
@@ -11,18 +12,6 @@ const lockfilePath = "pnpm-lock.yaml";
 const ciWorkflowPath = ".github/workflows/ci.yml";
 const pagesDeployWorkflowPath = ".github/workflows/pages-deploy.yml";
 const reviewGateWorkflowPath = ".github/workflows/review-gate.yml";
-
-const allowedDevDependencies = new Set(["playwright"]);
-const forbiddenLifecycleScripts = [
-  "preinstall",
-  "install",
-  "postinstall",
-  "prepare",
-  "prepublish",
-  "prepublishOnly",
-  "prepack",
-  "postpack"
-];
 
 const requiredDependabotSnippets = [
   "version: 2",
@@ -43,7 +32,10 @@ const requiredPolicyTerms = [
   "public-site-build",
   "public-visual-evidence",
   "no runtime `dependencies`",
-  "`playwright` as the only reviewed `devDependency`",
+  "Astro 7.0.9",
+  "TypeScript 6.0.3",
+  "workspace manifests",
+  "ASTRO_TELEMETRY_DISABLED=1",
   "no lifecycle scripts",
   "packageManager",
   "pnpm@10.28.2",
@@ -103,8 +95,7 @@ export function assertDependencyPolicy(root) {
     }
   }
 
-  assertPackageSurface(packageJsonText, findings);
-  assertLockfileSurface(lockfile, findings);
+  assertWorkspaceDependencySurface(root, packageJsonText, lockfile, findings);
   assertWorkflowVersionAlignment(packageJsonText, ciWorkflow, pagesDeployWorkflow, findings);
   assertPinnedExternalActions(
     [
@@ -164,63 +155,6 @@ function assertDependabotBlock(ecosystem, block, terms, findings) {
     if (!block.includes(term)) {
       findings.push(`${dependabotPath}: ${ecosystem} update block missing ${term}`);
     }
-  }
-}
-
-function assertPackageSurface(packageJsonText, findings) {
-  let manifest;
-  try {
-    manifest = JSON.parse(packageJsonText);
-  } catch (error) {
-    findings.push(`${packageJsonPath}: invalid JSON ${error.message}`);
-    return;
-  }
-
-  if (manifest.private !== true) {
-    findings.push(`${packageJsonPath}: package must stay private to avoid accidental npm publish`);
-  }
-  if (manifest.packageManager !== "pnpm@10.28.2") {
-    findings.push(`${packageJsonPath}: packageManager must stay pinned to pnpm@10.28.2`);
-  }
-  if (manifest.engines?.node !== ">=24") {
-    findings.push(`${packageJsonPath}: node engine must stay >=24`);
-  }
-  if (manifest.dependencies && Object.keys(manifest.dependencies).length > 0) {
-    findings.push(`${packageJsonPath}: runtime dependencies are not allowed by default`);
-  }
-
-  const devDependencies = Object.keys(manifest.devDependencies ?? {});
-  for (const dependency of devDependencies) {
-    if (!allowedDevDependencies.has(dependency)) {
-      findings.push(`${packageJsonPath}: unreviewed devDependency ${dependency}`);
-    }
-  }
-  if (manifest.devDependencies?.playwright !== "1.61.1") {
-    findings.push(`${packageJsonPath}: playwright must stay pinned to 1.61.1 until reviewed`);
-  }
-
-  for (const scriptName of forbiddenLifecycleScripts) {
-    if (manifest.scripts?.[scriptName]) {
-      findings.push(`${packageJsonPath}: lifecycle script ${scriptName} is not allowed by default`);
-    }
-  }
-}
-
-function assertLockfileSurface(lockfile, findings) {
-  const allowedPackagePrefixes = ["playwright@", "playwright-core@", "fsevents@"];
-  const packagesBlock = lockfile.match(/\npackages:\n(?<block>[\s\S]*?)\nsnapshots:\n/)?.groups?.block ?? "";
-  if (!packagesBlock) {
-    findings.push(`${lockfilePath}: missing packages block`);
-    return;
-  }
-  const packageMatches = [...packagesBlock.matchAll(/^  ([^:\n]+):$/gm)].map((match) => match[1]);
-  for (const packageName of packageMatches) {
-    if (!allowedPackagePrefixes.some((prefix) => packageName.startsWith(prefix))) {
-      findings.push(`${lockfilePath}: unexpected locked package ${packageName}`);
-    }
-  }
-  if (!lockfile.includes("playwright:\n        specifier: 1.61.1")) {
-    findings.push(`${lockfilePath}: playwright specifier must stay pinned to 1.61.1`);
   }
 }
 

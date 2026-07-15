@@ -5,11 +5,17 @@ import path from "node:path";
 import process from "node:process";
 import { assertAxalPages } from "./public-checks/axal-pages.mjs";
 import {
+  assertAstroBuildOutput,
+  assertAstroBuildOutputFixtures,
+  assertAstroWorkspace
+} from "./public-checks/astro-workspace.mjs";
+import {
   assertCiArtifactPolicyFixtures,
   assertCiArtifacts
 } from "./public-checks/ci-artifacts.mjs";
 import { assertContributorIntake } from "./public-checks/contributor-intake.mjs";
 import { assertDependencyPolicy } from "./public-checks/dependency-policy.mjs";
+import { assertWorkspaceDependencySurfaceFixtures } from "./public-checks/dependency-workspace.mjs";
 import { assertDeployWorkflow } from "./public-checks/deploy-workflow.mjs";
 import { assertGatewayPages } from "./public-checks/gateway-pages.mjs";
 import { assertHostedRoutesPolicy } from "./public-checks/hosted-routes.mjs";
@@ -253,6 +259,9 @@ function run() {
     assertSensitiveContent(root);
   }
   if (["--all", "--test"].includes(mode)) {
+    assertAstroWorkspace(root);
+    assertAstroBuildOutputFixtures();
+    assertWorkspaceDependencySurfaceFixtures();
     assertSensitiveContentFixturePolicy();
     assertCiArtifactPolicyFixtures();
     assertReviewGateFixtures(root);
@@ -273,6 +282,7 @@ function run() {
     assertReleaseGates();
   }
   if (["--all", "--public"].includes(mode)) {
+    assertAstroBuildOutput(root);
     assertPublicPages();
     assertMigrationLedger(root);
     assertGatewayPages(root);

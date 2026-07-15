@@ -73,6 +73,9 @@ jobs:
           name: public-site-build
           path: |
             dist
+            apps/complyeaze/dist
+            apps/axal/dist
+            apps/pack/dist
           if-no-files-found: error
           retention-days: 7
 
