@@ -6,6 +6,7 @@ import process from "node:process";
 import { assertAxalPages } from "./public-checks/axal-pages.mjs";
 import {
   assertAstroBuildOutput,
+  assertAstroBuildOutputFixtures,
   assertAstroWorkspace
 } from "./public-checks/astro-workspace.mjs";
 import {
@@ -259,6 +260,7 @@ function run() {
   }
   if (["--all", "--test"].includes(mode)) {
     assertAstroWorkspace(root);
+    assertAstroBuildOutputFixtures();
     assertWorkspaceDependencySurfaceFixtures();
     assertSensitiveContentFixturePolicy();
     assertCiArtifactPolicyFixtures();

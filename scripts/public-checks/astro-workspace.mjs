@@ -1,4 +1,14 @@
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  statSync,
+  writeFileSync
+} from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 
 const apps = [
@@ -87,17 +97,45 @@ export function assertAstroBuildOutput(root) {
       findings.push(`apps/${directory}/dist/index.html: missing; run pnpm build`);
       continue;
     }
-    const html = readFileSync(indexPath, "utf8");
-    if (/<script(?:\s|>)/i.test(html)) {
-      findings.push(`apps/${directory}/dist/index.html: unexpected script output`);
+    const outputFiles = walkFiles(dist);
+    const htmlFiles = outputFiles.filter((filePath) => filePath.endsWith(".html"));
+    for (const htmlPath of htmlFiles) {
+      if (/<script(?:\s|>)/i.test(readFileSync(htmlPath, "utf8"))) {
+        findings.push(
+          `apps/${directory}/dist/${path.relative(dist, htmlPath)}: unexpected script output`,
+        );
+      }
     }
-    const scripts = walkFiles(dist).filter((filePath) => /\.(?:js|mjs)$/i.test(filePath));
+    const scripts = outputFiles.filter((filePath) => /\.(?:js|mjs)$/i.test(filePath));
     if (scripts.length > 0) {
       findings.push(`apps/${directory}/dist: unexpected JavaScript ${scripts.join(", ")}`);
     }
   }
   if (findings.length > 0) {
     throw new Error(`Astro build-output findings:\n${findings.join("\n")}`);
+  }
+}
+
+export function assertAstroBuildOutputFixtures() {
+  const root = mkdtempSync(path.join(tmpdir(), "public-astro-output-"));
+  for (const [directory] of apps) {
+    const dist = path.join(root, "apps", directory, "dist");
+    mkdirSync(dist, { recursive: true });
+    writeFileSync(path.join(dist, "index.html"), "<main><h1>Safe</h1></main>", "utf8");
+  }
+  const nestedPage = path.join(root, "apps", "axal", "dist", "nested", "index.html");
+  mkdirSync(path.dirname(nestedPage), { recursive: true });
+  writeFileSync(nestedPage, "<main><h1>Unsafe</h1></main><script>unsafe()</script>", "utf8");
+  let rejected = false;
+  try {
+    assertAstroBuildOutput(root);
+  } catch (error) {
+    rejected = String(error.message).includes("nested/index.html");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+  if (!rejected) {
+    throw new Error("Astro nested inline-script fixture did not fail");
   }
 }
 

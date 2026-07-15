@@ -11,55 +11,61 @@ const dist = path.join(root, "dist");
 const astroApps = [
   {
     slug: "astro-complyeaze-foundation",
-    urlPath: "/__astro/complyeaze/",
+    serverKey: "complyeaze",
+    urlPath: "/",
     publicPath: "https://complyeaze.com/",
-    dist: path.join(root, "apps", "complyeaze", "dist"),
     heading: "ComplyEaze Astro workspace foundation",
     profile: "foundation",
+    signalTerms: ["ComplyEaze"],
   },
   {
     slug: "astro-axal-foundation",
-    urlPath: "/__astro/axal/",
+    serverKey: "axal",
+    urlPath: "/",
     publicPath: "https://axal.complyeaze.com/",
-    dist: path.join(root, "apps", "axal", "dist"),
     heading: "Axal Astro workspace foundation",
     profile: "foundation",
+    signalTerms: ["Axal"],
   },
   {
     slug: "astro-pack-foundation",
-    urlPath: "/__astro/pack/",
+    serverKey: "pack",
+    urlPath: "/",
     publicPath: "https://pack.complyeaze.com/",
-    dist: path.join(root, "apps", "pack", "dist"),
     heading: "Pack Astro workspace foundation",
     profile: "foundation",
+    signalTerms: ["Pack"],
   },
 ];
 const visualTargets = [
-  ...pages.map((page) => ({ ...page, publicPath: page.urlPath, profile: "legacy" })),
+  ...pages.map((page) => ({
+    ...page,
+    serverKey: "legacy",
+    publicPath: page.urlPath,
+    profile: "legacy",
+    signalTerms: ["ComplyEaze", "public", "trust", "surface"],
+  })),
   ...astroApps,
 ];
+const visualRoots = new Map([
+  ["legacy", dist],
+  ["complyeaze", path.join(root, "apps", "complyeaze", "dist")],
+  ["axal", path.join(root, "apps", "axal", "dist")],
+  ["pack", path.join(root, "apps", "pack", "dist")],
+]);
 const artifactDir = path.join(root, "test-results", "public-visual");
 rmSync(artifactDir, { recursive: true, force: true });
 mkdirSync(artifactDir, { recursive: true });
 writeIncompleteSummary();
 
-const server = createServer((request, response) => {
-  const url = new URL(request.url ?? "/", "http://127.0.0.1");
-  const filePath = resolveDistPath(url.pathname);
-  try {
-    const body = readFileSync(filePath);
-    response.writeHead(200, { "content-type": contentType(filePath) });
-    response.end(body);
-  } catch {
-    response.writeHead(404, { "content-type": "text/plain" });
-    response.end("Not found");
-  }
-});
-
-await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
-const port = server.address().port;
-const baseUrl = `http://127.0.0.1:${port}`;
-const browser = await chromium.launch(browserLaunchOptions());
+const servers = new Map();
+const baseUrls = new Map();
+for (const [key, distRoot] of visualRoots) {
+  const server = createStaticServer(distRoot);
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  servers.set(key, server);
+  baseUrls.set(key, `http://127.0.0.1:${server.address().port}`);
+}
 const viewports = [
   { name: "desktop", width: 1440, height: 1100 },
   { name: "tablet", width: 834, height: 1112 },
@@ -67,14 +73,21 @@ const viewports = [
 ];
 const findings = [];
 const summary = [];
+let browser;
 
 try {
+  browser = await chromium.launch(browserLaunchOptions());
   for (const pageDef of visualTargets) {
     for (const viewport of viewports) {
       const context = await browser.newContext({ reducedMotion: "reduce", viewport });
       const page = await context.newPage();
-      await page.goto(`${baseUrl}${pageDef.urlPath}`, { waitUntil: "networkidle" });
-      const metrics = await collectMetrics(page, pageDef.heading, pageDef.profile);
+      await page.goto(`${baseUrls.get(pageDef.serverKey)}${pageDef.urlPath}`, { waitUntil: "networkidle" });
+      const metrics = await collectMetrics(
+        page,
+        pageDef.heading,
+        pageDef.profile,
+        pageDef.signalTerms,
+      );
       const screenshot = `${pageDef.slug}-${viewport.name}.png`;
       await page.evaluate(() => document.activeElement?.blur());
       await page.screenshot({
@@ -89,8 +102,12 @@ try {
     }
   }
 } finally {
-  await browser.close();
-  await new Promise((resolve) => server.close(resolve));
+  await browser?.close();
+  await Promise.all(
+    [...servers.values()].map(
+      (server) => new Promise((resolve) => server.close(resolve)),
+    ),
+  );
 }
 
 writeSummary(summary);
@@ -102,17 +119,24 @@ if (findings.length > 0) {
 
 console.log(`Visual check passed for ${visualTargets.length} pages across ${viewports.length} viewports`);
 
-function resolveDistPath(urlPath) {
-  const app = astroApps.find((candidate) => urlPath.startsWith(candidate.urlPath));
-  if (app) {
-    const relativePath = urlPath.slice(app.urlPath.length).replace(/^\/+/, "");
-    const candidate = resolveWithin(app.dist, relativePath);
-    return !relativePath || statIsDirectory(candidate)
-      ? path.join(candidate, "index.html")
-      : candidate;
-  }
+function createStaticServer(distRoot) {
+  return createServer((request, response) => {
+    const url = new URL(request.url ?? "/", "http://127.0.0.1");
+    const filePath = resolveDistPath(distRoot, url.pathname);
+    try {
+      const body = readFileSync(filePath);
+      response.writeHead(200, { "content-type": contentType(filePath) });
+      response.end(body);
+    } catch {
+      response.writeHead(404, { "content-type": "text/plain" });
+      response.end("Not found");
+    }
+  });
+}
+
+function resolveDistPath(distRoot, urlPath) {
   const safePath = urlPath.replace(/^\/+/, "");
-  const candidate = resolveWithin(dist, safePath);
+  const candidate = resolveWithin(distRoot, safePath);
   if (urlPath === "/" || statIsDirectory(candidate)) {
     return path.join(candidate, "index.html");
   }
@@ -163,8 +187,8 @@ function browserLaunchOptions() {
   return executablePath ? { executablePath } : {};
 }
 
-async function collectMetrics(page, expectedHeading, profile) {
-  const metrics = await page.evaluate(({ heading, profile }) => {
+async function collectMetrics(page, expectedHeading, profile, signalTerms) {
+  const metrics = await page.evaluate(({ heading, profile, signalTerms }) => {
     function hasReducedMotionRule() {
       for (const sheet of document.styleSheets) {
         if (hasReducedMotionRuleInList(sheet.cssRules)) return true;
@@ -244,8 +268,8 @@ async function collectMetrics(page, expectedHeading, profile) {
       issues.push(`horizontal overflow ${document.documentElement.scrollWidth}px > ${window.innerWidth}px`);
     }
     const firstViewportText = document.body.innerText.slice(0, 900);
-    const expectedSignal = heading.split(/\s+/)[0]?.toLowerCase();
-    if (!expectedSignal || !firstViewportText.toLowerCase().includes(expectedSignal)) {
+    const lowerViewportText = firstViewportText.toLowerCase();
+    if (!signalTerms.some((term) => lowerViewportText.includes(term.toLowerCase()))) {
       issues.push("first viewport lacks expected product signal");
     }
     const unnamedLinks = [...document.querySelectorAll("a")].filter(
@@ -332,7 +356,7 @@ async function collectMetrics(page, expectedHeading, profile) {
       activeMotionElements: activeMotionElements.length,
       issues
     };
-  }, { heading: expectedHeading, profile });
+  }, { heading: expectedHeading, profile, signalTerms });
   const focusStates = [];
   if (profile === "legacy") {
     for (let index = 0; index < 16; index += 1) {

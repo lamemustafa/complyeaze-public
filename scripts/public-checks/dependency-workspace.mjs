@@ -50,6 +50,8 @@ export function assertWorkspaceDependencySurfaceFixtures() {
       private: true,
       scripts: { postinstall: "node unsafe.mjs" },
       dependencies: { "unsafe-runtime": "1.0.0" },
+      optionalDependencies: { "optional-runtime": "1.0.0" },
+      peerDependencies: { "peer-runtime": "1.0.0" },
     }),
     "utf8",
   );
@@ -69,7 +71,12 @@ export function assertWorkspaceDependencySurfaceFixtures() {
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
-  for (const expected of ["runtime dependencies are not allowed", "lifecycle script postinstall is not allowed"]) {
+  for (const expected of [
+    "dependencies are not allowed",
+    "optionalDependencies are not allowed",
+    "peerDependencies are not allowed",
+    "lifecycle script postinstall is not allowed",
+  ]) {
     if (!findings.some((finding) => finding.includes(expected))) {
       throw new Error(`Workspace dependency fixture missed: ${expected}`);
     }
@@ -128,8 +135,18 @@ function assertWorkspaceManifest(filePath, manifest, allowedDevDependencies, fin
 }
 
 function assertNoRuntimeDependencies(filePath, manifest, findings) {
-  if (Object.keys(manifest.dependencies ?? {}).length > 0) {
-    findings.push(`${filePath}: runtime dependencies are not allowed`);
+  for (const field of [
+    "dependencies",
+    "optionalDependencies",
+    "peerDependencies",
+    "bundledDependencies",
+    "bundleDependencies",
+  ]) {
+    const value = manifest[field];
+    const count = Array.isArray(value) ? value.length : Object.keys(value ?? {}).length;
+    if (count > 0) {
+      findings.push(`${filePath}: ${field} are not allowed`);
+    }
   }
 }
 
