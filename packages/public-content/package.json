@@ -2,5 +2,15 @@
   "name": "@complyeaze-public/content",
   "version": "0.0.0",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "exports": {
+    ".": "./src/schema.ts",
+    "./complyeaze-routes": "./src/complyeaze.routes.json"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
 }

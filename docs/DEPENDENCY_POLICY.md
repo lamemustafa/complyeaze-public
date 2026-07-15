@@ -15,6 +15,9 @@ backed.
 - Current package surface: no runtime `dependencies`, no lifecycle scripts, and
   only the pinned build/test tools above in workspace manifests unless this
   policy and the static dependency check are updated in the same PR.
+- Internal `@complyeaze-public/content` and `@complyeaze-public/shell` packages
+  may be linked as `workspace:*` development dependencies for static builds;
+  they remain private and may not add runtime dependency fields.
 - Astro commands must set `ASTRO_TELEMETRY_DISABLED=1`; no client analytics or
   telemetry dependency is allowed.
 - `packageManager` must stay pinned to `pnpm@10.28.2`, CI must use pnpm

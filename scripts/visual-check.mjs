@@ -37,6 +37,10 @@ const astroApps = [
     signalTerms: ["Pack"],
   },
 ];
+const astroRouteTargets = readAstroRouteTargets();
+if (astroRouteArtifactSlug("complyeaze", "products/pack").includes("/")) {
+  throw new Error("Nested Astro route slugs must produce flat visual artifact names");
+}
 const visualTargets = [
   ...pages.map((page) => ({
     ...page,
@@ -46,6 +50,7 @@ const visualTargets = [
     signalTerms: ["ComplyEaze", "public", "trust", "surface"],
   })),
   ...astroApps,
+  ...astroRouteTargets,
 ];
 const visualRoots = new Map([
   ["legacy", dist],
@@ -118,6 +123,28 @@ if (findings.length > 0) {
 }
 
 console.log(`Visual check passed for ${visualTargets.length} pages across ${viewports.length} viewports`);
+
+function readAstroRouteTargets() {
+  const manifestDir = path.join(root, "packages", "public-content", "src");
+  return readdirSync(manifestDir)
+    .filter((name) => name.endsWith(".routes.json"))
+    .flatMap((name) => {
+      const manifest = JSON.parse(readFileSync(path.join(manifestDir, name), "utf8"));
+      return manifest.routes.map((route) => ({
+        slug: astroRouteArtifactSlug(manifest.app, route.slug),
+        serverKey: manifest.app,
+        urlPath: route.urlPath,
+        publicPath: `${manifest.origin}${route.urlPath}`,
+        heading: route.heading,
+        profile: "migration",
+        signalTerms: route.signalTerms,
+      }));
+    });
+}
+
+function astroRouteArtifactSlug(app, routeSlug) {
+  return `astro-${app}-${routeSlug.replaceAll("/", "-")}`;
+}
 
 function createStaticServer(distRoot) {
   return createServer((request, response) => {
@@ -323,7 +350,7 @@ async function collectMetrics(page, expectedHeading, profile, signalTerms) {
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       issues.push("reduced-motion media emulation is not active");
     }
-    if (profile === "legacy" && !hasReducedMotionRule()) {
+    if (profile !== "foundation" && !hasReducedMotionRule()) {
       issues.push("missing prefers-reduced-motion stylesheet rule");
     }
     const activeMotionElements = [...document.querySelectorAll("body *")].filter((element) => {
@@ -358,7 +385,7 @@ async function collectMetrics(page, expectedHeading, profile, signalTerms) {
     };
   }, { heading: expectedHeading, profile, signalTerms });
   const focusStates = [];
-  if (profile === "legacy") {
+  if (profile !== "foundation") {
     for (let index = 0; index < 16; index += 1) {
       await page.keyboard.press("Tab");
       const focusState = await page.evaluate(() => {
@@ -380,13 +407,15 @@ async function collectMetrics(page, expectedHeading, profile, signalTerms) {
 
       const element = document.activeElement;
       if (!element || element === document.body) {
-        return { label: "body", visible: false };
+        return { label: "body", terminal: true, visible: true };
       }
       return {
         label: focusLabel(element),
+        terminal: false,
         visible: isVisibleFocus(element)
       };
       });
+      if (focusState.terminal) break;
       if (focusStates.some((state) => state.label === focusState.label)) {
         break;
       }

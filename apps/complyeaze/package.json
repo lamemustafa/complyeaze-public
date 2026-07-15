@@ -12,6 +12,8 @@
     "typecheck": "ASTRO_TELEMETRY_DISABLED=1 astro check"
   },
   "devDependencies": {
+    "@complyeaze-public/content": "workspace:*",
+    "@complyeaze-public/shell": "workspace:*",
     "@astrojs/check": "catalog:",
     "astro": "catalog:",
     "typescript": "catalog:"

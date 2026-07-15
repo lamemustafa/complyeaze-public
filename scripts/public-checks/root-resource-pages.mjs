@@ -1,5 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import rawManifest from "../../packages/public-content/src/complyeaze.routes.json" with { type: "json" };
+import { definePublicRouteManifest } from "../../packages/public-content/src/schema.ts";
 import { rootResourcePages } from "../../src/root-resource-data.mjs";
 import { pages } from "../../src/site-data.mjs";
 
@@ -13,6 +15,7 @@ const unsafePatterns = [
 ];
 
 export function assertRootResourcePages(root) {
+  const manifest = definePublicRouteManifest(rawManifest);
   const pagePaths = new Set(pages.map((page) => page.urlPath));
   const dataPaths = new Set(rootResourcePages.map((page) => page.urlPath));
   const findings = [];
@@ -20,6 +23,21 @@ export function assertRootResourcePages(root) {
   for (const route of requiredRoutes) {
     if (!pagePaths.has(route)) findings.push(`${route}: missing from site pages`);
     if (!dataPaths.has(route)) findings.push(`${route}: missing from root resource data`);
+  }
+
+  if (rootResourcePages.length !== manifest.routes.length) {
+    findings.push("legacy root resources must adapt every typed manifest route exactly once");
+  }
+
+  for (const route of manifest.routes) {
+    const page = rootResourcePages.find((candidate) => candidate.urlPath === route.urlPath);
+    if (!page) continue;
+    for (const field of ["slug", "urlPath", "title", "description", "eyebrow", "heading", "summary"]) {
+      if (page[field] !== route[field]) findings.push(`${route.urlPath}: legacy adapter diverges on ${field}`);
+    }
+    if (page.primaryCta !== route.primaryAction || page.secondaryCta !== route.secondaryAction) {
+      findings.push(`${route.urlPath}: legacy adapter must preserve canonical action objects`);
+    }
   }
 
   for (const page of rootResourcePages) {
