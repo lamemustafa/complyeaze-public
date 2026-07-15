@@ -1,0 +1,97 @@
+---
+import type { MigrationLedger } from "@complyeaze-public/content/complyeaze-migration-ledger";
+
+interface Props {
+  ledger: MigrationLedger;
+}
+
+const { ledger } = Astro.props;
+
+function scrollHintId(family: string): string {
+  return `route-ledger-hint-${family.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+}
+---
+
+<section class="migration-ledger" aria-label="Route migration ledger">
+  {ledger.map((entry) => (
+    <article>
+      <header>
+        <h2>{entry.family}</h2>
+        <span>{entry.status}</span>
+      </header>
+      <dl>
+        <div><dt>Source</dt><dd>{entry.source}</dd></div>
+        <div><dt>Destination</dt><dd>{entry.destination}</dd></div>
+        <div><dt>Cleanup rule</dt><dd>{entry.cleanup}</dd></div>
+        <div><dt>Parent cleanup</dt><dd>{entry.parentCleanup}</dd></div>
+        <div><dt>Evidence</dt><dd>{entry.evidence}</dd></div>
+        <div><dt>Rollback</dt><dd>{entry.rollback}</dd></div>
+      </dl>
+      <div class="route-ledger" role="region" tabindex="0" aria-describedby={scrollHintId(entry.family)} aria-label={`${entry.family} source route cleanup evidence`}>
+        <p id={scrollHintId(entry.family)} class="route-ledger-hint">Nine-column route ledger; scroll horizontally when displayed as a table.</p>
+        <table>
+          <caption>{entry.family} route-level cleanup blockers</caption>
+          <thead>
+            <tr>
+              <th scope="col">Source host</th>
+              <th scope="col">Source route</th>
+              <th scope="col">Destination host</th>
+              <th scope="col">Destination</th>
+              <th scope="col">Cleanup</th>
+              <th scope="col">Evidence</th>
+              <th scope="col">Redirect</th>
+              <th scope="col">Cleanup PR</th>
+              <th scope="col">Rollback</th>
+            </tr>
+          </thead>
+          <tbody>
+            {entry.routes.map((route) => (
+              <tr>
+                <th scope="row" data-label="Source host">{route.sourceHost}</th>
+                <td data-label="Source route">{route.sourceRoute}</td>
+                <td data-label="Destination host">{route.destinationHost}</td>
+                <td data-label="Destination">{route.destinationRoute}</td>
+                <td data-label="Cleanup">{route.cleanupStatus}</td>
+                <td data-label="Evidence">{route.evidenceStatus}; hosted evidence: {route.hostedEvidenceUrl}</td>
+                <td data-label="Redirect">{route.redirectStatus}; plan: {route.redirectPlan}</td>
+                <td data-label="Cleanup PR">{route.parentCleanupPr}</td>
+                <td data-label="Rollback">{route.rollback}; owner/path: {route.rollbackCommandOrOwner}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </article>
+  ))}
+</section>
+
+<style>
+  .migration-ledger { display: grid; gap: 1rem; margin-top: 1rem; }
+  .migration-ledger > article { min-width: 0; border: 1px solid #94a3b8; padding: clamp(1rem, 3vw, 1.5rem); }
+  .migration-ledger header { display: flex; align-items: start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+  h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 2rem); line-height: 1.1; text-wrap: balance; }
+  .migration-ledger header span { max-width: 100%; padding: 0.35rem 0.55rem; background: #9f341a; color: #fff; font-size: 0.82rem; font-weight: 800; overflow-wrap: anywhere; }
+  dl { display: grid; gap: 0.85rem; margin: 0; }
+  dl div { padding-top: 0.85rem; border-top: 1px solid #cbd5e1; }
+  dt { color: #7c2d12; font-size: 0.8rem; font-weight: 800; }
+  dd { margin: 0.25rem 0 0; overflow-wrap: anywhere; }
+  .route-ledger { min-width: 0; max-width: 100%; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #0f172a; overflow-x: auto; }
+  .route-ledger:focus-visible { outline: 3px solid #9f341a; outline-offset: 3px; }
+  .route-ledger-hint { margin: 0 0 0.75rem; color: #7c2d12; font-size: 0.78rem; font-weight: 800; }
+  caption { margin-bottom: 0.75rem; color: #0f172a; font-size: 1rem; font-weight: 800; text-align: left; text-transform: uppercase; }
+  table { width: 100%; min-width: 90rem; border-collapse: collapse; font-size: 0.86rem; }
+  th, td { padding: 0.65rem 0.5rem; border-top: 1px solid #cbd5e1; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+  th { color: #0f172a; }
+  @media (max-width: 61.25rem) {
+    .migration-ledger header { display: grid; }
+    .migration-ledger header span { justify-self: start; }
+    .route-ledger { overflow-x: visible; }
+    table { min-width: 0; }
+    .route-ledger-hint { display: none; }
+    thead { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    tr, th, td { display: block; }
+    tr { padding: 0.55rem 0; border-top: 1px solid #cbd5e1; }
+    th, td { padding: 0.25rem 0; border: 0; }
+    th::before, td::before { content: attr(data-label) ": "; display: block; color: #7c2d12; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; }
+  }
+</style>

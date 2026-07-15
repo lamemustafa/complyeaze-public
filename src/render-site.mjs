@@ -1,8 +1,9 @@
 import { site } from "./site-data.mjs";
-import { migrationLedger } from "./migration-data.mjs";
 import { products, proofLedger, trustSignals, migrationRoutes } from "./product-data.mjs";
 import { renderAxalPage } from "./render-axal.mjs";
+import { renderEvidencePage } from "./render-evidence.mjs";
 import { renderGatewayPage } from "./render-gateway.mjs";
+import { renderMigrationPage } from "./render-migration.mjs";
 import { renderPolicyPage } from "./render-policy.mjs";
 import { renderRootResourcePage } from "./render-root-resource.mjs";
 
@@ -90,7 +91,8 @@ function isCurrentNavItem(href, urlPath) {
 
 function renderPageBody(page) {
   if (page.slug === "products") return renderProducts();
-  if (page.slug === "migration") return renderMigration();
+  if (page.type === "evidence") return renderEvidencePage(page, escapeHtml);
+  if (page.type === "migration") return renderMigrationPage(page, escapeHtml);
   if (page.type === "productGateway") return renderGatewayPage(page, escapeHtml);
   if (page.type === "rootResource") return renderRootResourcePage(page, escapeHtml);
   if (page.type === "policy") return renderPolicyPage(page, escapeHtml);
@@ -109,83 +111,6 @@ function renderSections(sections) {
       )
       .join("")}
   </section>`;
-}
-
-function renderMigration() {
-  return `<section class="migration-summary" aria-label="Migration rules">
-    <article>
-      <strong>1</strong>
-      <span>Inventory the parent route and public destination.</span>
-    </article>
-    <article>
-      <strong>2</strong>
-      <span>Ship visual, link, metadata, and public-claim evidence.</span>
-    </article>
-    <article>
-      <strong>3</strong>
-      <span>Only then remove, redirect, or archive the parent route.</span>
-    </article>
-  </section>
-  <section class="migration-ledger" aria-label="Route migration ledger">
-    ${migrationLedger
-      .map(
-        (entry) => `<article>
-          <header>
-            <h2>${escapeHtml(entry.family)}</h2>
-            <span>${escapeHtml(entry.status)}</span>
-          </header>
-          <dl>
-            <div><dt>Source</dt><dd>${escapeHtml(entry.source)}</dd></div>
-            <div><dt>Destination</dt><dd>${escapeHtml(entry.destination)}</dd></div>
-            <div><dt>Cleanup rule</dt><dd>${escapeHtml(entry.cleanup)}</dd></div>
-            <div><dt>Parent cleanup</dt><dd>${escapeHtml(entry.parentCleanup)}</dd></div>
-            <div><dt>Evidence</dt><dd>${escapeHtml(entry.evidence)}</dd></div>
-            <div><dt>Rollback</dt><dd>${escapeHtml(entry.rollback)}</dd></div>
-          </dl>
-          ${renderMigrationRoutes(entry.routes)}
-        </article>`,
-      )
-      .join("")}
-  </section>`;
-}
-
-function renderMigrationRoutes(routes = []) {
-  if (routes.length === 0) return "";
-  return `<div class="route-ledger" aria-label="Source route cleanup evidence">
-    <h3>Route-level cleanup blockers</h3>
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">Source host</th>
-          <th scope="col">Source route</th>
-          <th scope="col">Destination host</th>
-          <th scope="col">Destination</th>
-          <th scope="col">Cleanup</th>
-          <th scope="col">Evidence</th>
-          <th scope="col">Redirect</th>
-          <th scope="col">Cleanup PR</th>
-          <th scope="col">Rollback</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${routes
-          .map(
-            (route) => `<tr>
-              <th scope="row" data-label="Source host">${escapeHtml(route.sourceHost)}</th>
-              <td data-label="Source route">${escapeHtml(route.sourceRoute)}</td>
-              <td data-label="Destination host">${escapeHtml(route.destinationHost)}</td>
-              <td data-label="Destination">${escapeHtml(route.destinationRoute)}</td>
-              <td data-label="Cleanup">${escapeHtml(route.cleanupStatus)}</td>
-              <td data-label="Evidence">${escapeHtml(route.evidenceStatus)}; hosted evidence: ${escapeHtml(route.hostedEvidenceUrl)}</td>
-              <td data-label="Redirect">${escapeHtml(route.redirectStatus)}; plan: ${escapeHtml(route.redirectPlan)}</td>
-              <td data-label="Cleanup PR">${escapeHtml(route.parentCleanupPr)}</td>
-              <td data-label="Rollback">${escapeHtml(route.rollback)}; owner/path: ${escapeHtml(route.rollbackCommandOrOwner)}</td>
-            </tr>`,
-          )
-          .join("")}
-      </tbody>
-    </table>
-  </div>`;
 }
 
 function renderProducts() {

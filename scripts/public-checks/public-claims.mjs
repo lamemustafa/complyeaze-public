@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 
 const contentDataFiles = [
+  "packages/public-content/src/complyeaze.migration-ledger.ts",
   "packages/public-content/src/complyeaze.routes.json",
   "src/site-data.mjs",
   "src/gateway-data.mjs",
@@ -92,6 +93,15 @@ export function assertCanonicalManifestClaimFixture() {
     assertNoRiskyClaimsOutsidePolicy(root, findings);
     if (!findings.some((finding) => finding.startsWith(`${manifestPath}:`))) {
       throw new Error("Canonical route manifest risky-claim fixture was not detected");
+    }
+    const ledgerPath = "packages/public-content/src/complyeaze.migration-ledger.ts";
+    const absoluteLedgerPath = path.join(root, ledgerPath);
+    mkdirSync(path.dirname(absoluteLedgerPath), { recursive: true });
+    writeFileSync(absoluteLedgerPath, 'const status = "production ready";\n', "utf8");
+    const ledgerFindings = [];
+    assertNoRiskyClaimsOutsidePolicy(root, ledgerFindings);
+    if (!ledgerFindings.some((finding) => finding.startsWith(`${ledgerPath}:`))) {
+      throw new Error("Canonical migration ledger risky-claim fixture was not detected");
     }
   } finally {
     rmSync(root, { recursive: true, force: true });

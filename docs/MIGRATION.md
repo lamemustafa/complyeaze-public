@@ -43,5 +43,7 @@ For each migrated surface, record:
 - Public claim evidence.
 - Rollback path.
 
-The current route-family ledger lives in `src/migration-data.mjs`, is rendered
-at `/migration/`, and is summarized in `docs/ROUTE_MIGRATION_LEDGER.md`.
+The canonical route-family ledger lives in
+`packages/public-content/src/complyeaze.migration-ledger.ts`, is rendered at
+`/migration/`, and is summarized in `docs/ROUTE_MIGRATION_LEDGER.md`.
+`src/migration-data.mjs` remains only as the legacy-renderer adapter during P1.

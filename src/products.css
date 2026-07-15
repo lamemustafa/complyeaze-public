@@ -120,6 +120,11 @@
   padding: clamp(1rem, 3vw, 1.5rem);
 }
 
+.product-table-section:focus-visible {
+  outline: 3px solid var(--rust);
+  outline-offset: 3px;
+}
+
 table {
   border-collapse: collapse;
   min-width: 680px;

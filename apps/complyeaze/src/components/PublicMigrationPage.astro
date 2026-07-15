@@ -1,0 +1,58 @@
+---
+import { migrationLedger } from "@complyeaze-public/content/complyeaze-migration-ledger";
+import type { PublicMigrationRoute } from "@complyeaze-public/content";
+import PublicMigrationLedger from "./PublicMigrationLedger.astro";
+
+interface Props {
+  route: PublicMigrationRoute;
+}
+
+const { route } = Astro.props;
+---
+
+<section class="intro" aria-labelledby="page-title">
+  <p class="eyebrow">{route.eyebrow}</p>
+  <h1 id="page-title">{route.heading}</h1>
+  <p class="summary">{route.summary}</p>
+</section>
+
+<section class="migration-boundary" aria-label="Migration evidence boundary">
+  {route.sections.map((section) => (
+    <article>
+      <h2>{section.title}</h2>
+      <p>{section.body}</p>
+    </article>
+  ))}
+</section>
+
+<ol class="migration-steps" aria-label="Migration order">
+  {route.steps.map((step) => (
+    <li>
+      <strong>{step.label}</strong>
+      <span>{step.body}</span>
+    </li>
+  ))}
+</ol>
+
+<PublicMigrationLedger ledger={migrationLedger} />
+
+<style>
+  .intro { max-width: 72ch; }
+  .eyebrow { margin: 0 0 1rem; color: #475569; font-size: 0.82rem; font-weight: 750; letter-spacing: 0.12em; text-transform: uppercase; }
+  h1 { max-width: 18ch; margin: 0; font-size: clamp(2.35rem, 7vw, 5.25rem); line-height: 1.02; letter-spacing: -0.035em; text-wrap: balance; }
+  h2 { margin: 0; font-size: clamp(1.3rem, 3vw, 1.9rem); line-height: 1.2; text-wrap: balance; }
+  p { max-width: 72ch; text-wrap: pretty; }
+  .summary { margin-block: 1.5rem 0; font-size: clamp(1.05rem, 2vw, 1.25rem); }
+  .migration-boundary { margin-block: clamp(4rem, 9vw, 7rem); border-top: 1px solid #cbd5e1; }
+  .migration-boundary article { display: grid; grid-template-columns: minmax(12rem, 0.75fr) minmax(0, 1.25fr); gap: 1rem clamp(2rem, 7vw, 7rem); padding-block: clamp(1.75rem, 4vw, 2.5rem); border-bottom: 1px solid #cbd5e1; }
+  .migration-boundary p { margin: 0; }
+  .migration-steps { counter-reset: migration-step; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin: 0 0 clamp(2rem, 5vw, 4rem); padding: 0; list-style: none; background: #64748b; }
+  .migration-steps li { counter-increment: migration-step; display: grid; align-content: start; gap: 0.75rem; padding: clamp(1rem, 3vw, 1.5rem); background: #0f172a; color: #fff; }
+  .migration-steps strong { display: flex; align-items: center; gap: 0.75rem; font-size: 1rem; }
+  .migration-steps strong::before { min-width: 2.5rem; height: 2.5rem; display: inline-flex; align-items: center; justify-content: center; border: 2px solid currentColor; content: counter(migration-step); }
+  .migration-steps span { line-height: 1.55; }
+  @media (max-width: 42rem) {
+    .migration-boundary article, .migration-steps { grid-template-columns: 1fr; }
+    .migration-boundary article { gap: 0.65rem; }
+  }
+</style>

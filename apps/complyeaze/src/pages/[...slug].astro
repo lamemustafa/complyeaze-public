@@ -4,6 +4,8 @@ import {
   definePublicRouteManifest,
   type PublicRoute,
 } from "@complyeaze-public/content";
+import PublicEvidencePage from "../components/PublicEvidencePage.astro";
+import PublicMigrationPage from "../components/PublicMigrationPage.astro";
 import PublicPolicyPage from "../components/PublicPolicyPage.astro";
 import PublicResourcePage from "../components/PublicResourcePage.astro";
 import PublicPageLayout from "../layouts/PublicPageLayout.astro";
@@ -25,5 +27,13 @@ const { origin, route } = Astro.props;
 ---
 
 <PublicPageLayout {origin} {route}>
-  {route.kind === "policy" ? <PublicPolicyPage {route} /> : <PublicResourcePage {route} />}
+  {route.kind === "resource" ? (
+    <PublicResourcePage {route} />
+  ) : route.kind === "policy" ? (
+    <PublicPolicyPage {route} />
+  ) : route.kind === "evidence" ? (
+    <PublicEvidencePage {route} />
+  ) : (
+    <PublicMigrationPage {route} />
+  )}
 </PublicPageLayout>

@@ -4,14 +4,27 @@ import { definePublicRouteManifest } from "../../packages/public-content/src/sch
 
 const manifestPath = "packages/public-content/src/complyeaze.routes.json";
 const requiredSourceFiles = [
+  "src/evidence-route-data.mjs",
+  "src/migration.css",
+  "src/products.css",
+  "src/render-evidence.mjs",
+  "src/render-migration.mjs",
+  "src/styles.css",
+  "scripts/visual-check.mjs",
   "packages/public-content/src/schema.ts",
   "packages/public-shell/src/metadata.ts",
+  "apps/complyeaze/src/components/PublicEvidencePage.astro",
+  "apps/complyeaze/src/components/PublicMigrationLedger.astro",
+  "apps/complyeaze/src/components/PublicMigrationPage.astro",
   "apps/complyeaze/src/components/PublicPolicyPage.astro",
   "apps/complyeaze/src/components/PublicResourcePage.astro",
   "apps/complyeaze/src/layouts/PublicPageLayout.astro",
   "apps/complyeaze/src/pages/[...slug].astro",
 ];
 const requiredRoutes = [
+  "/trust/",
+  "/docs/",
+  "/migration/",
   "/about/",
   "/contact/",
   "/privacy/",
@@ -23,13 +36,150 @@ const requiredRoutes = [
 
 export function assertAstroCoreRouteSources(root) {
   const findings = [];
-  for (const filePath of [manifestPath, ...requiredSourceFiles]) {
-    if (!existsSync(path.join(root, filePath))) findings.push(`${filePath}: missing`);
+  const requiredFiles = [manifestPath, ...requiredSourceFiles];
+  const missingFiles = requiredFiles.filter((filePath) => !existsSync(path.join(root, filePath)));
+  for (const filePath of missingFiles) {
+    findings.push(`${filePath}: missing`);
   }
   const manifest = readManifest(root, findings);
   if (manifest) validateManifest(manifest, findings);
+  if (missingFiles.length === 0) assertLegacyEvidenceStyles(root, findings);
   if (findings.length > 0) {
     throw new Error(`Astro core-route source findings:\n${findings.join("\n")}`);
+  }
+}
+
+function assertLegacyEvidenceStyles(root, findings) {
+  const visualCheck = readFileSync(path.join(root, "scripts", "visual-check.mjs"), "utf8");
+  if (!visualCheck.includes('identity: [...document.querySelectorAll("*")].indexOf(element)')) {
+    findings.push("scripts/visual-check.mjs: focus traversal needs stable DOM-element identities");
+  }
+  if (!visualCheck.includes("state.identity === focusState.identity")) {
+    findings.push("scripts/visual-check.mjs: focus cycles must not be detected from repeated labels");
+  }
+  if (visualCheck.includes("state.label === focusState.label")) {
+    findings.push("scripts/visual-check.mjs: repeated focus labels must not terminate traversal");
+  }
+  const styles = readFileSync(path.join(root, "src", "styles.css"), "utf8");
+  if (!/\.evidence-sources\s+a\s*\{[^}]*min-height:\s*44px/s.test(styles)) {
+    findings.push("src/styles.css: legacy evidence links need a 44px minimum target");
+  }
+  const productStyles = readFileSync(path.join(root, "src", "products.css"), "utf8");
+  if (!/\.product-table-section:focus-visible\s*\{[^}]*outline:/s.test(productStyles)) {
+    findings.push("src/products.css: focusable migration inventory needs a visible focus outline");
+  }
+  const migrationStyles = readFileSync(path.join(root, "src", "migration.css"), "utf8");
+  if (!/\.migration-summary\s+li\s*\{[^}]*display:\s*grid/s.test(migrationStyles)) {
+    findings.push("src/migration.css: migration steps must style the semantic ordered-list items");
+  }
+  if (!/\.migration-summary\s*\{[^}]*counter-reset:\s*migration-step/s.test(migrationStyles)) {
+    findings.push("src/migration.css: migration sequence needs visible ordered counters");
+  }
+  if (/\.migration-summary\s+strong\s*\{[^}]*(?:height|width):\s*2\.5rem/s.test(migrationStyles)) {
+    findings.push("src/migration.css: migration step labels must not be constrained to marker size");
+  }
+  if (/\.route-ledger\s+thead\s*\{[^}]*display:\s*none/s.test(migrationStyles)) {
+    findings.push("src/migration.css: responsive ledger must preserve table headers for assistive technology");
+  }
+  const legacyMigrationRenderer = readFileSync(
+    path.join(root, "src", "render-migration.mjs"),
+    "utf8",
+  );
+  if (!/class="route-ledger"\s+role="region"\s+tabindex="0"/.test(legacyMigrationRenderer)) {
+    findings.push("src/render-migration.mjs: desktop ledger needs a keyboard-focusable scroll region");
+  }
+  if (
+    !legacyMigrationRenderer.includes(
+      "Nine-column route ledger; scroll horizontally when displayed as a table.",
+    ) ||
+    !legacyMigrationRenderer.includes('class="route-ledger-hint"') ||
+    !legacyMigrationRenderer.includes("aria-describedby=")
+  ) {
+    findings.push("src/render-migration.mjs: desktop ledger needs a visible described scroll hint");
+  }
+  if (
+    !legacyMigrationRenderer.includes(
+      'aria-label="${escapeHtml(family)} source route cleanup evidence"',
+    )
+  ) {
+    findings.push("src/render-migration.mjs: ledger regions need unique family-scoped names");
+  }
+  if (!/\.route-ledger\s*\{[^}]*overflow-x:\s*auto/s.test(migrationStyles)) {
+    findings.push("src/migration.css: desktop ledger needs contained horizontal scrolling");
+  }
+  if (!/\.route-ledger\s+table\s*\{[^}]*min-width:\s*90rem/s.test(migrationStyles)) {
+    findings.push("src/migration.css: desktop ledger table needs a readable minimum width");
+  }
+  if (!/\.route-ledger:focus-visible\s*\{[^}]*outline:/s.test(migrationStyles)) {
+    findings.push("src/migration.css: keyboard-focused ledger needs a visible outline");
+  }
+  if (!/\.route-ledger-hint\s*\{[^}]*font-size:/s.test(migrationStyles)) {
+    findings.push("src/migration.css: desktop ledger scroll hint needs visible styling");
+  }
+  if (!/@media[^]*\.route-ledger-hint\s*\{[^}]*display:\s*none/s.test(migrationStyles)) {
+    findings.push("src/migration.css: stacked ledger must hide the desktop-only scroll hint");
+  }
+  if (!/\.migration-ledger\s*>\s*article\s*\{[^}]*min-width:\s*0/s.test(migrationStyles)) {
+    findings.push("src/migration.css: migration ledger cards must allow contained table overflow");
+  }
+  if (!/\.route-ledger\s*\{[^}]*max-width:\s*100%/s.test(migrationStyles)) {
+    findings.push("src/migration.css: desktop ledger scroll region must stay within its card");
+  }
+  if (!/\.route-ledger\s*\{[^}]*min-width:\s*0/s.test(migrationStyles)) {
+    findings.push("src/migration.css: desktop ledger scroll region must be shrinkable");
+  }
+  const astroLedger = readFileSync(
+    path.join(root, "apps", "complyeaze", "src", "components", "PublicMigrationLedger.astro"),
+    "utf8",
+  );
+  if (/thead\s*\{[^}]*display:\s*none/s.test(astroLedger)) {
+    findings.push("PublicMigrationLedger.astro: responsive ledger must preserve table headers");
+  }
+  if (!/class="route-ledger"\s+role="region"\s+tabindex="0"/.test(astroLedger)) {
+    findings.push("PublicMigrationLedger.astro: desktop ledger needs a keyboard-focusable scroll region");
+  }
+  if (
+    !astroLedger.includes(
+      "Nine-column route ledger; scroll horizontally when displayed as a table.",
+    ) ||
+    !astroLedger.includes('class="route-ledger-hint"') ||
+    !astroLedger.includes("aria-describedby=")
+  ) {
+    findings.push("PublicMigrationLedger.astro: desktop ledger needs a visible described scroll hint");
+  }
+  if (!astroLedger.includes('aria-label={`${entry.family} source route cleanup evidence`}')) {
+    findings.push("PublicMigrationLedger.astro: ledger regions need unique family-scoped names");
+  }
+  if (!/\.route-ledger\s*\{[^}]*overflow-x:\s*auto/s.test(astroLedger)) {
+    findings.push("PublicMigrationLedger.astro: desktop ledger needs contained horizontal scrolling");
+  }
+  if (!/table\s*\{[^}]*min-width:\s*90rem/s.test(astroLedger)) {
+    findings.push("PublicMigrationLedger.astro: desktop ledger table needs a readable minimum width");
+  }
+  if (!/\.route-ledger:focus-visible\s*\{[^}]*outline:/s.test(astroLedger)) {
+    findings.push("PublicMigrationLedger.astro: keyboard-focused ledger needs a visible outline");
+  }
+  if (!/\.route-ledger-hint\s*\{[^}]*font-size:/s.test(astroLedger)) {
+    findings.push("PublicMigrationLedger.astro: desktop ledger scroll hint needs visible styling");
+  }
+  if (!/@media[^]*\.route-ledger-hint\s*\{[^}]*display:\s*none/s.test(astroLedger)) {
+    findings.push("PublicMigrationLedger.astro: stacked ledger must hide the desktop-only scroll hint");
+  }
+  if (!/\.migration-ledger\s*>\s*article\s*\{[^}]*min-width:\s*0/s.test(astroLedger)) {
+    findings.push("PublicMigrationLedger.astro: migration ledger cards must allow contained table overflow");
+  }
+  if (!/\.route-ledger\s*\{[^}]*max-width:\s*100%/s.test(astroLedger)) {
+    findings.push("PublicMigrationLedger.astro: desktop ledger scroll region must stay within its card");
+  }
+  if (!/\.route-ledger\s*\{[^}]*min-width:\s*0/s.test(astroLedger)) {
+    findings.push("PublicMigrationLedger.astro: desktop ledger scroll region must be shrinkable");
+  }
+  const astroMigrationPage = readFileSync(
+    path.join(root, "apps", "complyeaze", "src", "components", "PublicMigrationPage.astro"),
+    "utf8",
+  );
+  if (!/\.migration-steps\s*\{[^}]*counter-reset:\s*migration-step/s.test(astroMigrationPage)) {
+    findings.push("PublicMigrationPage.astro: migration sequence needs visible ordered counters");
   }
 }
 
@@ -83,6 +233,179 @@ export function assertAstroCoreRouteFixtures() {
     ],
   };
   definePublicRouteManifest(policyManifest);
+
+  const evidenceManifest = {
+    ...nestedManifest,
+    routes: [
+      {
+        description: "Evidence route fixture",
+        evidenceLinks: [
+          {
+            description: "Review the evidence source.",
+            href: "https://example.com/evidence",
+            label: "Evidence source",
+          },
+        ],
+        eyebrow: "Evidence fixture",
+        heading: "Evidence route",
+        kind: "evidence",
+        robots: "noindex, nofollow",
+        sections: [{ body: "Fixture body", title: "Fixture" }],
+        signalTerms: ["evidence"],
+        slug: "trust",
+        summary: "Evidence route fixture",
+        title: "Evidence route fixture",
+        urlPath: "/trust/",
+      },
+    ],
+  };
+  definePublicRouteManifest(evidenceManifest);
+
+  const unsafeEvidenceManifest = structuredClone(evidenceManifest);
+  unsafeEvidenceManifest.routes[0].evidenceLinks[0].href = "javascript:alert(1)";
+  assertRejectedManifest(
+    unsafeEvidenceManifest,
+    "evidence route accepted an unsafe evidence URL",
+  );
+  assertRejectedManifest(
+    { ...evidenceManifest, routes: [{ ...evidenceManifest.routes[0], evidenceLinks: [] }] },
+    "evidence route accepted an empty evidence-link list",
+  );
+  assertRejectedManifest(
+    {
+      ...evidenceManifest,
+      routes: [
+        {
+          ...evidenceManifest.routes[0],
+          evidenceLinks: [
+            evidenceManifest.routes[0].evidenceLinks[0],
+            {
+              ...evidenceManifest.routes[0].evidenceLinks[0],
+              label: "Duplicate evidence source",
+            },
+          ],
+        },
+      ],
+    },
+    "evidence route accepted duplicate evidence URLs",
+  );
+  assertRejectedManifest(
+    {
+      ...evidenceManifest,
+      routes: [
+        {
+          ...evidenceManifest.routes[0],
+          policySummary: policyManifest.routes[0].policySummary,
+          primaryAction: { href: "/", label: "Home" },
+          proof: ["Wrong-kind proof"],
+          secondaryAction: { href: "/terms/", label: "Terms" },
+        },
+      ],
+    },
+    "evidence route accepted fields from other route kinds",
+  );
+
+  const migrationManifest = {
+    ...nestedManifest,
+    routes: [
+      {
+        description: "Migration route fixture",
+        eyebrow: "Migration fixture",
+        heading: "Migration route",
+        kind: "migration",
+        robots: "noindex, nofollow",
+        sections: [{ body: "Fixture body", title: "Fixture" }],
+        signalTerms: ["migration"],
+        slug: "migration",
+        steps: [
+          { body: "Inventory the source and destination.", label: "Inventory" },
+          { body: "Record evidence before cleanup.", label: "Evidence" },
+        ],
+        summary: "Migration route fixture",
+        title: "Migration route fixture",
+        urlPath: "/migration/",
+      },
+    ],
+  };
+  definePublicRouteManifest(migrationManifest);
+  assertRejectedManifest(
+    { ...migrationManifest, routes: [{ ...migrationManifest.routes[0], steps: [] }] },
+    "migration route accepted an empty step list",
+  );
+  assertRejectedManifest(
+    {
+      ...migrationManifest,
+      routes: [
+        {
+          ...migrationManifest.routes[0],
+          steps: [
+            migrationManifest.routes[0].steps[0],
+            {
+              body: "A duplicate label must not create an ambiguous ordered step.",
+              label: migrationManifest.routes[0].steps[0].label,
+            },
+          ],
+        },
+      ],
+    },
+    "migration route accepted duplicate step labels",
+  );
+  assertRejectedManifest(
+    {
+      ...migrationManifest,
+      routes: [
+        {
+          ...migrationManifest.routes[0],
+          evidenceLinks: evidenceManifest.routes[0].evidenceLinks,
+          policySummary: policyManifest.routes[0].policySummary,
+          primaryAction: { href: "/", label: "Home" },
+          proof: ["Wrong-kind proof"],
+          secondaryAction: { href: "/terms/", label: "Terms" },
+        },
+      ],
+    },
+    "migration route accepted fields from other route kinds",
+  );
+  assertRejectedManifest(
+    {
+      ...evidenceManifest,
+      routes: [{ ...evidenceManifest.routes[0], steps: migrationManifest.routes[0].steps }],
+    },
+    "evidence route accepted migration steps",
+  );
+  assertRejectedManifest(
+    {
+      ...nestedManifest,
+      routes: [
+        {
+          ...nestedManifest.routes[0],
+          evidenceLinks: evidenceManifest.routes[0].evidenceLinks,
+          steps: migrationManifest.routes[0].steps,
+        },
+      ],
+    },
+    "resource route accepted evidence or migration fields",
+  );
+  assertRejectedManifest(
+    {
+      ...policyManifest,
+      routes: [
+        {
+          ...policyManifest.routes[0],
+          evidenceLinks: evidenceManifest.routes[0].evidenceLinks,
+          steps: migrationManifest.routes[0].steps,
+        },
+      ],
+    },
+    "policy route accepted evidence or migration fields",
+  );
+  assertRejectedManifest(
+    {
+      ...nestedManifest,
+      routes: [{ ...nestedManifest.routes[0], kind: "unknown" }],
+    },
+    "route manifest accepted an unknown route kind",
+  );
 
   assertRejectedManifest(
     {
@@ -138,6 +461,37 @@ function assertRejectedManifest(manifest, message) {
   if (!rejected) throw new Error(message);
 }
 
+export function assertLegacyCoreRouteBuild(root) {
+  const findings = [];
+  const manifest = readManifest(root, findings);
+  if (!manifest) return fail(findings);
+  validateManifest(manifest, findings);
+  if (findings.length > 0) return fail(findings);
+
+  for (const route of manifest.routes ?? []) {
+    const legacyOutputPath = path.join(
+      root,
+      "dist",
+      route.urlPath.replace(/^\/+|\/+$/g, ""),
+      "index.html",
+    );
+    if (!existsSync(legacyOutputPath)) {
+      findings.push(`${route.urlPath}: missing legacy build output for parity check`);
+      continue;
+    }
+    const legacyHtml = readFileSync(legacyOutputPath, "utf8");
+    for (const [label, value] of expectedRouteValues(route)) {
+      if (!legacyHtml.includes(value)) {
+        findings.push(`${route.urlPath}: legacy build diverges on ${label}`);
+      }
+    }
+    if (route.kind === "migration" && !legacyHtml.includes("<caption")) {
+      findings.push(`${route.urlPath}: legacy migration tables need captions`);
+    }
+  }
+  if (findings.length > 0) fail(findings);
+}
+
 export function assertAstroCoreRouteBuild(root) {
   const findings = [];
   const manifest = readManifest(root, findings);
@@ -188,31 +542,24 @@ export function assertAstroCoreRouteBuild(root) {
     if (!html.includes(`class="brand" href="${manifest.origin}/"`)) {
       findings.push(`${route.urlPath}: preview brand must link to the production public home`);
     }
-    const expectedValues = [
-      ["title", route.title],
-      ["description", route.description],
-      ["eyebrow", route.eyebrow],
-      ["heading", route.heading],
-      ["summary", route.summary],
-      ...route.sections.flatMap((section) => [
-        ["section title", section.title],
-        ["section body", section.body],
-        ...(section.meta ? [["section meta", section.meta]] : []),
-      ]),
-      ...(route.kind === "resource"
-        ? [
-            ["primary action label", route.primaryAction.label],
-            ["primary action href", route.primaryAction.href],
-            ["secondary action label", route.secondaryAction.label],
-            ["secondary action href", route.secondaryAction.href],
-            ...route.proof.map((item) => ["proof item", item]),
-          ]
-        : Object.entries(route.policySummary).map(([label, value]) => [
-            `policy summary ${label}`,
-            value,
-          ])),
-    ];
-    for (const [label, value] of expectedValues) {
+    if (route.kind === "evidence" && !html.includes('class="evidence-sources"')) {
+      findings.push(`${route.urlPath}: Astro evidence sources missing`);
+    }
+    if (route.kind === "migration") {
+      if (!html.includes('<ol class="migration-steps"')) {
+        findings.push(`${route.urlPath}: Astro ordered migration steps missing`);
+      }
+      if (!html.includes('class="route-ledger"')) {
+        findings.push(`${route.urlPath}: Astro route-level migration ledger missing`);
+      }
+      if (!html.includes("<table")) {
+        findings.push(`${route.urlPath}: Astro semantic migration table missing`);
+      }
+      if (!html.includes("<caption")) {
+        findings.push(`${route.urlPath}: Astro migration tables need captions`);
+      }
+    }
+    for (const [label, value] of expectedRouteValues(route)) {
       if (!legacyHtml.includes(value)) {
         findings.push(`${route.urlPath}: legacy build diverges on ${label}`);
       }
@@ -240,6 +587,57 @@ export function assertAstroCoreRouteBuild(root) {
     }
   }
   if (findings.length > 0) fail(findings);
+}
+
+function expectedRouteValues(route) {
+  const values = [
+    ["title", route.title],
+    ["description", route.description],
+    ["eyebrow", route.eyebrow],
+    ["heading", route.heading],
+    ["summary", route.summary],
+    ...route.sections.flatMap((section) => [
+      ["section title", section.title],
+      ["section body", section.body],
+      ...(section.meta ? [["section meta", section.meta]] : []),
+    ]),
+  ];
+  if (route.kind === "resource") {
+    return [
+      ...values,
+      ["primary action label", route.primaryAction.label],
+      ["primary action href", route.primaryAction.href],
+      ["secondary action label", route.secondaryAction.label],
+      ["secondary action href", route.secondaryAction.href],
+      ...route.proof.map((item) => ["proof item", item]),
+    ];
+  }
+  if (route.kind === "policy") {
+    return [
+      ...values,
+      ...Object.entries(route.policySummary).map(([label, value]) => [
+        `policy summary ${label}`,
+        value,
+      ]),
+    ];
+  }
+  if (route.kind === "evidence") {
+    return [
+      ...values,
+      ...route.evidenceLinks.flatMap((link) => [
+        ["evidence link label", link.label],
+        ["evidence link description", link.description],
+        ["evidence link href", link.href],
+      ]),
+    ];
+  }
+  return [
+    ...values,
+    ...route.steps.flatMap((step) => [
+      ["migration step label", step.label],
+      ["migration step body", step.body],
+    ]),
+  ];
 }
 
 function validateManifest(manifest, findings) {

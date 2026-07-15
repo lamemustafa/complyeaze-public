@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/schema.ts",
+    "./complyeaze-migration-ledger": "./src/complyeaze.migration-ledger.ts",
     "./complyeaze-routes": "./src/complyeaze.routes.json"
   },
   "scripts": {

@@ -56,7 +56,7 @@ content included in this PR. If none, write `None`.
 ## Route Migration Or Cutover, If Any
 
 - [ ] No private-app route removal or redirect is claimed by this PR.
-- [ ] Route-level migration ledger rows updated in `src/migration-data.mjs`.
+- [ ] Route-level migration ledger rows updated in `packages/public-content/src/complyeaze.migration-ledger.ts`.
 - [ ] `docs/ROUTE_MIGRATION_LEDGER.md` mirrors the changed source host, source route, destination host, and destination route.
 - [ ] Rendered `/migration/` evidence reviewed when route ledger rows changed.
 - [ ] Destination route exists in `dist/route-manifest.json` when parent-route cleanup is proposed.
