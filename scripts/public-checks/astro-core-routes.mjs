@@ -6,10 +6,20 @@ const manifestPath = "packages/public-content/src/complyeaze.routes.json";
 const requiredSourceFiles = [
   "packages/public-content/src/schema.ts",
   "packages/public-shell/src/metadata.ts",
+  "apps/complyeaze/src/components/PublicPolicyPage.astro",
+  "apps/complyeaze/src/components/PublicResourcePage.astro",
   "apps/complyeaze/src/layouts/PublicPageLayout.astro",
   "apps/complyeaze/src/pages/[...slug].astro",
 ];
-const requiredRoutes = ["/about/", "/contact/"];
+const requiredRoutes = [
+  "/about/",
+  "/contact/",
+  "/privacy/",
+  "/terms/",
+  "/status/",
+  "/changelog/",
+  "/release-evidence/",
+];
 
 export function assertAstroCoreRouteSources(root) {
   const findings = [];
@@ -32,6 +42,7 @@ export function assertAstroCoreRouteFixtures() {
         description: "Nested route fixture",
         eyebrow: "Nested fixture",
         heading: "Nested route",
+        kind: "resource",
         primaryAction: { href: "/", label: "Home" },
         proof: ["Nested routes remain representable."],
         robots: "noindex, nofollow",
@@ -48,6 +59,58 @@ export function assertAstroCoreRouteFixtures() {
   };
   definePublicRouteManifest(nestedManifest);
 
+  const policyManifest = {
+    ...nestedManifest,
+    routes: [
+      {
+        description: "Policy route fixture",
+        eyebrow: "Policy fixture",
+        heading: "Policy route",
+        kind: "policy",
+        policySummary: {
+          evidence: "Rendered checks",
+          excluded: "Private app uptime",
+          scope: "Public static repository",
+        },
+        robots: "noindex, nofollow",
+        sections: [{ body: "Fixture body", title: "Fixture" }],
+        signalTerms: ["policy"],
+        slug: "privacy",
+        summary: "Policy route fixture",
+        title: "Policy route fixture",
+        urlPath: "/privacy/",
+      },
+    ],
+  };
+  definePublicRouteManifest(policyManifest);
+
+  assertRejectedManifest(
+    {
+      ...policyManifest,
+      routes: [
+        {
+          ...policyManifest.routes[0],
+          primaryAction: { href: "/", label: "Home" },
+          proof: ["Wrong-kind proof"],
+          secondaryAction: { href: "/terms/", label: "Terms" },
+        },
+      ],
+    },
+    "policy route accepted resource-only fields",
+  );
+  assertRejectedManifest(
+    {
+      ...nestedManifest,
+      routes: [
+        {
+          ...nestedManifest.routes[0],
+          policySummary: policyManifest.routes[0].policySummary,
+        },
+      ],
+    },
+    "resource route accepted a policy summary",
+  );
+
   const unsafeManifest = structuredClone(nestedManifest);
   unsafeManifest.routes[0].primaryAction.href = "javascript:alert(1)";
   let rejectedUnsafeHref = false;
@@ -63,6 +126,16 @@ export function assertAstroCoreRouteFixtures() {
   if (!malformedFindings.some((finding) => finding.includes("routes[0] must be an object"))) {
     throw new Error("Astro route fixture did not report a malformed route entry");
   }
+}
+
+function assertRejectedManifest(manifest, message) {
+  let rejected = false;
+  try {
+    definePublicRouteManifest(manifest);
+  } catch {
+    rejected = true;
+  }
+  if (!rejected) throw new Error(message);
 }
 
 export function assertAstroCoreRouteBuild(root) {
@@ -115,23 +188,31 @@ export function assertAstroCoreRouteBuild(root) {
     if (!html.includes(`class="brand" href="${manifest.origin}/"`)) {
       findings.push(`${route.urlPath}: preview brand must link to the production public home`);
     }
-    for (const [label, value] of [
+    const expectedValues = [
       ["title", route.title],
       ["description", route.description],
       ["eyebrow", route.eyebrow],
       ["heading", route.heading],
       ["summary", route.summary],
-      ["primary action label", route.primaryAction.label],
-      ["primary action href", route.primaryAction.href],
-      ["secondary action label", route.secondaryAction.label],
-      ["secondary action href", route.secondaryAction.href],
       ...route.sections.flatMap((section) => [
         ["section title", section.title],
         ["section body", section.body],
         ...(section.meta ? [["section meta", section.meta]] : []),
       ]),
-      ...route.proof.map((item) => ["proof item", item]),
-    ]) {
+      ...(route.kind === "resource"
+        ? [
+            ["primary action label", route.primaryAction.label],
+            ["primary action href", route.primaryAction.href],
+            ["secondary action label", route.secondaryAction.label],
+            ["secondary action href", route.secondaryAction.href],
+            ...route.proof.map((item) => ["proof item", item]),
+          ]
+        : Object.entries(route.policySummary).map(([label, value]) => [
+            `policy summary ${label}`,
+            value,
+          ])),
+    ];
+    for (const [label, value] of expectedValues) {
       if (!legacyHtml.includes(value)) {
         findings.push(`${route.urlPath}: legacy build diverges on ${label}`);
       }
@@ -139,8 +220,17 @@ export function assertAstroCoreRouteBuild(root) {
         findings.push(`${route.urlPath}: Astro build diverges on ${label}`);
       }
     }
+    if (route.kind === "policy" && (!html.includes('href="/privacy/"') || !html.includes('href="/terms/"'))) {
+      findings.push(`${route.urlPath}: Astro footer policy links missing`);
+    }
     for (const href of [...html.matchAll(/\shref="([^"]+)"/g)].map((match) => match[1])) {
       if (!href.startsWith("/")) continue;
+      if (href.startsWith("/_astro/")) {
+        if (!existsSync(path.join(appDist, href.slice(1)))) {
+          findings.push(`${route.urlPath}: unresolved preview asset ${href}`);
+        }
+        continue;
+      }
       const targetPath = path.join(
         appDist,
         href.replace(/^\/+|\/+$/g, ""),
@@ -187,8 +277,11 @@ function validateManifest(manifest, findings) {
     if (!Array.isArray(route.sections) || route.sections.length === 0) {
       findings.push(`${manifestPath}: ${route.urlPath} needs sections`);
     }
-    if (!Array.isArray(route.proof) || route.proof.length === 0) {
-      findings.push(`${manifestPath}: ${route.urlPath} needs proof`);
+    if (route.kind === "resource" && (!Array.isArray(route.proof) || route.proof.length === 0)) {
+      findings.push(`${manifestPath}: ${route.urlPath} resource route needs proof`);
+    }
+    if (route.kind === "policy" && !route.policySummary) {
+      findings.push(`${manifestPath}: ${route.urlPath} policy route needs a policy summary`);
     }
     if (JSON.stringify(route).includes("ComplyEaze Public")) {
       findings.push(`${manifestPath}: ${route.urlPath} exposes repository-boundary branding`);

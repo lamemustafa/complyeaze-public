@@ -1,7 +1,9 @@
-import { readFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 
 const contentDataFiles = [
+  "packages/public-content/src/complyeaze.routes.json",
   "src/site-data.mjs",
   "src/gateway-data.mjs",
   "src/root-resource-data.mjs",
@@ -71,6 +73,28 @@ export function assertNoRiskyClaimsOutsidePolicy(root, findings) {
         findings.push(`${filePath}:${lineForOffset(maskedText, match.index ?? 0)}: unsupported ${label}`);
       }
     }
+  }
+}
+
+export function assertCanonicalManifestClaimFixture() {
+  const root = mkdtempSync(path.join(tmpdir(), "public-claim-manifest-"));
+  try {
+    for (const filePath of publicClaimScanFiles) {
+      const absolutePath = path.join(root, filePath);
+      mkdirSync(path.dirname(absolutePath), { recursive: true });
+      writeFileSync(absolutePath, "", "utf8");
+    }
+    const manifestPath = "packages/public-content/src/complyeaze.routes.json";
+    const absoluteManifestPath = path.join(root, manifestPath);
+    mkdirSync(path.dirname(absoluteManifestPath), { recursive: true });
+    writeFileSync(absoluteManifestPath, '{"summary":"production ready"}\n', "utf8");
+    const findings = [];
+    assertNoRiskyClaimsOutsidePolicy(root, findings);
+    if (!findings.some((finding) => finding.startsWith(`${manifestPath}:`))) {
+      throw new Error("Canonical route manifest risky-claim fixture was not detected");
+    }
+  } finally {
+    rmSync(root, { recursive: true, force: true });
   }
 }
 

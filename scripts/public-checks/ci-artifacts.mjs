@@ -1,4 +1,5 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 
 const ciWorkflowPath = ".github/workflows/ci.yml";
@@ -6,7 +7,7 @@ const pullRequestTemplatePath = ".github/PULL_REQUEST_TEMPLATE.md";
 const releaseGatesPath = "docs/RELEASE_GATES.md";
 const visualTestingPath = "docs/VISUAL_TESTING.md";
 const reviewRectifyPath = "docs/REVIEW_RECTIFY.md";
-const policyDataPath = "src/policy-data.mjs";
+const routeManifestPath = "packages/public-content/src/complyeaze.routes.json";
 
 const requiredArtifacts = [
   {
@@ -44,7 +45,7 @@ export function assertCiArtifacts(root) {
   const visualTesting = readFileSync(path.join(root, visualTestingPath), "utf8");
   const reviewRectify = readFileSync(path.join(root, reviewRectifyPath), "utf8");
   const pullRequestTemplate = readFileSync(path.join(root, pullRequestTemplatePath), "utf8");
-  const policyData = readFileSync(path.join(root, policyDataPath), "utf8");
+  const routeManifest = readFileSync(path.join(root, routeManifestPath), "utf8");
   const findings = [];
 
   findings.push(...artifactWorkflowFindings(ciWorkflow));
@@ -67,7 +68,7 @@ export function assertCiArtifacts(root) {
     [releaseGatesPath, releaseGates],
     [visualTestingPath, visualTesting],
     [reviewRectifyPath, reviewRectify],
-    [policyDataPath, policyData]
+    [routeManifestPath, routeManifest]
   ]) {
     if (!text.includes("public-visual-evidence")) {
       findings.push(`${filePath}: missing public-visual-evidence artifact reference`);
@@ -83,6 +84,7 @@ export function assertCiArtifacts(root) {
 }
 
 export function assertCiArtifactPolicyFixtures() {
+  assertCanonicalArtifactReferenceFixture();
   assertArtifactFixture("literal retention", artifactFixtureWorkflow(), false);
   assertArtifactFixture(
     "quoted retention",
@@ -148,6 +150,37 @@ export function assertCiArtifactPolicyFixtures() {
   for (const [name, workflow] of invalidFixtures) {
     assertArtifactFixture(name, workflow, true);
   }
+}
+
+function assertCanonicalArtifactReferenceFixture() {
+  const root = mkdtempSync(path.join(tmpdir(), "public-ci-artifacts-"));
+  const referencedArtifacts = "public-site-build public-visual-evidence";
+  try {
+    writeFixture(root, ciWorkflowPath, artifactFixtureWorkflow());
+    for (const filePath of [
+      pullRequestTemplatePath,
+      releaseGatesPath,
+      visualTestingPath,
+      reviewRectifyPath,
+    ]) {
+      writeFixture(root, filePath, referencedArtifacts);
+    }
+    writeFixture(root, "src/policy-data.mjs", "export const policyPages = [];\n");
+    writeFixture(
+      root,
+      "packages/public-content/src/complyeaze.routes.json",
+      JSON.stringify({ evidence: referencedArtifacts }),
+    );
+    assertCiArtifacts(root);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
+
+function writeFixture(root, filePath, contents) {
+  const absolutePath = path.join(root, filePath);
+  mkdirSync(path.dirname(absolutePath), { recursive: true });
+  writeFileSync(absolutePath, contents, "utf8");
 }
 
 function artifactWorkflowFindings(workflow) {

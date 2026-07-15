@@ -1,0 +1,64 @@
+---
+import type { PublicPolicyRoute } from "@complyeaze-public/content";
+
+interface Props {
+  route: PublicPolicyRoute;
+}
+
+const { route } = Astro.props;
+---
+
+<section class="intro" aria-labelledby="page-title">
+  <p class="eyebrow">{route.eyebrow}</p>
+  <h1 id="page-title">{route.heading}</h1>
+  <p class="summary">{route.summary}</p>
+</section>
+
+<section class="policy-summary" aria-label="Policy evidence summary">
+  <dl>
+    <div>
+      <dt>Scope</dt>
+      <dd>{route.policySummary.scope}</dd>
+    </div>
+    <div>
+      <dt>Evidence</dt>
+      <dd>{route.policySummary.evidence}</dd>
+    </div>
+    <div>
+      <dt>Excluded</dt>
+      <dd>{route.policySummary.excluded}</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="policy-sections" aria-label={`${route.heading} details`}>
+  {route.sections.map((section) => (
+    <article>
+      <h2>{section.title}</h2>
+      <p>{section.body}</p>
+    </article>
+  ))}
+</section>
+
+<style>
+  .intro { max-width: 72ch; }
+  .eyebrow { margin: 0 0 1rem; color: #475569; font-size: 0.82rem; font-weight: 750; letter-spacing: 0.12em; text-transform: uppercase; }
+  h1 { max-width: 18ch; margin: 0; font-size: clamp(2.35rem, 7vw, 5.25rem); line-height: 1.02; letter-spacing: -0.035em; text-wrap: balance; }
+  h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 2rem); line-height: 1.2; text-wrap: balance; }
+  p { max-width: 72ch; text-wrap: pretty; }
+  .summary { margin-block: 1.5rem 0; font-size: clamp(1.05rem, 2vw, 1.25rem); }
+  .policy-summary { margin-block: clamp(3rem, 7vw, 5rem); padding-block: 1.5rem; border-block: 1px solid #cbd5e1; }
+  dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
+  dl div { min-width: 0; padding: 0.75rem clamp(1rem, 3vw, 2rem); }
+  dl div + div { border-inline-start: 1px solid #cbd5e1; }
+  dt { color: #475569; font-size: 0.85rem; font-weight: 750; }
+  dd { margin: 0.35rem 0 0; font-weight: 700; text-wrap: pretty; }
+  .policy-sections { border-top: 1px solid #cbd5e1; }
+  article { display: grid; grid-template-columns: minmax(12rem, 0.75fr) minmax(0, 1.25fr); gap: 1.5rem clamp(2rem, 7vw, 7rem); padding-block: clamp(1.75rem, 4vw, 2.5rem); border-bottom: 1px solid #cbd5e1; }
+  article p { margin: 0; }
+  @media (max-width: 42rem) {
+    dl { grid-template-columns: 1fr; }
+    dl div + div { border-block-start: 1px solid #cbd5e1; border-inline-start: 0; }
+    article { grid-template-columns: 1fr; gap: 0.75rem; }
+  }
+</style>

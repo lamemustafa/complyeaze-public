@@ -2,15 +2,15 @@ export function renderPolicyPage(page, escapeHtml) {
   return `<section class="policy-strip" aria-label="Policy evidence summary">
     <article>
       <span>Scope</span>
-      <strong>Public static repository</strong>
+      <strong>${escapeHtml(page.policySummary.scope)}</strong>
     </article>
     <article>
       <span>Evidence</span>
-      <strong>Local docs and rendered checks</strong>
+      <strong>${escapeHtml(page.policySummary.evidence)}</strong>
     </article>
     <article>
       <span>Excluded</span>
-      <strong>Tenant data and app uptime</strong>
+      <strong>${escapeHtml(page.policySummary.excluded)}</strong>
     </article>
   </section>
   <section class="policy-stack" aria-label="${escapeHtml(page.heading)} details">
