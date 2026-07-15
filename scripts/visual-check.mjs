@@ -8,6 +8,36 @@ import { pages } from "../src/site-data.mjs";
 
 const root = process.cwd();
 const dist = path.join(root, "dist");
+const astroApps = [
+  {
+    slug: "astro-complyeaze-foundation",
+    urlPath: "/__astro/complyeaze/",
+    publicPath: "https://complyeaze.com/",
+    dist: path.join(root, "apps", "complyeaze", "dist"),
+    heading: "ComplyEaze Astro workspace foundation",
+    profile: "foundation",
+  },
+  {
+    slug: "astro-axal-foundation",
+    urlPath: "/__astro/axal/",
+    publicPath: "https://axal.complyeaze.com/",
+    dist: path.join(root, "apps", "axal", "dist"),
+    heading: "Axal Astro workspace foundation",
+    profile: "foundation",
+  },
+  {
+    slug: "astro-pack-foundation",
+    urlPath: "/__astro/pack/",
+    publicPath: "https://pack.complyeaze.com/",
+    dist: path.join(root, "apps", "pack", "dist"),
+    heading: "Pack Astro workspace foundation",
+    profile: "foundation",
+  },
+];
+const visualTargets = [
+  ...pages.map((page) => ({ ...page, publicPath: page.urlPath, profile: "legacy" })),
+  ...astroApps,
+];
 const artifactDir = path.join(root, "test-results", "public-visual");
 rmSync(artifactDir, { recursive: true, force: true });
 mkdirSync(artifactDir, { recursive: true });
@@ -39,19 +69,19 @@ const findings = [];
 const summary = [];
 
 try {
-  for (const pageDef of pages) {
+  for (const pageDef of visualTargets) {
     for (const viewport of viewports) {
       const context = await browser.newContext({ reducedMotion: "reduce", viewport });
       const page = await context.newPage();
       await page.goto(`${baseUrl}${pageDef.urlPath}`, { waitUntil: "networkidle" });
-      const metrics = await collectMetrics(page, pageDef.heading);
+      const metrics = await collectMetrics(page, pageDef.heading, pageDef.profile);
       const screenshot = `${pageDef.slug}-${viewport.name}.png`;
       await page.evaluate(() => document.activeElement?.blur());
       await page.screenshot({
         path: path.join(artifactDir, screenshot),
         fullPage: true
       });
-      summary.push({ page: pageDef.urlPath, slug: pageDef.slug, viewport: viewport.name, screenshot, ...metrics });
+      summary.push({ page: pageDef.publicPath, slug: pageDef.slug, viewport: viewport.name, screenshot, ...metrics });
       for (const issue of metrics.issues) {
         findings.push(`${pageDef.urlPath} ${viewport.name}: ${issue}`);
       }
@@ -70,13 +100,30 @@ if (findings.length > 0) {
   throw new Error(`Visual findings:\n${findings.join("\n")}`);
 }
 
-console.log(`Visual check passed for ${pages.length} pages across ${viewports.length} viewports`);
+console.log(`Visual check passed for ${visualTargets.length} pages across ${viewports.length} viewports`);
 
 function resolveDistPath(urlPath) {
+  const app = astroApps.find((candidate) => urlPath.startsWith(candidate.urlPath));
+  if (app) {
+    const relativePath = urlPath.slice(app.urlPath.length).replace(/^\/+/, "");
+    const candidate = resolveWithin(app.dist, relativePath);
+    return !relativePath || statIsDirectory(candidate)
+      ? path.join(candidate, "index.html")
+      : candidate;
+  }
   const safePath = urlPath.replace(/^\/+/, "");
-  const candidate = path.join(dist, safePath);
+  const candidate = resolveWithin(dist, safePath);
   if (urlPath === "/" || statIsDirectory(candidate)) {
     return path.join(candidate, "index.html");
+  }
+  return candidate;
+}
+
+function resolveWithin(rootPath, relativePath) {
+  const resolvedRoot = path.resolve(rootPath);
+  const candidate = path.resolve(resolvedRoot, relativePath);
+  if (candidate !== resolvedRoot && !candidate.startsWith(`${resolvedRoot}${path.sep}`)) {
+    return path.join(resolvedRoot, "__not-found__");
   }
   return candidate;
 }
@@ -116,8 +163,8 @@ function browserLaunchOptions() {
   return executablePath ? { executablePath } : {};
 }
 
-async function collectMetrics(page, expectedHeading) {
-  const metrics = await page.evaluate((heading) => {
+async function collectMetrics(page, expectedHeading, profile) {
+  const metrics = await page.evaluate(({ heading, profile }) => {
     function hasReducedMotionRule() {
       for (const sheet of document.styleSheets) {
         if (hasReducedMotionRuleInList(sheet.cssRules)) return true;
@@ -197,8 +244,9 @@ async function collectMetrics(page, expectedHeading) {
       issues.push(`horizontal overflow ${document.documentElement.scrollWidth}px > ${window.innerWidth}px`);
     }
     const firstViewportText = document.body.innerText.slice(0, 900);
-    if (!/ComplyEaze|public|trust|surface/i.test(firstViewportText)) {
-      issues.push("first viewport lacks public ComplyEaze signal");
+    const expectedSignal = heading.split(/\s+/)[0]?.toLowerCase();
+    if (!expectedSignal || !firstViewportText.toLowerCase().includes(expectedSignal)) {
+      issues.push("first viewport lacks expected product signal");
     }
     const unnamedLinks = [...document.querySelectorAll("a")].filter(
       (link) => !(link.textContent ?? "").trim() && !link.getAttribute("aria-label"),
@@ -245,11 +293,13 @@ async function collectMetrics(page, expectedHeading) {
     }
     const hero = document.querySelector(".hero");
     const heroRect = hero?.getBoundingClientRect();
-    if (!heroRect || heroRect.height < 360) issues.push("hero area is too shallow for visual review");
+    if (profile === "legacy" && (!heroRect || heroRect.height < 360)) {
+      issues.push("hero area is too shallow for visual review");
+    }
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       issues.push("reduced-motion media emulation is not active");
     }
-    if (!hasReducedMotionRule()) {
+    if (profile === "legacy" && !hasReducedMotionRule()) {
       issues.push("missing prefers-reduced-motion stylesheet rule");
     }
     const activeMotionElements = [...document.querySelectorAll("body *")].filter((element) => {
@@ -282,11 +332,12 @@ async function collectMetrics(page, expectedHeading) {
       activeMotionElements: activeMotionElements.length,
       issues
     };
-  }, expectedHeading);
+  }, { heading: expectedHeading, profile });
   const focusStates = [];
-  for (let index = 0; index < 16; index += 1) {
-    await page.keyboard.press("Tab");
-    const focusState = await page.evaluate(() => {
+  if (profile === "legacy") {
+    for (let index = 0; index < 16; index += 1) {
+      await page.keyboard.press("Tab");
+      const focusState = await page.evaluate(() => {
       function focusLabel(element) {
         return [element.tagName.toLowerCase(), element.getAttribute("href") ?? element.getAttribute("aria-label") ?? element.textContent?.trim()]
           .filter(Boolean)
@@ -311,18 +362,19 @@ async function collectMetrics(page, expectedHeading) {
         label: focusLabel(element),
         visible: isVisibleFocus(element)
       };
-    });
-    if (focusStates.some((state) => state.label === focusState.label)) {
-      break;
+      });
+      if (focusStates.some((state) => state.label === focusState.label)) {
+        break;
+      }
+      focusStates.push(focusState);
     }
-    focusStates.push(focusState);
-  }
-  const invisibleFocusStates = focusStates.filter((state) => !state.visible);
-  if (invisibleFocusStates.length > 0) {
-    metrics.issues.push(`focused controls lack visible focus indicators: ${invisibleFocusStates.map((state) => state.label).join(", ")}`);
-  }
-  if (focusStates.length < 2) {
-    metrics.issues.push("keyboard focus check did not reach controls beyond the skip link");
+    const invisibleFocusStates = focusStates.filter((state) => !state.visible);
+    if (invisibleFocusStates.length > 0) {
+      metrics.issues.push(`focused controls lack visible focus indicators: ${invisibleFocusStates.map((state) => state.label).join(", ")}`);
+    }
+    if (focusStates.length < 2) {
+      metrics.issues.push("keyboard focus check did not reach controls beyond the skip link");
+    }
   }
   return { ...metrics, focusTargets: focusStates.map((state) => state.label), focusTarget: focusStates[0]?.label ?? "none" };
 }
@@ -374,11 +426,11 @@ function markdownCell(value) {
 }
 
 function assertVisualArtifacts(summary) {
-  const expectedScreenshots = pages.flatMap((pageDef) => viewports.map((viewport) => `${pageDef.slug}-${viewport.name}.png`)).sort();
+  const expectedScreenshots = visualTargets.flatMap((pageDef) => viewports.map((viewport) => `${pageDef.slug}-${viewport.name}.png`)).sort();
   const actualScreenshots = readdirSync(artifactDir).filter((file) => file.endsWith(".png")).sort();
   assertArrayEqual("visual screenshots", actualScreenshots, expectedScreenshots);
 
-  const expectedEntries = pages.length * viewports.length;
+  const expectedEntries = visualTargets.length * viewports.length;
   if (summary.length !== expectedEntries) {
     throw new Error(`Visual summary entry count mismatch: expected ${expectedEntries}, got ${summary.length}`);
   }

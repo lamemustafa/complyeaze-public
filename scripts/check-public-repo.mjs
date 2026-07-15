@@ -14,6 +14,7 @@ import {
 } from "./public-checks/ci-artifacts.mjs";
 import { assertContributorIntake } from "./public-checks/contributor-intake.mjs";
 import { assertDependencyPolicy } from "./public-checks/dependency-policy.mjs";
+import { assertWorkspaceDependencySurfaceFixtures } from "./public-checks/dependency-workspace.mjs";
 import { assertDeployWorkflow } from "./public-checks/deploy-workflow.mjs";
 import { assertGatewayPages } from "./public-checks/gateway-pages.mjs";
 import { assertHostedRoutesPolicy } from "./public-checks/hosted-routes.mjs";
@@ -258,6 +259,7 @@ function run() {
   }
   if (["--all", "--test"].includes(mode)) {
     assertAstroWorkspace(root);
+    assertWorkspaceDependencySurfaceFixtures();
     assertSensitiveContentFixturePolicy();
     assertCiArtifactPolicyFixtures();
     assertReviewGateFixtures(root);

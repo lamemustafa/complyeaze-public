@@ -1,15 +1,18 @@
-import { existsSync, readFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  writeFileSync
+} from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 
 const rootManifestPath = "package.json";
 const lockfilePath = "pnpm-lock.yaml";
-const workspaceManifests = new Map([
-  ["apps/axal/package.json", ["@astrojs/check", "astro", "typescript"]],
-  ["apps/complyeaze/package.json", ["@astrojs/check", "astro", "typescript"]],
-  ["apps/pack/package.json", ["@astrojs/check", "astro", "typescript"]],
-  ["packages/public-content/package.json", []],
-  ["packages/public-shell/package.json", []],
-]);
+const appDevDependencies = ["@astrojs/check", "astro", "typescript"];
 const forbiddenLifecycleScripts = [
   "preinstall",
   "install",
@@ -25,13 +28,52 @@ export function assertWorkspaceDependencySurface(root, rootManifestText, lockfil
   const rootManifest = parseManifest(rootManifestPath, rootManifestText, findings);
   if (rootManifest) assertRootManifest(rootManifest, findings);
 
-  for (const [filePath, allowedDevDependencies] of workspaceManifests) {
+  const workspaceManifests = discoverWorkspaceManifests(root);
+  for (const filePath of workspaceManifests) {
     const text = readRequiredFile(root, filePath, findings);
     const manifest = text ? parseManifest(filePath, text, findings) : null;
+    const allowedDevDependencies = filePath.startsWith("apps/") ? appDevDependencies : [];
     if (manifest) assertWorkspaceManifest(filePath, manifest, allowedDevDependencies, findings);
   }
 
-  assertLockfile(lockfile, findings);
+  assertLockfile(lockfile, workspaceManifests, findings);
+}
+
+export function assertWorkspaceDependencySurfaceFixtures() {
+  const root = mkdtempSync(path.join(tmpdir(), "public-workspace-dependency-"));
+  const manifestPath = path.join(root, "packages", "experiment", "package.json");
+  mkdirSync(path.dirname(manifestPath), { recursive: true });
+  writeFileSync(
+    manifestPath,
+    JSON.stringify({
+      name: "@complyeaze-public/experiment",
+      private: true,
+      scripts: { postinstall: "node unsafe.mjs" },
+      dependencies: { "unsafe-runtime": "1.0.0" },
+    }),
+    "utf8",
+  );
+  const findings = [];
+  try {
+    assertWorkspaceDependencySurface(
+      root,
+      JSON.stringify({
+        private: true,
+        packageManager: "pnpm@10.28.2",
+        engines: { node: ">=24" },
+        devDependencies: { playwright: "1.61.1" },
+      }),
+      "\nimporters:\n\n  .: {}\n\n  packages/experiment: {}\n\npackages:\n",
+      findings,
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+  for (const expected of ["runtime dependencies are not allowed", "lifecycle script postinstall is not allowed"]) {
+    if (!findings.some((finding) => finding.includes(expected))) {
+      throw new Error(`Workspace dependency fixture missed: ${expected}`);
+    }
+  }
 }
 
 function assertRootManifest(manifest, findings) {
@@ -99,7 +141,7 @@ function assertNoLifecycleScripts(filePath, manifest, findings) {
   }
 }
 
-function assertLockfile(lockfile, findings) {
+function assertLockfile(lockfile, workspaceManifests, findings) {
   const requiredSnippets = [
     "  apps/axal:",
     "  apps/complyeaze:",
@@ -120,6 +162,25 @@ function assertLockfile(lockfile, findings) {
   if (catalogSpecifiers.length !== 9) {
     findings.push(`${lockfilePath}: expected 9 catalog-pinned Astro tool specifiers`);
   }
+  const importersBlock = lockfile.match(/\nimporters:\n(?<block>[\s\S]*?)\npackages:\n/)?.groups?.block ?? "";
+  const actualImporters = [...importersBlock.matchAll(/^  (\S[^:\n]*):(?:\s*\{\})?\s*$/gm)]
+    .map((match) => match[1])
+    .sort();
+  const expectedImporters = [".", ...workspaceManifests.map((filePath) => path.dirname(filePath))].sort();
+  if (actualImporters.join(",") !== expectedImporters.join(",")) {
+    findings.push(`${lockfilePath}: workspace importers do not match discovered manifests`);
+  }
+}
+
+function discoverWorkspaceManifests(root) {
+  return ["apps", "packages"].flatMap((parent) => {
+    const parentPath = path.join(root, parent);
+    if (!existsSync(parentPath)) return [];
+    return readdirSync(parentPath, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => `${parent}/${entry.name}/package.json`)
+      .filter((filePath) => existsSync(path.join(root, filePath)));
+  }).sort();
 }
 
 function parseManifest(filePath, text, findings) {
