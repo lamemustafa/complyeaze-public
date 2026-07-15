@@ -157,6 +157,7 @@ function runReviewGate(target) {
 function setReviewGateStatus(target, state, description) {
   const latestStatus = readLatestReviewGateStatus(target);
   if (
+    isReviewGateCreator(latestStatus) &&
     latestStatus?.state === state &&
     latestStatus?.description === description
   ) {
@@ -193,10 +194,12 @@ function readReviewGateStatuses(target) {
     "api",
     `repos/${repo}/commits/${target.headRefOid}/statuses`,
   ]);
-  return statuses.filter(
-    (status) =>
-      status.context === REVIEW_GATE_CONTEXT &&
-      String(status.creator?.login ?? "").toLowerCase() === REVIEW_GATE_CREATOR,
+  return statuses.filter((status) => status.context === REVIEW_GATE_CONTEXT);
+}
+
+function isReviewGateCreator(status) {
+  return (
+    String(status?.creator?.login ?? "").toLowerCase() === REVIEW_GATE_CREATOR
   );
 }
 

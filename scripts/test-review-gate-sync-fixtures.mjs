@@ -28,6 +28,7 @@ try {
   testPaginatedOpenList();
   testRepairWritesOneFinalStatus();
   testForeignPublisherIgnored();
+  testNewerForeignStatusDoesNotHideRepair();
   testNextRepairUpdatesStaleStatus();
 
   console.log(`Review-gate sync fixture checks passed for ${scenarioCount} scenarios`);
@@ -110,6 +111,23 @@ function testForeignPublisherIgnored() {
 
   assert(result.posts.length === 1, "foreign publisher must not suppress the repair write");
   assertPost(result.posts, "HEAD14", "success");
+}
+
+function testNewerForeignStatusDoesNotHideRepair() {
+  const state = singlePrState(16, "HEAD16", reviewGraph("HEAD16"));
+  state.currentStatuses.HEAD16 = [
+    foreignStatus(12, "failure"),
+    status(11, "success", "No active review blockers found."),
+  ];
+  const result = runScenario("newer-foreign-status-repaired", state, [
+    "--pr", "16", "--repair", "--skip-pending-status",
+  ]);
+
+  assert(
+    result.posts.length === 1,
+    "a newer foreign status must force a fresh bot repair write",
+  );
+  assertPost(result.posts, "HEAD16", "success");
 }
 
 function testNextRepairUpdatesStaleStatus() {
