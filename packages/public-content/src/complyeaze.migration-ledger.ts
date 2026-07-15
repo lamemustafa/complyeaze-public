@@ -65,7 +65,8 @@ function axalRoute(routePath: string): MigrationRouteEntry {
     sourceRoute: routePath,
     destinationHost: "axal.complyeaze.com",
     destinationRoute: routePath,
-    evidenceStatus: "Axal-hosted route, canonical, sitemap, and path-routing evidence pending",
+    evidenceStatus:
+      "planned Axal marketing destination not yet implemented in apps/axal; canonical, sitemap, and path-routing evidence pending",
     redirectStatus: "redirect not required for same-host same-path cutover",
     redirectPlan: "redirect not required for same-host same-path cutover",
     rollback: "restore private-app path routing if public route cutover fails",
@@ -127,13 +128,13 @@ export const migrationLedger = defineMigrationLedger([
     family: "Axal marketing",
     source: "Axal public marketing URLs on axal.complyeaze.com: / and /<slug>",
     destination:
-      "complyeaze-public routes on axal.complyeaze.com: / plus five /<slug> static public pages",
-    status: "seeded; cleanup blocked",
+      "Planned complyeaze-public routes on axal.complyeaze.com: / plus five /<slug> static public pages; apps/axal currently emits only a noindex foundation at /",
+    status: "planned same-host destinations; Axal detail-route implementation pending; cleanup blocked",
     cleanup: "Do not move login, signup, reset, callback, or workspace flows into this repository.",
     parentCleanup:
       "blocked; requires separate private-app cleanup PR after hosted and path-routing evidence",
     evidence:
-      "Seed intent recorded. Axal path-routing, hosted route, visual artifact, and private-app cleanup PR evidence are pending.",
+      "Seed intent recorded. Legacy preview content remains under complyeaze.com/products/axal/*; apps/axal detail-route implementation, path-routing, hosted route, visual artifact, and private-app cleanup PR evidence are pending.",
     rollback:
       "Preserve private-app path routing until Axal-hosted marketing routes and crawler metadata pass hosted route checks; restore private-app routing if cutover fails.",
     routes: [

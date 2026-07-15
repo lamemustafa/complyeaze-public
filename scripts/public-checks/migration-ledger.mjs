@@ -332,6 +332,32 @@ export function assertMigrationLedger(root) {
     }
   }
 
+  const axalMarketing = migrationLedger.find((entry) => entry.family === "Axal marketing");
+  const axalFamilyCopy = [
+    axalMarketing?.destination,
+    axalMarketing?.evidence,
+    axalMarketing?.status,
+  ]
+    .join(" ")
+    .toLowerCase();
+  if (!axalFamilyCopy.includes("planned") || !axalFamilyCopy.includes("apps/axal")) {
+    findings.push(
+      "Axal marketing: family copy must identify the same-host destinations as planned and state the current apps/axal foundation-only implementation",
+    );
+  }
+  if (
+    !axalMarketing?.routes.every((route) => {
+      const evidenceStatus = route.evidenceStatus.toLowerCase();
+      return ["planned", "apps/axal", "implemented", "pending"].every((term) =>
+        evidenceStatus.includes(term),
+      );
+    })
+  ) {
+    findings.push(
+      "Axal marketing: every route must keep its unimplemented apps/axal destination explicit in evidence status",
+    );
+  }
+
   for (const entry of migrationLedger) {
     const missingFields = requiredFields.filter((field) => !entry[field]);
     if (missingFields.length > 0) {
