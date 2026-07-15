@@ -16,7 +16,7 @@ const requiredTemplateTerms = [
   "No private-app route removal or redirect is claimed by this PR",
   "scripts/check-hosted-routes.mjs --base-url <url>",
   "docs/ROUTE_MIGRATION_LEDGER.md",
-  "src/migration-data.mjs",
+  "packages/public-content/src/complyeaze.migration-ledger.ts",
   "source host",
   "destination host",
   "Rendered `/migration/` evidence",

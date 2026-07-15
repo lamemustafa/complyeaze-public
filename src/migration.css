@@ -1,13 +1,17 @@
 .migration-summary {
+  counter-reset: migration-step;
   display: grid;
   gap: 1px;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  list-style: none;
   margin-top: clamp(2rem, 5vw, 4rem);
+  padding: 0;
 }
 
-.migration-summary article {
+.migration-summary li {
   background: var(--ink);
   color: white;
+  counter-increment: migration-step;
   display: grid;
   gap: 0.75rem;
   padding: clamp(1rem, 3vw, 1.5rem);
@@ -15,12 +19,19 @@
 
 .migration-summary strong {
   align-items: center;
-  border: 2px solid currentColor;
-  display: inline-flex;
+  display: flex;
   font-size: 1.1rem;
+  gap: 0.75rem;
+}
+
+.migration-summary strong::before {
+  align-items: center;
+  border: 2px solid currentColor;
+  content: counter(migration-step);
+  display: inline-flex;
+  flex: 0 0 2.5rem;
   height: 2.5rem;
   justify-content: center;
-  width: 2.5rem;
 }
 
 .migration-summary span {
@@ -33,9 +44,10 @@
   margin-top: 1rem;
 }
 
-.migration-ledger article {
+.migration-ledger > article {
   background: rgba(255, 255, 255, 0.78);
   border: 2px solid var(--line);
+  min-width: 0;
   padding: clamp(1rem, 3vw, 1.5rem);
 }
 
@@ -92,19 +104,37 @@
 .route-ledger {
   border-top: 2px solid var(--line);
   margin-top: 1.25rem;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
   padding-top: 1rem;
 }
 
-.route-ledger h3 {
+.route-ledger:focus-visible {
+  outline: 3px solid var(--rust);
+  outline-offset: 3px;
+}
+
+.route-ledger-hint {
+  color: var(--rust);
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin: 0 0 0.75rem;
+}
+
+.route-ledger caption {
   color: var(--ink);
   font-size: 1rem;
+  font-weight: 800;
   margin: 0 0 0.75rem;
+  text-align: left;
   text-transform: uppercase;
 }
 
 .route-ledger table {
   border-collapse: collapse;
   font-size: 0.86rem;
+  min-width: 90rem;
   width: 100%;
 }
 
@@ -132,8 +162,28 @@
     justify-self: start;
   }
 
-  .route-ledger thead {
+  .route-ledger {
+    overflow-x: visible;
+  }
+
+  .route-ledger table {
+    min-width: 0;
+  }
+
+  .route-ledger-hint {
     display: none;
+  }
+
+  .route-ledger thead {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
   }
 
   .route-ledger tr,

@@ -12,7 +12,8 @@ import {
 import {
   assertAstroCoreRouteBuild,
   assertAstroCoreRouteFixtures,
-  assertAstroCoreRouteSources
+  assertAstroCoreRouteSources,
+  assertLegacyCoreRouteBuild
 } from "./public-checks/astro-core-routes.mjs";
 import {
   assertCiArtifactPolicyFixtures,
@@ -27,6 +28,7 @@ import { assertHostedRoutesPolicy } from "./public-checks/hosted-routes.mjs";
 import { assertLegalGovernance } from "./public-checks/legal-governance.mjs";
 import {
   assertMigrationLedger,
+  assertMigrationLedgerFixtures,
   assertRenderedMigrationLedger
 } from "./public-checks/migration-ledger.mjs";
 import {
@@ -264,7 +266,7 @@ function assertScriptSyntax() {
   }
 }
 
-function run() {
+async function run() {
   assertRequiredFiles();
 
   if (["--all", "--lint", "--test", "--public"].includes(mode)) {
@@ -274,6 +276,7 @@ function run() {
     assertAstroWorkspace(root);
     assertAstroCoreRouteSources(root);
     assertAstroCoreRouteFixtures();
+    await assertMigrationLedgerFixtures(root);
     assertCanonicalManifestClaimFixture();
     assertPolicyPageSources(root);
     assertRootResourcePageSources();
@@ -300,6 +303,7 @@ function run() {
   }
   if (["--all", "--public"].includes(mode)) {
     assertAstroBuildOutput(root);
+    assertLegacyCoreRouteBuild(root);
     assertAstroCoreRouteBuild(root);
     assertPublicPages();
     assertMigrationLedger(root);
@@ -327,4 +331,4 @@ function run() {
   console.log(`complyeaze-public ${mode.slice(2)} check passed`);
 }
 
-run();
+await run();

@@ -417,16 +417,17 @@ async function collectMetrics(page, expectedHeading, profile, signalTerms) {
 
       const element = document.activeElement;
       if (!element || element === document.body) {
-        return { label: "body", terminal: true, visible: true };
+        return { identity: -1, label: "body", terminal: true, visible: true };
       }
       return {
+        identity: [...document.querySelectorAll("*")].indexOf(element),
         label: focusLabel(element),
         terminal: false,
         visible: isVisibleFocus(element)
       };
       });
       if (focusState.terminal) break;
-      if (focusStates.some((state) => state.label === focusState.label)) {
+      if (focusStates.some((state) => state.identity === focusState.identity)) {
         break;
       }
       focusStates.push(focusState);

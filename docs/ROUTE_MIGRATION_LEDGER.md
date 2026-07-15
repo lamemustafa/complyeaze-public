@@ -16,8 +16,8 @@ own hosts, not `/pack/*` or `/tools/*` paths on `complyeaze.com`.
 ## Root public pages
 
 - Source: Root public URLs on complyeaze.com: /, /resources/about-us, /resources/contact-us, /resources/privacy-policy, and /resources/terms-and-conditions
-- Destination: complyeaze-public routes on complyeaze.com: /, /about/, /contact/, /privacy/, /terms/, /status/, /changelog/, and /release-evidence/
-- Status: root resource and policy/status/release pages seeded; cleanup blocked
+- Destination: complyeaze-public routes on complyeaze.com: /, /about/, /contact/, /trust/, /docs/, /migration/, /privacy/, /terms/, /status/, /changelog/, and /release-evidence/
+- Status: root resource, trust/docs/migration, and policy/status/release pages seeded; cleanup blocked
 - Cleanup rule: Do not remove parent routes until production host routing, canonical URLs, rollback redirects, and scripts/check-hosted-routes.mjs evidence are recorded.
 - Parent cleanup: blocked; requires separate private-app cleanup PR after hosted and redirect evidence
 - Evidence: Seed intent recorded. Hosted route, visual artifact, redirect, and private-app cleanup PR evidence are pending.
@@ -34,21 +34,21 @@ own hosts, not `/pack/*` or `/tools/*` paths on `complyeaze.com`.
 ## Axal marketing
 
 - Source: Axal public marketing URLs on axal.complyeaze.com: / and /<slug>
-- Destination: complyeaze-public routes on complyeaze.com: /products/axal/ plus five /products/axal/<slug>/ static public pages
+- Destination: complyeaze-public routes on axal.complyeaze.com: / plus five /<slug> static public pages
 - Status: seeded; cleanup blocked
 - Cleanup rule: Do not move login, signup, reset, callback, or workspace flows into this repository.
-- Parent cleanup: blocked; requires separate private-app cleanup PR after hosted and redirect evidence
-- Evidence: Seed intent recorded. Hosted route, visual artifact, redirect, and private-app cleanup PR evidence are pending.
-- Rollback: Preserve parent rewrites until Axal clean-route redirects and crawler metadata pass hosted route checks.
+- Parent cleanup: blocked; requires separate private-app cleanup PR after hosted and path-routing evidence
+- Evidence: Seed intent recorded. Axal path-routing, hosted route, visual artifact, and private-app cleanup PR evidence are pending.
+- Rollback: Preserve private-app path routing until Axal-hosted marketing routes and crawler metadata pass hosted route checks; restore private-app routing if cutover fails.
 
 | Source host | Source route | Destination host | Destination route | Cleanup | Evidence | Redirect | Cleanup PR | Rollback |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `axal.complyeaze.com` | `/` | `complyeaze.com` | `/products/axal/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
-| `axal.complyeaze.com` | `/ca-practice-management-software` | `complyeaze.com` | `/products/axal/ca-practice-management-software/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
-| `axal.complyeaze.com` | `/gst-notice-management-software` | `complyeaze.com` | `/products/axal/gst-notice-management-software/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
-| `axal.complyeaze.com` | `/compliance-calendar-software-india` | `complyeaze.com` | `/products/axal/compliance-calendar-software-india/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
-| `axal.complyeaze.com` | `/gst-reconciliation-evidence-review` | `complyeaze.com` | `/products/axal/gst-reconciliation-evidence-review/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
-| `axal.complyeaze.com` | `/client-document-collection-portal-access` | `complyeaze.com` | `/products/axal/client-document-collection-portal-access/` | cleanup blocked | hosted 200, canonical, sitemap, and redirect evidence pending; hosted evidence: not recorded | redirect not configured; plan: redirect not configured | not linked | keep parent route until redirect rollback is tested; owner/path: keep parent route until redirect rollback is tested |
+| `axal.complyeaze.com` | `/` | `axal.complyeaze.com` | `/` | cleanup blocked | Axal-hosted route, canonical, sitemap, and path-routing evidence pending; hosted evidence: not recorded | redirect not required for same-host same-path cutover; plan: redirect not required for same-host same-path cutover | not linked | restore private-app path routing if public route cutover fails; owner/path: private-app path-routing owner not assigned |
+| `axal.complyeaze.com` | `/ca-practice-management-software` | `axal.complyeaze.com` | `/ca-practice-management-software` | cleanup blocked | Axal-hosted route, canonical, sitemap, and path-routing evidence pending; hosted evidence: not recorded | redirect not required for same-host same-path cutover; plan: redirect not required for same-host same-path cutover | not linked | restore private-app path routing if public route cutover fails; owner/path: private-app path-routing owner not assigned |
+| `axal.complyeaze.com` | `/gst-notice-management-software` | `axal.complyeaze.com` | `/gst-notice-management-software` | cleanup blocked | Axal-hosted route, canonical, sitemap, and path-routing evidence pending; hosted evidence: not recorded | redirect not required for same-host same-path cutover; plan: redirect not required for same-host same-path cutover | not linked | restore private-app path routing if public route cutover fails; owner/path: private-app path-routing owner not assigned |
+| `axal.complyeaze.com` | `/compliance-calendar-software-india` | `axal.complyeaze.com` | `/compliance-calendar-software-india` | cleanup blocked | Axal-hosted route, canonical, sitemap, and path-routing evidence pending; hosted evidence: not recorded | redirect not required for same-host same-path cutover; plan: redirect not required for same-host same-path cutover | not linked | restore private-app path routing if public route cutover fails; owner/path: private-app path-routing owner not assigned |
+| `axal.complyeaze.com` | `/gst-reconciliation-evidence-review` | `axal.complyeaze.com` | `/gst-reconciliation-evidence-review` | cleanup blocked | Axal-hosted route, canonical, sitemap, and path-routing evidence pending; hosted evidence: not recorded | redirect not required for same-host same-path cutover; plan: redirect not required for same-host same-path cutover | not linked | restore private-app path routing if public route cutover fails; owner/path: private-app path-routing owner not assigned |
+| `axal.complyeaze.com` | `/client-document-collection-portal-access` | `axal.complyeaze.com` | `/client-document-collection-portal-access` | cleanup blocked | Axal-hosted route, canonical, sitemap, and path-routing evidence pending; hosted evidence: not recorded | redirect not required for same-host same-path cutover; plan: redirect not required for same-host same-path cutover | not linked | restore private-app path routing if public route cutover fails; owner/path: private-app path-routing owner not assigned |
 
 ## Pack public pages
 

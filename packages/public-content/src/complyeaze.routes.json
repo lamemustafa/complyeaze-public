@@ -85,6 +85,157 @@
       ]
     },
     {
+      "slug": "trust",
+      "urlPath": "/trust/",
+      "title": "Trust and safety | ComplyEaze",
+      "description": "Public safety rules and source evidence for ComplyEaze claims, screenshots, dependencies, and review practice.",
+      "eyebrow": "Trust and safety",
+      "heading": "Public claims need evidence",
+      "kind": "evidence",
+      "summary": "This repository is open by design, so trust comes from narrow claims, synthetic examples, explicit product boundaries, and public source evidence rather than implied authority.",
+      "robots": "noindex, nofollow",
+      "signalTerms": ["ComplyEaze", "trust", "evidence"],
+      "sections": [
+        {
+          "title": "Synthetic evidence only",
+          "body": "Screenshots, fixtures, demos, and issue reports must avoid real taxpayer identifiers, documents, credentials, portal responses, customer details, and production screenshots."
+        },
+        {
+          "title": "Source before confidence",
+          "body": "Security, privacy, release, browser-local, dependency, and statutory claims must point to source, release, runtime, or official evidence before a professional relies on them."
+        },
+        {
+          "title": "Reserved marks and roles",
+          "body": "The source license does not grant rights to imply endorsement, affiliation, certification, government approval, or official ComplyEaze operation."
+        }
+      ],
+      "evidenceLinks": [
+        {
+          "label": "Security policy",
+          "description": "Private reporting path and sensitive-data boundaries for public repository issues.",
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/SECURITY.md"
+        },
+        {
+          "label": "Public claim policy",
+          "description": "Evidence requirements and prohibited public readiness or endorsement claims.",
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/PUBLIC_CLAIM_POLICY.md"
+        },
+        {
+          "label": "Dependency policy",
+          "description": "Reviewed package, lockfile, workflow, lifecycle-script, and action-pinning boundaries.",
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/DEPENDENCY_POLICY.md"
+        },
+        {
+          "label": "Repository settings",
+          "description": "Protected-check, review-gate, Pages-guard, and repository posture evidence.",
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/REPOSITORY_SETTINGS.md"
+        },
+        {
+          "label": "Review and rectify",
+          "description": "Required local and current-head review loop for meaningful public changes.",
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/REVIEW_RECTIFY.md"
+        }
+      ]
+    },
+    {
+      "slug": "docs",
+      "urlPath": "/docs/",
+      "title": "Public runbooks | ComplyEaze",
+      "description": "Curated migration, release, visual-review, public-claim, and review runbooks for the ComplyEaze public site.",
+      "eyebrow": "Public runbooks",
+      "heading": "Follow the evidence path before changing a route",
+      "kind": "evidence",
+      "summary": "These source documents explain how public pages move, what evidence a release needs, and which conditions must remain blocked until production cutover is proven.",
+      "robots": "noindex, nofollow",
+      "signalTerms": ["ComplyEaze", "runbooks", "migration"],
+      "sections": [
+        {
+          "title": "Before commit",
+          "body": "Run the focused checks first, then lint, typecheck, tests, builds, visual review, public-content, links, metadata, and whitespace checks."
+        },
+        {
+          "title": "Before cleanup",
+          "body": "Do not remove a private-app public route until the destination owns production traffic and hosted, canonical, redirect, rollback, and cleanup-PR evidence is recorded."
+        },
+        {
+          "title": "Before public claims",
+          "body": "If the repository cannot prove a claim, narrow or remove it. A preview, artifact, or screenshot does not establish hosted cutover or private-app health."
+        }
+      ],
+      "evidenceLinks": [
+        {
+          "label": "Migration plan",
+          "description": "Public-surface extraction order, evidence requirements, and cleanup boundary.",
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/MIGRATION.md"
+        },
+        {
+          "label": "Route migration ledger",
+          "description": "Host-aware source, destination, evidence, redirect, cleanup, and rollback records.",
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/ROUTE_MIGRATION_LEDGER.md"
+        },
+        {
+          "label": "Release gates",
+          "description": "Required checks, artifacts, review state, and dependency evidence before merge.",
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/RELEASE_GATES.md"
+        },
+        {
+          "label": "Visual testing",
+          "description": "Desktop, tablet, mobile, accessibility, overflow, focus, and screenshot review rules.",
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/VISUAL_TESTING.md"
+        },
+        {
+          "label": "Public claim policy",
+          "description": "Source and evidence standards for compliance, privacy, release, and product claims.",
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/PUBLIC_CLAIM_POLICY.md"
+        },
+        {
+          "label": "Review and rectify",
+          "description": "Before-every-commit local review and current-head GitHub review requirements.",
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/REVIEW_RECTIFY.md"
+        }
+      ]
+    },
+    {
+      "slug": "migration",
+      "urlPath": "/migration/",
+      "title": "Route migration ledger | ComplyEaze",
+      "description": "Host-aware public route migration evidence for moving ComplyEaze-family pages without premature private-app cleanup.",
+      "eyebrow": "Migration ledger",
+      "heading": "No cleanup before route evidence",
+      "kind": "migration",
+      "summary": "Every public route family needs a destination, hosted evidence, redirect decision, cleanup rule, and rollback path before a source route is removed or redirected.",
+      "robots": "noindex, nofollow",
+      "signalTerms": ["ComplyEaze", "migration", "ledger"],
+      "sections": [
+        {
+          "title": "Family context",
+          "body": "Family summaries explain the intended public destination and product boundary without authorizing route cleanup."
+        },
+        {
+          "title": "Route-level blockers",
+          "body": "Each source route keeps its own host, destination, evidence, redirect, cleanup PR, and rollback record so similarly named routes on different hosts cannot be confused."
+        },
+        {
+          "title": "Evidence remains pending",
+          "body": "Preview builds, CI artifacts, and screenshots support review but do not prove production hosting, redirects, canonical behavior, or private-app cleanup readiness."
+        }
+      ],
+      "steps": [
+        {
+          "label": "Inventory",
+          "body": "Record the source host and route, intended destination, ownership boundary, and affected product family."
+        },
+        {
+          "label": "Evidence",
+          "body": "Verify hosted response, canonical URL, sitemap intent, redirect behavior, visual output, public claims, and rollback evidence."
+        },
+        {
+          "label": "Cleanup",
+          "body": "Remove or redirect the source only through a separate private-app cleanup PR after every required evidence field is reviewed."
+        }
+      ]
+    },
+    {
       "slug": "privacy",
       "urlPath": "/privacy/",
       "title": "Privacy Boundary | ComplyEaze",
@@ -185,7 +336,7 @@
         },
         {
           "title": "Migration posture",
-          "body": "Root story, product-family, trust, migration, Axal marketing, and public policy/status/release routes are seeded. Route-level cleanup rows stay blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
+          "body": "About, contact, trust, docs, migration, and policy/status/release routes now have canonical Astro previews alongside the legacy rollback build. Root story, product gateways, and Axal marketing remain legacy-seeded. Route-level cleanup rows stay blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
         },
         {
           "title": "Hosting posture",

@@ -9,11 +9,22 @@ export interface PublicSection {
   title: string;
 }
 
+export interface PublicEvidenceLink {
+  description: string;
+  href: string;
+  label: string;
+}
+
+export interface PublicMigrationStep {
+  body: string;
+  label: string;
+}
+
 export interface PublicRouteBase {
   description: string;
   eyebrow: string;
   heading: string;
-  kind: "policy" | "resource";
+  kind: "evidence" | "migration" | "policy" | "resource";
   robots: "noindex, nofollow";
   sections: PublicSection[];
   signalTerms: string[];
@@ -39,7 +50,21 @@ export interface PublicPolicyRoute extends PublicRouteBase {
   };
 }
 
-export type PublicRoute = PublicPolicyRoute | PublicResourceRoute;
+export interface PublicEvidenceRoute extends PublicRouteBase {
+  evidenceLinks: PublicEvidenceLink[];
+  kind: "evidence";
+}
+
+export interface PublicMigrationRoute extends PublicRouteBase {
+  kind: "migration";
+  steps: PublicMigrationStep[];
+}
+
+export type PublicRoute =
+  | PublicEvidenceRoute
+  | PublicMigrationRoute
+  | PublicPolicyRoute
+  | PublicResourceRoute;
 
 export interface PublicRouteManifest {
   app: string;
@@ -82,17 +107,87 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
   value.sections.forEach((section, index) => validateSection(section, `${label}.sections[${index}]`));
   assertStringArray(value.signalTerms, `${label}.signalTerms`);
   if (value.kind === "resource") {
-    assert(value.policySummary === undefined, `${label}.policySummary is only valid for policy routes`);
+    for (const field of ["evidenceLinks", "policySummary", "steps"] as const) {
+      assert(value[field] === undefined, `${label}.${field} is not valid for resource routes`);
+    }
     validateAction(value.primaryAction, `${label}.primaryAction`);
     validateAction(value.secondaryAction, `${label}.secondaryAction`);
     assertStringArray(value.proof, `${label}.proof`);
     return;
   }
-  assert(value.kind === "policy", `${label}.kind must be policy or resource`);
-  for (const field of ["primaryAction", "proof", "secondaryAction"] as const) {
-    assert(value[field] === undefined, `${label}.${field} is only valid for resource routes`);
+  if (value.kind === "evidence") {
+    for (const field of [
+      "policySummary",
+      "primaryAction",
+      "proof",
+      "secondaryAction",
+      "steps",
+    ] as const) {
+      assert(value[field] === undefined, `${label}.${field} is not valid for evidence routes`);
+    }
+    assert(
+      Array.isArray(value.evidenceLinks) && value.evidenceLinks.length > 0,
+      `${label}.evidenceLinks must not be empty`,
+    );
+    value.evidenceLinks.forEach((link, index) =>
+      validateEvidenceLink(link, `${label}.evidenceLinks[${index}]`),
+    );
+    const evidenceHrefs = value.evidenceLinks.map((link) => link.href);
+    assert(
+      new Set(evidenceHrefs).size === evidenceHrefs.length,
+      `${label}.evidenceLinks href values must be unique`,
+    );
+    return;
+  }
+  if (value.kind === "migration") {
+    for (const field of [
+      "evidenceLinks",
+      "policySummary",
+      "primaryAction",
+      "proof",
+      "secondaryAction",
+    ] as const) {
+      assert(value[field] === undefined, `${label}.${field} is not valid for migration routes`);
+    }
+    assert(
+      Array.isArray(value.steps) && value.steps.length > 0,
+      `${label}.steps must not be empty`,
+    );
+    value.steps.forEach((step, index) => validateMigrationStep(step, `${label}.steps[${index}]`));
+    const stepLabels = value.steps.map((step) => step.label);
+    assert(
+      new Set(stepLabels).size === stepLabels.length,
+      `${label}.steps labels must be unique`,
+    );
+    return;
+  }
+  assert(
+    value.kind === "policy",
+    `${label}.kind must be evidence, migration, policy, or resource`,
+  );
+  for (const field of [
+    "evidenceLinks",
+    "primaryAction",
+    "proof",
+    "secondaryAction",
+    "steps",
+  ] as const) {
+    assert(value[field] === undefined, `${label}.${field} is not valid for policy routes`);
   }
   validatePolicySummary(value.policySummary, `${label}.policySummary`);
+}
+
+function validateMigrationStep(value: unknown, label: string): asserts value is PublicMigrationStep {
+  assertRecord(value, label);
+  assertString(value.body, `${label}.body`);
+  assertString(value.label, `${label}.label`);
+}
+
+function validateEvidenceLink(value: unknown, label: string): asserts value is PublicEvidenceLink {
+  assertRecord(value, label);
+  assertString(value.description, `${label}.description`);
+  assertPublicHref(value.href, `${label}.href`);
+  assertString(value.label, `${label}.label`);
 }
 
 function validateAction(value: unknown, label: string): asserts value is PublicAction {
