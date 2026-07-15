@@ -7,20 +7,29 @@ import {
 import PublicEvidencePage from "../components/PublicEvidencePage.astro";
 import PublicMigrationPage from "../components/PublicMigrationPage.astro";
 import PublicPolicyPage from "../components/PublicPolicyPage.astro";
+import PublicProductsPage from "../components/PublicProductsPage.astro";
 import PublicResourcePage from "../components/PublicResourcePage.astro";
 import PublicPageLayout from "../layouts/PublicPageLayout.astro";
 
 interface Props {
   origin: string;
-  route: PublicRoute;
+  route: CatchAllRoute;
 }
+
+type CatchAllRoute = Exclude<PublicRoute, { kind: "home" }>;
 
 export function getStaticPaths() {
   const manifest = definePublicRouteManifest(rawManifest);
-  return manifest.routes.map((route) => ({
-    params: { slug: route.slug },
-    props: { origin: manifest.origin, route },
-  }));
+  return manifest.routes
+    .filter((route): route is CatchAllRoute => route.kind !== "home")
+    .map((route) => ({
+      params: { slug: route.slug },
+      props: { origin: manifest.origin, route },
+    }));
+}
+
+function assertNever(route: never): never {
+  throw new Error(`Unsupported route kind: ${JSON.stringify(route)}`);
 }
 
 const { origin, route } = Astro.props;
@@ -33,7 +42,11 @@ const { origin, route } = Astro.props;
     <PublicPolicyPage {route} />
   ) : route.kind === "evidence" ? (
     <PublicEvidencePage {route} />
-  ) : (
+  ) : route.kind === "products" ? (
+    <PublicProductsPage {route} />
+  ) : route.kind === "migration" ? (
     <PublicMigrationPage {route} />
+  ) : (
+    assertNever(route)
   )}
 </PublicPageLayout>

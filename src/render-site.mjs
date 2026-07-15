@@ -1,5 +1,5 @@
 import { site } from "./site-data.mjs";
-import { products, proofLedger, trustSignals, migrationRoutes } from "./product-data.mjs";
+import { products, trustSignals } from "./product-data.mjs";
 import { renderAxalPage } from "./render-axal.mjs";
 import { renderEvidencePage } from "./render-evidence.mjs";
 import { renderGatewayPage } from "./render-gateway.mjs";
@@ -29,7 +29,7 @@ export function renderPage(page) {
     <meta property="og:type" content="website">
     <meta property="og:url" content="${canonical}">
     <link rel="stylesheet" href="/assets/styles.css">
-    ${page.slug === "products" ? '<link rel="stylesheet" href="/assets/products.css">' : ""}
+    ${page.type === "customerProducts" ? '<link rel="stylesheet" href="/assets/products.css">' : ""}
     ${page.slug === "migration" ? '<link rel="stylesheet" href="/assets/migration.css">' : ""}
     ${page.type === "productGateway" ? '<link rel="stylesheet" href="/assets/gateway.css">' : ""}
     ${page.type === "rootResource" ? '<link rel="stylesheet" href="/assets/root-resource.css">' : ""}
@@ -39,9 +39,9 @@ export function renderPage(page) {
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
     <header class="site-header">
-      <a class="brand" href="/" aria-label="ComplyEaze Public home">
+      <a class="brand" href="/" aria-label="ComplyEaze home">
         <span class="brand-mark" aria-hidden="true">CE</span>
-        <span>ComplyEaze Public</span>
+        <span>ComplyEaze</span>
       </a>
       <nav class="site-nav" aria-label="Primary navigation">
         ${site.nav
@@ -62,7 +62,7 @@ export function renderPage(page) {
       ${renderPageBody(page)}
     </main>
     <footer class="site-footer">
-      <p>Open-source public surfaces. Private app data stays outside this repository.</p>
+      <p>Public product facts and evidence. Sensitive operational data stays private.</p>
       <nav aria-label="Footer navigation">
         ${footerLinks
           .map(
@@ -90,7 +90,7 @@ function isCurrentNavItem(href, urlPath) {
 }
 
 function renderPageBody(page) {
-  if (page.slug === "products") return renderProducts();
+  if (page.type === "customerProducts") return renderProducts();
   if (page.type === "evidence") return renderEvidencePage(page, escapeHtml);
   if (page.type === "migration") return renderMigrationPage(page, escapeHtml);
   if (page.type === "productGateway") return renderGatewayPage(page, escapeHtml);
@@ -114,29 +114,19 @@ function renderSections(sections) {
 }
 
 function renderProducts() {
-  return `<section class="proof-ledger" aria-label="Public proof ledger">
-    ${proofLedger
-      .map(
-        (item) => `<article>
-          <p>${escapeHtml(item.label)}</p>
-          <strong>${escapeHtml(item.value)}</strong>
-          <span>${escapeHtml(item.detail)}</span>
-        </article>`,
-      )
-      .join("")}
-  </section>
-  <section class="product-map" aria-label="ComplyEaze product-family map">
+  return `<section class="product-map" aria-label="ComplyEaze product-family map">
     ${products
       .map(
         (product) => `<article id="${escapeHtml(product.name.toLowerCase())}">
           <a class="product-name" href="${escapeHtml(product.href)}">${escapeHtml(product.name)}</a>
           <p class="product-role">${escapeHtml(product.role)}</p>
           <dl>
-            <div><dt>Promise</dt><dd>${escapeHtml(product.promise)}</dd></div>
+            <div><dt>Job</dt><dd>${escapeHtml(product.job)}</dd></div>
             <div><dt>Proof</dt><dd>${escapeHtml(product.proof)}</dd></div>
             <div><dt>Boundary</dt><dd>${escapeHtml(product.boundary)}</dd></div>
             <div><dt>Status</dt><dd>${escapeHtml(product.status)}</dd></div>
           </dl>
+          <a class="product-evidence" href="${escapeHtml(product.evidence.href)}">${escapeHtml(product.evidence.label)}</a>
         </article>`,
       )
       .join("")}
@@ -150,30 +140,6 @@ function renderProducts() {
         </article>`,
       )
       .join("")}
-  </section>
-  <section class="product-table-section" aria-label="Public migration inventory">
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">Source</th>
-          <th scope="col">Destination</th>
-          <th scope="col">Status</th>
-          <th scope="col">Notes</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${migrationRoutes
-          .map(
-            (route) => `<tr>
-              <th scope="row" data-label="Source">${escapeHtml(route.source)}</th>
-              <td data-label="Destination">${escapeHtml(route.destination)}</td>
-              <td data-label="Status">${escapeHtml(route.status)}</td>
-              <td data-label="Notes">${escapeHtml(route.notes)}</td>
-            </tr>`,
-          )
-          .join("")}
-      </tbody>
-    </table>
   </section>`;
 }
 

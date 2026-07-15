@@ -4,6 +4,107 @@
   "origin": "https://complyeaze.com",
   "routes": [
     {
+      "slug": "index",
+      "urlPath": "/",
+      "title": "ComplyEaze | Choose the right compliance surface",
+      "description": "Compare the public job, evidence, and custody boundary for Axal, Pack, and Tools before choosing where to continue.",
+      "eyebrow": "ComplyEaze product family",
+      "heading": "Choose the work. See the boundary. Check the evidence.",
+      "kind": "home",
+      "summary": "ComplyEaze helps CA firms, compliance teams, and business operators route work to Axal for coordinated practice review, Pack for local GST evidence collection, or Tools for browser-local utility work.",
+      "robots": "noindex, nofollow",
+      "signalTerms": ["ComplyEaze", "Axal", "Pack", "Tools"],
+      "primaryAction": {
+        "label": "Explore the product family",
+        "href": "/products/"
+      },
+      "secondaryAction": {
+        "label": "Review public trust evidence",
+        "href": "/trust/"
+      },
+      "sections": [
+        {
+          "title": "Coordinate practice work with Axal",
+          "body": "Use the authenticated workspace when matters, obligations, evidence, clients, documents, and tasks need permission-aware coordination and human review."
+        },
+        {
+          "title": "Collect GST evidence locally with Pack",
+          "body": "Use the browser extension for the narrow filed-return collection job when local artifact control and source provenance matter more than shared workspace custody."
+        },
+        {
+          "title": "Create quick browser-local artifacts with Tools",
+          "body": "Use the public utilities for focused review work from pasted rows or plain text when no account, upload, or saved tenant context is needed."
+        }
+      ]
+    },
+    {
+      "slug": "products",
+      "urlPath": "/products/",
+      "title": "Products | ComplyEaze",
+      "description": "Compare Axal, Pack, and Tools by job, public evidence, custody boundary, and current public posture.",
+      "eyebrow": "Product family",
+      "heading": "Choose by job and custody boundary",
+      "kind": "products",
+      "summary": "The products share a trust posture, not a single workflow. Start with the work you need to complete, then verify where context lives and which public evidence supports the product description.",
+      "robots": "noindex, nofollow",
+      "signalTerms": ["ComplyEaze", "products", "custody", "evidence"],
+      "sections": [
+        {
+          "title": "ComplyEaze is the public trust layer",
+          "body": "This site explains the family, its public evidence, and the boundary between inspectable product information and authenticated operations."
+        },
+        {
+          "title": "Different jobs need different custody",
+          "body": "Axal keeps permission-aware firm context, Pack keeps its narrow evidence job local to the browser, and Tools creates browser-local drafts without account state."
+        },
+        {
+          "title": "Evidence comes before reliance",
+          "body": "Review the linked public source and current status before relying on security, release, browser-local, integration, or compliance-related product statements."
+        }
+      ],
+      "products": [
+        {
+          "name": "Axal",
+          "role": "Compliance review workspace",
+          "job": "Coordinate matters, obligations, evidence, clients, documents, and tasks for CA practice teams.",
+          "proof": "The public route family documents workspace-first, permission-aware, source-led compliance review concepts.",
+          "boundary": "Account, workspace, role, and saved operational context belong to the authenticated product.",
+          "status": "Authenticated workspace; public marketing preview limited",
+          "href": "https://axal.complyeaze.com/",
+          "evidence": {
+            "label": "Review Axal public source",
+            "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/src/axal-data.mjs"
+          }
+        },
+        {
+          "name": "Pack",
+          "role": "Local GST evidence utility",
+          "job": "Collect filed-return evidence for a narrow GST Portal task while retaining local artifact control.",
+          "proof": "Pack owns its public extension source, release evidence, privacy posture, security policy, and support facts.",
+          "boundary": "Browser extension and local artifacts; no shared workspace custody or backend-upload claim.",
+          "status": "Source-build alpha",
+          "href": "https://pack.complyeaze.com/",
+          "evidence": {
+            "label": "Review Pack source",
+            "href": "https://github.com/lamemustafa/pack"
+          }
+        },
+        {
+          "name": "Tools",
+          "role": "Browser-local compliance utilities",
+          "job": "Create focused review artifacts from pasted rows or plain text without opening an account.",
+          "proof": "The Tools repository owns the utility registry, browser-local runtime, release facts, and source evidence.",
+          "boundary": "Browser-local drafts; no account, upload, tenant state, or saved operational context.",
+          "status": "Public utilities",
+          "href": "https://tools.complyeaze.com/",
+          "evidence": {
+            "label": "Review Tools source",
+            "href": "https://github.com/lamemustafa/complyeaze-tools"
+          }
+        }
+      ]
+    },
+    {
       "slug": "about",
       "urlPath": "/about/",
       "title": "About ComplyEaze",
@@ -336,7 +437,7 @@
         },
         {
           "title": "Migration posture",
-          "body": "About, contact, trust, docs, migration, and policy/status/release routes now have canonical Astro previews alongside the legacy rollback build. Root story, product gateways, and Axal marketing remain legacy-seeded. Route-level cleanup rows stay blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
+          "body": "The customer-core homepage, product-family index, about, contact, trust, docs, migration, and policy/status/release routes now have canonical Astro previews alongside the legacy rollback build. Pack and Tools gateways plus Axal marketing remain legacy-seeded. Route-level cleanup rows stay blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
         },
         {
           "title": "Hosting posture",
@@ -365,6 +466,10 @@
         "excluded": "Production cutover claims"
       },
       "sections": [
+        {
+          "title": "2026-07-15 - Customer-core route port",
+          "body": "Moved / and /products/ into the canonical typed manifest and ComplyEaze Astro preview, replaced repository-boundary customer copy with job, custody, and evidence guidance, and kept the legacy renderer as the rollback baseline."
+        },
         {
           "title": "2026-07-15 - Core public routes ported to Astro",
           "body": "Moved /about/ and /contact/ into the canonical typed manifest and ComplyEaze Astro preview while keeping the legacy renderer as the rollback baseline and proving cross-renderer parity."

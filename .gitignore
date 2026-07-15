@@ -5,6 +5,7 @@ out/
 .next/
 coverage/
 test-results/
+.impeccable/critique/
 playwright-report/
 blob-report/
 .playwright/
