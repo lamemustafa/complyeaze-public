@@ -9,6 +9,12 @@ interface Props {
 
 const { origin, route } = Astro.props;
 const canonical = canonicalUrl(origin, route.urlPath);
+const primaryNavigation = [
+  { href: "/", label: "Home" },
+  { href: "/products/", label: "Products" },
+  { href: "/about/", label: "About" },
+  { href: "/trust/", label: "Trust" },
+];
 ---
 
 <!doctype html>
@@ -35,9 +41,13 @@ const canonical = canonicalUrl(origin, route.urlPath);
       header > div, footer > div, main { width: min(100% - 2rem, 72rem); margin-inline: auto; }
       header > div, footer > div { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1rem; }
       .brand { min-height: 44px; display: inline-flex; align-items: center; color: #0f172a; font-weight: 750; text-decoration: none; }
+      header nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
+      header nav a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; color: #0f172a; }
       main { padding-block: clamp(3rem, 8vw, 7rem); }
       footer { border-block-end: 0; }
       footer p { margin: 0; }
+      footer .footer-copy { display: grid; gap: 0.25rem; }
+      footer .colophon { min-height: 44px; display: inline-flex; align-items: center; }
       footer nav { display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; }
       footer a { min-height: 44px; display: inline-flex; align-items: center; }
       @media (max-width: 42rem) {
@@ -53,7 +63,13 @@ const canonical = canonicalUrl(origin, route.urlPath);
     <header>
       <div>
         <a class="brand" href={`${origin}/`}>ComplyEaze</a>
-        <span>Public migration preview</span>
+        <nav aria-label="Primary navigation">
+          {primaryNavigation.map((item) => (
+            <a href={item.href} aria-current={route.urlPath === item.href ? "page" : undefined}>
+              {item.label}
+            </a>
+          ))}
+        </nav>
       </div>
     </header>
     <main id="main-content">
@@ -61,7 +77,10 @@ const canonical = canonicalUrl(origin, route.urlPath);
     </main>
     <footer>
       <div>
-        <p>Static, public-safe, and reviewable.</p>
+        <div class="footer-copy">
+          <p>Public product facts and evidence. Sensitive operational data stays private.</p>
+          <a class="colophon" href="https://sanchika.complyeaze.com/">Sanchika — inspect the design evidence.</a>
+        </div>
         <nav aria-label="Policy navigation">
           <a href="/privacy/" aria-current={route.urlPath === "/privacy/" ? "page" : undefined}>Privacy</a>
           <a href="/terms/" aria-current={route.urlPath === "/terms/" ? "page" : undefined}>Terms</a>

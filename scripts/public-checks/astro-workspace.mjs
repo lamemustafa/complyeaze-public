@@ -171,7 +171,16 @@ function assertApp(root, directory, packageName, origin, findings) {
   if (!config.includes('output: "static"')) {
     findings.push(`${base}/astro.config.mjs: output must be static`);
   }
-  if (!page.includes('name="robots" content="noindex, nofollow"')) {
+  const ownsTypedCustomerRoot =
+    directory === "complyeaze" &&
+    page.includes("definePublicRouteManifest") &&
+    page.includes("PublicPageLayout");
+  if (ownsTypedCustomerRoot) {
+    const layout = read(root, `${base}/src/layouts/PublicPageLayout.astro`, findings);
+    if (!layout.includes('name="robots" content={route.robots}')) {
+      findings.push(`${base}/src/layouts/PublicPageLayout.astro: typed root must stay noindex`);
+    }
+  } else if (!page.includes('name="robots" content="noindex, nofollow"')) {
     findings.push(`${base}/src/pages/index.astro: foundation route must stay noindex`);
   }
   if (page.includes("client:")) {

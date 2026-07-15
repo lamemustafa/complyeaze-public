@@ -1,9 +1,11 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { definePublicRouteManifest } from "../../packages/public-content/src/schema.ts";
+import { canonicalUrl } from "../../packages/public-shell/src/metadata.ts";
 
 const manifestPath = "packages/public-content/src/complyeaze.routes.json";
 const requiredSourceFiles = [
+  "src/customer-route-data.mjs",
   "src/evidence-route-data.mjs",
   "src/migration.css",
   "src/products.css",
@@ -14,14 +16,19 @@ const requiredSourceFiles = [
   "packages/public-content/src/schema.ts",
   "packages/public-shell/src/metadata.ts",
   "apps/complyeaze/src/components/PublicEvidencePage.astro",
+  "apps/complyeaze/src/components/PublicHomePage.astro",
   "apps/complyeaze/src/components/PublicMigrationLedger.astro",
   "apps/complyeaze/src/components/PublicMigrationPage.astro",
   "apps/complyeaze/src/components/PublicPolicyPage.astro",
+  "apps/complyeaze/src/components/PublicProductsPage.astro",
   "apps/complyeaze/src/components/PublicResourcePage.astro",
   "apps/complyeaze/src/layouts/PublicPageLayout.astro",
   "apps/complyeaze/src/pages/[...slug].astro",
+  "apps/complyeaze/src/pages/index.astro",
 ];
 const requiredRoutes = [
+  "/",
+  "/products/",
   "/trust/",
   "/docs/",
   "/migration/",
@@ -43,9 +50,129 @@ export function assertAstroCoreRouteSources(root) {
   }
   const manifest = readManifest(root, findings);
   if (manifest) validateManifest(manifest, findings);
-  if (missingFiles.length === 0) assertLegacyEvidenceStyles(root, findings);
+  if (missingFiles.length === 0) {
+    assertAstroCustomerRouteSources(root, findings);
+    assertLegacyCustomerRouteSources(root, findings);
+    assertLegacyEvidenceStyles(root, findings);
+  }
   if (findings.length > 0) {
     throw new Error(`Astro core-route source findings:\n${findings.join("\n")}`);
+  }
+}
+
+function assertAstroCustomerRouteSources(root, findings) {
+  const visualCheck = readFileSync(path.join(root, "scripts", "visual-check.mjs"), "utf8");
+  const homePage = readFileSync(
+    path.join(root, "apps", "complyeaze", "src", "components", "PublicHomePage.astro"),
+    "utf8",
+  );
+  const productsPage = readFileSync(
+    path.join(root, "apps", "complyeaze", "src", "components", "PublicProductsPage.astro"),
+    "utf8",
+  );
+  const indexPage = readFileSync(
+    path.join(root, "apps", "complyeaze", "src", "pages", "index.astro"),
+    "utf8",
+  );
+  const catchAllPage = readFileSync(
+    path.join(root, "apps", "complyeaze", "src", "pages", "[...slug].astro"),
+    "utf8",
+  );
+  const layout = readFileSync(
+    path.join(root, "apps", "complyeaze", "src", "layouts", "PublicPageLayout.astro"),
+    "utf8",
+  );
+
+  if (!indexPage.includes("definePublicRouteManifest") || !indexPage.includes("PublicHomePage")) {
+    findings.push("apps/complyeaze/src/pages/index.astro: root must render the canonical home route");
+  }
+  if (/workspace foundation|does not serve customer routes/i.test(indexPage)) {
+    findings.push("apps/complyeaze/src/pages/index.astro: obsolete foundation copy remains");
+  }
+  if (!catchAllPage.includes('route.kind !== "home"')) {
+    findings.push("apps/complyeaze/src/pages/[...slug].astro: catch-all must exclude the home route");
+  }
+  for (const kind of ["resource", "policy", "evidence", "home", "products", "migration"]) {
+    const routeBranch = `route.kind === "${kind}"`;
+    if (kind !== "home" && !catchAllPage.includes(routeBranch)) {
+      findings.push(`apps/complyeaze/src/pages/[...slug].astro: missing explicit ${kind} branch`);
+    }
+  }
+  if (!catchAllPage.includes("assertNever(route)")) {
+    findings.push("apps/complyeaze/src/pages/[...slug].astro: route rendering is not exhaustive");
+  }
+  if (!homePage.includes('class="actions"') || !homePage.includes("route.primaryAction")) {
+    findings.push("PublicHomePage.astro: customer actions are missing");
+  }
+  if (!productsPage.includes('class="product-family"') || !productsPage.includes("<dl>")) {
+    findings.push("PublicProductsPage.astro: semantic product comparison is missing");
+  }
+  if (!productsPage.includes("product.evidence.href") || !productsPage.includes("product.evidence.label")) {
+    findings.push("PublicProductsPage.astro: public product evidence links are missing");
+  }
+  if (!layout.includes('aria-label="Primary navigation"')) {
+    findings.push("PublicPageLayout.astro: customer primary navigation is missing");
+  }
+  if (!/header nav a\s*\{[^}]*min-width:\s*44px/s.test(layout)) {
+    findings.push("PublicPageLayout.astro: primary navigation targets need 44px minimum width");
+  }
+  for (const href of ["/products/", "/about/", "/trust/"]) {
+    if (!layout.includes(`href: "${href}"`)) {
+      findings.push(`PublicPageLayout.astro: primary navigation is missing ${href}`);
+    }
+  }
+  if (/Public migration preview|href="\/(?:migration|status|docs)\/"/.test(layout)) {
+    findings.push("PublicPageLayout.astro: customer shell exposes internal methodology navigation");
+  }
+  if (!layout.includes("Sanchika — inspect the design evidence.")) {
+    findings.push("PublicPageLayout.astro: restrained Sanchika colophon is missing");
+  }
+  if (layout.includes("Built with Sanchika")) {
+    findings.push("PublicPageLayout.astro: colophon claims Sanchika adoption before P2");
+  }
+  if (visualCheck.includes("astro-complyeaze-foundation")) {
+    findings.push("scripts/visual-check.mjs: obsolete ComplyEaze foundation target remains");
+  }
+  if (
+    !visualCheck.includes("const expectedVisualTargetCount = 34") ||
+    !visualCheck.includes("visualTargets.length !== expectedVisualTargetCount")
+  ) {
+    findings.push("scripts/visual-check.mjs: expected 34-page visual inventory is not enforced");
+  }
+}
+
+function assertLegacyCustomerRouteSources(root, findings) {
+  const customerData = readFileSync(path.join(root, "src", "customer-route-data.mjs"), "utf8");
+  const siteData = readFileSync(path.join(root, "src", "site-data.mjs"), "utf8");
+  const productData = readFileSync(path.join(root, "src", "product-data.mjs"), "utf8");
+  const renderer = readFileSync(path.join(root, "src", "render-site.mjs"), "utf8");
+
+  if (!customerData.includes("definePublicRouteManifest")) {
+    findings.push("src/customer-route-data.mjs: customer routes must adapt the typed manifest");
+  }
+  if (!siteData.includes('from "./customer-route-data.mjs"') || siteData.includes("const corePages")) {
+    findings.push("src/site-data.mjs: core pages must come from the canonical customer adapter");
+  }
+  if (/ComplyEaze Public|label: "(?:Migration|Status|Docs)"/.test(siteData)) {
+    findings.push("src/site-data.mjs: primary customer shell exposes internal navigation or branding");
+  }
+  if (!productData.includes('from "./customer-route-data.mjs"')) {
+    findings.push("src/product-data.mjs: product data must come from the canonical customer adapter");
+  }
+  if (/export const products\s*=\s*\[|migrationRoutes|proofLedger/.test(productData)) {
+    findings.push("src/product-data.mjs: duplicated customer or migration data remains");
+  }
+  if (/Public migration inventory|migrationRoutes|proofLedger/.test(renderer)) {
+    findings.push("src/render-site.mjs: customer product page exposes internal migration methodology");
+  }
+  if (!renderer.includes("product.evidence.href") || !renderer.includes("product.evidence.label")) {
+    findings.push("src/render-site.mjs: customer product evidence links are not rendered");
+  }
+  if (
+    !renderer.includes('page.type === "customerProducts"') ||
+    renderer.includes('page.slug === "products"')
+  ) {
+    findings.push("src/render-site.mjs: customer products must dispatch by semantic route type");
   }
 }
 
@@ -65,8 +192,8 @@ function assertLegacyEvidenceStyles(root, findings) {
     findings.push("src/styles.css: legacy evidence links need a 44px minimum target");
   }
   const productStyles = readFileSync(path.join(root, "src", "products.css"), "utf8");
-  if (!/\.product-table-section:focus-visible\s*\{[^}]*outline:/s.test(productStyles)) {
-    findings.push("src/products.css: focusable migration inventory needs a visible focus outline");
+  if (!/\.product-evidence\s*\{[^}]*min-height:\s*44px/s.test(productStyles)) {
+    findings.push("src/products.css: legacy product evidence links need a 44px minimum target");
   }
   const migrationStyles = readFileSync(path.join(root, "src", "migration.css"), "utf8");
   if (!/\.migration-summary\s+li\s*\{[^}]*display:\s*grid/s.test(migrationStyles)) {
@@ -184,6 +311,9 @@ function assertLegacyEvidenceStyles(root, findings) {
 }
 
 export function assertAstroCoreRouteFixtures() {
+  if (canonicalUrl("https://complyeaze.com", "/") !== "https://complyeaze.com/") {
+    throw new Error("public canonical helper did not preserve the root route");
+  }
   const nestedManifest = {
     app: "complyeaze",
     origin: "https://complyeaze.com",
@@ -208,6 +338,150 @@ export function assertAstroCoreRouteFixtures() {
     schemaVersion: 1,
   };
   definePublicRouteManifest(nestedManifest);
+  assertRejectedManifest(
+    {
+      ...nestedManifest,
+      routes: [{ ...nestedManifest.routes[0], slug: "index", urlPath: "/" }],
+    },
+    "non-home route accepted the root path",
+  );
+
+  const homeManifest = {
+    ...nestedManifest,
+    routes: [
+      {
+        description: "Customer home fixture",
+        eyebrow: "ComplyEaze product family",
+        heading: "Choose the right compliance surface",
+        kind: "home",
+        primaryAction: { href: "/products/", label: "Explore products" },
+        robots: "noindex, nofollow",
+        sections: [{ body: "Fixture body", title: "Fixture" }],
+        secondaryAction: { href: "/trust/", label: "Review trust evidence" },
+        signalTerms: ["ComplyEaze", "products"],
+        slug: "index",
+        summary: "Customer home fixture",
+        title: "ComplyEaze",
+        urlPath: "/",
+      },
+    ],
+  };
+  definePublicRouteManifest(homeManifest);
+  assertRejectedManifest(
+    { ...homeManifest, routes: [{ ...homeManifest.routes[0], slug: "home" }] },
+    "home route accepted a non-index root slug",
+  );
+  assertRejectedManifest(
+    { ...homeManifest, routes: [{ ...homeManifest.routes[0], urlPath: "/index/" }] },
+    "home route accepted a non-root path",
+  );
+
+  const productsManifest = {
+    ...nestedManifest,
+    routes: [
+      {
+        description: "Product family fixture",
+        eyebrow: "Product family",
+        heading: "Choose by job and boundary",
+        kind: "products",
+        products: [
+          {
+            boundary: "Workspace-scoped operational context.",
+            evidence: {
+              href: "https://example.com/axal-evidence",
+              label: "Review Axal evidence",
+            },
+            href: "https://axal.example.com/",
+            job: "Coordinate compliance review work.",
+            name: "Axal",
+            proof: "Source-led review posture.",
+            role: "Compliance review workspace",
+            status: "Limited public preview",
+          },
+        ],
+        robots: "noindex, nofollow",
+        sections: [{ body: "Fixture body", title: "Fixture" }],
+        signalTerms: ["products", "boundary"],
+        slug: "products",
+        summary: "Product family fixture",
+        title: "Products | ComplyEaze",
+        urlPath: "/products/",
+      },
+    ],
+  };
+  definePublicRouteManifest(productsManifest);
+  assertRejectedManifest(
+    { ...productsManifest, routes: [{ ...productsManifest.routes[0], products: [] }] },
+    "products route accepted an empty product list",
+  );
+  assertRejectedManifest(
+    {
+      ...productsManifest,
+      routes: [
+        {
+          ...productsManifest.routes[0],
+          products: [
+            productsManifest.routes[0].products[0],
+            {
+              ...productsManifest.routes[0].products[0],
+              href: "https://second.example.com/",
+            },
+          ],
+        },
+      ],
+    },
+    "products route accepted duplicate product names",
+  );
+  assertRejectedManifest(
+    {
+      ...productsManifest,
+      routes: [
+        {
+          ...productsManifest.routes[0],
+          products: [
+            productsManifest.routes[0].products[0],
+            {
+              ...productsManifest.routes[0].products[0],
+              name: "Pack",
+            },
+          ],
+        },
+      ],
+    },
+    "products route accepted duplicate product destinations",
+  );
+  const unsafeProductManifest = structuredClone(productsManifest);
+  unsafeProductManifest.routes[0].products[0].href = "javascript:alert(1)";
+  assertRejectedManifest(unsafeProductManifest, "products route accepted an unsafe destination");
+  const missingEvidenceManifest = structuredClone(productsManifest);
+  delete missingEvidenceManifest.routes[0].products[0].evidence;
+  assertRejectedManifest(missingEvidenceManifest, "products route accepted missing evidence");
+  const unsafeProductEvidenceManifest = structuredClone(productsManifest);
+  unsafeProductEvidenceManifest.routes[0].products[0].evidence.href = "javascript:alert(1)";
+  assertRejectedManifest(
+    unsafeProductEvidenceManifest,
+    "products route accepted an unsafe evidence URL",
+  );
+  assertRejectedManifest(
+    {
+      ...homeManifest,
+      routes: [{ ...homeManifest.routes[0], products: productsManifest.routes[0].products }],
+    },
+    "home route accepted products-only fields",
+  );
+  assertRejectedManifest(
+    {
+      ...productsManifest,
+      routes: [
+        {
+          ...productsManifest.routes[0],
+          primaryAction: homeManifest.routes[0].primaryAction,
+          secondaryAction: homeManifest.routes[0].secondaryAction,
+        },
+      ],
+    },
+    "products route accepted home-only fields",
+  );
 
   const policyManifest = {
     ...nestedManifest,
@@ -466,6 +740,15 @@ export function assertLegacyCoreRouteBuild(root) {
   const manifest = readManifest(root, findings);
   if (!manifest) return fail(findings);
   validateManifest(manifest, findings);
+  const legacyManifestPath = path.join(root, "dist", "route-manifest.json");
+  if (!existsSync(legacyManifestPath)) {
+    findings.push("dist/route-manifest.json: missing legacy route manifest");
+  } else {
+    const legacyManifest = JSON.parse(readFileSync(legacyManifestPath, "utf8"));
+    if (legacyManifest.pageCount !== 20 || legacyManifest.routes?.length !== 20) {
+      findings.push("dist/route-manifest.json: expected exactly 20 legacy routes");
+    }
+  }
   if (findings.length > 0) return fail(findings);
 
   for (const route of manifest.routes ?? []) {
@@ -559,6 +842,17 @@ export function assertAstroCoreRouteBuild(root) {
         findings.push(`${route.urlPath}: Astro migration tables need captions`);
       }
     }
+    if (route.kind === "home" && !html.includes('class="actions"')) {
+      findings.push(`${route.urlPath}: Astro customer actions missing`);
+    }
+    if (route.kind === "products") {
+      if (!html.includes('class="product-family"') || !html.includes("<dl")) {
+        findings.push(`${route.urlPath}: Astro semantic product comparison missing`);
+      }
+      if (!html.includes('class="product-evidence"')) {
+        findings.push(`${route.urlPath}: Astro product evidence links missing`);
+      }
+    }
     for (const [label, value] of expectedRouteValues(route)) {
       if (!legacyHtml.includes(value)) {
         findings.push(`${route.urlPath}: legacy build diverges on ${label}`);
@@ -586,6 +880,18 @@ export function assertAstroCoreRouteBuild(root) {
       if (!existsSync(targetPath)) findings.push(`${route.urlPath}: unresolved preview link ${href}`);
     }
   }
+  if (existsSync(path.join(appDist, "index", "index.html"))) {
+    findings.push("/: Astro build emitted an unintended /index/ route");
+  }
+  const previewSitemapPath = path.join(appDist, "sitemap.xml");
+  if (existsSync(previewSitemapPath)) {
+    const previewSitemap = readFileSync(previewSitemapPath, "utf8");
+    for (const route of manifest.routes ?? []) {
+      if (previewSitemap.includes(`${manifest.origin}${route.urlPath}`)) {
+        findings.push(`${route.urlPath}: preview route leaked into the Astro sitemap`);
+      }
+    }
+  }
   if (findings.length > 0) fail(findings);
 }
 
@@ -610,6 +916,31 @@ function expectedRouteValues(route) {
       ["secondary action label", route.secondaryAction.label],
       ["secondary action href", route.secondaryAction.href],
       ...route.proof.map((item) => ["proof item", item]),
+    ];
+  }
+  if (route.kind === "home") {
+    return [
+      ...values,
+      ["primary action label", route.primaryAction.label],
+      ["primary action href", route.primaryAction.href],
+      ["secondary action label", route.secondaryAction.label],
+      ["secondary action href", route.secondaryAction.href],
+    ];
+  }
+  if (route.kind === "products") {
+    return [
+      ...values,
+      ...route.products.flatMap((product) => [
+        ["product name", product.name],
+        ["product role", product.role],
+        ["product job", product.job],
+        ["product proof", product.proof],
+        ["product boundary", product.boundary],
+        ["product status", product.status],
+        ["product href", product.href],
+        ["product evidence label", product.evidence.label],
+        ["product evidence href", product.evidence.href],
+      ]),
     ];
   }
   if (route.kind === "policy") {
@@ -662,6 +993,7 @@ function validateManifest(manifest, findings) {
     if (!paths.includes(requiredRoute)) findings.push(`${manifestPath}: missing ${requiredRoute}`);
   }
   if (new Set(paths).size !== paths.length) findings.push(`${manifestPath}: duplicate route paths`);
+  if (paths.length !== 12) findings.push(`${manifestPath}: expected exactly 12 routes`);
 
   for (const route of routeObjects) {
     for (const field of ["slug", "urlPath", "title", "description", "heading", "summary"]) {
@@ -684,6 +1016,23 @@ function validateManifest(manifest, findings) {
     if (JSON.stringify(route).includes("ComplyEaze Public")) {
       findings.push(`${manifestPath}: ${route.urlPath} exposes repository-boundary branding`);
     }
+    if (
+      ["home", "products"].includes(route.kind) &&
+      /migration ledger|review gate|cleanup pr|public boundary repository/i.test(
+        JSON.stringify(route),
+      )
+    ) {
+      findings.push(`${manifestPath}: ${route.urlPath} exposes internal methodology`);
+    }
+  }
+
+  const statusRoute = routeObjects.find((route) => route.urlPath === "/status/");
+  if (!statusRoute || !JSON.stringify(statusRoute).includes("customer-core")) {
+    findings.push(`${manifestPath}: /status/ must report the customer-core route port`);
+  }
+  const changelogRoute = routeObjects.find((route) => route.urlPath === "/changelog/");
+  if (!changelogRoute || !JSON.stringify(changelogRoute).includes("Customer-core route port")) {
+    findings.push(`${manifestPath}: /changelog/ must record the customer-core route port`);
   }
 }
 

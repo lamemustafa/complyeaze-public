@@ -1,0 +1,83 @@
+---
+import type { PublicProductsRoute } from "@complyeaze-public/content";
+
+interface Props {
+  route: PublicProductsRoute;
+}
+
+const { route } = Astro.props;
+---
+
+<section class="intro" aria-labelledby="page-title">
+  <p class="eyebrow">{route.eyebrow}</p>
+  <h1 id="page-title">{route.heading}</h1>
+  <p class="summary">{route.summary}</p>
+</section>
+
+<section class="product-family" aria-labelledby="product-family-title">
+  <header>
+    <h2 id="product-family-title">Compare the product family</h2>
+    <p>Each destination names the work, public proof, custody boundary, and current posture.</p>
+  </header>
+  <div class="product-list">
+    {route.products.map((product) => (
+      <article>
+        <div class="product-heading">
+          <h3><a href={product.href}>{product.name}</a></h3>
+          <p>{product.role}</p>
+        </div>
+        <dl>
+          <div><dt>Job</dt><dd>{product.job}</dd></div>
+          <div><dt>Proof</dt><dd>{product.proof}</dd></div>
+          <div><dt>Boundary</dt><dd>{product.boundary}</dd></div>
+          <div><dt>Status</dt><dd>{product.status}</dd></div>
+        </dl>
+        <a class="product-evidence" href={product.evidence.href}>{product.evidence.label}</a>
+      </article>
+    ))}
+  </div>
+</section>
+
+<section class="product-principles" aria-label="How the product family fits together">
+  {route.sections.map((section) => (
+    <article>
+      <h2>{section.title}</h2>
+      <p>{section.body}</p>
+    </article>
+  ))}
+</section>
+
+<style>
+  .intro { max-width: 74ch; }
+  .eyebrow { margin: 0 0 1rem; color: #475569; font-size: 0.82rem; font-weight: 750; letter-spacing: 0.12em; text-transform: uppercase; }
+  h1 { max-width: 17ch; margin: 0; font-size: clamp(2.45rem, 7vw, 5.5rem); line-height: 1.02; letter-spacing: -0.035em; text-wrap: balance; }
+  h2, h3 { margin: 0; line-height: 1.2; text-wrap: balance; }
+  h2 { font-size: clamp(1.3rem, 3vw, 1.9rem); }
+  h3 { font-size: clamp(1.6rem, 4vw, 2.5rem); }
+  p { max-width: 72ch; text-wrap: pretty; }
+  .summary { margin-block: 1.5rem 0; font-size: clamp(1.08rem, 2vw, 1.28rem); }
+  .product-family { margin-block: clamp(4rem, 10vw, 8rem); border-block: 1px solid #0f172a; }
+  .product-family > header { display: grid; grid-template-columns: minmax(13rem, 0.75fr) minmax(0, 1.25fr); gap: 1rem clamp(2rem, 7vw, 7rem); padding-block: 1.5rem; }
+  .product-family > header p, .product-heading p, dd, .product-principles p { margin: 0; }
+  .product-list { border-top: 1px solid #cbd5e1; }
+  .product-list article { display: grid; grid-template-columns: minmax(12rem, 0.55fr) minmax(18rem, 1.2fr) minmax(10rem, 0.45fr); gap: 1.5rem clamp(1.5rem, 4vw, 4rem); padding-block: clamp(2rem, 5vw, 3rem); border-bottom: 1px solid #cbd5e1; }
+  .product-heading { min-width: 0; }
+  .product-heading a { min-height: 44px; display: inline-flex; align-items: center; }
+  .product-heading p { color: #475569; font-weight: 700; }
+  dl { display: grid; gap: 0.9rem; margin: 0; }
+  dl div { display: grid; grid-template-columns: minmax(5rem, 0.3fr) minmax(0, 1.7fr); gap: 1rem; }
+  dt { color: #475569; font-weight: 750; }
+  dd { min-width: 0; overflow-wrap: anywhere; }
+  .product-evidence { min-height: 44px; display: inline-flex; align-items: center; align-self: start; font-weight: 750; }
+  .product-principles { border-top: 1px solid #94a3b8; }
+  .product-principles article { display: grid; grid-template-columns: minmax(13rem, 0.8fr) minmax(0, 1.2fr); gap: 1rem clamp(2rem, 7vw, 7rem); padding-block: clamp(1.75rem, 4vw, 2.75rem); border-bottom: 1px solid #cbd5e1; }
+  @media (max-width: 58rem) {
+    .product-list article { grid-template-columns: minmax(11rem, 0.65fr) minmax(0, 1.35fr); }
+    .product-evidence { grid-column: 2; }
+  }
+  @media (max-width: 42rem) {
+    .product-family > header, .product-list article, .product-principles article { grid-template-columns: 1fr; }
+    .product-evidence { grid-column: auto; }
+    dl div { grid-template-columns: 1fr; gap: 0.25rem; }
+  }
+</style>

@@ -10,15 +10,6 @@ const root = process.cwd();
 const dist = path.join(root, "dist");
 const astroApps = [
   {
-    slug: "astro-complyeaze-foundation",
-    serverKey: "complyeaze",
-    urlPath: "/",
-    publicPath: "https://complyeaze.com/",
-    heading: "ComplyEaze Astro workspace foundation",
-    profile: "foundation",
-    signalTerms: ["ComplyEaze"],
-  },
-  {
     slug: "astro-axal-foundation",
     serverKey: "axal",
     urlPath: "/",
@@ -52,6 +43,12 @@ const visualTargets = [
   ...astroApps,
   ...astroRouteTargets,
 ];
+const expectedVisualTargetCount = 34;
+if (visualTargets.length !== expectedVisualTargetCount) {
+  throw new Error(
+    `Expected ${expectedVisualTargetCount} visual pages, received ${visualTargets.length}`,
+  );
+}
 const visualRoots = new Map([
   ["legacy", dist],
   ["complyeaze", path.join(root, "apps", "complyeaze", "dist")],

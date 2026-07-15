@@ -1,3 +1,15 @@
+import type {
+  PublicHomeRoute,
+  PublicProduct,
+  PublicProductsRoute,
+} from "./customer-route-types.ts";
+
+export type {
+  PublicHomeRoute,
+  PublicProduct,
+  PublicProductsRoute,
+} from "./customer-route-types.ts";
+
 export interface PublicAction {
   href: string;
   label: string;
@@ -24,7 +36,7 @@ export interface PublicRouteBase {
   description: string;
   eyebrow: string;
   heading: string;
-  kind: "evidence" | "migration" | "policy" | "resource";
+  kind: "evidence" | "home" | "migration" | "policy" | "products" | "resource";
   robots: "noindex, nofollow";
   sections: PublicSection[];
   signalTerms: string[];
@@ -62,8 +74,10 @@ export interface PublicMigrationRoute extends PublicRouteBase {
 
 export type PublicRoute =
   | PublicEvidenceRoute
+  | PublicHomeRoute
   | PublicMigrationRoute
   | PublicPolicyRoute
+  | PublicProductsRoute
   | PublicResourceRoute;
 
 export interface PublicRouteManifest {
@@ -97,17 +111,61 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
   const { slug, urlPath } = value;
   assertString(slug, `${label}.slug`);
   assertString(urlPath, `${label}.urlPath`);
-  assert(
-    /^\/[a-z0-9-]+(?:\/[a-z0-9-]+)*\/$/.test(urlPath),
-    `${label}.urlPath must be a clean trailing-slash route`,
-  );
-  assert(slug === urlPath.slice(1, -1), `${label}.slug must match urlPath`);
+  if (urlPath === "/") {
+    assert(slug === "index", `${label}.slug must be index for the root route`);
+    assert(value.kind === "home", `${label}.kind must be home for the root route`);
+  } else {
+    assert(
+      /^\/[a-z0-9-]+(?:\/[a-z0-9-]+)*\/$/.test(urlPath),
+      `${label}.urlPath must be a clean trailing-slash route`,
+    );
+    assert(slug === urlPath.slice(1, -1), `${label}.slug must match urlPath`);
+  }
   assert(value.robots === "noindex, nofollow", `${label}.robots must stay noindex before cutover`);
   assert(Array.isArray(value.sections) && value.sections.length > 0, `${label}.sections must not be empty`);
   value.sections.forEach((section, index) => validateSection(section, `${label}.sections[${index}]`));
   assertStringArray(value.signalTerms, `${label}.signalTerms`);
+  if (value.kind === "home") {
+    for (const field of ["evidenceLinks", "policySummary", "products", "proof", "steps"] as const) {
+      assert(value[field] === undefined, `${label}.${field} is not valid for home routes`);
+    }
+    assert(value.urlPath === "/", `${label}.urlPath must be / for home routes`);
+    validateAction(value.primaryAction, `${label}.primaryAction`);
+    validateAction(value.secondaryAction, `${label}.secondaryAction`);
+    return;
+  }
+  if (value.kind === "products") {
+    for (const field of [
+      "evidenceLinks",
+      "policySummary",
+      "primaryAction",
+      "proof",
+      "secondaryAction",
+      "steps",
+    ] as const) {
+      assert(value[field] === undefined, `${label}.${field} is not valid for products routes`);
+    }
+    assert(
+      Array.isArray(value.products) && value.products.length > 0,
+      `${label}.products must not be empty`,
+    );
+    value.products.forEach((product, index) =>
+      validateProduct(product, `${label}.products[${index}]`),
+    );
+    const productNames = value.products.map((product) => product.name);
+    assert(
+      new Set(productNames).size === productNames.length,
+      `${label}.products names must be unique`,
+    );
+    const productHrefs = value.products.map((product) => product.href);
+    assert(
+      new Set(productHrefs).size === productHrefs.length,
+      `${label}.products href values must be unique`,
+    );
+    return;
+  }
   if (value.kind === "resource") {
-    for (const field of ["evidenceLinks", "policySummary", "steps"] as const) {
+    for (const field of ["evidenceLinks", "policySummary", "products", "steps"] as const) {
       assert(value[field] === undefined, `${label}.${field} is not valid for resource routes`);
     }
     validateAction(value.primaryAction, `${label}.primaryAction`);
@@ -119,6 +177,7 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
     for (const field of [
       "policySummary",
       "primaryAction",
+      "products",
       "proof",
       "secondaryAction",
       "steps",
@@ -144,6 +203,7 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
       "evidenceLinks",
       "policySummary",
       "primaryAction",
+      "products",
       "proof",
       "secondaryAction",
     ] as const) {
@@ -163,11 +223,12 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
   }
   assert(
     value.kind === "policy",
-    `${label}.kind must be evidence, migration, policy, or resource`,
+    `${label}.kind must be evidence, home, migration, policy, products, or resource`,
   );
   for (const field of [
     "evidenceLinks",
     "primaryAction",
+    "products",
     "proof",
     "secondaryAction",
     "steps",
@@ -175,6 +236,15 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
     assert(value[field] === undefined, `${label}.${field} is not valid for policy routes`);
   }
   validatePolicySummary(value.policySummary, `${label}.policySummary`);
+}
+
+function validateProduct(value: unknown, label: string): asserts value is PublicProduct {
+  assertRecord(value, label);
+  for (const field of ["boundary", "job", "name", "proof", "role", "status"] as const) {
+    assertString(value[field], `${label}.${field}`);
+  }
+  assertPublicHref(value.href, `${label}.href`);
+  validateAction(value.evidence, `${label}.evidence`);
 }
 
 function validateMigrationStep(value: unknown, label: string): asserts value is PublicMigrationStep {
