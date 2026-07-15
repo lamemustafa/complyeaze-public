@@ -5,6 +5,10 @@ import path from "node:path";
 import process from "node:process";
 import { assertAxalPages } from "./public-checks/axal-pages.mjs";
 import {
+  assertAstroBuildOutput,
+  assertAstroWorkspace
+} from "./public-checks/astro-workspace.mjs";
+import {
   assertCiArtifactPolicyFixtures,
   assertCiArtifacts
 } from "./public-checks/ci-artifacts.mjs";
@@ -253,6 +257,7 @@ function run() {
     assertSensitiveContent(root);
   }
   if (["--all", "--test"].includes(mode)) {
+    assertAstroWorkspace(root);
     assertSensitiveContentFixturePolicy();
     assertCiArtifactPolicyFixtures();
     assertReviewGateFixtures(root);
@@ -273,6 +278,7 @@ function run() {
     assertReleaseGates();
   }
   if (["--all", "--public"].includes(mode)) {
+    assertAstroBuildOutput(root);
     assertPublicPages();
     assertMigrationLedger(root);
     assertGatewayPages(root);

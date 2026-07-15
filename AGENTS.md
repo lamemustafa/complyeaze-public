@@ -44,12 +44,17 @@ for objectively broken checks are allowed.
 
 For non-trivial changes:
 
-1. Review the real diff and rendered page.
-2. Classify findings as Critical, High, Medium, or Low.
-3. Fix all Critical and High findings.
-4. Fix Medium findings when low-cost, otherwise document follow-up scope.
-5. Re-run focused checks, then broaden to the full public gate.
-6. Repeat until the latest review is clean.
+1. Keep one repository and one open implementation PR active at a time.
+2. Review the real diff and rendered page.
+3. Classify findings as Critical, High, Medium, or Low.
+4. Fix all Critical and High findings.
+5. Fix Medium findings when low-cost, otherwise document follow-up scope.
+6. Re-run focused checks, then broaden to the full public gate.
+7. Before every commit, run a local Codex review of the complete intended diff
+   and rectify every valid finding.
+8. After every push, obtain a current-head GitHub Codex review before merge;
+   reply to and resolve every addressed thread.
+9. Repeat until the latest review is clean.
 
 See `docs/REVIEW_RECTIFY.md`.
 

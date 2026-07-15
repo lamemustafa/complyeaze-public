@@ -28,10 +28,23 @@ Out of scope:
 
 ## Development
 
-The implementation stack will be finalized during the first build slice. The
-initial repo contract assumes Node.js, pnpm, TypeScript, a static/public-site
-framework, Playwright visual checks, and CI gates for lint, typecheck, tests,
-build, links, metadata, and rendered screenshots.
+The public architecture is an incremental Astro workspace with independent
+ComplyEaze, Axal, and Pack static apps. During P1, the existing generator remains
+the customer-facing parity baseline while routes move app by app; it is deleted
+only after route, metadata, link, and rendered parity are proven.
+
+```bash
+pnpm install --frozen-lockfile
+pnpm dev:core
+pnpm dev:axal
+pnpm dev:pack
+pnpm verify
+```
+
+Astro commands disable framework telemetry. Public pages target zero client
+JavaScript unless a later reviewed interaction requires a small island. Preview
+builds may set `PUBLIC_SITE_ORIGIN`; production origins remain the default in
+each app configuration.
 
 ## Governance
 

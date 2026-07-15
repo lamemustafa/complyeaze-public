@@ -8,13 +8,15 @@ backed.
 
 - Static-site build, rendering, visual review, metadata, link checks, CI, and
   local public-repo governance scripts.
-- Development dependencies that support the public gate, such as Playwright for
-  rendered visual evidence.
+- Development dependencies that support static generation and the public gate:
+  Astro 7.0.9, `@astrojs/check` 0.9.9, TypeScript 6.0.3, and Playwright 1.61.1.
 - GitHub Actions required for checkout, Node/pnpm setup, Pages readiness,
   artifact retention, and review-gate status sync.
 - Current package surface: no runtime `dependencies`, no lifecycle scripts, and
-  `playwright` as the only reviewed `devDependency` unless this policy and the
-  static dependency check are updated in the same PR.
+  only the pinned build/test tools above in workspace manifests unless this
+  policy and the static dependency check are updated in the same PR.
+- Astro commands must set `ASTRO_TELEMETRY_DISABLED=1`; no client analytics or
+  telemetry dependency is allowed.
 - `packageManager` must stay pinned to `pnpm@10.28.2`, CI must use pnpm
   `10.28.2`, and Node workflow versions must stay aligned with the public
   package engine.
