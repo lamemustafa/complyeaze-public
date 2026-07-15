@@ -1,0 +1,25 @@
+---
+import rawManifest from "@complyeaze-public/content/complyeaze-routes";
+import {
+  definePublicRouteManifest,
+  type PublicRoute,
+} from "@complyeaze-public/content";
+import PublicPageLayout from "../layouts/PublicPageLayout.astro";
+
+interface Props {
+  origin: string;
+  route: PublicRoute;
+}
+
+export function getStaticPaths() {
+  const manifest = definePublicRouteManifest(rawManifest);
+  return manifest.routes.map((route) => ({
+    params: { slug: route.slug },
+    props: { origin: manifest.origin, route },
+  }));
+}
+
+const { origin, route } = Astro.props;
+---
+
+<PublicPageLayout {origin} {route} />

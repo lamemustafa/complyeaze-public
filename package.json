@@ -10,8 +10,9 @@
   },
   "scripts": {
     "lint": "node scripts/check-public-repo.mjs --lint",
-    "typecheck": "pnpm typecheck:legacy && pnpm typecheck:apps",
+    "typecheck": "pnpm typecheck:legacy && pnpm typecheck:packages && pnpm typecheck:apps",
     "typecheck:legacy": "node scripts/check-public-repo.mjs --typecheck",
+    "typecheck:packages": "pnpm --filter './packages/*' typecheck",
     "typecheck:apps": "pnpm --filter './apps/*' typecheck",
     "test": "node scripts/check-public-repo.mjs --test",
     "dev:core": "pnpm --filter @complyeaze-public/core dev",

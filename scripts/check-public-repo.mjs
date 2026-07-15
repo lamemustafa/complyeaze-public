@@ -10,6 +10,11 @@ import {
   assertAstroWorkspace
 } from "./public-checks/astro-workspace.mjs";
 import {
+  assertAstroCoreRouteBuild,
+  assertAstroCoreRouteFixtures,
+  assertAstroCoreRouteSources
+} from "./public-checks/astro-core-routes.mjs";
+import {
   assertCiArtifactPolicyFixtures,
   assertCiArtifacts
 } from "./public-checks/ci-artifacts.mjs";
@@ -260,6 +265,8 @@ function run() {
   }
   if (["--all", "--test"].includes(mode)) {
     assertAstroWorkspace(root);
+    assertAstroCoreRouteSources(root);
+    assertAstroCoreRouteFixtures();
     assertAstroBuildOutputFixtures();
     assertWorkspaceDependencySurfaceFixtures();
     assertSensitiveContentFixturePolicy();
@@ -283,6 +290,7 @@ function run() {
   }
   if (["--all", "--public"].includes(mode)) {
     assertAstroBuildOutput(root);
+    assertAstroCoreRouteBuild(root);
     assertPublicPages();
     assertMigrationLedger(root);
     assertGatewayPages(root);

@@ -12,7 +12,22 @@ import path from "node:path";
 
 const rootManifestPath = "package.json";
 const lockfilePath = "pnpm-lock.yaml";
-const appDevDependencies = ["@astrojs/check", "astro", "typescript"];
+const appDevDependencies = new Map([
+  ["@astrojs/check", "catalog:"],
+  ["astro", "catalog:"],
+  ["typescript", "catalog:"],
+]);
+const manifestDevDependencyOverrides = new Map([
+  [
+    "apps/complyeaze/package.json",
+    new Map([
+      ["@complyeaze-public/content", "workspace:*"],
+      ["@complyeaze-public/shell", "workspace:*"],
+    ]),
+  ],
+  ["packages/public-content/package.json", new Map([["typescript", "catalog:"]])],
+  ["packages/public-shell/package.json", new Map([["typescript", "catalog:"]])],
+]);
 const forbiddenLifecycleScripts = [
   "preinstall",
   "install",
@@ -28,15 +43,18 @@ export function assertWorkspaceDependencySurface(root, rootManifestText, lockfil
   const rootManifest = parseManifest(rootManifestPath, rootManifestText, findings);
   if (rootManifest) assertRootManifest(rootManifest, findings);
 
-  const workspaceManifests = discoverWorkspaceManifests(root);
-  for (const filePath of workspaceManifests) {
+  const workspacePackages = [];
+  for (const filePath of discoverWorkspaceManifests(root)) {
     const text = readRequiredFile(root, filePath, findings);
     const manifest = text ? parseManifest(filePath, text, findings) : null;
-    const allowedDevDependencies = filePath.startsWith("apps/") ? appDevDependencies : [];
-    if (manifest) assertWorkspaceManifest(filePath, manifest, allowedDevDependencies, findings);
+    if (manifest) {
+      const allowedDevDependencies = allowedDevDependenciesFor(filePath);
+      assertWorkspaceManifest(filePath, manifest, allowedDevDependencies, findings);
+      workspacePackages.push({ filePath, manifest });
+    }
   }
 
-  assertLockfile(lockfile, workspaceManifests, findings);
+  assertLockfile(lockfile, workspacePackages, findings);
 }
 
 export function assertWorkspaceDependencySurfaceFixtures() {
@@ -115,12 +133,13 @@ function assertWorkspaceManifest(filePath, manifest, allowedDevDependencies, fin
   assertNoRuntimeDependencies(filePath, manifest, findings);
 
   const actualDevDependencies = Object.keys(manifest.devDependencies ?? {}).sort();
-  if (actualDevDependencies.join(",") !== [...allowedDevDependencies].sort().join(",")) {
+  const allowedNames = [...allowedDevDependencies.keys()].sort();
+  if (actualDevDependencies.join(",") !== allowedNames.join(",")) {
     findings.push(`${filePath}: unexpected devDependency surface ${actualDevDependencies.join(", ")}`);
   }
-  for (const dependency of allowedDevDependencies) {
-    if (manifest.devDependencies?.[dependency] !== "catalog:") {
-      findings.push(`${filePath}: ${dependency} must use the pinned workspace catalog`);
+  for (const [dependency, specifier] of allowedDevDependencies) {
+    if (manifest.devDependencies?.[dependency] !== specifier) {
+      findings.push(`${filePath}: ${dependency} must use ${specifier}`);
     }
   }
   assertNoLifecycleScripts(filePath, manifest, findings);
@@ -158,13 +177,8 @@ function assertNoLifecycleScripts(filePath, manifest, findings) {
   }
 }
 
-function assertLockfile(lockfile, workspaceManifests, findings) {
+function assertLockfile(lockfile, workspacePackages, findings) {
   const requiredSnippets = [
-    "  apps/axal:",
-    "  apps/complyeaze:",
-    "  apps/pack:",
-    "  packages/public-content: {}",
-    "  packages/public-shell: {}",
     "playwright:\n        specifier: 1.61.1",
     "'@astrojs/check@0.9.9':",
     "astro@7.0.9",
@@ -176,17 +190,37 @@ function assertLockfile(lockfile, workspaceManifests, findings) {
     }
   }
   const catalogSpecifiers = lockfile.match(/specifier: 'catalog:'/g) ?? [];
-  if (catalogSpecifiers.length !== 9) {
-    findings.push(`${lockfilePath}: expected 9 catalog-pinned Astro tool specifiers`);
+  const expectedCatalogSpecifiers = workspacePackages.reduce(
+    (count, { manifest }) => count + Object.values(manifest.devDependencies ?? {}).filter((value) => value === "catalog:").length,
+    0,
+  );
+  if (catalogSpecifiers.length !== expectedCatalogSpecifiers) {
+    findings.push(`${lockfilePath}: expected ${expectedCatalogSpecifiers} catalog-pinned tool specifiers`);
+  }
+  const workspaceSpecifiers = lockfile.match(/specifier: workspace:\*/g) ?? [];
+  const expectedWorkspaceSpecifiers = workspacePackages.reduce(
+    (count, { manifest }) => count + Object.values(manifest.devDependencies ?? {}).filter((value) => value === "workspace:*").length,
+    0,
+  );
+  if (workspaceSpecifiers.length !== expectedWorkspaceSpecifiers) {
+    findings.push(`${lockfilePath}: expected ${expectedWorkspaceSpecifiers} workspace-linked devDependencies`);
   }
   const importersBlock = lockfile.match(/\nimporters:\n(?<block>[\s\S]*?)\npackages:\n/)?.groups?.block ?? "";
   const actualImporters = [...importersBlock.matchAll(/^  (\S[^:\n]*):(?:\s*\{\})?\s*$/gm)]
     .map((match) => match[1])
     .sort();
-  const expectedImporters = [".", ...workspaceManifests.map((filePath) => path.dirname(filePath))].sort();
+  const expectedImporters = [".", ...workspacePackages.map(({ filePath }) => path.dirname(filePath))].sort();
   if (actualImporters.join(",") !== expectedImporters.join(",")) {
     findings.push(`${lockfilePath}: workspace importers do not match discovered manifests`);
   }
+}
+
+function allowedDevDependenciesFor(filePath) {
+  const allowed = filePath.startsWith("apps/") ? new Map(appDevDependencies) : new Map();
+  for (const [name, specifier] of manifestDevDependencyOverrides.get(filePath) ?? []) {
+    allowed.set(name, specifier);
+  }
+  return allowed;
 }
 
 function discoverWorkspaceManifests(root) {
