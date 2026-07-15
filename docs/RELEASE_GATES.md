@@ -33,6 +33,14 @@ pnpm github:settings
 This live audit is separate from `pnpm verify` because it uses the GitHub API to
 confirm repository metadata and branch-ruleset state.
 
+Same-repository lifecycle, review, and inline review-comment events reconcile
+`Review gate` immediately. Fork review/comment events may receive read-only
+tokens, and review-thread resolution or reopening has no dedicated ordinary
+event in this workflow. A later trusted lifecycle event or the daily all-open
+repair reconciles those cases, so the expected worst-case recovery delay is one
+daily interval. Daily repairs and event-driven reconciliation are serialized per
+pull request so an older repair cannot publish after a newer event result.
+
 ## Release Evidence
 
 Each release should record:
@@ -40,11 +48,11 @@ Each release should record:
 - Commit SHA.
 - Build command and artifact path.
 - CI artifact `public-site-build`, containing the generated `dist` build output
-  retained for 14 days.
+  retained for 7 days.
 - CI artifact `public-visual-evidence`, containing rendered screenshots and
   visual summaries with reduced-motion state, focus target, overflow, link,
   touch-target, image, blank-section, clipping, and overlap evidence retained
-  for 30 days.
+  for 7 days.
 - Route manifest generated at `dist/route-manifest.json`, matched to
   `src/site-data.mjs`, rendered HTML files, canonical URLs, and `sitemap.xml`.
 - Desktop and mobile screenshots.

@@ -22,6 +22,14 @@ deployment infrastructure.
   ComplyEaze, Axal, Pack, Tools, or Sanchika marks in a way that implies
   endorsement, affiliation, or ownership.
 
+## Governance Freeze
+
+During programme Phases 0-4, do not add new recurring review crons, scorecard
+dimensions, repository-settings audits, general-purpose gate frameworks,
+governance-only packages, or general check scripts. Prefer consolidating
+existing checks; only narrowly scoped adoption/boundary checks or replacements
+for objectively broken checks are allowed.
+
 ## Design And Content Rules
 
 - Public pages use the brand register. They should communicate clearly and
