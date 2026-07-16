@@ -1,6 +1,27 @@
 import { gzipSync } from "node:zlib";
 import AxeBuilder from "@axe-core/playwright";
 
+const craftAssetResourceTypes = new Set(["script", "stylesheet", "font"]);
+
+export function isCraftAssetResource(craftReview, resourceType) {
+  return craftReview && craftAssetResourceTypes.has(resourceType);
+}
+
+export function craftAssetResponseIssue({ craftReview, ok, resourceType, status, url }) {
+  if (!isCraftAssetResource(craftReview, resourceType) || ok) return null;
+  return `${resourceType} request returned ${status}: ${url}`;
+}
+
+export function craftAssetRequestFailureIssue({
+  craftReview,
+  errorText,
+  resourceType,
+  url,
+}) {
+  if (!isCraftAssetResource(craftReview, resourceType)) return null;
+  return `${resourceType} request failed (${errorText || "unknown network error"}): ${url}`;
+}
+
 export async function collectCraftVisualEvidence(page, transferredAssets) {
   const issues = [];
   const axeResults = await new AxeBuilder({ page })

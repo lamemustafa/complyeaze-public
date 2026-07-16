@@ -5,6 +5,7 @@ import "../styles/craft-review.css";
 interface Props { route: AxalCraftReviewRoute; }
 const { route } = Astro.props;
 const queue: Array<[string, string, "ready" | "waiting" | "selected" | "overdue"]> = [["SYN-108", "Ready", "ready"], ["SYN-214", "Waiting", "waiting"], ["SYN-305", "Review", "selected"], ["SYN-411", "Overdue", "overdue"]];
+const evidenceCounts = { available: 2, requested: 1, total: 3 } as const;
 ---
 
 <article class="ax-craft" data-craft-review="synthetic">
@@ -20,12 +21,12 @@ const queue: Array<[string, string, "ready" | "waiting" | "selected" | "overdue"
     </aside>
     <section class="ax-matter">
       <p>Evidence note · SYN-305</p><h2>Decide what the source supports</h2>
-      <p>The synthetic variance note has one available source, one requested item, and no published conclusion.</p>
+      <p>The synthetic variance note has {evidenceCounts.available} available sources, {evidenceCounts.requested} requested item, and no published conclusion.</p>
       <dl><div><dt>Prepared by</dt><dd>A. Reviewer</dd></div><div><dt>Due</dt><dd>Today, 16:00</dd></div><div><dt>Scope</dt><dd>Fictional evidence review</dd></div></dl>
       <aside class={patternClassName("HumanReviewCheckpoint", { variant: "inverse", state: "review-needed" })}><span>Human checkpoint</span><strong>CA review needed</strong><p>Evidence can support a decision; it cannot make one here.</p></aside>
     </section>
     <aside class={patternClassName("EvidencePanel", { variant: "rail", state: "available" })} aria-label="Synthetic evidence">
-      <p>Evidence rail</p><h2>2 of 3 sources</h2>
+      <p>Evidence rail</p><h2>{evidenceCounts.available} of {evidenceCounts.total} sources</h2>
       <ul><li><strong>Books extract</strong><span>Available · synthetic CSV</span></li><li><strong>Portal receipt</strong><span>Available · SYN-RCPT-18</span></li><li><strong>Client note</strong><span>Requested · not received</span></li></ul>
     </aside>
   </section>

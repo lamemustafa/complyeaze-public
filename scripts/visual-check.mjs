@@ -3,7 +3,12 @@ import { createServer } from "node:http";
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { collectCraftVisualEvidence } from "./public-checks/craft-visual-evidence.mjs";
+import {
+  collectCraftVisualEvidence,
+  craftAssetRequestFailureIssue,
+  craftAssetResponseIssue,
+  isCraftAssetResource,
+} from "./public-checks/craft-visual-evidence.mjs";
 import { chromium } from "playwright";
 import { createVisualHitTestEvidence } from "./public-checks/visual-geometry.mjs";
 import { publicRouteRegistry } from "./public-route-registry.mjs";
@@ -75,16 +80,40 @@ try {
       });
       const page = await context.newPage();
       const transferredAssets = [];
+      const transferredAssetIssues = [];
       const transferredAssetTasks = [];
       page.on("response", (response) => {
-        if (!pageDef.craftReview || !response.ok()) return;
         const type = response.request().resourceType();
-        if (!['script', 'stylesheet', 'font'].includes(type)) return;
+        if (!isCraftAssetResource(pageDef.craftReview, type)) return;
+        const issue = craftAssetResponseIssue({
+          craftReview: pageDef.craftReview,
+          ok: response.ok(),
+          resourceType: type,
+          status: response.status(),
+          url: response.url(),
+        });
+        if (issue) {
+          transferredAssetIssues.push(issue);
+          return;
+        }
         transferredAssetTasks.push(
           response.body()
             .then((body) => transferredAssets.push({ type, url: response.url(), body }))
-            .catch(() => undefined),
+            .catch(() =>
+              transferredAssetIssues.push(
+                `${type} response body could not be inspected: ${response.url()}`,
+              ),
+            ),
         );
+      });
+      page.on("requestfailed", (request) => {
+        const issue = craftAssetRequestFailureIssue({
+          craftReview: pageDef.craftReview,
+          errorText: request.failure()?.errorText,
+          resourceType: request.resourceType(),
+          url: request.url(),
+        });
+        if (issue) transferredAssetIssues.push(issue);
       });
       await page.exposeFunction("createVisualHitTestEvidence", createVisualHitTestEvidence);
       await page.goto(`${baseUrls.get(pageDef.serverKey)}${pageDef.urlPath}`, { waitUntil: "networkidle" });
@@ -97,7 +126,7 @@ try {
       );
       if (pageDef.craftReview) {
         const craftEvidence = await collectCraftVisualEvidence(page, transferredAssets);
-        metrics.issues.push(...craftEvidence.issues);
+        metrics.issues.push(...transferredAssetIssues, ...craftEvidence.issues);
         delete craftEvidence.issues;
         Object.assign(metrics, craftEvidence);
       }
