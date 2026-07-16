@@ -1,4 +1,5 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 
 const forbiddenFiles = [
@@ -51,6 +52,12 @@ const activeFiles = [
   "scripts/public-checks/required-files.mjs",
 ];
 
+const allowedActiveSourceReferences = [
+  "apps/axal/src/styles/sanchika.css",
+  "apps/complyeaze/src/styles/sanchika.css",
+  "apps/pack/src/styles/sanchika.css",
+];
+
 export function assertLegacyCleanup(root) {
   const findings = [];
   for (const filePath of forbiddenFiles) {
@@ -59,10 +66,10 @@ export function assertLegacyCleanup(root) {
   for (const filePath of activeFiles) {
     const absolutePath = path.join(root, filePath);
     if (!existsSync(absolutePath)) continue;
-    const text = readFileSync(absolutePath, "utf8");
+    const text = maskAllowedActiveSourceReferences(readFileSync(absolutePath, "utf8"));
     for (const pattern of [
       ["legacy build script", /build:legacy|scripts\/build-site\.mjs/],
-      ["legacy source path", /(?:^|["'`])src\/(?:render-|site-data|.*-data|.*\.css)/m],
+      ["legacy source path", /(?:^|["'`/])src\/(?:render-|site-data|.*-data|.*\.css)/m],
       ["root dist route manifest", /dist\/route-manifest\.json/],
       ["stale legacy-renderer claim", /legacy (?:build|dist|renderer|rollback)/i],
     ]) {
@@ -77,4 +84,41 @@ export function assertLegacyCleanup(root) {
     findings.push("scripts/visual-check.mjs: legacy visual discovery remains");
   }
   if (findings.length > 0) throw new Error(`Legacy-cleanup findings:\n${findings.join("\n")}`);
+}
+
+function maskAllowedActiveSourceReferences(text) {
+  return allowedActiveSourceReferences.reduce(
+    (masked, sourcePath) => masked.replaceAll(sourcePath, ""),
+    text,
+  );
+}
+
+export function assertLegacyCleanupFixtures() {
+  const root = mkdtempSync(path.join(tmpdir(), "legacy-cleanup-"));
+  try {
+    for (const filePath of activeFiles) {
+      const absolutePath = path.join(root, filePath);
+      mkdirSync(path.dirname(absolutePath), { recursive: true });
+      writeFileSync(absolutePath, "", "utf8");
+    }
+    writeFileSync(
+      path.join(root, "scripts/visual-check.mjs"),
+      "const expectedVisualTargetCount = 22;",
+      "utf8",
+    );
+    writeFileSync(
+      path.join(root, "scripts/public-checks/required-files.mjs"),
+      'const path = "apps/complyeaze/src/render-site.mjs";\n',
+      "utf8",
+    );
+    try {
+      assertLegacyCleanup(root);
+    } catch (error) {
+      if (String(error).includes("legacy source path")) return;
+      throw error;
+    }
+    throw new Error("Prefixed legacy source-path fixture was not detected");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 }

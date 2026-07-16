@@ -6,7 +6,8 @@ const contentDataFiles = [
   "packages/public-content/src/complyeaze.migration-ledger.ts",
   "packages/public-content/src/complyeaze.routes.json",
   "packages/public-content/src/axal.routes.json",
-  "packages/public-content/src/pack.routes.json"
+  "packages/public-content/src/pack.routes.json",
+  "packages/public-content/src/sanchika.adoption.json"
 ];
 
 const publicClaimScanFiles = [
@@ -25,6 +26,7 @@ const publicClaimScanFiles = [
   "apps/complyeaze/src/components/PublicPolicyPage.astro",
   "apps/complyeaze/src/components/PublicProductsPage.astro",
   "apps/complyeaze/src/components/PublicResourcePage.astro",
+  "apps/complyeaze/src/components/PublicSanchikaAdoptionPage.astro",
   "apps/complyeaze/src/layouts/PublicPageLayout.astro",
   "apps/complyeaze/src/pages/[...slug].astro",
   "apps/complyeaze/src/pages/index.astro",
@@ -116,6 +118,20 @@ export function assertCanonicalManifestClaimFixture() {
     assertNoRiskyClaimsOutsidePolicy(root, ledgerFindings);
     if (!ledgerFindings.some((finding) => finding.startsWith(`${ledgerPath}:`))) {
       throw new Error("Canonical migration ledger risky-claim fixture was not detected");
+    }
+    for (const sanchikaPath of [
+      "apps/complyeaze/src/components/PublicSanchikaAdoptionPage.astro",
+      "packages/public-content/src/sanchika.adoption.json",
+    ]) {
+      const absoluteSanchikaPath = path.join(root, sanchikaPath);
+      mkdirSync(path.dirname(absoluteSanchikaPath), { recursive: true });
+      writeFileSync(absoluteSanchikaPath, 'const claim = "production ready";\n', "utf8");
+      const sanchikaFindings = [];
+      assertNoRiskyClaimsOutsidePolicy(root, sanchikaFindings);
+      if (!sanchikaFindings.some((finding) => finding.startsWith(`${sanchikaPath}:`))) {
+        throw new Error(`${sanchikaPath} risky-claim fixture was not detected`);
+      }
+      writeFileSync(absoluteSanchikaPath, "", "utf8");
     }
   } finally {
     rmSync(root, { recursive: true, force: true });

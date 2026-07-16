@@ -28,7 +28,10 @@ import {
 } from "./public-checks/gateway-pages.mjs";
 import { assertHostedRoutesPolicy } from "./public-checks/hosted-routes.mjs";
 import { assertLegalGovernance } from "./public-checks/legal-governance.mjs";
-import { assertLegacyCleanup } from "./public-checks/legacy-cleanup.mjs";
+import {
+  assertLegacyCleanup,
+  assertLegacyCleanupFixtures
+} from "./public-checks/legacy-cleanup.mjs";
 import { assertPackManifest } from "./public-checks/pack-manifest.mjs";
 import {
   assertMigrationLedger,
@@ -304,6 +307,7 @@ async function run() {
     await assertReleaseEvidenceSources(root);
     await assertSanchikaAdoptionSources(root);
     assertVisualGeometryFixtures();
+    assertLegacyCleanupFixtures();
     assertLegacyCleanup(root);
   }
   if (["--all", "--test", "--public"].includes(mode)) {
