@@ -82,8 +82,8 @@
           "job": "Collect filed-return evidence for a narrow GST Portal task while retaining local artifact control.",
           "proof": "Pack owns its public extension source, release evidence, privacy posture, security policy, and support facts.",
           "boundary": "Browser extension and local artifacts; no shared workspace custody or backend-upload claim.",
-          "status": "Source-build alpha",
-          "href": "https://pack.complyeaze.com/",
+          "status": "Public extension; current release evidence owned by Pack",
+          "href": "/products/pack/",
           "evidence": {
             "label": "Review Pack source",
             "href": "https://github.com/lamemustafa/pack"
@@ -96,11 +96,125 @@
           "proof": "The Tools repository owns the utility registry, browser-local runtime, release facts, and source evidence.",
           "boundary": "Browser-local drafts; no account, upload, tenant state, or saved operational context.",
           "status": "Public utilities",
-          "href": "https://tools.complyeaze.com/",
+          "href": "/products/tools/",
           "evidence": {
             "label": "Review Tools source",
             "href": "https://github.com/lamemustafa/complyeaze-tools"
           }
+        }
+      ]
+    },
+    {
+      "slug": "products/pack",
+      "urlPath": "/products/pack/",
+      "title": "Pack | ComplyEaze",
+      "description": "Understand Pack's local-first GST evidence role, custody boundary, and product-owned public proof before continuing.",
+      "eyebrow": "Pack product gateway",
+      "heading": "Keep the evidence job local. Verify the product proof.",
+      "kind": "gateway",
+      "product": "Pack",
+      "summary": "Pack is the ComplyEaze-family browser-extension lane for authorised users collecting selected GST Portal evidence into their own browser environment. Pack owns the current capability, release, permission, privacy, and security evidence.",
+      "robots": "noindex, nofollow",
+      "signalTerms": ["Pack", "GST evidence", "local-first", "source"],
+      "primaryAction": {
+        "label": "Open Pack public site",
+        "href": "https://pack.complyeaze.com/"
+      },
+      "secondaryAction": {
+        "label": "Compare the product family",
+        "href": "/products/"
+      },
+      "sections": [
+        {
+          "title": "Use Pack for a focused evidence task",
+          "body": "Pack's public source describes a local-first browser-extension workflow for authorised users collecting selected filed-return artifacts from their own GST Portal session. Exact supported artifacts and release state must be checked on Pack-owned surfaces."
+        },
+        {
+          "title": "Where Pack data stays",
+          "body": "Pack owns its browser runtime and local extension storage. This ComplyEaze gateway does not receive portal credentials, session material, taxpayer artifacts, downloaded files, or extension state."
+        },
+        {
+          "title": "What to check before using Pack",
+          "body": "Use the product-owned links below to verify Pack's current source, release, privacy, and security posture."
+        }
+      ],
+      "evidenceLinks": [
+        {
+          "label": "Review Pack source",
+          "description": "Inspect the public extension source and its documented privacy invariants.",
+          "href": "https://github.com/lamemustafa/pack"
+        },
+        {
+          "label": "Review Pack releases",
+          "description": "Check the current public release artifacts and notes before relying on distribution or capability claims.",
+          "href": "https://github.com/lamemustafa/pack/releases"
+        },
+        {
+          "label": "Review Pack privacy",
+          "description": "Read the product-owned privacy boundary for the public Pack surface.",
+          "href": "https://pack.complyeaze.com/privacy"
+        },
+        {
+          "label": "Review Pack security",
+          "description": "Read the public vulnerability-reporting and security-maintenance policy.",
+          "href": "https://github.com/lamemustafa/pack/blob/master/SECURITY.md"
+        }
+      ]
+    },
+    {
+      "slug": "products/tools",
+      "urlPath": "/products/tools/",
+      "title": "Tools | ComplyEaze",
+      "description": "Understand the browser-local Tools job, custody boundary, and product-owned public proof before choosing a utility.",
+      "eyebrow": "Tools product gateway",
+      "heading": "Create a local draft. Keep professional review in the loop.",
+      "kind": "gateway",
+      "product": "Tools",
+      "summary": "Tools is the ComplyEaze-family lane for browser-local first-pass compliance drafts created from pasted rows or plain text. The Tools host owns each utility's runtime, input, output, accessibility, privacy, and release evidence.",
+      "robots": "noindex, nofollow",
+      "signalTerms": ["Tools", "browser-local", "draft", "evidence"],
+      "primaryAction": {
+        "label": "Open Tools public site",
+        "href": "https://tools.complyeaze.com/"
+      },
+      "secondaryAction": {
+        "label": "Compare the product family",
+        "href": "/products/"
+      },
+      "sections": [
+        {
+          "title": "Use Tools for a first-pass draft",
+          "body": "Tools provides focused browser-local utilities for reconciliation triage, payables review, follow-up drafts, evidence memos, and review copies. Each output remains a draft for human and professional review."
+        },
+        {
+          "title": "Where your inputs and drafts stay",
+          "body": "The public Tools source says files are processed in the browser without an account or file upload. Product hosting and security controls may still process ordinary browser and security signals."
+        },
+        {
+          "title": "What to check before using Tools",
+          "body": "Use the product-owned links below to verify the current Tools source, privacy, security, and release gates."
+        }
+      ],
+      "evidenceLinks": [
+        {
+          "label": "Review Tools source",
+          "description": "Inspect the utility registry, browser-local implementation, and public limitations.",
+          "href": "https://github.com/lamemustafa/complyeaze-tools"
+        },
+        {
+          "label": "Review Tools privacy",
+          "description": "Read the product-owned privacy boundary and hosting qualification.",
+          "href": "https://tools.complyeaze.com/privacy/"
+        },
+        {
+          "label": "Review Tools release gates",
+          "description": "Inspect the checks required before a utility or public claim is released.",
+          "href": "https://github.com/lamemustafa/complyeaze-tools/blob/main/docs/release-gates.md"
+        },
+        {
+          "label": "Review Tools security",
+          "description": "Read the public vulnerability-reporting and security-maintenance policy.",
+          "href": "https://github.com/lamemustafa/complyeaze-tools/blob/main/SECURITY.md"
         }
       ]
     },
@@ -437,7 +551,7 @@
         },
         {
           "title": "Migration posture",
-          "body": "The customer-core homepage, product-family index, about, contact, trust, docs, migration, and policy/status/release routes now have canonical Astro previews alongside the legacy rollback build. Pack and Tools gateways plus Axal marketing remain legacy-seeded. Route-level cleanup rows stay blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
+          "body": "The customer-core homepage, product-family index, Pack and Tools gateways, about, contact, trust, docs, migration, and policy/status/release routes now have canonical Astro previews alongside the legacy rollback build. Axal marketing remains legacy-seeded. Route-level cleanup rows stay blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
         },
         {
           "title": "Hosting posture",
@@ -466,6 +580,10 @@
         "excluded": "Production cutover claims"
       },
       "sections": [
+        {
+          "title": "2026-07-16 - Product gateway route port",
+          "body": "Moved /products/pack/ and /products/tools/ into the canonical typed manifest and ComplyEaze Astro preview, routed product-family choices through customer-safe gateways, and kept product capability and release evidence on product-owned public surfaces."
+        },
         {
           "title": "2026-07-15 - Customer-core route port",
           "body": "Moved / and /products/ into the canonical typed manifest and ComplyEaze Astro preview, replaced repository-boundary customer copy with job, custody, and evidence guidance, and kept the legacy renderer as the rollback baseline."

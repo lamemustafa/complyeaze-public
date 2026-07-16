@@ -51,16 +51,31 @@
   text-wrap: balance;
 }
 
-.gateway-evidence ol {
+.gateway-evidence ul {
   display: grid;
   gap: 0.85rem;
   margin: 0;
-  padding-left: 1.4rem;
+  padding: 0;
+  list-style: none;
 }
 
 .gateway-evidence li {
-  color: var(--muted-ink);
+  display: grid;
+  gap: 0.3rem;
   line-height: 1.6;
   max-width: 78ch;
-  padding-left: 0.25rem;
+}
+
+.gateway-evidence a {
+  align-items: center;
+  display: inline-flex;
+  font-weight: 800;
+  min-height: 44px;
+  width: fit-content;
+}
+
+.gateway-evidence p {
+  color: var(--muted-ink);
+  margin: 0;
+  overflow-wrap: anywhere;
 }

@@ -15,6 +15,11 @@ const primaryNavigation = [
   { href: "/about/", label: "About" },
   { href: "/trust/", label: "Trust" },
 ];
+
+function isCurrentPrimaryNavItem(href: string, urlPath: string): boolean {
+  if (href === "/products/") return urlPath.startsWith(href);
+  return urlPath === href;
+}
 ---
 
 <!doctype html>
@@ -43,6 +48,7 @@ const primaryNavigation = [
       .brand { min-height: 44px; display: inline-flex; align-items: center; color: #0f172a; font-weight: 750; text-decoration: none; }
       header nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
       header nav a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; color: #0f172a; }
+      header nav a[aria-current="page"] { font-weight: 750; text-decoration-thickness: 0.16em; }
       main { padding-block: clamp(3rem, 8vw, 7rem); }
       footer { border-block-end: 0; }
       footer p { margin: 0; }
@@ -65,7 +71,7 @@ const primaryNavigation = [
         <a class="brand" href={`${origin}/`}>ComplyEaze</a>
         <nav aria-label="Primary navigation">
           {primaryNavigation.map((item) => (
-            <a href={item.href} aria-current={route.urlPath === item.href ? "page" : undefined}>
+            <a href={item.href} aria-current={isCurrentPrimaryNavItem(item.href, route.urlPath) ? "page" : undefined}>
               {item.label}
             </a>
           ))}

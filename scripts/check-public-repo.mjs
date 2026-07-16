@@ -23,7 +23,10 @@ import { assertContributorIntake } from "./public-checks/contributor-intake.mjs"
 import { assertDependencyPolicy } from "./public-checks/dependency-policy.mjs";
 import { assertWorkspaceDependencySurfaceFixtures } from "./public-checks/dependency-workspace.mjs";
 import { assertDeployWorkflow } from "./public-checks/deploy-workflow.mjs";
-import { assertGatewayPages } from "./public-checks/gateway-pages.mjs";
+import {
+  assertGatewayPageSources,
+  assertGatewayPages
+} from "./public-checks/gateway-pages.mjs";
 import { assertHostedRoutesPolicy } from "./public-checks/hosted-routes.mjs";
 import { assertLegalGovernance } from "./public-checks/legal-governance.mjs";
 import {
@@ -278,6 +281,7 @@ async function run() {
     assertAstroCoreRouteFixtures();
     await assertMigrationLedgerFixtures(root);
     assertCanonicalManifestClaimFixture();
+    assertGatewayPageSources(root);
     assertPolicyPageSources(root);
     assertRootResourcePageSources();
     assertAstroBuildOutputFixtures();
