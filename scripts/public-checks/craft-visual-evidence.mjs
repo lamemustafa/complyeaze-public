@@ -1,7 +1,7 @@
 import { gzipSync } from "node:zlib";
 import AxeBuilder from "@axe-core/playwright";
 
-const craftAssetResourceTypes = new Set(["script", "stylesheet", "font"]);
+const craftAssetResourceTypes = new Set(["script", "stylesheet", "font", "image"]);
 
 export function isCraftAssetResource(craftReview, resourceType) {
   return craftReview && craftAssetResourceTypes.has(resourceType);

@@ -7,7 +7,7 @@ assert.equal(typeof craftEvidence.craftAssetRequestFailureIssue, "function");
 assert.equal(typeof craftEvidence.calculateCraftCssGzipBytes, "function");
 assert.equal(typeof craftEvidence.calculateAuthoredJavaScriptBytes, "function");
 assert.equal(craftEvidence.isCraftAssetResource(true, "font"), true);
-assert.equal(craftEvidence.isCraftAssetResource(true, "image"), false);
+assert.equal(craftEvidence.isCraftAssetResource(true, "image"), true);
 assert.equal(craftEvidence.isCraftAssetResource(false, "font"), false);
 
 assert.equal(
@@ -29,8 +29,27 @@ assert.equal(
   }),
   "stylesheet request failed (net::ERR_CONNECTION_REFUSED): http://127.0.0.1/styles/review.css",
 );
+assert.equal(
+  craftEvidence.craftAssetResponseIssue({
+    craftReview: true,
+    ok: false,
+    resourceType: "image",
+    status: 404,
+    url: "http://127.0.0.1/images/review-bg.webp",
+  }),
+  "image request returned 404: http://127.0.0.1/images/review-bg.webp",
+);
+assert.equal(
+  craftEvidence.craftAssetRequestFailureIssue({
+    craftReview: true,
+    errorText: "net::ERR_FAILED",
+    resourceType: "image",
+    url: "http://127.0.0.1/images/review-bg.webp",
+  }),
+  "image request failed (net::ERR_FAILED): http://127.0.0.1/images/review-bg.webp",
+);
 
-for (const resourceType of ["document", "image"]) {
+for (const resourceType of ["document", "media"]) {
   assert.equal(
     craftEvidence.craftAssetResponseIssue({
       craftReview: true,
