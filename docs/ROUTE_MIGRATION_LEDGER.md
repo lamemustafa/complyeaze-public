@@ -38,7 +38,7 @@ own hosts, not `/pack/*` or `/tools/*` paths on `complyeaze.com`.
 - Status: apps/axal typed preview parity for six same-host routes; hosting and cutover pending; cleanup blocked
 - Cleanup rule: Do not move login, signup, reset, callback, or workspace flows into this repository.
 - Parent cleanup: blocked; requires separate private-app cleanup PR after hosted and path-routing evidence
-- Evidence: Typed preview parity is implemented in apps/axal while legacy rollback content remains under complyeaze.com/products/axal/*; hosted route, path-routing, final visual artifact, and private-app cleanup PR evidence are pending.
+- Evidence: Typed preview parity is implemented in apps/axal from the canonical manifest; hosted route, path-routing, and private-app cleanup PR evidence are pending.
 - Rollback: Preserve private-app path routing until Axal-hosted marketing routes and crawler metadata pass hosted route checks; restore private-app routing if cutover fails.
 
 | Source host | Source route | Destination host | Destination route | Cleanup | Evidence | Redirect | Cleanup PR | Rollback |

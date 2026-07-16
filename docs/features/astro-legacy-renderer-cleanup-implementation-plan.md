@@ -6,6 +6,8 @@
 
 **Base:** `origin/main` at `039b994ff3a72d2913c2ab072d8511ffb65599e6`
 
+**Status:** Implementation complete and locally verified; PR lifecycle pending.
+
 ## Objective
 
 Complete P1 by making the three typed app manifests and their Astro outputs the

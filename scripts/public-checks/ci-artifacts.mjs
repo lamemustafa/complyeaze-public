@@ -12,7 +12,12 @@ const routeManifestPath = "packages/public-content/src/complyeaze.routes.json";
 const requiredArtifacts = [
   {
     name: "public-site-build",
-    paths: ["dist", "apps/complyeaze/dist", "apps/axal/dist", "apps/pack/dist"],
+    paths: [
+      "apps/complyeaze/dist",
+      "apps/axal/dist",
+      "apps/pack/dist",
+      "test-results/public-build",
+    ],
     retentionDays: 7,
   },
   {
@@ -165,7 +170,6 @@ function assertCanonicalArtifactReferenceFixture() {
     ]) {
       writeFixture(root, filePath, referencedArtifacts);
     }
-    writeFixture(root, "src/policy-data.mjs", "export const policyPages = [];\n");
     writeFixture(
       root,
       "packages/public-content/src/complyeaze.routes.json",
@@ -337,10 +341,10 @@ function artifactFixtureWorkflow({
   retentionLines = ["          retention-days: 7"],
   pathLines = [
     "          path: |",
-    "            dist",
     "            apps/complyeaze/dist",
     "            apps/axal/dist",
     "            apps/pack/dist",
+    "            test-results/public-build",
   ],
 } = {}) {
   return [

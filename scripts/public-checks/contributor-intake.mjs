@@ -25,8 +25,8 @@ const requiredCodeownersTerms = [
   "/scripts/ @lamemustafa",
   "/package.json @lamemustafa",
   "/pnpm-lock.yaml @lamemustafa",
-  "/src/*-data.mjs @lamemustafa",
-  "/src/render-*.mjs @lamemustafa"
+  "/apps/ @lamemustafa",
+  "/packages/ @lamemustafa"
 ];
 
 const requiredIssueConfigTerms = [

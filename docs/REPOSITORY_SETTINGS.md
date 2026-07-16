@@ -93,7 +93,8 @@ The deploy job is disabled unless all of these are true:
 - The `github-pages` environment has been reviewed for the intended deployment
   approval policy.
 
-When enabled, the workflow runs `pnpm verify`, uploads only `dist`, and deploys
+When enabled, the workflow runs `pnpm verify`, uploads only
+`apps/complyeaze/dist`, and deploys
 with the GitHub Pages token permissions `contents: read`, `pages: write`, and
 `id-token: write`. It must not use deployment secrets, private app variables,
 Prisma, Redis, BullMQ, portal automation, document storage, custom-domain

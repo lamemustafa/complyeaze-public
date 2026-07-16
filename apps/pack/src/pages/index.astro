@@ -1,5 +1,10 @@
 ---
-const product = "Pack";
+import rawManifest from "../../../../packages/public-content/src/pack.routes.json";
+import { definePackRouteManifest } from "../../../../packages/public-content/src/pack-route-schema.ts";
+
+const manifest = definePackRouteManifest(rawManifest);
+const route = manifest.routes[0];
+const canonical = new URL(route.urlPath, manifest.origin);
 ---
 
 <!doctype html>
@@ -7,13 +12,18 @@ const product = "Pack";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="robots" content="noindex, nofollow" />
-    <title>{product} Astro workspace foundation</title>
+    <meta name="description" content={route.description} />
+    <meta name="robots" content={route.robots} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={route.title} />
+    <meta property="og:description" content={route.description} />
+    <meta property="og:url" content={canonical} />
+    <title>{route.title}</title>
   </head>
   <body>
     <main>
-      <h1>{product} Astro workspace foundation</h1>
-      <p>This foundation does not serve customer routes until route parity is proven.</p>
+      <h1>{route.heading}</h1>
+      <p>{route.summary}</p>
     </main>
   </body>
 </html>

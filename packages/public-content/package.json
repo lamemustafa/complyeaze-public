@@ -7,7 +7,8 @@
     ".": "./src/schema.ts",
     "./axal-routes": "./src/axal.routes.json",
     "./complyeaze-migration-ledger": "./src/complyeaze.migration-ledger.ts",
-    "./complyeaze-routes": "./src/complyeaze.routes.json"
+    "./complyeaze-routes": "./src/complyeaze.routes.json",
+    "./pack-routes": "./src/pack.routes.json"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

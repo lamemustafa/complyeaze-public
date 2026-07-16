@@ -47,14 +47,17 @@ Each release should record:
 
 - Commit SHA.
 - Build command and artifact path.
-- CI artifact `public-site-build`, containing the generated `dist` build output
-  plus each `apps/*/dist` Astro build retained for 7 days.
+- CI artifact `public-site-build`, containing all three `apps/*/dist` Astro
+  builds plus `test-results/public-build` aggregate release evidence, retained
+  for 7 days.
 - CI artifact `public-visual-evidence`, containing rendered screenshots and
   visual summaries with reduced-motion state, focus target, overflow, link,
   touch-target, image, blank-section, clipping, and overlap evidence retained
   for 7 days.
-- Route manifest generated at `dist/route-manifest.json`, matched to
-  `src/site-data.mjs`, rendered HTML files, canonical URLs, and `sitemap.xml`.
+- Aggregate release evidence generated at
+  `test-results/public-build/route-manifest.json`, matched to the three typed
+  route manifests and their actual Astro HTML outputs. This evidence file is
+  not a deployable route.
 - Desktop and mobile screenshots.
 - Accessibility and link-check results.
 - Metadata, robots, sitemap, canonical, and redirect results.
@@ -83,9 +86,17 @@ Each release should record:
 - Hosted route evidence should write `test-results/hosted-routes/summary.json`
   and `test-results/hosted-routes/summary.md` for review.
 - The Pages workflow must run `pnpm verify` before deploying and may upload only
-  the generated `dist` artifact.
+  `apps/complyeaze/dist`. Axal and Pack hosting remain separate, unconfigured
+  concerns.
 - No production database, Redis, worker, portal, credential, or document storage
   dependency is allowed by default.
 - If containerized, deployments should use immutable image digests.
 - Secrets must stay in the deployment platform and never appear in source,
   examples, logs, or screenshots.
+
+## Astro Cutover Rollback
+
+If the manifest-only cutover regresses an unhosted public build, revert the
+cutover commit to the last pre-cutover `main` revision and inspect the retained
+seven-day `public-site-build` and `public-visual-evidence` artifacts. Do not
+enable Pages, change DNS, or remove private-app routes as part of that rollback.

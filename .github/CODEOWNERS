@@ -24,7 +24,5 @@
 /pnpm-lock.yaml @lamemustafa
 
 # Public route data and rendering.
-/src/*-data.mjs @lamemustafa
-/src/site-data.mjs @lamemustafa
-/src/render-*.mjs @lamemustafa
-/src/*.css @lamemustafa
+/apps/ @lamemustafa
+/packages/ @lamemustafa

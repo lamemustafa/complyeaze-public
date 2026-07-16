@@ -5,18 +5,30 @@ import path from "node:path";
 const contentDataFiles = [
   "packages/public-content/src/complyeaze.migration-ledger.ts",
   "packages/public-content/src/complyeaze.routes.json",
-  "src/site-data.mjs",
-  "src/gateway-data.mjs",
-  "src/root-resource-data.mjs",
-  "src/product-data.mjs",
-  "src/axal-data.mjs",
-  "src/axal-more-data.mjs",
-  "src/migration-data.mjs",
-  "src/policy-data.mjs"
+  "packages/public-content/src/axal.routes.json",
+  "packages/public-content/src/pack.routes.json"
 ];
 
 const publicClaimScanFiles = [
   ...contentDataFiles,
+  "apps/axal/src/components/AxalDetailPage.astro",
+  "apps/axal/src/components/AxalHomePage.astro",
+  "apps/axal/src/components/SyntheticWorkbench.astro",
+  "apps/axal/src/layouts/AxalPageLayout.astro",
+  "apps/axal/src/pages/[slug].astro",
+  "apps/axal/src/pages/index.astro",
+  "apps/complyeaze/src/components/PublicEvidencePage.astro",
+  "apps/complyeaze/src/components/PublicGatewayPage.astro",
+  "apps/complyeaze/src/components/PublicHomePage.astro",
+  "apps/complyeaze/src/components/PublicMigrationLedger.astro",
+  "apps/complyeaze/src/components/PublicMigrationPage.astro",
+  "apps/complyeaze/src/components/PublicPolicyPage.astro",
+  "apps/complyeaze/src/components/PublicProductsPage.astro",
+  "apps/complyeaze/src/components/PublicResourcePage.astro",
+  "apps/complyeaze/src/layouts/PublicPageLayout.astro",
+  "apps/complyeaze/src/pages/[...slug].astro",
+  "apps/complyeaze/src/pages/index.astro",
+  "apps/pack/src/pages/index.astro",
   "AGENTS.md",
   "README.md",
   "PRODUCT.md",

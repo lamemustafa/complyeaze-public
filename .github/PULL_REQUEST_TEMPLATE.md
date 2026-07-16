@@ -59,7 +59,7 @@ content included in this PR. If none, write `None`.
 - [ ] Route-level migration ledger rows updated in `packages/public-content/src/complyeaze.migration-ledger.ts`.
 - [ ] `docs/ROUTE_MIGRATION_LEDGER.md` mirrors the changed source host, source route, destination host, and destination route.
 - [ ] Rendered `/migration/` evidence reviewed when route ledger rows changed.
-- [ ] Destination route exists in `dist/route-manifest.json` when parent-route cleanup is proposed.
+- [ ] Destination route exists in `test-results/public-build/route-manifest.json` when parent-route cleanup is proposed.
 - [ ] `scripts/check-hosted-routes.mjs --base-url <url>` evidence attached when hosted routes changed.
 - [ ] Redirect behavior and rollback evidence attached when parent-route cleanup is proposed.
 - [ ] Rollback owner or revert path listed when parent-route cleanup is proposed.

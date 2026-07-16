@@ -5,7 +5,7 @@ import process from "node:process";
 
 const root = process.cwd();
 const resultsDir = path.join(root, "test-results", "hosted-routes");
-const manifestPath = path.join(root, "dist", "route-manifest.json");
+const manifestPath = path.join(root, "test-results", "public-build", "route-manifest.json");
 
 const baseUrlArg = readOption("--base-url");
 const allowLocalhost = process.argv.includes("--allow-localhost");
@@ -19,10 +19,13 @@ const baseUrl = normalizedBaseUrl(baseUrlArg);
 assertSafeBaseUrl(baseUrl, allowLocalhost);
 
 const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
-const routes = Array.isArray(manifest.routes) ? manifest.routes : [];
+const routes = Array.isArray(manifest.routes)
+  ? manifest.routes.filter((route) => route.app === "complyeaze")
+  : [];
+const manifestOrigin = routes[0]?.origin ?? "https://complyeaze.com";
 
 if (routes.length === 0) {
-  fail("dist/route-manifest.json has no routes. Run pnpm build first.");
+  fail("Local release evidence has no ComplyEaze routes. Run pnpm build first.");
 }
 
 const checks = [];
@@ -57,7 +60,6 @@ async function main() {
 
   await checkRobots();
   await checkSitemap();
-  await checkRouteManifest();
   writeEvidence();
 
   const failed = checks.filter((check) => !check.ok);
@@ -77,7 +79,7 @@ async function checkRobots() {
   const findings = robots.error ? [robots.error] : [];
   if (!robots.error) {
     assertIncludes(robots.text, "User-agent: *", "robots user-agent", findings);
-    assertIncludes(robots.text, `${manifest.origin}/sitemap.xml`, "sitemap location", findings);
+    assertIncludes(robots.text, `${manifestOrigin}/sitemap.xml`, "sitemap location", findings);
   }
   checks.push({
     kind: "resource",
@@ -103,55 +105,6 @@ async function checkSitemap() {
     status: sitemap.status,
     redirected: sitemap.redirected,
     ok: sitemap.status === 200 && findings.length === 0,
-    findings
-  });
-}
-
-async function checkRouteManifest() {
-  const hosted = await fetchText("/route-manifest.json");
-  const findings = hosted.error ? [hosted.error] : [];
-  let hostedManifest;
-  if (!hosted.error) {
-    try {
-      hostedManifest = JSON.parse(hosted.text);
-    } catch {
-      findings.push("invalid hosted JSON");
-    }
-  }
-
-  if (hostedManifest) {
-    if (hostedManifest.schemaVersion !== manifest.schemaVersion) {
-      findings.push("schemaVersion mismatch");
-    }
-    if (hostedManifest.origin !== manifest.origin) {
-      findings.push("origin mismatch");
-    }
-    if (hostedManifest.pageCount !== manifest.pageCount) {
-      findings.push("pageCount mismatch");
-    }
-
-    const hostedRoutes = Array.isArray(hostedManifest.routes) ? hostedManifest.routes : [];
-    const hostedByPath = new Map(hostedRoutes.map((route) => [route.urlPath, route]));
-    for (const route of routes) {
-      const hostedRoute = hostedByPath.get(route.urlPath);
-      if (!hostedRoute) {
-        findings.push(`${route.urlPath} missing from hosted manifest`);
-        continue;
-      }
-      for (const field of ["outputPath", "canonical", "title", "description"]) {
-        if (hostedRoute[field] !== route[field]) {
-          findings.push(`${route.urlPath} ${field} mismatch`);
-        }
-      }
-    }
-  }
-
-  checks.push({
-    kind: "resource",
-    path: "/route-manifest.json",
-    status: hosted.status,
-    redirected: hosted.redirected,
-    ok: hosted.status === 200 && findings.length === 0,
     findings
   });
 }
@@ -232,11 +185,11 @@ function writeEvidence() {
     schemaVersion: 1,
     generatedAt: new Date().toISOString(),
     host: safeHostLabel(baseUrl),
-    manifestOrigin: manifest.origin,
+    manifestOrigin,
     evidenceScope: "hosted destination routes only",
     redirectEvidence: "not checked by this script",
     productionCutoverEvidence:
-      baseUrl.origin === manifest.origin
+      baseUrl.origin === manifestOrigin
         ? "base URL matches manifest origin"
         : "preview host only; production custom-domain cutover is not proven",
     routeCount: routes.length,
