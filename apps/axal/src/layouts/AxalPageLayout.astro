@@ -5,9 +5,10 @@ interface Props {
   currentPath: string;
   description: string;
   title: string;
+  reviewOnly?: boolean;
 }
 
-const { currentPath, description, title } = Astro.props;
+const { currentPath, description, title, reviewOnly = false } = Astro.props;
 const canonical = new URL(currentPath, Astro.site ?? "https://axal.complyeaze.com");
 const navigation = [
   { href: "/", label: "Overview" },
@@ -51,7 +52,7 @@ const navigation = [
           </a>
         ))}
       </nav>
-      <a class="header-action" href="https://axal.complyeaze.com/signup">Start with Axal</a>
+      {!reviewOnly && <a class="header-action" href="https://axal.complyeaze.com/signup">Start with Axal</a>}
     </header>
     <main id="main-content"><slot /></main>
     <footer>
@@ -67,7 +68,7 @@ const navigation = [
         <a href="https://complyeaze.com/privacy/">Privacy</a>
         <a href="https://complyeaze.com/terms/">Terms</a>
         <a href="https://complyeaze.com/contact/">Contact</a>
-        <a href="https://axal.complyeaze.com/login">Log in</a>
+        {!reviewOnly && <a href="https://axal.complyeaze.com/login">Log in</a>}
       </nav>
     </footer>
   </body>

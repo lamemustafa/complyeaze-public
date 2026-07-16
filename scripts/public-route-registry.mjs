@@ -20,6 +20,7 @@ export const publicRouteRegistry = manifests.flatMap((manifest) =>
     origin: manifest.origin,
     outputPath: routeOutputPath(route.urlPath),
     profile: route.kind === "pack-foundation" ? "foundation" : "site",
+    reviewEvidence: "reviewEvidence" in route ? route.reviewEvidence : undefined,
     robots: route.robots,
     signalTerms: route.signalTerms,
     slug: route.slug,

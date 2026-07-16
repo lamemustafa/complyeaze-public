@@ -45,7 +45,12 @@ export function calculateAuthoredJavaScriptBytes(
   return transferredBytes + inlineBytes;
 }
 
-export async function collectCraftVisualEvidence(page, transferredAssets) {
+export async function collectCraftVisualEvidence(
+  page,
+  transferredAssets,
+  expectedMeasurements,
+  viewportName,
+) {
   const issues = [];
   const axeResults = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
@@ -84,11 +89,29 @@ export async function collectCraftVisualEvidence(page, transferredAssets) {
   const cls = await page.evaluate(() =>
     (window.__craftLayoutShifts ?? []).reduce((total, value) => total + value, 0),
   );
+  const roundedCls = Number(cls.toFixed(4));
   if (authoredJavaScriptBytes !== 0) issues.push(`authored JavaScript is ${authoredJavaScriptBytes} bytes`);
   if (cssGzipBytes > 61440) issues.push(`CSS is ${cssGzipBytes} gzip bytes, above 61440`);
   if (criticalFonts > 2) issues.push(`${criticalFonts} critical fonts, above 2`);
   if (remoteFonts.length > 0) issues.push(`${remoteFonts.length} remote font requests`);
   if (cls > 0.05) issues.push(`CLS ${cls.toFixed(4)} exceeds 0.05`);
+  if (!expectedMeasurements) {
+    issues.push("shipped craft measurements are missing");
+  } else {
+    if (authoredJavaScriptBytes !== expectedMeasurements.authoredJavaScriptBytes) {
+      issues.push(`shipped JavaScript measurement is stale (${expectedMeasurements.authoredJavaScriptBytes} expected, ${authoredJavaScriptBytes} measured)`);
+    }
+    if (cssGzipBytes !== expectedMeasurements.cssGzipBytes) {
+      issues.push(`shipped CSS measurement is stale (${expectedMeasurements.cssGzipBytes} expected, ${cssGzipBytes} measured)`);
+    }
+    if (criticalFonts !== expectedMeasurements.criticalFonts) {
+      issues.push(`shipped font measurement is stale (${expectedMeasurements.criticalFonts} expected, ${criticalFonts} measured)`);
+    }
+    const expectedCls = expectedMeasurements.cls[viewportName];
+    if (roundedCls !== expectedCls) {
+      issues.push(`shipped ${viewportName} CLS measurement is stale (${expectedCls} expected, ${roundedCls} measured)`);
+    }
+  }
 
   const readability = await page.evaluate(() => {
     const collapsedText = [...document.querySelectorAll("main h1, main h2, main h3, main p, main strong")]
@@ -145,16 +168,40 @@ export async function collectCraftVisualEvidence(page, transferredAssets) {
 
   await page.emulateMedia({ forcedColors: "active" });
   await page.locator("main a").first().focus();
-  const forcedColors = await page.evaluate(() => ({
-    active: window.matchMedia("(forced-colors: active)").matches,
-    focusable: document.querySelectorAll("a, summary, button").length,
-    visibleFocus: (() => {
-      const style = window.getComputedStyle(document.activeElement);
-      return style.outlineStyle !== "none" && Number.parseFloat(style.outlineWidth) >= 2;
-    })(),
-  }));
+  const forcedColors = await page.evaluate(() => {
+    const statusElements = [...document.querySelectorAll("[data-review-status]")];
+    const visibleStatusElements = statusElements.filter((element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.width >= 1 && rect.height >= 1 && (element.textContent?.trim().length ?? 0) > 0;
+    });
+    const boundedStatusElements = visibleStatusElements.filter((element) => {
+      const style = window.getComputedStyle(element);
+      return [style.borderTopWidth, style.borderRightWidth, style.borderBottomWidth, style.borderLeftWidth]
+        .every((width) => Number.parseFloat(width) >= 1);
+    });
+    return {
+      active: window.matchMedia("(forced-colors: active)").matches,
+      boundedStatusCount: boundedStatusElements.length,
+      focusable: document.querySelectorAll("a, summary, button").length,
+      statusCount: statusElements.length,
+      visibleFocus: (() => {
+        const style = window.getComputedStyle(document.activeElement);
+        return style.outlineStyle !== "none" && Number.parseFloat(style.outlineWidth) >= 2;
+      })(),
+      visibleStatusCount: visibleStatusElements.length,
+    };
+  });
   if (!forcedColors.active || forcedColors.focusable === 0 || !forcedColors.visibleFocus) {
     issues.push("forced-colors focus evidence is incomplete");
+  }
+  if (
+    forcedColors.statusCount === 0
+    || forcedColors.visibleStatusCount !== forcedColors.statusCount
+    || forcedColors.boundedStatusCount !== forcedColors.statusCount
+  ) {
+    issues.push(
+      `forced-colors status evidence is incomplete (${forcedColors.boundedStatusCount}/${forcedColors.visibleStatusCount}/${forcedColors.statusCount} bounded/visible/total)`,
+    );
   }
   await page.emulateMedia({ forcedColors: "none" });
 
@@ -162,10 +209,11 @@ export async function collectCraftVisualEvidence(page, transferredAssets) {
     authoredJavaScriptBytes,
     axeBlockingViolations: blockingAxe.length,
     axeViolations: axeResults.violations.length,
-    cls: Number(cls.toFixed(4)),
+    cls: roundedCls,
     criticalFonts,
     cssGzipBytes,
     forcedColors: forcedColors.active,
+    forcedColorsStatusCount: forcedColors.statusCount,
     nativeDisclosure,
     nativeDisclosureRestored,
     readability,

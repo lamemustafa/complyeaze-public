@@ -7,4 +7,4 @@ const manifest = defineAxalRouteManifest(rawManifest);
 const route = manifest.routes.find((entry) => entry.kind === "axal-craft-review");
 if (!route) throw new Error("Axal craft review route is missing");
 ---
-<AxalPageLayout currentPath={route.urlPath} description={route.description} title={route.title}><AxalCraftReviewPage {route} /></AxalPageLayout>
+<AxalPageLayout currentPath={route.urlPath} description={route.description} title={route.title} reviewOnly><AxalCraftReviewPage {route} /></AxalPageLayout>

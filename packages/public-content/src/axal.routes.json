@@ -549,6 +549,7 @@
         "compositions": ["ReviewDeskPreview", "WorkQueueRow", "EvidencePanel", "HumanReviewCheckpoint", "AuditTrailPreview", "PricingBlock", "FAQAccordion"],
         "contentMode": "synthetic",
         "interactionMode": "zero-js",
+        "measurements": { "authoredJavaScriptBytes": 0, "cls": { "desktop": 0.0001, "tablet": 0, "mobile": 0 }, "criticalFonts": 2, "cssGzipBytes": 13415, "maxCls": 0.0001, "viewports": ["desktop", "tablet", "mobile"] },
         "reviewStatus": "C3 human craft approval pending",
         "sanchikaRelease": "v0.1.1"
       }

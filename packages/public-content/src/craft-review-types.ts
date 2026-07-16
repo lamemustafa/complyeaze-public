@@ -11,6 +11,14 @@ export interface CraftReviewEvidence {
   compositions: string[];
   contentMode: "synthetic";
   interactionMode: "zero-js";
+  measurements: {
+    authoredJavaScriptBytes: 0;
+    cls: { desktop: number; mobile: number; tablet: number };
+    criticalFonts: number;
+    cssGzipBytes: number;
+    maxCls: number;
+    viewports: ["desktop", "tablet", "mobile"];
+  };
   reviewStatus: "C3 human craft approval pending";
   sanchikaRelease: "v0.1.1";
 }

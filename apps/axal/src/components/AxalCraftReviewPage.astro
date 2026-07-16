@@ -10,7 +10,7 @@ const evidenceCounts = { available: 2, requested: 1, total: 3 } as const;
 
 <article class="ax-craft" data-craft-review="synthetic">
   <header class="ax-intro">
-    <p>Synthetic Axal craft review · noindex</p><h1>{route.heading}</h1><p>{route.summary}</p>
+    <p>Synthetic Axal craft review · noindex · review-only</p><h1>{route.heading}</h1><p>{route.summary}</p>
     <a href="#review-desk">Enter the synthetic review desk</a>
   </header>
 
@@ -23,11 +23,20 @@ const evidenceCounts = { available: 2, requested: 1, total: 3 } as const;
       <p>Evidence note · SYN-305</p><h2>Decide what the source supports</h2>
       <p>The synthetic variance note has {evidenceCounts.available} available sources, {evidenceCounts.requested} requested item, and no published conclusion.</p>
       <dl><div><dt>Prepared by</dt><dd>A. Reviewer</dd></div><div><dt>Due</dt><dd>Today, 16:00</dd></div><div><dt>Scope</dt><dd>Fictional evidence review</dd></div></dl>
-      <aside class={patternClassName("HumanReviewCheckpoint", { variant: "inverse", state: "review-needed" })}><span>Human checkpoint</span><strong>CA review needed</strong><p>Evidence can support a decision; it cannot make one here.</p></aside>
+      <aside class={patternClassName("HumanReviewCheckpoint", { variant: "inverse", state: "review-needed" })} data-review-status><span>Human checkpoint</span><strong>CA review needed</strong><p>Evidence can support a decision; it cannot make one here.</p></aside>
     </section>
-    <aside class={patternClassName("EvidencePanel", { variant: "rail", state: "available" })} aria-label="Synthetic evidence">
+    <aside class={patternClassName("EvidencePanel", { variant: "rail", state: "available" })} aria-label="Synthetic evidence" data-review-status>
       <p>Evidence rail</p><h2>{evidenceCounts.available} of {evidenceCounts.total} sources</h2>
       <ul><li><strong>Books extract</strong><span>Available · synthetic CSV</span></li><li><strong>Portal receipt</strong><span>Available · SYN-RCPT-18</span></li><li><strong>Client note</strong><span>Requested · not received</span></li></ul>
+    </aside>
+  </section>
+
+  <section class="ax-state-key" aria-label="Review state vocabulary">
+    <aside class={patternClassName("EvidencePanel", { variant: "rail", state: "disputed" })} data-review-status>
+      <p>Evidence states</p><h2>Available · Requested · Missing · Disputed</h2><p>Each source keeps an explicit review state.</p>
+    </aside>
+    <aside class={patternClassName("HumanReviewCheckpoint", { variant: "inverse", state: "held" })} data-review-status>
+      <p>Checkpoint states</p><h2>Preparation · Review needed · Held · Approved · Returned · Blocked</h2><p>A human records every decision transition.</p>
     </aside>
   </section>
 
@@ -42,5 +51,5 @@ const evidenceCounts = { available: 2, requested: 1, total: 3 } as const;
     <details><summary>Does this preview make a compliance decision?</summary><p>No. It demonstrates how source and human judgement can stay visibly connected.</p></details>
   </section>
 
-  <aside class="ax-receipt" aria-labelledby="ax-receipt"><div><p>Reviewer evidence</p><h2 id="ax-receipt">Axal composition receipt</h2></div><dl><div><dt>Release</dt><dd>{route.reviewEvidence.sanchikaRelease}</dd></div><div><dt>Mode</dt><dd>Synthetic · zero JS</dd></div><div><dt>Checks</dt><dd>axe · keyboard · reduced motion · forced colors</dd></div><div><dt>Status</dt><dd>{route.reviewEvidence.reviewStatus}</dd></div></dl></aside>
+  <aside class="ax-receipt" aria-labelledby="ax-receipt" data-review-status><div><p>Reviewer evidence</p><h2 id="ax-receipt">Axal composition receipt</h2></div><dl><div><dt>Surface</dt><dd>Axal · /review/craft/</dd></div><div><dt>Release</dt><dd>{route.reviewEvidence.sanchikaRelease}</dd></div><div><dt>Compositions</dt><dd>{route.reviewEvidence.compositions.join(" · ")}</dd></div><div><dt>Mode</dt><dd>Synthetic · zero JS</dd></div><div><dt>Posture</dt><dd>noindex, nofollow · review-only · excluded from sitemap</dd></div><div><dt>Checks</dt><dd>axe · keyboard · reduced motion · forced colors</dd></div><div><dt>JavaScript</dt><dd data-craft-measurement="javascript">{route.reviewEvidence.measurements.authoredJavaScriptBytes} B</dd></div><div><dt>CSS</dt><dd data-craft-measurement="css">{route.reviewEvidence.measurements.cssGzipBytes} B gzip</dd></div><div><dt>Fonts</dt><dd data-craft-measurement="fonts">{route.reviewEvidence.measurements.criticalFonts}</dd></div><div><dt>Max CLS</dt><dd data-craft-measurement="cls">{route.reviewEvidence.measurements.maxCls} · desktop, tablet, mobile</dd></div><div><dt>Status</dt><dd>{route.reviewEvidence.reviewStatus}</dd></div></dl></aside>
 </article>

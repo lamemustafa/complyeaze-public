@@ -48,8 +48,58 @@ export async function assertCraftReviewSources(root) {
     const componentPath = path.join(root, `apps/${app}/src/components/${app === "complyeaze" ? "Public" : app === "axal" ? "Axal" : "Pack"}CraftReviewPage.astro`);
     const component = readFileSync(componentPath, "utf8");
     if (!component.includes("patternClassName")) throw new Error(`${app}: craft page must use the public Sanchika API`);
+    if (component.includes("Pending browser evidence")) {
+      throw new Error(`${app}: craft page must ship measured evidence, not placeholders`);
+    }
+    for (const marker of [
+      "noindex · review-only",
+      'data-review-status',
+      'data-craft-measurement="javascript"',
+      'data-craft-measurement="css"',
+      'data-craft-measurement="fonts"',
+      'data-craft-measurement="cls"',
+      "/review/craft/",
+    ]) {
+      if (!component.includes(marker)) throw new Error(`${app}: craft page is missing visible review evidence ${marker}`);
+    }
     for (const composition of requiredCompositions[app]) {
       if (!component.includes(`"${composition}"`)) throw new Error(`${app}: craft page is missing ${composition}`);
+    }
+  }
+
+  const packComponent = readFileSync(
+    path.join(root, "apps/pack/src/components/PackCraftReviewPage.astro"),
+    "utf8",
+  );
+  for (const marker of ["<dt>Verification</dt>", "https://github.com/lamemustafa/pack/issues"]) {
+    if (!packComponent.includes(marker)) throw new Error(`pack: craft page is missing ${marker}`);
+  }
+
+  const axalComponent = readFileSync(
+    path.join(root, "apps/axal/src/components/AxalCraftReviewPage.astro"),
+    "utf8",
+  );
+  for (const state of ["Missing", "Disputed", "Held", "Approved", "Returned", "Blocked"]) {
+    if (!axalComponent.includes(state)) throw new Error(`axal: craft page is missing review state ${state}`);
+  }
+  const axalReviewPage = readFileSync(
+    path.join(root, "apps/axal/src/pages/review/craft.astro"),
+    "utf8",
+  );
+  if (!axalReviewPage.includes("reviewOnly")) {
+    throw new Error("axal: craft route must request the review-safe layout mode");
+  }
+  const axalLayout = readFileSync(
+    path.join(root, "apps/axal/src/layouts/AxalPageLayout.astro"),
+    "utf8",
+  );
+  if (!axalLayout.includes("reviewOnly") || !axalLayout.includes("{!reviewOnly &&")) {
+    throw new Error("axal: layout must suppress live account actions in review-only mode");
+  }
+  for (const app of Object.keys(requiredCompositions)) {
+    const css = readFileSync(path.join(root, `apps/${app}/src/styles/craft-review.css`), "utf8");
+    if (!css.includes("[data-review-status]")) {
+      throw new Error(`${app}: forced-colors review-status boundary is missing`);
     }
   }
 
@@ -63,6 +113,14 @@ export async function assertCraftReviewSources(root) {
     accessibility: ["axe", "keyboard", "reduced-motion", "forced-colors"],
     budgets: { authoredJavaScriptBytes: 0, criticalFonts: 2, cssGzipBytes: 61440, maxCls: 0.05 },
     compositions: ["PublicHero"], contentMode: "synthetic", interactionMode: "zero-js",
+    measurements: {
+      authoredJavaScriptBytes: 0,
+      cls: { desktop: 0.001, tablet: 0, mobile: 0 },
+      criticalFonts: 0,
+      cssGzipBytes: 12000,
+      maxCls: 0.001,
+      viewports: ["desktop", "tablet", "mobile"],
+    },
     reviewStatus: "C3 human craft approval pending", sanchikaRelease: "v0.1.1",
   };
   for (const mutate of [
@@ -70,6 +128,8 @@ export async function assertCraftReviewSources(root) {
     (value) => { value.contentMode = "live"; },
     (value) => { value.reviewStatus = "C3 approved"; },
     (value) => { value.budgets.authoredJavaScriptBytes = 1; },
+    (value) => { value.measurements.cssGzipBytes = 70000; },
+    (value) => { value.measurements.cls.mobile = 0.002; },
   ]) {
     const invalid = structuredClone(fixture);
     mutate(invalid);
@@ -82,6 +142,18 @@ export function assertCraftReviewBuild(root) {
   for (const route of publicRouteRegistry.filter(({ discoverability }) => discoverability === "review-only")) {
     const html = readFileSync(path.join(root, appDistPath(route)), "utf8");
     for (const marker of ['data-craft-review="synthetic"', "C3 human craft approval pending", 'name="robots" content="noindex, nofollow"']) {
+      if (!html.includes(marker)) findings.push(`${route.app}: built craft route is missing ${marker}`);
+    }
+    if (html.includes("Pending browser evidence")) {
+      findings.push(`${route.app}: built craft route contains placeholder measurements`);
+    }
+    const measurements = route.reviewEvidence?.measurements;
+    for (const marker of measurements ? [
+      `data-craft-measurement="javascript">${measurements.authoredJavaScriptBytes} B</dd>`,
+      `data-craft-measurement="css">${measurements.cssGzipBytes} B gzip</dd>`,
+      `data-craft-measurement="fonts">${measurements.criticalFonts}</dd>`,
+      `data-craft-measurement="cls">${measurements.maxCls} · desktop, tablet, mobile</dd>`,
+    ] : []) {
       if (!html.includes(marker)) findings.push(`${route.app}: built craft route is missing ${marker}`);
     }
     if (/<script(?:\s|>)/i.test(html)) findings.push(`${route.app}: built craft route contains authored client JavaScript`);

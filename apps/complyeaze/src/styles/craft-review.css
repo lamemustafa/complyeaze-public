@@ -15,4 +15,4 @@
 @media (forced-colors: active) { .ce-craft .sk-pattern-public-hero, .ce-receipt { background: Canvas; color: CanvasText; border: 2px solid CanvasText; }.ce-source { color: LinkText; } }
 .ce-route-list strong { color: #65cfc4; }
 .ce-craft .sk-pattern-human-review-checkpoint span { color: #76ddd2; }
-@media (forced-colors: active) { .ce-route-list strong, .ce-craft .sk-pattern-human-review-checkpoint span { color: CanvasText; } }
+@media (forced-colors: active) { .ce-route-list strong, .ce-craft .sk-pattern-human-review-checkpoint span { color: CanvasText; }.ce-craft [data-review-status] { border: 2px solid CanvasText !important; } }

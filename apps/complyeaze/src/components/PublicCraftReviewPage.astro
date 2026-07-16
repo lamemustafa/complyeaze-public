@@ -15,7 +15,7 @@ const products = [
 <article class="ce-craft" data-craft-review="synthetic">
   <header class={patternClassName("PublicHero", { variant: "editorial", state: "with-proof-artifact" })}>
     <div class="ce-hero-copy">
-      <p class="ce-register">Synthetic craft review · noindex</p>
+      <p class="ce-register">Synthetic craft review · noindex · review-only</p>
       <h1>{route.heading}</h1>
       <p>{route.summary}</p>
       <a class="ce-source" href="/sanchika/">Inspect the adopted design contract</a>
@@ -35,7 +35,7 @@ const products = [
     <p class="ce-colophon"><strong>Sanchika</strong> supplies the shared contract; it is not a peer product destination.</p>
   </section>
 
-  <dl class={patternClassName("ProofStrip", { variant: "inline", state: "verified" })} aria-label="Public proof">
+  <dl class={patternClassName("ProofStrip", { variant: "inline", state: "verified" })} aria-label="Public proof" data-review-status>
     <div><dt>Route ownership</dt><dd>3 app manifests<small>Typed registry · review routes excluded from sitemap</small></dd></div>
     <div><dt>Interaction</dt><dd>Zero authored JS<small>Native links and document order</small></dd></div>
     <div><dt>Limitation</dt><dd>Review artifact<small>Not a live product or C3 approval</small></dd></div>
@@ -45,21 +45,28 @@ const products = [
     <div class="ce-section-head"><p>Human review excerpt</p><h2 id="decision-desk">Keep source, question, and decision together</h2></div>
     <div class={patternClassName("ReviewDeskPreview", { variant: "three-pane", state: "ca-review-needed" })}>
       <section><span>Review queue</span><h3>Northwind Books · evidence note</h3><p>Synthetic case · reviewer attention required</p></section>
-      <aside class={patternClassName("EvidencePanel", { variant: "rail", state: "available" })} aria-label="Available evidence">
+      <aside class={patternClassName("EvidencePanel", { variant: "rail", state: "available" })} aria-label="Available evidence" data-review-status>
         <span>Evidence available</span><strong>Source receipt CE-SYN-042</strong><p>Prepared 16 Jul · fictional record</p>
       </aside>
-      <aside class={patternClassName("HumanReviewCheckpoint", { variant: "inline", state: "review-needed" })} aria-label="Human review checkpoint">
+      <aside class={patternClassName("HumanReviewCheckpoint", { variant: "inline", state: "review-needed" })} aria-label="Human review checkpoint" data-review-status>
         <span>Checkpoint</span><strong>Professional review needed</strong><p>No conclusion is published from this preview.</p>
       </aside>
     </div>
   </section>
 
-  <aside class="ce-receipt" aria-labelledby="review-receipt">
+  <aside class="ce-receipt" aria-labelledby="review-receipt" data-review-status>
     <div><p>Reviewer evidence</p><h2 id="review-receipt">Composition receipt</h2></div>
     <dl>
+      <div><dt>Surface</dt><dd>ComplyEaze · /review/craft/</dd></div>
       <div><dt>Release</dt><dd>{route.reviewEvidence.sanchikaRelease}</dd></div>
+      <div><dt>Compositions</dt><dd>{route.reviewEvidence.compositions.join(" · ")}</dd></div>
       <div><dt>Mode</dt><dd>Synthetic · zero JS</dd></div>
+      <div><dt>Posture</dt><dd>noindex, nofollow · review-only · excluded from sitemap</dd></div>
       <div><dt>Checks</dt><dd>axe · keyboard · reduced motion · forced colors</dd></div>
+      <div><dt>JavaScript</dt><dd data-craft-measurement="javascript">{route.reviewEvidence.measurements.authoredJavaScriptBytes} B</dd></div>
+      <div><dt>CSS</dt><dd data-craft-measurement="css">{route.reviewEvidence.measurements.cssGzipBytes} B gzip</dd></div>
+      <div><dt>Fonts</dt><dd data-craft-measurement="fonts">{route.reviewEvidence.measurements.criticalFonts}</dd></div>
+      <div><dt>Max CLS</dt><dd data-craft-measurement="cls">{route.reviewEvidence.measurements.maxCls} · desktop, tablet, mobile</dd></div>
       <div><dt>Status</dt><dd>{route.reviewEvidence.reviewStatus}</dd></div>
     </dl>
   </aside>
