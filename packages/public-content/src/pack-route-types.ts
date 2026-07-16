@@ -1,3 +1,5 @@
+import type { CraftReviewRouteBase } from "./craft-review-types.ts";
+
 export interface PackFoundationRoute {
   description: string;
   heading: string;
@@ -13,6 +15,12 @@ export interface PackFoundationRoute {
 export interface PackRouteManifest {
   app: "pack";
   origin: "https://pack.complyeaze.com";
-  routes: [PackFoundationRoute];
+  routes: [PackFoundationRoute, PackCraftReviewRoute];
   schemaVersion: 1;
 }
+
+export interface PackCraftReviewRoute extends CraftReviewRouteBase {
+  kind: "pack-craft-review";
+}
+
+export type PackRoute = PackCraftReviewRoute | PackFoundationRoute;

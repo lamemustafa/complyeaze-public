@@ -116,9 +116,12 @@ function assertRootManifest(manifest, findings) {
   }
   assertNoRuntimeDependencies(rootManifestPath, manifest, findings);
 
-  const rootDevDependencies = Object.keys(manifest.devDependencies ?? {});
-  if (rootDevDependencies.join(",") !== "playwright") {
-    findings.push(`${rootManifestPath}: root devDependencies must contain only playwright`);
+  const rootDevDependencies = Object.keys(manifest.devDependencies ?? {}).sort();
+  if (rootDevDependencies.join(",") !== "@axe-core/playwright,playwright") {
+    findings.push(`${rootManifestPath}: root devDependencies must contain only axe and playwright`);
+  }
+  if (manifest.devDependencies?.["@axe-core/playwright"] !== "4.12.1") {
+    findings.push(`${rootManifestPath}: @axe-core/playwright must stay pinned to 4.12.1 until reviewed`);
   }
   if (manifest.devDependencies?.playwright !== "1.61.1") {
     findings.push(`${rootManifestPath}: playwright must stay pinned to 1.61.1 until reviewed`);

@@ -9,7 +9,8 @@ backed.
 - Static-site build, rendering, visual review, metadata, link checks, CI, and
   local public-repo governance scripts.
 - Development dependencies that support static generation and the public gate:
-  Astro 7.0.9, `@astrojs/check` 0.9.9, TypeScript 6.0.3, and Playwright 1.61.1.
+  Astro 7.0.9, `@astrojs/check` 0.9.9, TypeScript 6.0.3, Playwright 1.61.1,
+  and `@axe-core/playwright` 4.12.1.
 - The three reviewed Sanchika `v0.1.1` GitHub release tarballs are allowed as
   app development dependencies for static CSS and package-contract builds.
   Their URLs, checksums, pnpm overrides, and rollback set must match the public

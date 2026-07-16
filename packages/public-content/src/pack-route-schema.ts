@@ -1,4 +1,5 @@
-import type { PackFoundationRoute, PackRouteManifest } from "./pack-route-types.ts";
+import type { PackCraftReviewRoute, PackFoundationRoute, PackRouteManifest } from "./pack-route-types.ts";
+import { defineCraftReviewEvidence } from "./craft-review-schema.ts";
 
 export function definePackRouteManifest(value: unknown): PackRouteManifest {
   assertRecord(value, "Pack route manifest");
@@ -9,9 +10,41 @@ export function definePackRouteManifest(value: unknown): PackRouteManifest {
     value.origin === "https://pack.complyeaze.com",
     "Pack route manifest must use the canonical Pack origin",
   );
-  assert(Array.isArray(value.routes) && value.routes.length === 1, "Pack manifest needs one route");
+  assert(Array.isArray(value.routes) && value.routes.length === 2, "Pack manifest needs two routes");
   validateFoundation(value.routes[0], "routes[0]");
+  validateCraft(value.routes[1], "routes[1]");
   return value as unknown as PackRouteManifest;
+}
+
+function validateCraft(value: unknown, label: string): asserts value is PackCraftReviewRoute {
+  assertRecord(value, label);
+  assertExactKeys(
+    value,
+    [
+      "description",
+      "discoverability",
+      "heading",
+      "kind",
+      "reviewEvidence",
+      "robots",
+      "signalTerms",
+      "slug",
+      "summary",
+      "title",
+      "urlPath",
+    ],
+    label,
+  );
+  for (const field of ["description", "heading", "summary", "title"] as const) assertString(value[field], `${label}.${field}`);
+  assert(value.kind === "pack-craft-review", `${label}.kind must be pack-craft-review`);
+  assert(value.slug === "review/craft", `${label}.slug must be review/craft`);
+  assert(value.urlPath === "/review/craft/", `${label}.urlPath must be /review/craft/`);
+  assert(value.robots === "noindex, nofollow", `${label}.robots must stay noindex, nofollow`);
+  assert(value.discoverability === "review-only", `${label}.discoverability must be review-only`);
+  assert(Array.isArray(value.signalTerms) && value.signalTerms.length > 0, `${label}.signalTerms must not be empty`);
+  value.signalTerms.forEach((term, index) => assertString(term, `${label}.signalTerms[${index}]`));
+  defineCraftReviewEvidence(value.reviewEvidence, ["LocalArtifactFlow", "CustodyBoundary", "PermissionExplainer", "SourceProvenanceStrip", "ReleaseStatusBanner"]);
+  assertNoReadinessClaims(value, label);
 }
 
 function validateFoundation(value: unknown, label: string): asserts value is PackFoundationRoute {
@@ -40,6 +73,10 @@ function validateFoundation(value: unknown, label: string): asserts value is Pac
   assert(value.robots === "noindex, nofollow", `${label}.robots must stay noindex, nofollow`);
   assert(Array.isArray(value.signalTerms) && value.signalTerms.length > 0, `${label}.signalTerms must not be empty`);
   value.signalTerms.forEach((term, index) => assertString(term, `${label}.signalTerms[${index}]`));
+  assertNoReadinessClaims(value, label);
+}
+
+function assertNoReadinessClaims(value: unknown, label: string) {
   const text = JSON.stringify(value);
   assert(
     !/chrome web store|production ready|release ready|install now|available now/i.test(text),

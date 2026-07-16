@@ -39,7 +39,7 @@ Store visual evidence as CI artifacts or reviewed local artifacts:
   controls, and first-viewport overlap heuristics.
 - Summary markdown with reduced-motion state, focus target, failures, and
   dispositions.
-- A 22-page, three-viewport matrix: 66 unique route/viewport cells.
+- A 25-page, three-viewport matrix: 75 unique route/viewport cells.
 - GitHub Actions artifact `public-site-build` for the three Astro build outputs
   and aggregate release evidence that generated the screenshots.
 - GitHub Actions artifact `public-visual-evidence` for PR and `master` runs.

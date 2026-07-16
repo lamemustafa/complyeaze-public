@@ -1,0 +1,29 @@
+---
+import { patternClassName } from "@sanchika/patterns";
+import type { PackCraftReviewRoute } from "../../../../packages/public-content/src/pack-route-types.ts";
+import "../styles/craft-review.css";
+interface Props { route: PackCraftReviewRoute; }
+const { route } = Astro.props;
+---
+
+<article class="pk-craft" data-craft-review="synthetic">
+  <header class="pk-intro"><div><p>Pack field note · synthetic craft review · noindex · review-only</p><h1>{route.heading}</h1></div><div><p>{route.summary}</p><a href="#custody-flow">Trace the fictional artifact</a></div></header>
+
+  <section id="custody-flow" class={patternClassName("LocalArtifactFlow", { variant: "three-stage", state: "ready" })} aria-labelledby="flow-title">
+    <div class="pk-section-head"><p>Ordered local flow</p><h2 id="flow-title">One artifact. Three visible custody moments.</h2></div>
+    <ol><li><span>01</span><h3>Select</h3><p>Authorised user chooses a fictional filed-return artifact.</p><small>Source · synthetic portal listing</small></li><li><span>02</span><h3>Collect</h3><p>The browser-local task prepares a local artifact receipt.</p><small>Receipt · PK-SYN-024</small></li><li><span>03</span><h3>Review</h3><p>The user checks the local file and its provenance.</p><small>Destination · local device</small></li></ol>
+  </section>
+
+  <section class="pk-boundary-grid">
+    <aside class={patternClassName("CustodyBoundary", { variant: "ledger", state: "local-only" })} aria-labelledby="custody-title" data-review-status><p>Custody boundary</p><h2 id="custody-title">The artifact stays with the user</h2><dl><div><dt>Portal session</dt><dd>Not transferred</dd></div><div><dt>Selected artifact</dt><dd>Local device</dd></div><div><dt>Public metadata</dt><dd>Source and release facts only</dd></div></dl></aside>
+    <aside class={patternClassName("PermissionExplainer", { variant: "panel", state: "not-requested" })} aria-labelledby="permission-title" data-review-status><p>Permission posture</p><h2 id="permission-title">No permission request on this route</h2><p>This static review explains the intended boundary. It does not request browser access or simulate an enabled control.</p><a href="https://github.com/lamemustafa/pack">Inspect the public source</a></aside>
+  </section>
+
+  <dl class={patternClassName("SourceProvenanceStrip", { variant: "ledger", state: "current" })} aria-label="Synthetic source provenance" data-review-status><div><dt>Source</dt><dd>Fictional GST workspace</dd></div><div><dt>Observed</dt><dd>16 Jul · synthetic</dd></div><div><dt>Receipt</dt><dd>PK-SYN-024</dd></div><div><dt>Limitation</dt><dd>No live portal or taxpayer data</dd></div><div><dt>Verification</dt><dd>Source destination reviewed · synthetic</dd></div></dl>
+
+  <aside class={patternClassName("ReleaseStatusBanner", { variant: "notice", state: "alpha" })} aria-labelledby="release-title" data-review-status><p>Release posture</p><h2 id="release-title">Source-build alpha</h2><p>Review current source and release evidence before relying on capability. This route does not claim Chrome Web Store or production availability.</p></aside>
+
+  <nav class="pk-policy" aria-label="Pack evidence policies"><p>Policy shell</p><a href="https://pack.complyeaze.com/privacy">Privacy boundary</a><a href="https://github.com/lamemustafa/pack/blob/master/SECURITY.md">Security policy</a><a href="https://github.com/lamemustafa/pack/issues">Support</a><a href="https://github.com/lamemustafa/pack/releases">Release evidence</a><a href="https://github.com/lamemustafa/pack">Source</a></nav>
+
+  <aside class="pk-receipt" aria-labelledby="pk-receipt" data-review-status><div><p>Acceptance contract</p><h2 id="pk-receipt">Pack composition receipt</h2></div><dl><div><dt>Surface</dt><dd>Pack · /review/craft/</dd></div><div><dt>Release</dt><dd>{route.reviewEvidence.sanchikaRelease}</dd></div><div><dt>Compositions</dt><dd>{route.reviewEvidence.compositions.join(" · ")}</dd></div><div><dt>Mode</dt><dd>Synthetic · zero JS</dd></div><div><dt>Posture</dt><dd>noindex, nofollow · review-only · excluded from sitemap</dd></div><div><dt>Required checks</dt><dd>axe · keyboard · reduced motion · forced colors</dd></div><div><dt>JavaScript bound</dt><dd data-craft-measurement="javascript">≤ {route.reviewEvidence.measurementCeilings.authoredJavaScriptBytes} B</dd></div><div><dt>CSS bound</dt><dd data-craft-measurement="css">≤ {route.reviewEvidence.measurementCeilings.cssGzipBytes} B gzip</dd></div><div><dt>Font bound</dt><dd data-craft-measurement="fonts">≤ {route.reviewEvidence.measurementCeilings.criticalFonts}</dd></div><div><dt>CLS bound</dt><dd data-craft-measurement="cls">≤ {route.reviewEvidence.measurementCeilings.maxCls} · desktop, tablet, mobile</dd></div><div><dt>Run result</dt><dd>Not embedded · see exact-head visual artifact</dd></div><div><dt>Status</dt><dd>{route.reviewEvidence.reviewStatus}</dd></div></dl></aside>
+</article>

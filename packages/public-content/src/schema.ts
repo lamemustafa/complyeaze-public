@@ -4,6 +4,10 @@ import type {
   PublicProductsRoute,
 } from "./customer-route-types.ts";
 import type { PublicGatewayRoute } from "./gateway-route-types.ts";
+import { defineCraftReviewEvidence } from "./craft-review-schema.ts";
+import type { CraftReviewEvidence } from "./craft-review-types.ts";
+export { defineCraftReviewEvidence } from "./craft-review-schema.ts";
+export type { CraftReviewEvidence, CraftReviewRouteBase } from "./craft-review-types.ts";
 export { defineSanchikaAdoptionManifest } from "./sanchika-adoption-schema.ts";
 export type { SanchikaAdoptionManifest } from "./sanchika-adoption-types.ts";
 export { defineAxalRouteManifest } from "./axal-route-schema.ts";
@@ -47,7 +51,7 @@ export interface PublicRouteBase {
   description: string;
   eyebrow: string;
   heading: string;
-  kind: "adoption" | "evidence" | "gateway" | "home" | "migration" | "policy" | "products" | "resource";
+  kind: "adoption" | "evidence" | "gateway" | "home" | "migration" | "policy" | "products" | "public-craft-review" | "resource";
   robots: "noindex, nofollow";
   sections: PublicSection[];
   signalTerms: string[];
@@ -59,6 +63,14 @@ export interface PublicRouteBase {
 
 export interface PublicAdoptionRoute extends PublicRouteBase {
   kind: "adoption";
+}
+
+export interface PublicCraftReviewRoute extends PublicRouteBase {
+  discoverability: "review-only";
+  kind: "public-craft-review";
+  reviewEvidence: CraftReviewEvidence;
+  slug: "review/craft";
+  urlPath: "/review/craft/";
 }
 
 export interface PublicResourceRoute extends PublicRouteBase {
@@ -94,6 +106,7 @@ export type PublicRoute =
   | PublicHomeRoute
   | PublicMigrationRoute
   | PublicPolicyRoute
+  | PublicCraftReviewRoute
   | PublicProductsRoute
   | PublicResourceRoute;
 
@@ -280,9 +293,18 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
     }
     return;
   }
+  if (value.kind === "public-craft-review") {
+    assert(value.slug === "review/craft", `${label}.slug must be review/craft`);
+    assert(value.urlPath === "/review/craft/", `${label}.urlPath must be /review/craft/`);
+    assert(value.discoverability === "review-only", `${label}.discoverability must be review-only`);
+    defineCraftReviewEvidence(value.reviewEvidence, [
+      "PublicHero", "ProductRouteMap", "ProofStrip", "ReviewDeskPreview", "EvidencePanel", "HumanReviewCheckpoint",
+    ]);
+    return;
+  }
   assert(
     value.kind === "policy",
-    `${label}.kind must be adoption, evidence, gateway, home, migration, policy, products, or resource`,
+    `${label}.kind must be adoption, evidence, gateway, home, migration, policy, products, public-craft-review, or resource`,
   );
   for (const field of [
     "evidenceLinks",

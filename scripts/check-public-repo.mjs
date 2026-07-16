@@ -19,6 +19,7 @@ import {
   assertCiArtifacts
 } from "./public-checks/ci-artifacts.mjs";
 import { assertContributorIntake } from "./public-checks/contributor-intake.mjs";
+import { assertCraftReviewBuild, assertCraftReviewSources } from "./public-checks/craft-review.mjs";
 import { assertDependencyPolicy } from "./public-checks/dependency-policy.mjs";
 import { assertWorkspaceDependencySurfaceFixtures } from "./public-checks/dependency-workspace.mjs";
 import { assertDeployWorkflow } from "./public-checks/deploy-workflow.mjs";
@@ -306,6 +307,7 @@ async function run() {
     assertReviewGateFixtures(root);
     await assertReleaseEvidenceSources(root);
     await assertSanchikaAdoptionSources(root);
+    await assertCraftReviewSources(root);
     assertVisualGeometryFixtures();
     assertLegacyCleanupFixtures();
     assertLegacyCleanup(root);
@@ -336,6 +338,7 @@ async function run() {
     assertAxalPages(root);
     assertCiArtifacts(root);
     assertContributorIntake(root);
+    assertCraftReviewBuild(root);
     assertDependencyPolicy(root);
     assertSanchikaAdoptionBuild(root);
     assertDeployWorkflow(root);

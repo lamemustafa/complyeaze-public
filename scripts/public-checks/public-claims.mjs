@@ -13,12 +13,14 @@ const contentDataFiles = [
 const publicClaimScanFiles = [
   ...contentDataFiles,
   "apps/axal/src/components/AxalDetailPage.astro",
+  "apps/axal/src/components/AxalCraftReviewPage.astro",
   "apps/axal/src/components/AxalHomePage.astro",
   "apps/axal/src/components/SyntheticWorkbench.astro",
   "apps/axal/src/layouts/AxalPageLayout.astro",
   "apps/axal/src/pages/[slug].astro",
   "apps/axal/src/pages/index.astro",
   "apps/complyeaze/src/components/PublicEvidencePage.astro",
+  "apps/complyeaze/src/components/PublicCraftReviewPage.astro",
   "apps/complyeaze/src/components/PublicGatewayPage.astro",
   "apps/complyeaze/src/components/PublicHomePage.astro",
   "apps/complyeaze/src/components/PublicMigrationLedger.astro",
@@ -33,6 +35,7 @@ const publicClaimScanFiles = [
   "apps/complyeaze/src/pages/robots.txt.ts",
   "apps/complyeaze/src/pages/sitemap.xml.ts",
   "apps/pack/src/pages/index.astro",
+  "apps/pack/src/components/PackCraftReviewPage.astro",
   "AGENTS.md",
   "README.md",
   "PRODUCT.md",
@@ -132,6 +135,21 @@ export function assertCanonicalManifestClaimFixture() {
         throw new Error(`${sanchikaPath} risky-claim fixture was not detected`);
       }
       writeFileSync(absoluteSanchikaPath, "", "utf8");
+    }
+    for (const craftComponentPath of [
+      "apps/complyeaze/src/components/PublicCraftReviewPage.astro",
+      "apps/axal/src/components/AxalCraftReviewPage.astro",
+      "apps/pack/src/components/PackCraftReviewPage.astro",
+    ]) {
+      const absoluteCraftPath = path.join(root, craftComponentPath);
+      mkdirSync(path.dirname(absoluteCraftPath), { recursive: true });
+      writeFileSync(absoluteCraftPath, 'const claim = "production ready";\n', "utf8");
+      const craftFindings = [];
+      assertNoRiskyClaimsOutsidePolicy(root, craftFindings);
+      if (!craftFindings.some((finding) => finding.startsWith(`${craftComponentPath}:`))) {
+        throw new Error(`${craftComponentPath} risky-claim fixture was not detected`);
+      }
+      writeFileSync(absoluteCraftPath, "", "utf8");
     }
   } finally {
     rmSync(root, { recursive: true, force: true });
