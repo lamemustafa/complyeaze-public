@@ -22,6 +22,16 @@ export function craftAssetRequestFailureIssue({
   return `${resourceType} request failed (${errorText || "unknown network error"}): ${url}`;
 }
 
+export function calculateCraftCssGzipBytes(transferredAssets, inlineStyleTexts) {
+  const transferredBytes = transferredAssets
+    .filter(({ type }) => type === "stylesheet")
+    .reduce((total, asset) => total + gzipSync(asset.body).byteLength, 0);
+  const inlineBytes = inlineStyleTexts.length > 0
+    ? gzipSync(Buffer.from(inlineStyleTexts.join("\n"))).byteLength
+    : 0;
+  return transferredBytes + inlineBytes;
+}
+
 export async function collectCraftVisualEvidence(page, transferredAssets) {
   const issues = [];
   const axeResults = await new AxeBuilder({ page })
@@ -40,9 +50,8 @@ export async function collectCraftVisualEvidence(page, transferredAssets) {
   const authoredJavaScriptBytes = transferredAssets
     .filter(({ type }) => type === "script")
     .reduce((total, asset) => total + asset.body.byteLength, 0);
-  const cssGzipBytes = transferredAssets
-    .filter(({ type }) => type === "stylesheet")
-    .reduce((total, asset) => total + gzipSync(asset.body).byteLength, 0);
+  const inlineStyleTexts = await page.locator("style").allTextContents();
+  const cssGzipBytes = calculateCraftCssGzipBytes(transferredAssets, inlineStyleTexts);
   const criticalFonts = new Set(
     transferredAssets.filter(({ type }) => type === "font").map(({ url }) => url),
   ).size;
@@ -95,11 +104,20 @@ export async function collectCraftVisualEvidence(page, transferredAssets) {
 
   const disclosure = page.locator("details").first();
   let nativeDisclosure = "not-applicable";
+  let nativeDisclosureRestored = "not-applicable";
   if (await disclosure.count()) {
+    const initiallyOpen = await disclosure.evaluate((element) => element.open);
     await disclosure.locator("summary").focus();
     await page.keyboard.press("Enter");
-    nativeDisclosure = (await disclosure.getAttribute("open")) === "" ? "pass" : "fail";
-    if (nativeDisclosure === "fail") issues.push("native disclosure did not open from the keyboard");
+    const toggledOpen = await disclosure.evaluate((element) => element.open);
+    nativeDisclosure = toggledOpen !== initiallyOpen ? "pass" : "fail";
+    if (nativeDisclosure === "fail") issues.push("native disclosure did not toggle from the keyboard");
+    await page.keyboard.press("Enter");
+    const restoredOpen = await disclosure.evaluate((element) => element.open);
+    nativeDisclosureRestored = restoredOpen === initiallyOpen ? "pass" : "fail";
+    if (nativeDisclosureRestored === "fail") {
+      issues.push("native disclosure did not return to its initial state");
+    }
   }
 
   await page.emulateMedia({ forcedColors: "active" });
@@ -126,6 +144,7 @@ export async function collectCraftVisualEvidence(page, transferredAssets) {
     cssGzipBytes,
     forcedColors: forcedColors.active,
     nativeDisclosure,
+    nativeDisclosureRestored,
     readability,
     issues,
   };
