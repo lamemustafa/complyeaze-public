@@ -234,8 +234,10 @@ It reports only verifiable facts:
 - Sanchika `v0.1.1` and composition names used;
 - `synthetic` content and `zero-js` interaction posture;
 - noindex, nofollow, review-only discoverability, and sitemap exclusion;
-- keyboard, reduced-motion, forced-colors, and axe checks;
-- measured JavaScript, CSS, critical-font, and CLS results;
+- required keyboard, reduced-motion, forced-colors, and axe checks;
+- environment-independent JavaScript, CSS, critical-font, and CLS acceptance
+  ceilings, with exact measured results retained in the exact-head visual
+  artifact;
 - the explicit statement: `C3 human craft approval pending`.
 
 The panel must not expose build paths, machine usernames, tokens, private repo
@@ -299,8 +301,10 @@ Each built craft route must meet:
 - no missing font, stylesheet, or asset responses.
 
 Budget values are written into the shared evidence record and independently
-measured by the browser check. The visible receipt may display only measured
-results, not optimistic configured limits.
+measured by the browser check. The visible receipt presents the stricter
+acceptance ceilings as bounds and explicitly states that run results are not
+embedded. Exact measurements remain in the exact-head visual artifact so the
+static page never implies that a browser audit has already run.
 
 ### Full repository gate
 

@@ -60,6 +60,13 @@ export async function assertPackManifest(root) {
   const unsupportedField = structuredClone(rawManifest);
   unsupportedField.routes[0].installUrl = "https://example.com";
   assertRejected(definePackRouteManifest, unsupportedField, "Pack manifest accepted an unsafe field");
+  const unsupportedCraftField = structuredClone(rawManifest);
+  unsupportedCraftField.routes[1].installUrl = "https://example.com";
+  assertRejected(
+    definePackRouteManifest,
+    unsupportedCraftField,
+    "Pack craft manifest accepted an unsafe field",
+  );
 }
 
 function assertRejected(validator, value, message) {

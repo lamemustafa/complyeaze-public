@@ -53,6 +53,8 @@ export async function assertCraftReviewSources(root) {
     }
     for (const marker of [
       "noindex · review-only",
+      "Acceptance contract",
+      "Not embedded · see exact-head visual artifact",
       'data-review-status',
       'data-craft-measurement="javascript"',
       'data-craft-measurement="css"',
@@ -146,6 +148,12 @@ export function assertCraftReviewBuild(root) {
     }
     if (html.includes("Pending browser evidence")) {
       findings.push(`${route.app}: built craft route contains placeholder measurements`);
+    }
+    for (const marker of [
+      "Acceptance contract",
+      "Not embedded · see exact-head visual artifact",
+    ]) {
+      if (!html.includes(marker)) findings.push(`${route.app}: built craft route is missing ${marker}`);
     }
     const ceilings = route.reviewEvidence?.measurementCeilings;
     for (const marker of ceilings ? [

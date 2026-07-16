@@ -18,6 +18,23 @@ export function definePackRouteManifest(value: unknown): PackRouteManifest {
 
 function validateCraft(value: unknown, label: string): asserts value is PackCraftReviewRoute {
   assertRecord(value, label);
+  assertExactKeys(
+    value,
+    [
+      "description",
+      "discoverability",
+      "heading",
+      "kind",
+      "reviewEvidence",
+      "robots",
+      "signalTerms",
+      "slug",
+      "summary",
+      "title",
+      "urlPath",
+    ],
+    label,
+  );
   for (const field of ["description", "heading", "summary", "title"] as const) assertString(value[field], `${label}.${field}`);
   assert(value.kind === "pack-craft-review", `${label}.kind must be pack-craft-review`);
   assert(value.slug === "review/craft", `${label}.slug must be review/craft`);
