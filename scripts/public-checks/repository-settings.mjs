@@ -14,13 +14,13 @@ const githubSettingsScriptPath = "scripts/check-github-repository-settings.mjs";
 const requiredRepositoryTerms = [
   "GitHub repository: `lamemustafa/complyeaze-public`",
   "Visibility: public",
-  "Default branch: `main`",
+  "Default branch: `master`",
   "Homepage: `https://complyeaze.com`",
   "Issues: enabled",
   "Projects: disabled",
   "Wiki: disabled",
   "Topics: `complyeaze`, `public-site`, `compliance`, `open-source`, `trust`",
-  "Ruleset: `Protect main`",
+  "Ruleset: `Protect master`",
   "No branch deletion",
   "No non-fast-forward updates",
   "Pull request required",
@@ -38,8 +38,9 @@ const requiredRepositoryTerms = [
   "GitHub Pages is configured to use GitHub Actions",
   "`github-pages` environment has been reviewed",
   "Do not enable Projects or Wiki",
-  "Do not make `main` directly pushable",
+  "Do not make `master` directly pushable",
   "pnpm github:settings",
+  "pnpm github:settings --allow-main-transition",
   "Live Settings Audit"
 ];
 
@@ -47,7 +48,7 @@ const requiredCiTerms = [
   "name: CI",
   "pull_request:",
   "push:",
-  "- main",
+  "- master",
   "name: Public site gates",
   "permissions:",
   "contents: read",
@@ -80,8 +81,10 @@ const requiredPackageTerms = [
 
 const requiredGithubSettingsScriptTerms = [
   "lamemustafa/complyeaze-public",
-  "Protect main",
-  "refs/heads/main",
+  "--allow-main-transition",
+  "acceptedDefaultBranches",
+  "rulesetName",
+  "protectedRef",
   "allowed_merge_methods",
   "required_approving_review_count",
   "require_code_owner_review",
@@ -108,7 +111,7 @@ const requiredPagesDeployTerms = [
   "name: Pages deploy",
   "workflow_dispatch:",
   "push:",
-  "- main",
+  "- master",
   "contents: read",
   "pages: write",
   "id-token: write",

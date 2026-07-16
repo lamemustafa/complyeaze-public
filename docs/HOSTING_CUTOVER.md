@@ -12,7 +12,7 @@ redirect, and rollback evidence is recorded in this repo and reviewed.
 
 - GitHub Pages is readiness-only.
 - `.github/workflows/pages-deploy.yml` deploys only when the workflow is running
-  on `main` and `ENABLE_GITHUB_PAGES_DEPLOY` is exactly `true`.
+  on `master` and `ENABLE_GITHUB_PAGES_DEPLOY` is exactly `true`.
 - GitHub Pages must be configured to use GitHub Actions before the workflow can
   produce hosted evidence.
 - No `CNAME` or custom-domain cutover should be added without a separate
@@ -58,7 +58,7 @@ node scripts/check-hosted-routes.mjs --base-url http://127.0.0.1:8000 --allow-lo
 
 1. Build the public artifact with `pnpm build`.
 2. Run `pnpm verify` and `git diff --check`.
-3. Deploy only from reviewed `main` or an explicitly reviewed preview.
+3. Deploy only from reviewed `master` or an explicitly reviewed preview.
 4. Run `pnpm hosted:check -- --base-url <hosted URL>` against the hosted URL.
 5. Record the evidence in the PR, release note, or migration ledger update.
 6. Review redirect behavior from the private app to the public destination.

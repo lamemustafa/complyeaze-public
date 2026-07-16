@@ -1,24 +1,24 @@
 # Repository Settings
 
 Status: active
-Last verified: 2026-07-08
+Last verified: 2026-07-16
 
 ## Repository
 
 - GitHub repository: `lamemustafa/complyeaze-public`
 - Visibility: public
-- Default branch: `main`
+- Default branch: `master`
 - Homepage: `https://complyeaze.com`
 - Issues: enabled
 - Projects: disabled
 - Wiki: disabled
 - Topics: `complyeaze`, `public-site`, `compliance`, `open-source`, `trust`
 
-## Main Branch Ruleset
+## Master Branch Ruleset
 
-Ruleset: `Protect main`
+Ruleset: `Protect master`
 
-Required for `refs/heads/main`:
+Required for `refs/heads/master`:
 
 - No branch deletion.
 - No non-fast-forward updates.
@@ -54,7 +54,7 @@ pattern used by Sanchika.
   state quickly. Do not describe it as current-head Codex review enforcement
   unless a guaranteed reviewer integration is installed and required.
 - Do not enable Projects or Wiki unless the public contribution model changes.
-- Do not make `main` directly pushable after the initial bootstrap commit.
+- Do not make `master` directly pushable after the initial bootstrap commit.
 
 ## Live Settings Audit
 
@@ -64,10 +64,21 @@ Command:
 pnpm github:settings
 ```
 
+During the one-time default-branch migration PR, before the live cutover, run:
+
+```bash
+pnpm github:settings --allow-main-transition
+```
+
+The transition flag accepts either `main` or `master` as the live default but
+still requires the matching `Protect main` or `Protect master` ruleset and the
+complete review, merge-method, and required-check policy. Remove the flag after
+the live default changes; the ordinary command remains strict for `master`.
+
 The audit uses the GitHub CLI to verify the live
-`lamemustafa/complyeaze-public` repository metadata and `Protect main` ruleset:
+`lamemustafa/complyeaze-public` repository metadata and `Protect master` ruleset:
 public visibility, default branch, homepage, issue/project/wiki posture, topic
-set, squash merge support, active `refs/heads/main` ruleset enforcement, branch
+set, squash merge support, active `refs/heads/master` ruleset enforcement, branch
 deletion and non-fast-forward protection, pull-request requirement, one approving
 review, code-owner review, stale review dismissal, review-thread resolution,
 `allowed_merge_methods: ["squash"]`, strict required checks, and the required
@@ -87,7 +98,7 @@ evidence.
 
 The deploy job is disabled unless all of these are true:
 
-- The workflow is running on `refs/heads/main`.
+- The workflow is running on `refs/heads/master`.
 - Repository variable `ENABLE_GITHUB_PAGES_DEPLOY` is exactly `true`.
 - GitHub Pages is configured to use GitHub Actions.
 - The `github-pages` environment has been reviewed for the intended deployment
