@@ -45,5 +45,6 @@ For each migrated surface, record:
 
 The canonical route-family ledger lives in
 `packages/public-content/src/complyeaze.migration-ledger.ts`, is rendered at
-`/migration/`, and is summarized in `docs/ROUTE_MIGRATION_LEDGER.md`.
-`src/migration-data.mjs` remains only as the legacy-renderer adapter during P1.
+`/migration/`, and is summarized in `docs/ROUTE_MIGRATION_LEDGER.md`. Public
+route content is owned by the typed ComplyEaze, Axal, and Pack manifests under
+`packages/public-content/src/`; the three Astro apps are the only renderers.

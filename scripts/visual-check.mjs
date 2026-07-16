@@ -4,49 +4,34 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, wri
 import os from "node:os";
 import path from "node:path";
 import { chromium } from "playwright";
-import { pages } from "../src/site-data.mjs";
 import { createVisualHitTestEvidence } from "./public-checks/visual-geometry.mjs";
+import { publicRouteRegistry } from "./public-route-registry.mjs";
 
 const root = process.cwd();
-const dist = path.join(root, "dist");
-const astroApps = [
-  {
-    slug: "astro-pack-foundation",
-    serverKey: "pack",
-    urlPath: "/",
-    publicPath: "https://pack.complyeaze.com/",
-    heading: "Pack Astro workspace foundation",
-    profile: "foundation",
-    signalTerms: ["Pack"],
-  },
-];
-const astroRouteTargets = readAstroRouteTargets();
+const astroRouteTargets = publicRouteRegistry.map((route) => ({
+  slug: astroRouteArtifactSlug(route.app, route.slug),
+  serverKey: route.app,
+  urlPath: route.urlPath,
+  publicPath: `${route.origin}${route.urlPath}`,
+  heading: route.heading,
+  profile: route.profile,
+  signalTerms: route.signalTerms,
+}));
 if (astroRouteArtifactSlug("complyeaze", "products/pack").includes("/")) {
   throw new Error("Nested Astro route slugs must produce flat visual artifact names");
 }
-const visualTargets = [
-  ...pages.map((page) => ({
-    ...page,
-    serverKey: "legacy",
-    publicPath: page.urlPath,
-    profile: "legacy",
-    signalTerms: ["ComplyEaze", "public", "trust", "surface"],
-  })),
-  ...astroApps,
-  ...astroRouteTargets,
-];
+const visualTargets = [...astroRouteTargets];
 const visualTargetSlugs = visualTargets.map((target) => target.slug);
 if (new Set(visualTargetSlugs).size !== visualTargetSlugs.length) {
-  throw new Error("Visual page slugs must be unique across legacy and Astro targets");
+  throw new Error("Visual page slugs must be unique across typed Astro targets");
 }
-const expectedVisualTargetCount = 41;
+const expectedVisualTargetCount = 21;
 if (visualTargets.length !== expectedVisualTargetCount) {
   throw new Error(
     `Expected ${expectedVisualTargetCount} visual pages, received ${visualTargets.length}`,
   );
 }
 const visualRoots = new Map([
-  ["legacy", dist],
   ["complyeaze", path.join(root, "apps", "complyeaze", "dist")],
   ["axal", path.join(root, "apps", "axal", "dist")],
   ["pack", path.join(root, "apps", "pack", "dist")],
@@ -120,24 +105,6 @@ if (findings.length > 0) {
 }
 
 console.log(`Visual check passed for ${visualTargets.length} pages across ${viewports.length} viewports`);
-
-function readAstroRouteTargets() {
-  const manifestDir = path.join(root, "packages", "public-content", "src");
-  return readdirSync(manifestDir)
-    .filter((name) => name.endsWith(".routes.json"))
-    .flatMap((name) => {
-      const manifest = JSON.parse(readFileSync(path.join(manifestDir, name), "utf8"));
-      return manifest.routes.map((route) => ({
-        slug: astroRouteArtifactSlug(manifest.app, route.slug),
-        serverKey: manifest.app,
-        urlPath: route.urlPath,
-        publicPath: `${manifest.origin}${route.urlPath}`,
-        heading: route.heading,
-        profile: "migration",
-        signalTerms: route.signalTerms,
-      }));
-    });
-}
 
 function astroRouteArtifactSlug(app, routeSlug) {
   return `astro-${app}-${routeSlug.replaceAll("/", "-")}`;
@@ -366,11 +333,6 @@ async function collectMetrics(page, expectedHeading, profile, signalTerms) {
         .map(({ element, evidence }) => `${controlLabel(element)} [${hitTestEvidenceLabel(evidence)}]`)
         .join(", ");
       issues.push(`${overlappedContentChecks.length} overlapped first-viewport content blocks: ${labels}`);
-    }
-    const hero = document.querySelector(".hero");
-    const heroRect = hero?.getBoundingClientRect();
-    if (profile === "legacy" && (!heroRect || heroRect.height < 360)) {
-      issues.push("hero area is too shallow for visual review");
     }
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       issues.push("reduced-motion media emulation is not active");

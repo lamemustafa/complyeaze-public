@@ -21,8 +21,9 @@ const requiredRunbookTerms = [
 ];
 
 const requiredScriptTerms = [
-  "dist/route-manifest.json",
   "test-results",
+  "public-build",
+  "route-manifest.json",
   "hosted-routes",
   "--base-url",
   "--allow-localhost",
@@ -31,8 +32,7 @@ const requiredScriptTerms = [
   "redirectEvidence",
   "productionCutoverEvidence",
   "/robots.txt",
-  "/sitemap.xml",
-  "/route-manifest.json"
+  "/sitemap.xml"
 ];
 
 export function assertHostedRoutesPolicy(root) {

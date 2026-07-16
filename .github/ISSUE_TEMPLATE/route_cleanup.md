@@ -15,7 +15,7 @@ labels: route-cleanup
 
 ## Required Evidence
 
-- [ ] Destination route exists in `dist/route-manifest.json`.
+- [ ] Destination route exists in `test-results/public-build/route-manifest.json`.
 - [ ] Hosted destination evidence from `scripts/check-hosted-routes.mjs --base-url <url>`.
 - [ ] Canonical URL and sitemap entry verified.
 - [ ] Redirect behavior verified for the source route.

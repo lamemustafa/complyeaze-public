@@ -46,9 +46,10 @@ node scripts/check-hosted-routes.mjs --base-url http://127.0.0.1:8000 --allow-lo
   `scripts/check-hosted-routes.mjs`.
 - Preview or GitHub Pages URLs do not prove production custom-domain cutover
   unless the `--base-url` origin matches the manifest origin.
-- Confirmation that `/robots.txt`, `/sitemap.xml`, `/route-manifest.json`, page
-  titles, descriptions, canonical tags, Open Graph titles, and main landmarks
-  match the built artifact.
+- Confirmation that `/robots.txt`, `/sitemap.xml`, page titles, descriptions,
+  canonical tags, Open Graph titles, and main landmarks match the local
+  `test-results/public-build/route-manifest.json` release evidence. The
+  aggregate evidence file is a CI artifact, not a hosted route.
 - Redirect behavior for every private-app source route being removed or
   redirected.
 - Rollback owner, command, or revert path.
@@ -69,7 +70,8 @@ node scripts/check-hosted-routes.mjs --base-url http://127.0.0.1:8000 --allow-lo
 Do not remove or redirect a private ComplyEaze public route unless all of these
 are true:
 
-- The destination route exists in `dist/route-manifest.json`.
+- The destination route exists in
+  `test-results/public-build/route-manifest.json`.
 - The hosted destination route returns HTTP 200.
 - Canonical URLs and sitemap entries point to the intended production origin.
 - The old route redirect is tested and reversible.

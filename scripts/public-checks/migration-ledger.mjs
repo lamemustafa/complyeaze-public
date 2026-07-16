@@ -2,7 +2,6 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { migrationLedger } from "../../packages/public-content/src/complyeaze.migration-ledger.ts";
-import { migrationLedger as legacyMigrationLedger } from "../../src/migration-data.mjs";
 
 const ledgerDocPath = "docs/ROUTE_MIGRATION_LEDGER.md";
 const migrationPlanPath = "docs/MIGRATION.md";
@@ -80,9 +79,6 @@ export async function assertMigrationLedgerFixtures(root) {
   }
   if (!Array.isArray(module.migrationLedger)) {
     throw new Error(`${canonicalLedgerPath}: missing canonical migrationLedger export`);
-  }
-  if (JSON.stringify(module.migrationLedger) !== JSON.stringify(legacyMigrationLedger)) {
-    throw new Error(`${canonicalLedgerPath}: canonical ledger diverges from the legacy adapter`);
   }
   const validLedger = [
     {
@@ -397,7 +393,6 @@ export function assertMigrationLedger(root) {
 
 export function assertRenderedMigrationLedger(root, findings) {
   const renderedOutputs = [
-    ["migration/index.html", path.join(root, "dist", "migration", "index.html")],
     [
       "apps/complyeaze/dist/migration/index.html",
       path.join(root, "apps", "complyeaze", "dist", "migration", "index.html"),

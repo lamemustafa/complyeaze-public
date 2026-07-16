@@ -73,7 +73,7 @@
           "href": "https://axal.complyeaze.com/",
           "evidence": {
             "label": "Review Axal public source",
-            "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/src/axal-data.mjs"
+            "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/packages/public-content/src/axal.routes.json"
           }
         },
         {
@@ -524,7 +524,7 @@
       "slug": "status",
       "urlPath": "/status/",
       "title": "Public Site Status | ComplyEaze",
-      "description": "Repository, legacy rollback, and multi-app Astro preview status for the ComplyEaze public site.",
+      "description": "Repository, rollback, and multi-app Astro build status for the ComplyEaze public site.",
       "eyebrow": "Repository status",
       "heading": "Static-site readiness, not app uptime",
       "kind": "policy",
@@ -533,7 +533,7 @@
       "signalTerms": ["ComplyEaze", "status", "readiness"],
       "policySummary": {
         "scope": "Public build and migration posture",
-        "evidence": "Legacy and Astro rendered checks",
+        "evidence": "Astro build and aggregate rendered checks",
         "excluded": "Tenant data and app uptime"
       },
       "sections": [
@@ -543,7 +543,7 @@
         },
         {
           "title": "Build posture",
-          "body": "The legacy static renderer remains the rollback baseline while ComplyEaze, Axal, and Pack Astro apps build parallel noindex previews. Release gates require lint, typecheck, tests, build, visual screenshots, public-content checks, link checks, metadata checks, git diff --check, and review-thread clearance."
+          "body": "ComplyEaze, Axal, and Pack build independently as static noindex Astro apps from typed manifests. Release gates require lint, typecheck, tests, build, aggregate release evidence, visual screenshots, public-content checks, link checks, metadata checks, git diff --check, and review-thread clearance. Rollback is a Git revert backed by retained CI artifacts."
         },
         {
           "title": "Governance posture",
@@ -551,7 +551,7 @@
         },
         {
           "title": "Migration posture",
-          "body": "All twenty legacy public routes now have typed Astro preview parity: the customer-core homepage and product-family index, Pack and Tools gateways, ten supporting ComplyEaze routes, and six Axal routes alongside the legacy rollback build. Axal hosting and path routing remain pending. Route-level cleanup rows stay blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
+          "body": "The typed manifests now own 14 ComplyEaze routes, six Axal routes, and one conservative Pack foundation. The old string renderer and its duplicate adapters are removed. Hosting and path routing remain pending, and route-level cleanup stays blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
         },
         {
           "title": "Hosting posture",
@@ -581,6 +581,10 @@
       },
       "sections": [
         {
+          "title": "2026-07-16 - Astro manifest cutover",
+          "body": "Made the three typed manifests and their Astro outputs the only route and rendering sources, added aggregate release evidence for 21 routes, retained a 63-cell visual matrix, removed the duplicate string renderer, and kept deployment, routing, indexing, and private-app cleanup outside the change."
+        },
+        {
           "title": "2026-07-16 - Axal six-route preview port",
           "body": "Moved the Axal homepage and five customer workflow pages into one typed Axal manifest and the Axal Astro preview, preserved the established public identity, replaced the private product screenshot with a labelled synthetic workbench, and kept authentication, hosting, path routing, indexing, and private cleanup outside the tranche."
         },
@@ -590,11 +594,11 @@
         },
         {
           "title": "2026-07-15 - Customer-core route port",
-          "body": "Moved / and /products/ into the canonical typed manifest and ComplyEaze Astro preview, replaced repository-boundary customer copy with job, custody, and evidence guidance, and kept the legacy renderer as the rollback baseline."
+          "body": "Moved / and /products/ into the canonical typed manifest and ComplyEaze Astro preview, replaced repository-boundary customer copy with job, custody, and evidence guidance, and retained the then-current rollback baseline."
         },
         {
           "title": "2026-07-15 - Core public routes ported to Astro",
-          "body": "Moved /about/ and /contact/ into the canonical typed manifest and ComplyEaze Astro preview while keeping the legacy renderer as the rollback baseline and proving cross-renderer parity."
+          "body": "Moved /about/ and /contact/ into the canonical typed manifest and ComplyEaze Astro preview while retaining the then-current rollback baseline and proving rendered parity."
         },
         {
           "title": "2026-07-15 - Multi-app Astro workspace",
@@ -630,7 +634,7 @@
         },
         {
           "title": "2026-07-08 - Hosted route cutover checks",
-          "body": "Added scripts/check-hosted-routes.mjs and the hosting cutover runbook so reviewers can verify hosted destination routes, robots, sitemap, route manifest, canonical tags, and preview-vs-production origin boundaries without enabling Pages by default."
+          "body": "Added scripts/check-hosted-routes.mjs and the hosting cutover runbook so reviewers can verify hosted destination routes, robots, sitemap, canonical tags, and preview-vs-production origin boundaries against retained local release evidence without enabling Pages by default."
         },
         {
           "title": "2026-07-08 - Public policy/status/release routes",
@@ -669,7 +673,7 @@
       "sections": [
         {
           "title": "Route manifest",
-          "body": "The canonical typed route manifest feeds the ComplyEaze Astro preview and legacy rollback renderer. The legacy build still emits dist/route-manifest.json, robots.txt, and sitemap.xml, while parity checks compare canonical route data with both rendered outputs."
+          "body": "Three canonical typed manifests feed the ComplyEaze, Axal, and Pack Astro apps. The root build validates all 21 actual HTML outputs and writes non-deployable aggregate evidence to test-results/public-build/route-manifest.json."
         },
         {
           "title": "Visual artifacts",
@@ -677,7 +681,7 @@
         },
         {
           "title": "Build artifacts",
-          "body": "CI retains the legacy dist output and all three Astro app outputs as the public-site-build artifact so reviewers can inspect static HTML and route evidence without treating the artifact as hosted cutover evidence."
+          "body": "CI retains all three Astro app outputs and aggregate release evidence as the public-site-build artifact for seven days so reviewers can inspect static HTML and route ownership without treating the artifact as hosted cutover evidence."
         },
         {
           "title": "Claim and safety checks",
@@ -701,7 +705,7 @@
         },
         {
           "title": "Hosted route evidence",
-          "body": "scripts/check-hosted-routes.mjs verifies hosted destination pages against dist/route-manifest.json, robots.txt, sitemap.xml, canonical tags, metadata, and main landmarks. Its summaries explicitly say redirect evidence is not checked by that script and preview hosts do not prove production cutover."
+          "body": "scripts/check-hosted-routes.mjs verifies hosted ComplyEaze destination pages, robots.txt, sitemap.xml, canonical tags, metadata, and main landmarks against retained local release evidence. Its summaries explicitly say redirect evidence is not checked by that script and preview hosts do not prove production cutover."
         },
         {
           "title": "Route cleanup governance",

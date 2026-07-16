@@ -12,8 +12,7 @@ import {
 import {
   assertAstroCoreRouteBuild,
   assertAstroCoreRouteFixtures,
-  assertAstroCoreRouteSources,
-  assertLegacyCoreRouteBuild
+  assertAstroCoreRouteSources
 } from "./public-checks/astro-core-routes.mjs";
 import {
   assertCiArtifactPolicyFixtures,
@@ -29,6 +28,8 @@ import {
 } from "./public-checks/gateway-pages.mjs";
 import { assertHostedRoutesPolicy } from "./public-checks/hosted-routes.mjs";
 import { assertLegalGovernance } from "./public-checks/legal-governance.mjs";
+import { assertLegacyCleanup } from "./public-checks/legacy-cleanup.mjs";
+import { assertPackManifest } from "./public-checks/pack-manifest.mjs";
 import {
   assertMigrationLedger,
   assertMigrationLedgerFixtures,
@@ -40,6 +41,7 @@ import {
 } from "./public-checks/policy-pages.mjs";
 import { requiredFiles } from "./public-checks/required-files.mjs";
 import { assertRepositorySettings } from "./public-checks/repository-settings.mjs";
+import { assertReleaseEvidenceSources } from "./public-checks/release-evidence.mjs";
 import {
   assertReviewGateFixturePolicy,
   assertReviewGateFixtures
@@ -56,7 +58,7 @@ import {
   assertSensitiveContentFixturePolicy
 } from "./public-checks/sensitive-content.mjs";
 import { assertVisualGeometryFixtures } from "./public-checks/visual-geometry.mjs";
-import { pages } from "../src/site-data.mjs";
+import { appDistPath, publicRouteRegistry } from "./public-route-registry.mjs";
 
 const root = process.cwd();
 const mode = process.argv.find((arg) => arg.startsWith("--")) ?? "--all";
@@ -168,8 +170,8 @@ function assertReleaseGates() {
 }
 
 function assertBuiltPages() {
-  const missing = pages
-    .map((page) => path.join("dist", page.outputPath))
+  const missing = publicRouteRegistry
+    .map((page) => appDistPath(page))
     .filter((file) => !existsSync(path.join(root, file)));
   if (missing.length > 0) {
     throw new Error(`Missing built pages. Run pnpm build first:\n${missing.join("\n")}`);
@@ -179,29 +181,26 @@ function assertBuiltPages() {
 function assertMetadata() {
   assertBuiltPages();
   const findings = [];
-  for (const page of pages) {
-    const html = readFileSync(path.join(root, "dist", page.outputPath), "utf8");
+  for (const page of publicRouteRegistry) {
+    const html = readFileSync(path.join(root, appDistPath(page)), "utf8");
     if (!html.includes(`<title>${page.title}</title>`)) {
-      findings.push(`${page.outputPath}: missing expected title`);
+      findings.push(`${appDistPath(page)}: missing expected title`);
     }
     if (!html.includes(`name="description" content="${page.description}"`)) {
-      findings.push(`${page.outputPath}: missing expected description`);
+      findings.push(`${appDistPath(page)}: missing expected description`);
     }
-    if (!html.includes(`rel="canonical" href="https://complyeaze.com${page.urlPath}"`)) {
-      findings.push(`${page.outputPath}: missing expected canonical`);
+    if (!html.includes(`rel="canonical" href="${page.origin}${page.urlPath}"`)) {
+      findings.push(`${appDistPath(page)}: missing expected canonical`);
     }
     if (!html.includes('property="og:title"')) {
-      findings.push(`${page.outputPath}: missing Open Graph title`);
+      findings.push(`${appDistPath(page)}: missing Open Graph title`);
+    }
+    if (!html.includes(`name="robots" content="${page.robots}"`)) {
+      findings.push(`${appDistPath(page)}: missing expected robots posture`);
     }
   }
-  if (!existsSync(path.join(root, "dist", "robots.txt"))) {
-    findings.push("dist/robots.txt: missing");
-  }
-  if (!existsSync(path.join(root, "dist", "sitemap.xml"))) {
-    findings.push("dist/sitemap.xml: missing");
-  }
-  if (!existsSync(path.join(root, "dist", "route-manifest.json"))) {
-    findings.push("dist/route-manifest.json: missing");
+  if (!existsSync(path.join(root, "test-results/public-build/route-manifest.json"))) {
+    findings.push("test-results/public-build/route-manifest.json: missing");
   }
   if (findings.length > 0) {
     throw new Error(`Metadata findings:\n${findings.join("\n")}`);
@@ -210,23 +209,25 @@ function assertMetadata() {
 
 function assertLinks() {
   assertBuiltPages();
-  const knownPaths = new Set(pages.map((page) => page.urlPath));
   const findings = [];
-  for (const page of pages) {
-    const html = readFileSync(path.join(root, "dist", page.outputPath), "utf8");
+  for (const page of publicRouteRegistry) {
+    const knownPaths = new Set(
+      publicRouteRegistry.filter((route) => route.app === page.app).map((route) => route.urlPath),
+    );
+    const html = readFileSync(path.join(root, appDistPath(page)), "utf8");
     const hrefs = [...html.matchAll(/\shref="([^"]+)"/g)].map((match) => match[1]);
     for (const href of hrefs) {
       if (href.startsWith("http") || href.startsWith("#") || href.startsWith("mailto:")) {
         continue;
       }
-      if (href.startsWith("/assets/")) {
-        if (!existsSync(path.join(root, "dist", href))) {
-          findings.push(`${page.outputPath}: missing asset ${href}`);
+      if (href.startsWith("/_astro/") || href.startsWith("/fonts/") || href === "/favicon.svg") {
+        if (!existsSync(path.join(root, `apps/${page.app}/dist`, href))) {
+          findings.push(`${appDistPath(page)}: missing asset ${href}`);
         }
         continue;
       }
       if (!knownPaths.has(href)) {
-        findings.push(`${page.outputPath}: unknown internal link ${href}`);
+        findings.push(`${appDistPath(page)}: unknown internal link ${href}`);
       }
     }
   }
@@ -238,12 +239,16 @@ function assertLinks() {
 function assertPublicPages() {
   assertBuiltPages();
   const findings = [];
-  for (const page of pages) {
-    const html = readFileSync(path.join(root, "dist", page.outputPath), "utf8");
-    if (!html.includes("<main")) findings.push(`${page.outputPath}: missing main landmark`);
-    if (!html.includes(page.heading)) findings.push(`${page.outputPath}: missing page heading`);
-    if (/Prisma|Redis|BullMQ|portal automation/.test(html) && page.slug !== "index" && page.type !== "policy") {
-      findings.push(`${page.outputPath}: private-app boundary terms outside overview page`);
+  const privateBoundaryCopyAllowed = new Set(["/privacy/", "/status/"]);
+  for (const page of publicRouteRegistry) {
+    const html = readFileSync(path.join(root, appDistPath(page)), "utf8");
+    if (!html.includes("<main")) findings.push(`${appDistPath(page)}: missing main landmark`);
+    if (!html.includes(page.heading)) findings.push(`${appDistPath(page)}: missing page heading`);
+    if (
+      /Prisma|Redis|BullMQ|portal automation/.test(html) &&
+      !privateBoundaryCopyAllowed.has(page.urlPath)
+    ) {
+      findings.push(`${appDistPath(page)}: private-app implementation terms outside status boundary`);
     }
   }
   assertRenderedMigrationLedger(root, findings);
@@ -283,6 +288,7 @@ async function run() {
     await assertMigrationLedgerFixtures(root);
     assertCanonicalManifestClaimFixture();
     assertGatewayPageSources(root);
+    await assertPackManifest(root);
     assertAxalPages(root);
     assertPolicyPageSources(root);
     assertRootResourcePageSources();
@@ -291,7 +297,9 @@ async function run() {
     assertSensitiveContentFixturePolicy();
     assertCiArtifactPolicyFixtures();
     assertReviewGateFixtures(root);
+    await assertReleaseEvidenceSources(root);
     assertVisualGeometryFixtures();
+    assertLegacyCleanup(root);
   }
   if (["--all", "--test", "--public"].includes(mode)) {
     assertReviewGateFixturePolicy(root);
@@ -310,7 +318,6 @@ async function run() {
   }
   if (["--all", "--public"].includes(mode)) {
     assertAstroBuildOutput(root);
-    assertLegacyCoreRouteBuild(root);
     assertAstroCoreRouteBuild(root);
     assertPublicPages();
     assertMigrationLedger(root);

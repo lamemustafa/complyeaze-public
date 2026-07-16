@@ -39,8 +39,9 @@ Store visual evidence as CI artifacts or reviewed local artifacts:
   controls, and first-viewport overlap heuristics.
 - Summary markdown with reduced-motion state, focus target, failures, and
   dispositions.
-- GitHub Actions artifact `public-site-build` for the rendered `dist` output
-  that generated the screenshots.
+- A 21-page, three-viewport matrix: 63 unique route/viewport cells.
+- GitHub Actions artifact `public-site-build` for the three Astro build outputs
+  and aggregate release evidence that generated the screenshots.
 - GitHub Actions artifact `public-visual-evidence` for PR and `main` runs.
 
 Do not commit screenshots that contain real taxpayer data, portal data,

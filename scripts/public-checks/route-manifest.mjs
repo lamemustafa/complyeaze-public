@@ -1,15 +1,15 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { pages } from "../../src/site-data.mjs";
+import { publicRouteRegistry } from "../public-route-registry.mjs";
 
-const ORIGIN = "https://complyeaze.com";
+const evidencePath = "test-results/public-build/route-manifest.json";
 
 function readManifest(root) {
-  const manifestPath = path.join(root, "dist", "route-manifest.json");
-  if (!existsSync(manifestPath)) {
-    throw new Error("Missing dist/route-manifest.json. Run pnpm build first.");
+  const absolutePath = path.join(root, evidencePath);
+  if (!existsSync(absolutePath)) {
+    throw new Error(`Missing ${evidencePath}. Run pnpm build first.`);
   }
-  return JSON.parse(readFileSync(manifestPath, "utf8"));
+  return JSON.parse(readFileSync(absolutePath, "utf8"));
 }
 
 function assertUnique(values, label, findings) {
@@ -24,48 +24,49 @@ export function assertRouteManifest(root) {
   const manifest = readManifest(root);
   const findings = [];
   const routes = Array.isArray(manifest.routes) ? manifest.routes : [];
-  const sitemap = existsSync(path.join(root, "dist", "sitemap.xml"))
-    ? readFileSync(path.join(root, "dist", "sitemap.xml"), "utf8")
-    : "";
 
   if (manifest.schemaVersion !== 1) findings.push("schemaVersion must be 1");
-  if (manifest.origin !== ORIGIN) findings.push(`origin must be ${ORIGIN}`);
-  if (manifest.pageCount !== pages.length) {
-    findings.push(`pageCount ${manifest.pageCount} does not match source page count ${pages.length}`);
+  if (manifest.pageCount !== publicRouteRegistry.length) {
+    findings.push(
+      `pageCount ${manifest.pageCount} does not match canonical route count ${publicRouteRegistry.length}`,
+    );
   }
-  if (routes.length !== pages.length) {
-    findings.push(`routes length ${routes.length} does not match source page count ${pages.length}`);
+  if (routes.length !== publicRouteRegistry.length) {
+    findings.push(
+      `routes length ${routes.length} does not match canonical route count ${publicRouteRegistry.length}`,
+    );
   }
 
-  assertUnique(routes.map((route) => route.urlPath), "urlPath", findings);
-  assertUnique(routes.map((route) => route.outputPath), "outputPath", findings);
-  assertUnique(routes.map((route) => route.canonical), "canonical", findings);
+  assertUnique(routes.map((route) => `${route.origin}${route.urlPath}`), "route ownership", findings);
+  assertUnique(routes.map((route) => route.buildEvidence), "buildEvidence", findings);
 
-  const routesByPath = new Map(routes.map((route) => [route.urlPath, route]));
-  for (const page of pages) {
-    const route = routesByPath.get(page.urlPath);
-    const canonical = `${ORIGIN}${page.urlPath}`;
+  const routesByOwner = new Map(routes.map((route) => [`${route.origin}${route.urlPath}`, route]));
+  for (const source of publicRouteRegistry) {
+    const owner = `${source.origin}${source.urlPath}`;
+    const route = routesByOwner.get(owner);
     if (!route) {
-      findings.push(`${page.urlPath}: missing route manifest entry`);
+      findings.push(`${owner}: missing release-evidence entry`);
       continue;
     }
-
-    for (const field of ["slug", "urlPath", "outputPath", "title", "description"]) {
-      if (route[field] !== page[field]) {
-        findings.push(`${page.urlPath}: ${field} does not match source page data`);
-      }
+    for (const field of [
+      "app",
+      "slug",
+      "urlPath",
+      "outputPath",
+      "title",
+      "description",
+      "origin",
+      "robots",
+    ]) {
+      if (route[field] !== source[field]) findings.push(`${owner}: ${field} does not match manifest`);
     }
-    if (route.type !== (page.type ?? "core")) {
-      findings.push(`${page.urlPath}: type does not match source page data`);
+    if (route.canonical !== owner) findings.push(`${owner}: canonical does not match ownership`);
+    const expectedBuildEvidence = `apps/${source.app}/dist/${source.outputPath}`;
+    if (route.buildEvidence !== expectedBuildEvidence) {
+      findings.push(`${owner}: buildEvidence does not match ${expectedBuildEvidence}`);
     }
-    if (route.canonical !== canonical) {
-      findings.push(`${page.urlPath}: canonical does not match ${canonical}`);
-    }
-    if (!existsSync(path.join(root, "dist", page.outputPath))) {
-      findings.push(`${page.urlPath}: outputPath file is missing`);
-    }
-    if (!sitemap.includes(`<loc>${canonical}</loc>`)) {
-      findings.push(`${page.urlPath}: canonical is missing from sitemap.xml`);
+    if (!existsSync(path.join(root, expectedBuildEvidence))) {
+      findings.push(`${owner}: built HTML is missing`);
     }
   }
 

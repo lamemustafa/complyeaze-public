@@ -115,7 +115,7 @@ const requiredPagesDeployTerms = [
   "ENABLE_GITHUB_PAGES_DEPLOY",
   "name: github-pages",
   "pnpm verify",
-  "path: dist"
+  "path: apps/complyeaze/dist"
 ];
 
 const requiredPullRequestTerms = [

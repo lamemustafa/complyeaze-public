@@ -26,8 +26,8 @@ const requiredRootScripts = [
   "dev:core",
   "dev:axal",
   "dev:pack",
-  "build:legacy",
   "build:apps",
+  "build:evidence",
   "verify:fast",
   "verify:ui",
 ];
@@ -177,15 +177,17 @@ function assertApp(root, directory, packageName, origin, findings) {
       page.includes("PublicPageLayout")) ||
     (directory === "axal" &&
       page.includes("defineAxalRouteManifest") &&
-      page.includes("AxalPageLayout"));
+      page.includes("AxalPageLayout")) ||
+    (directory === "pack" && page.includes("definePackRouteManifest"));
   if (ownsTypedCustomerRoot) {
     const layoutName = directory === "axal" ? "AxalPageLayout.astro" : "PublicPageLayout.astro";
-    const layout = read(root, `${base}/src/layouts/${layoutName}`, findings);
+    const layout = directory === "pack" ? page : read(root, `${base}/src/layouts/${layoutName}`, findings);
     if (
       !layout.includes('name="robots" content={route.robots}') &&
       !layout.includes('name="robots" content="noindex, nofollow"')
     ) {
-      findings.push(`${base}/src/layouts/${layoutName}: typed root must stay noindex`);
+      const sourcePath = directory === "pack" ? "src/pages/index.astro" : `src/layouts/${layoutName}`;
+      findings.push(`${base}/${sourcePath}: typed root must stay noindex`);
     }
   } else if (!page.includes('name="robots" content="noindex, nofollow"')) {
     findings.push(`${base}/src/pages/index.astro: foundation route must stay noindex`);

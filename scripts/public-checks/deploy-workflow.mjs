@@ -19,7 +19,7 @@ const requiredJobSnippets = [
   "if: ${{ github.ref == 'refs/heads/main' && vars.ENABLE_GITHUB_PAGES_DEPLOY == 'true' }}",
   "name: github-pages",
   "pnpm verify",
-  "path: dist",
+  "path: apps/complyeaze/dist",
 ];
 
 const requiredPinnedActions = [

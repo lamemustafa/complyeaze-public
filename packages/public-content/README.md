@@ -1,11 +1,11 @@
 # Public content boundary
 
-This private workspace package owns typed, public-safe content and route metadata as pages move from the legacy renderer.
+This private workspace package owns typed, public-safe content and route metadata
+for the ComplyEaze, Axal, and Pack Astro apps.
 
-During incremental migration, the legacy root-resource renderer and the Astro
-app both consume `src/complyeaze.routes.json`. The Axal Astro app and legacy
-Axal adapter likewise consume `src/axal.routes.json`. Renderer-specific structure may
-differ, but route copy, metadata, actions, and proof have one source of truth
-while the legacy build remains the rollback baseline.
+`src/complyeaze.routes.json`, `src/axal.routes.json`, and
+`src/pack.routes.json` are validated manifests and the only public route-content
+sources. Their owning Astro apps render them independently; aggregate release
+evidence records the built output without becoming a deployable route.
 
 It must not contain auth logic, tenant data, private route types, or a competing design system.

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "app": "pack",
+  "origin": "https://pack.complyeaze.com",
+  "routes": [
+    {
+      "kind": "pack-foundation",
+      "slug": "index",
+      "urlPath": "/",
+      "title": "Pack Astro workspace foundation",
+      "description": "A noindex Astro workspace foundation for future public Pack routes.",
+      "heading": "Pack Astro workspace foundation",
+      "summary": "This foundation does not serve customer routes until Pack route parity and product-owned evidence are proven.",
+      "robots": "noindex, nofollow",
+      "signalTerms": ["Pack", "foundation", "noindex"]
+    }
+  ]
+}
