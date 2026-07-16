@@ -16,6 +16,10 @@ catalogs:
       specifier: 6.0.3
       version: 6.0.3
 
+overrides:
+  '@sanchika/tokens@0.1.0': https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz
+  '@sanchika/primitives@0.1.0': https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz
+
 importers:
 
   .:
@@ -29,6 +33,15 @@ importers:
       '@astrojs/check':
         specifier: 'catalog:'
         version: 0.9.9(prettier@3.9.5)(typescript@6.0.3)
+      '@sanchika/patterns':
+        specifier: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz
+        version: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz
+      '@sanchika/primitives':
+        specifier: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz
+        version: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz
+      '@sanchika/tokens':
+        specifier: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz
+        version: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz
       astro:
         specifier: 'catalog:'
         version: 7.0.9(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.2)(yaml@2.9.0)
@@ -47,6 +60,15 @@ importers:
       '@complyeaze-public/shell':
         specifier: workspace:*
         version: link:../../packages/public-shell
+      '@sanchika/patterns':
+        specifier: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz
+        version: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz
+      '@sanchika/primitives':
+        specifier: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz
+        version: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz
+      '@sanchika/tokens':
+        specifier: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz
+        version: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz
       astro:
         specifier: 'catalog:'
         version: 7.0.9(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.2)(yaml@2.9.0)
@@ -59,6 +81,15 @@ importers:
       '@astrojs/check':
         specifier: 'catalog:'
         version: 0.9.9(prettier@3.9.5)(typescript@6.0.3)
+      '@sanchika/patterns':
+        specifier: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz
+        version: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz
+      '@sanchika/primitives':
+        specifier: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz
+        version: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz
+      '@sanchika/tokens':
+        specifier: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz
+        version: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz
       astro:
         specifier: 'catalog:'
         version: 7.0.9(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.2)(yaml@2.9.0)
@@ -733,6 +764,21 @@ packages:
     peerDependenciesMeta:
       rollup:
         optional: true
+
+  '@sanchika/patterns@https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz':
+    resolution: {integrity: sha512-D4kdcZG2kJYBhNnBu7EfdR6paxGuCXe1kXscV2855pzBe0hVKGxVKIcISPs/g6LiSX1LRo1wgvs3+mHGgdRyEw==, tarball: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz}
+    version: 0.1.0
+    engines: {node: '>=24'}
+
+  '@sanchika/primitives@https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz':
+    resolution: {integrity: sha512-FePiOeVtqxcOEUtU4hvKefV2itblX3+XuY1rD9TLjJdzo0vvbxN+zCPc18KxAIes6c6yGJxAK5HBUNXPKZ5cBg==, tarball: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz}
+    version: 0.1.0
+    engines: {node: '>=24'}
+
+  '@sanchika/tokens@https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz':
+    resolution: {integrity: sha512-KlEj26eMF6dmX28wO9AOeUki+rS7/Phq+4EPf4YTAqJITzRmrhxbEazQaRVrSn6PMU8v0GQjxNgw/X4K9vyXIg==, tarball: https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz}
+    version: 0.1.0
+    engines: {node: '>=24'}
 
   '@shikijs/core@4.3.1':
     resolution: {integrity: sha512-ANMDxuaPsNMdDC1m4vfvhlDmJweMwkE5XitTwrq2rWHx5jM+dlm4MmHt2PP6t0uejfR77SuhrhJ0zEijIF/uhA==}
@@ -2298,6 +2344,16 @@ snapshots:
       '@types/estree': 1.0.9
       estree-walker: 2.0.2
       picomatch: 4.0.5
+
+  '@sanchika/patterns@https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz':
+    dependencies:
+      '@sanchika/primitives': https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz
+
+  '@sanchika/primitives@https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz':
+    dependencies:
+      '@sanchika/tokens': https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz
+
+  '@sanchika/tokens@https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz': {}
 
   '@shikijs/core@4.3.1':
     dependencies:

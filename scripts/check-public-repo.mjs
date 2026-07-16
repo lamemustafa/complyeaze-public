@@ -54,6 +54,10 @@ import {
 } from "./public-checks/root-resource-pages.mjs";
 import { assertRouteManifest } from "./public-checks/route-manifest.mjs";
 import {
+  assertSanchikaAdoptionBuild,
+  assertSanchikaAdoptionSources
+} from "./public-checks/sanchika-adoption.mjs";
+import {
   assertSensitiveContent,
   assertSensitiveContentFixturePolicy
 } from "./public-checks/sensitive-content.mjs";
@@ -298,6 +302,7 @@ async function run() {
     assertCiArtifactPolicyFixtures();
     assertReviewGateFixtures(root);
     await assertReleaseEvidenceSources(root);
+    await assertSanchikaAdoptionSources(root);
     assertVisualGeometryFixtures();
     assertLegacyCleanup(root);
   }
@@ -328,6 +333,7 @@ async function run() {
     assertCiArtifacts(root);
     assertContributorIntake(root);
     assertDependencyPolicy(root);
+    assertSanchikaAdoptionBuild(root);
     assertDeployWorkflow(root);
     assertHostedRoutesPolicy(root);
     assertLegalGovernance(root);

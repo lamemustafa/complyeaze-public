@@ -17,6 +17,7 @@ const requiredFiles = [
   "apps/complyeaze/src/components/PublicPolicyPage.astro",
   "apps/complyeaze/src/components/PublicProductsPage.astro",
   "apps/complyeaze/src/components/PublicResourcePage.astro",
+  "apps/complyeaze/src/components/PublicSanchikaAdoptionPage.astro",
   "apps/complyeaze/src/layouts/PublicPageLayout.astro",
   "apps/complyeaze/src/pages/[...slug].astro",
   "apps/complyeaze/src/pages/index.astro",
@@ -27,7 +28,7 @@ const requiredFiles = [
 const requiredRoutes = [
   "/", "/products/", "/products/pack/", "/products/tools/", "/trust/", "/docs/",
   "/migration/", "/about/", "/contact/", "/privacy/", "/terms/", "/status/",
-  "/changelog/", "/release-evidence/",
+  "/changelog/", "/release-evidence/", "/sanchika/",
 ];
 
 export function assertAstroCoreRouteSources(root) {
@@ -35,7 +36,7 @@ export function assertAstroCoreRouteSources(root) {
     .filter((filePath) => !existsSync(path.join(root, filePath)))
     .map((filePath) => `${filePath}: missing`);
   const routes = publicRouteRegistry.filter((route) => route.app === "complyeaze");
-  if (routes.length !== 14) findings.push(`expected 14 ComplyEaze routes, found ${routes.length}`);
+  if (routes.length !== 15) findings.push(`expected 15 ComplyEaze routes, found ${routes.length}`);
   for (const routePath of requiredRoutes) {
     if (!routes.some((route) => route.urlPath === routePath)) findings.push(`missing ${routePath}`);
   }
@@ -48,7 +49,7 @@ export function assertAstroCoreRouteSources(root) {
     if (!index.includes("definePublicRouteManifest") || !index.includes("PublicHomePage")) {
       findings.push("ComplyEaze root must render the canonical home route");
     }
-    for (const kind of ["resource", "policy", "evidence", "gateway", "products", "migration"]) {
+    for (const kind of ["resource", "policy", "evidence", "gateway", "products", "migration", "adoption"]) {
       if (!catchAll.includes(`route.kind === "${kind}"`)) findings.push(`catch-all missing ${kind} branch`);
     }
     if (!catchAll.includes("assertNever(route)")) findings.push("catch-all rendering is not exhaustive");
@@ -92,7 +93,7 @@ export function assertAstroCoreRouteFixtures() {
 
 export function assertAstroCoreRouteBuild(root) {
   const evidence = createReleaseEvidenceFromBuild(root, publicRouteRegistry);
-  if (evidence.pageCount !== 21) throw new Error(`expected 21 Astro outputs, found ${evidence.pageCount}`);
+  if (evidence.pageCount !== 22) throw new Error(`expected 22 Astro outputs, found ${evidence.pageCount}`);
   const complyeazeDist = path.join(root, "apps/complyeaze/dist");
   const robots = readFileSync(path.join(complyeazeDist, "robots.txt"), "utf8");
   const sitemap = readFileSync(path.join(complyeazeDist, "sitemap.xml"), "utf8");

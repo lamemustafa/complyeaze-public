@@ -30,7 +30,8 @@
     "verify:fast": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "verify:ui": "pnpm visual:check",
     "verify": "pnpm verify:fast && pnpm public:check && pnpm links:check && pnpm metadata:check && pnpm verify:ui && git diff --check",
-    "github:settings": "node scripts/check-github-repository-settings.mjs"
+    "github:settings": "node scripts/check-github-repository-settings.mjs",
+    "sanchika:smoke": "node apps/complyeaze/scripts/sanchika-package-smoke.mjs"
   },
   "devDependencies": {
     "playwright": "1.61.1"

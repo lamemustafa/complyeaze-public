@@ -581,6 +581,10 @@
       },
       "sections": [
         {
+          "title": "2026-07-16 - Sanchika v0.1 public adoption",
+          "body": "Adopted the exact reviewed Sanchika v0.1.0 GitHub release artifacts across the ComplyEaze, Axal, and Pack public Astro shells, added typed adoption and rollback evidence, expanded release evidence to 22 routes and 66 visual cells, and kept pattern composition, hosting, indexing, private-app changes, and Tools outside the tranche."
+        },
+        {
           "title": "2026-07-16 - Astro manifest cutover",
           "body": "Made the three typed manifests and their Astro outputs the only route and rendering sources, added aggregate release evidence for 21 routes, retained a 63-cell visual matrix, removed the duplicate string renderer, and kept deployment, routing, indexing, and private-app cleanup outside the change."
         },
@@ -673,7 +677,7 @@
       "sections": [
         {
           "title": "Route manifest",
-          "body": "Three canonical typed manifests feed the ComplyEaze, Axal, and Pack Astro apps. The root build validates all 21 actual HTML outputs and writes non-deployable aggregate evidence to test-results/public-build/route-manifest.json."
+          "body": "Three canonical typed route manifests feed the ComplyEaze, Axal, and Pack Astro apps. The root build validates all 22 actual HTML outputs and writes non-deployable aggregate evidence to test-results/public-build/route-manifest.json."
         },
         {
           "title": "Visual artifacts",
@@ -689,7 +693,7 @@
         },
         {
           "title": "Dependency surface evidence",
-          "body": "scripts/public-checks/dependency-policy.mjs keeps package.json private, blocks runtime dependencies and lifecycle scripts, reviews devDependencies for Playwright, Astro, Astro Check, and TypeScript, verifies pnpm-lock.yaml against the workspace dependency surface, checks Dependabot groups and reviewers, aligns pnpm@10.28.2 and Node 24 across workflows, and requires every external GitHub Action to be pinned to a reviewed SHA."
+          "body": "scripts/public-checks/dependency-policy.mjs keeps package.json private, blocks runtime dependencies and lifecycle scripts, reviews the build-tool and exact Sanchika GitHub-artifact devDependency surface, verifies pnpm-lock.yaml against the workspace dependency surface, checks Dependabot groups and reviewers, aligns pnpm@10.28.2 and Node 24 across workflows, and requires every external GitHub Action to be pinned to a reviewed SHA."
         },
         {
           "title": "Contributor intake evidence",
@@ -713,11 +717,37 @@
         },
         {
           "title": "Pages deploy guard",
-          "body": "The GitHub Pages workflow is readiness-only unless it runs on main with ENABLE_GITHUB_PAGES_DEPLOY set to true. It runs the full verify gate before uploading only dist, and it is not parent-route cleanup evidence without hosted route, canonical, redirect, and rollback review."
+          "body": "The GitHub Pages workflow is readiness-only unless it runs on main with ENABLE_GITHUB_PAGES_DEPLOY set to true. It runs the full verify gate before uploading only apps/complyeaze/dist, and it is not parent-route cleanup evidence without hosted route, canonical, redirect, and rollback review."
         },
         {
           "title": "Review gate",
           "body": "The GitHub Review gate is designed to block unresolved review threads and requested-changes states. It complements, but does not replace, rendered review and the manual review-rectify loop."
+        }
+      ]
+    },
+    {
+      "slug": "sanchika",
+      "urlPath": "/sanchika/",
+      "title": "Sanchika Adoption Evidence | ComplyEaze",
+      "description": "Artifact-backed Sanchika v0.1.0 adoption evidence for the three ComplyEaze public Astro applications.",
+      "eyebrow": "Open-source adoption evidence",
+      "heading": "Sanchika adoption is tied to reviewed release artifacts",
+      "kind": "adoption",
+      "summary": "ComplyEaze, Axal, and Pack consume the same reviewed Sanchika v0.1.0 GitHub artifact set for a bounded public-shell baseline.",
+      "robots": "noindex, nofollow",
+      "signalTerms": ["Sanchika", "v0.1.0", "artifact adoption"],
+      "sections": [
+        {
+          "title": "Artifact boundary",
+          "body": "Tokens, primitives, and patterns resolve from the reviewed GitHub release tarballs with recorded checksums and no nested source imports."
+        },
+        {
+          "title": "Consumer boundary",
+          "body": "P2 adopts semantic shell roles and existing primitive jobs across three public Astro apps. Product-pattern composition remains reserved for P3 craft review."
+        },
+        {
+          "title": "Rollback boundary",
+          "body": "The complete package set rolls back together to the reviewed v0.0.2 artifacts without deployment, domain, database, or private-application changes."
         }
       ]
     }

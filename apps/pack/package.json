@@ -12,6 +12,9 @@
     "typecheck": "ASTRO_TELEMETRY_DISABLED=1 astro check"
   },
   "devDependencies": {
+    "@sanchika/patterns": "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz",
+    "@sanchika/primitives": "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz",
+    "@sanchika/tokens": "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz",
     "@astrojs/check": "catalog:",
     "astro": "catalog:",
     "typescript": "catalog:"

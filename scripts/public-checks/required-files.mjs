@@ -58,9 +58,18 @@ export const requiredFiles = [
   "scripts/public-checks/root-resource-pages.mjs",
   "scripts/public-checks/route-manifest.mjs",
   "scripts/public-checks/sensitive-content.mjs",
+  "scripts/public-checks/sanchika-adoption.mjs",
   "packages/public-content/src/complyeaze.routes.json",
   "packages/public-content/src/axal.routes.json",
   "packages/public-content/src/pack.routes.json",
   "packages/public-content/src/pack-route-schema.ts",
-  "packages/public-content/src/pack-route-types.ts"
+  "packages/public-content/src/pack-route-types.ts",
+  "packages/public-content/src/sanchika-adoption-schema.ts",
+  "packages/public-content/src/sanchika-adoption-types.ts",
+  "packages/public-content/src/sanchika.adoption.json",
+  "apps/complyeaze/scripts/sanchika-package-smoke.mjs",
+  "apps/complyeaze/src/components/PublicSanchikaAdoptionPage.astro",
+  "apps/complyeaze/src/styles/sanchika.css",
+  "apps/axal/src/styles/sanchika.css",
+  "apps/pack/src/styles/sanchika.css"
 ];
