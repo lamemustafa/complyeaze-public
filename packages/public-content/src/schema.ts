@@ -4,6 +4,8 @@ import type {
   PublicProductsRoute,
 } from "./customer-route-types.ts";
 import type { PublicGatewayRoute } from "./gateway-route-types.ts";
+export { defineSanchikaAdoptionManifest } from "./sanchika-adoption-schema.ts";
+export type { SanchikaAdoptionManifest } from "./sanchika-adoption-types.ts";
 export { defineAxalRouteManifest } from "./axal-route-schema.ts";
 export type {
   AxalDetailRoute,
@@ -45,7 +47,7 @@ export interface PublicRouteBase {
   description: string;
   eyebrow: string;
   heading: string;
-  kind: "evidence" | "gateway" | "home" | "migration" | "policy" | "products" | "resource";
+  kind: "adoption" | "evidence" | "gateway" | "home" | "migration" | "policy" | "products" | "resource";
   robots: "noindex, nofollow";
   sections: PublicSection[];
   signalTerms: string[];
@@ -53,6 +55,10 @@ export interface PublicRouteBase {
   summary: string;
   title: string;
   urlPath: string;
+}
+
+export interface PublicAdoptionRoute extends PublicRouteBase {
+  kind: "adoption";
 }
 
 export interface PublicResourceRoute extends PublicRouteBase {
@@ -82,6 +88,7 @@ export interface PublicMigrationRoute extends PublicRouteBase {
 }
 
 export type PublicRoute =
+  | PublicAdoptionRoute
   | PublicEvidenceRoute
   | PublicGatewayRoute
   | PublicHomeRoute
@@ -258,9 +265,24 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
     );
     return;
   }
+  if (value.kind === "adoption") {
+    for (const field of [
+      "evidenceLinks",
+      "policySummary",
+      "primaryAction",
+      "product",
+      "products",
+      "proof",
+      "secondaryAction",
+      "steps",
+    ] as const) {
+      assert(value[field] === undefined, `${label}.${field} is not valid for adoption routes`);
+    }
+    return;
+  }
   assert(
     value.kind === "policy",
-    `${label}.kind must be evidence, gateway, home, migration, policy, products, or resource`,
+    `${label}.kind must be adoption, evidence, gateway, home, migration, policy, products, or resource`,
   );
   for (const field of [
     "evidenceLinks",

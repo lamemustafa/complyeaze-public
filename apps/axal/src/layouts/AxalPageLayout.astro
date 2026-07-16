@@ -1,4 +1,6 @@
 ---
+import "../styles/sanchika.css";
+
 interface Props {
   currentPath: string;
   description: string;
@@ -87,16 +89,16 @@ const navigation = [
     font-display: swap;
   }
   :root {
-    --axal-purple: #5b21b6;
-    --axal-purple-dark: #3b1678;
-    --axal-purple-soft: #f2edfb;
-    --axal-gold: #b68027;
-    --axal-gold-ink: #8a5b12;
-    --axal-ink: #201a29;
-    --axal-muted: #5f5868;
-    --axal-line: #ded8e5;
-    --axal-warm: #f8f5f2;
-    --axal-white: #fff;
+    --axal-purple: var(--sk-color-brand-primary);
+    --axal-purple-dark: color-mix(in srgb, var(--sk-color-brand-primary) 78%, black);
+    --axal-purple-soft: var(--sk-color-surface-inset);
+    --axal-gold: var(--sk-color-accent-seal);
+    --axal-gold-ink: var(--sk-color-link);
+    --axal-ink: var(--sk-color-ink-primary);
+    --axal-muted: var(--sk-color-ink-secondary);
+    --axal-line: var(--sk-color-border-subtle);
+    --axal-warm: var(--sk-color-canvas);
+    --axal-white: var(--sk-color-surface-raised);
     --display: "Cormorant Garamond", Cormorant, Georgia, serif;
     --body: Outfit, "Avenir Next", sans-serif;
   }
@@ -121,7 +123,10 @@ const navigation = [
     text-wrap: balance;
   }
   p { color: var(--axal-muted); text-wrap: pretty; }
-  :focus-visible { outline: 3px solid var(--axal-gold); outline-offset: 4px; }
+  :focus-visible {
+    outline: var(--sk-focus-outline-width) solid var(--sk-color-focus);
+    outline-offset: var(--sk-focus-outline-offset);
+  }
   .skip-link {
     position: fixed;
     z-index: 20;

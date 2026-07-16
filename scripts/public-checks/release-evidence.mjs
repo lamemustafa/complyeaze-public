@@ -16,8 +16,8 @@ export async function assertReleaseEvidenceSources(root) {
   }
 
   const { publicRouteRegistry } = await import("../public-route-registry.mjs");
-  if (publicRouteRegistry.length !== 21) {
-    findings.push(`expected 21 canonical routes, found ${publicRouteRegistry.length}`);
+  if (publicRouteRegistry.length !== 22) {
+    findings.push(`expected 22 canonical routes, found ${publicRouteRegistry.length}`);
   }
   const ownership = publicRouteRegistry.map((route) => `${route.origin}${route.urlPath}`);
   if (new Set(ownership).size !== ownership.length) {

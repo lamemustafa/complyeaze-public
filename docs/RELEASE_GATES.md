@@ -58,6 +58,9 @@ Each release should record:
   `test-results/public-build/route-manifest.json`, matched to the three typed
   route manifests and their actual Astro HTML outputs. This evidence file is
   not a deployable route.
+- Sanchika adoption evidence from the typed manifest, exact GitHub release
+  tarball resolutions, package smoke test, and built CSS markers for all three
+  public apps.
 - Desktop and mobile screenshots.
 - Accessibility and link-check results.
 - Metadata, robots, sitemap, canonical, and redirect results.

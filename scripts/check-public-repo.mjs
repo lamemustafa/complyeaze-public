@@ -28,7 +28,10 @@ import {
 } from "./public-checks/gateway-pages.mjs";
 import { assertHostedRoutesPolicy } from "./public-checks/hosted-routes.mjs";
 import { assertLegalGovernance } from "./public-checks/legal-governance.mjs";
-import { assertLegacyCleanup } from "./public-checks/legacy-cleanup.mjs";
+import {
+  assertLegacyCleanup,
+  assertLegacyCleanupFixtures
+} from "./public-checks/legacy-cleanup.mjs";
 import { assertPackManifest } from "./public-checks/pack-manifest.mjs";
 import {
   assertMigrationLedger,
@@ -53,6 +56,10 @@ import {
   assertRootResourcePages
 } from "./public-checks/root-resource-pages.mjs";
 import { assertRouteManifest } from "./public-checks/route-manifest.mjs";
+import {
+  assertSanchikaAdoptionBuild,
+  assertSanchikaAdoptionSources
+} from "./public-checks/sanchika-adoption.mjs";
 import {
   assertSensitiveContent,
   assertSensitiveContentFixturePolicy
@@ -298,7 +305,9 @@ async function run() {
     assertCiArtifactPolicyFixtures();
     assertReviewGateFixtures(root);
     await assertReleaseEvidenceSources(root);
+    await assertSanchikaAdoptionSources(root);
     assertVisualGeometryFixtures();
+    assertLegacyCleanupFixtures();
     assertLegacyCleanup(root);
   }
   if (["--all", "--test", "--public"].includes(mode)) {
@@ -328,6 +337,7 @@ async function run() {
     assertCiArtifacts(root);
     assertContributorIntake(root);
     assertDependencyPolicy(root);
+    assertSanchikaAdoptionBuild(root);
     assertDeployWorkflow(root);
     assertHostedRoutesPolicy(root);
     assertLegalGovernance(root);

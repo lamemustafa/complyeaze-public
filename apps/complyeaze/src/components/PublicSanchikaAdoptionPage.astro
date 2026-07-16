@@ -1,0 +1,81 @@
+---
+import rawAdoption from "@complyeaze-public/content/sanchika-adoption";
+import {
+  defineSanchikaAdoptionManifest,
+  type PublicAdoptionRoute,
+} from "@complyeaze-public/content";
+
+interface Props {
+  route: PublicAdoptionRoute;
+}
+
+const { route } = Astro.props;
+const adoption = defineSanchikaAdoptionManifest(rawAdoption);
+---
+
+<section class="intro" aria-labelledby="page-title">
+  <p class="eyebrow">{route.eyebrow}</p>
+  <h1 id="page-title">{route.heading}</h1>
+  <p class="summary">{route.summary}</p>
+  <p>
+    <span class="sk-badge sk-tone-neutral sk-size-sm">{adoption.release.tag}</span>
+    <a href={adoption.release.releaseUrl}>Inspect the published release</a>
+  </p>
+</section>
+
+<section class="adoption-sections" aria-label="Adoption boundaries">
+  {route.sections.map((section) => (
+    <article class="sk-card sk-tone-neutral sk-size-md">
+      <h2>{section.title}</h2>
+      <p>{section.body}</p>
+    </article>
+  ))}
+</section>
+
+<section class="artifact-ledger" aria-labelledby="artifact-title">
+  <header>
+    <p class="eyebrow">Reviewed package set</p>
+    <h2 id="artifact-title">Three packages, one source commit</h2>
+    <p><code>{adoption.release.sourceCommit}</code></p>
+  </header>
+  <ul>
+    {adoption.packages.map((artifact) => (
+      <li class="sk-card sk-tone-info sk-size-md">
+        <strong>{artifact.name}</strong>
+        <code>{artifact.sha256}</code>
+        <a href={artifact.tarballUrl}>Review tarball</a>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<section class="consumer-ledger" aria-labelledby="consumer-title">
+  <h2 id="consumer-title">Adopted public consumers</h2>
+  <ul>
+    {adoption.adoptedApps.map((app) => <li><strong>{app.id}</strong> — {app.surface}</li>)}
+  </ul>
+  <p>
+    Rollback restores the complete <a href={adoption.rollback.releaseUrl}>v{adoption.rollback.version} artifact set</a>.
+  </p>
+</section>
+
+<style>
+  .intro { max-width: 72ch; }
+  .eyebrow { margin: 0 0 var(--sk-space-4); color: var(--sk-color-ink-secondary); font-size: var(--sk-font-size-sm); font-weight: var(--sk-font-weight-bold); letter-spacing: 0.12em; text-transform: uppercase; }
+  h1 { max-width: 18ch; margin: 0; font-family: var(--sk-font-display); font-size: var(--sk-font-size-4xl); line-height: var(--sk-line-height-tight); text-wrap: balance; }
+  h2 { margin: 0; font-size: var(--sk-font-size-2xl); line-height: var(--sk-line-height-tight); }
+  p { text-wrap: pretty; }
+  a { min-height: 44px; display: inline-flex; align-items: center; }
+  .intro > p:last-child { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sk-space-3); margin-top: var(--sk-space-6); }
+  .adoption-sections { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sk-space-4); margin-block: var(--sk-space-16); }
+  .adoption-sections p, .artifact-ledger p { margin-bottom: 0; }
+  .artifact-ledger { display: grid; grid-template-columns: minmax(14rem, 0.65fr) minmax(0, 1.35fr); gap: var(--sk-space-8); padding-block: var(--sk-space-12); border-block: var(--sk-border-width-default) solid var(--sk-color-border-strong); }
+  .artifact-ledger ul { display: grid; gap: var(--sk-space-3); margin: 0; padding: 0; list-style: none; }
+  .artifact-ledger li { display: grid; gap: var(--sk-space-2); }
+  code { overflow-wrap: anywhere; font-family: var(--sk-font-mono); font-size: var(--sk-font-size-xs); }
+  .consumer-ledger { max-width: 72ch; padding-block: var(--sk-space-12); }
+  .consumer-ledger li + li { margin-top: var(--sk-space-2); }
+  @media (max-width: 48rem) {
+    .adoption-sections, .artifact-ledger { grid-template-columns: 1fr; }
+  }
+</style>

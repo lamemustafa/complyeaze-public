@@ -1,0 +1,11 @@
+@import "@sanchika/tokens/theme.css";
+@import "@sanchika/primitives/styles.css";
+@import "@sanchika/patterns/styles.css";
+
+:root {
+  --sk-color-brand-primary: #5b21b6;
+  --sk-color-brand-secondary: #3b1678;
+  --sk-color-accent-seal: #b68027;
+  --sk-color-link: #8a5b12;
+  --sk-color-focus: #b68027;
+}

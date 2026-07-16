@@ -8,7 +8,8 @@
     "./axal-routes": "./src/axal.routes.json",
     "./complyeaze-migration-ledger": "./src/complyeaze.migration-ledger.ts",
     "./complyeaze-routes": "./src/complyeaze.routes.json",
-    "./pack-routes": "./src/pack.routes.json"
+    "./pack-routes": "./src/pack.routes.json",
+    "./sanchika-adoption": "./src/sanchika.adoption.json"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

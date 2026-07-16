@@ -14,9 +14,9 @@ const { states } = Astro.props;
       <span>Matters</span><span>Obligations</span><span>Evidence</span><span>Review queue</span>
     </aside>
     <div class="work-list">
-      <div class="list-heading"><strong>Attention today</strong><span>Review posture</span></div>
+      <div class="list-heading"><strong>Attention today</strong><span class="sk-badge sk-tone-neutral sk-size-sm">Review posture</span></div>
       {states.map((state, index) => (
-        <article>
+        <article class="sk-card sk-tone-neutral sk-size-md">
           <span class="state-mark" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
           <strong>{state}</strong>
           <small>{index % 2 === 0 ? "Source visible" : "Action assigned"}</small>

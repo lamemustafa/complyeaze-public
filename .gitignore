@@ -6,6 +6,7 @@ out/
 coverage/
 test-results/
 .impeccable/critique/
+.superpowers/
 playwright-report/
 blob-report/
 .playwright/

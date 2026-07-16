@@ -1,4 +1,5 @@
 ---
+import "../styles/sanchika.css";
 import rawManifest from "../../../../packages/public-content/src/pack.routes.json";
 import { definePackRouteManifest } from "../../../../packages/public-content/src/pack-route-schema.ts";
 
@@ -21,9 +22,32 @@ const canonical = new URL(route.urlPath, manifest.origin);
     <title>{route.title}</title>
   </head>
   <body>
-    <main>
+    <main class="sk-card sk-tone-neutral sk-size-md">
+      <span class="sk-badge sk-tone-neutral sk-size-sm">Sanchika v0.1 shell</span>
       <h1>{route.heading}</h1>
       <p>{route.summary}</p>
     </main>
   </body>
 </html>
+
+<style>
+  :global(*) { box-sizing: border-box; }
+  :global(body) {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding: var(--sk-space-6);
+    background: var(--sk-color-canvas);
+    color: var(--sk-color-ink-primary);
+    font-family: var(--sk-font-body);
+  }
+  main { width: min(100%, 42rem); }
+  main > .sk-badge { justify-self: start; }
+  h1 { margin-block: var(--sk-space-5) var(--sk-space-3); }
+  p { margin: 0; color: var(--sk-color-ink-secondary); }
+  :global(:focus-visible) {
+    outline: var(--sk-focus-outline-width) solid var(--sk-color-focus);
+    outline-offset: var(--sk-focus-outline-offset);
+  }
+</style>

@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "release": {
+    "tag": "v0.1.0",
+    "version": "0.1.0",
+    "sourceCommit": "050e444d50e8e4800f471709411eefca40058ab4",
+    "releaseUrl": "https://github.com/lamemustafa/sanchika/releases/tag/v0.1.0",
+    "distribution": "github-release-artifacts"
+  },
+  "packages": [
+    {
+      "name": "@sanchika/tokens",
+      "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz",
+      "sha256": "92148781457a3797db7f643235c8f23d881a4842426d50961bf6ec65bd718c55",
+      "assetDigest": "sha256:92148781457a3797db7f643235c8f23d881a4842426d50961bf6ec65bd718c55"
+    },
+    {
+      "name": "@sanchika/primitives",
+      "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz",
+      "sha256": "2d22f4a07f3d0ae1064e663551cecafc3dedeae4bf700889a0c900935e8b9585",
+      "assetDigest": "sha256:2d22f4a07f3d0ae1064e663551cecafc3dedeae4bf700889a0c900935e8b9585"
+    },
+    {
+      "name": "@sanchika/patterns",
+      "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz",
+      "sha256": "3b0b6e6e5b42712222bcf5badeca63a9fee6c0466904de0a2f5d27f2cd5428f5",
+      "assetDigest": "sha256:3b0b6e6e5b42712222bcf5badeca63a9fee6c0466904de0a2f5d27f2cd5428f5"
+    }
+  ],
+  "adoptedApps": [
+    { "id": "complyeaze", "surface": "shared public shell and adoption evidence" },
+    { "id": "axal", "surface": "shared public marketing shell" },
+    { "id": "pack", "surface": "noindex public foundation shell" }
+  ],
+  "cssImportOrder": [
+    "@sanchika/tokens/theme.css",
+    "@sanchika/primitives/styles.css",
+    "@sanchika/patterns/styles.css"
+  ],
+  "smoke": {
+    "definitionExport": "tokenDefinitions",
+    "primitiveExport": "primitiveClassName",
+    "patternExport": "patternClassName"
+  },
+  "rollback": {
+    "version": "0.0.2",
+    "releaseUrl": "https://github.com/lamemustafa/sanchika/releases/tag/v0.0.2",
+    "packages": [
+      {
+        "name": "@sanchika/tokens",
+        "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.0.2/sanchika-tokens-0.0.2.tgz",
+        "sha256": "6a82a1efd83a0af2f351b86af6cd7ff9ba724c3d41c3564c582400854b96189c",
+        "assetDigest": "sha256:6a82a1efd83a0af2f351b86af6cd7ff9ba724c3d41c3564c582400854b96189c"
+      },
+      {
+        "name": "@sanchika/primitives",
+        "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.0.2/sanchika-primitives-0.0.2.tgz",
+        "sha256": "76a37620fa25d256377222f6caf0beadae4c755ddc124dc9c42a51a29ca09742",
+        "assetDigest": "sha256:76a37620fa25d256377222f6caf0beadae4c755ddc124dc9c42a51a29ca09742"
+      },
+      {
+        "name": "@sanchika/patterns",
+        "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.0.2/sanchika-patterns-0.0.2.tgz",
+        "sha256": "d50fe702112d337f28afea40f0012492344dca8dc6964dfadea4e70ce71c75da",
+        "assetDigest": "sha256:d50fe702112d337f28afea40f0012492344dca8dc6964dfadea4e70ce71c75da"
+      }
+    ]
+  },
+  "nonGoals": [
+    "P3 craft routes and product-pattern composition",
+    "public page redesign or customer-copy rewrite",
+    "deployment, domains, redirects, indexing, or private-route cleanup",
+    "private application or Tools adoption",
+    "npm publication or Sanchika source changes"
+  ]
+}

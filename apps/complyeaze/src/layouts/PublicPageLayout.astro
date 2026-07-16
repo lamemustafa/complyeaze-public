@@ -1,6 +1,7 @@
 ---
 import type { PublicRoute } from "@complyeaze-public/content";
 import { canonicalUrl } from "@complyeaze-public/shell";
+import "../styles/sanchika.css";
 
 interface Props {
   origin: string;
@@ -35,19 +36,19 @@ function isCurrentPrimaryNavItem(href: string, urlPath: string): boolean {
     <meta property="og:url" content={canonical} />
     <title>{route.title}</title>
     <style is:global>
-      :root { color-scheme: light; font-family: ui-sans-serif, system-ui, sans-serif; }
+      :root { color-scheme: light; font-family: var(--sk-font-body); }
       * { box-sizing: border-box; }
-      body { margin: 0; color: #0f172a; background: #fff; line-height: 1.65; }
-      a { color: #1d4ed8; text-underline-offset: 0.2em; }
-      a:focus-visible { outline: 3px solid #2f80ed; outline-offset: 4px; }
-      .skip-link { position: fixed; inset: 0 auto auto 1rem; z-index: 10; padding: 0.75rem 1rem; background: #0f172a; color: #fff; transform: translateY(-140%); }
+      body { margin: 0; color: var(--sk-color-ink-primary); background: var(--sk-color-canvas); line-height: var(--sk-line-height-body); }
+      a { color: var(--sk-color-link); text-underline-offset: 0.2em; }
+      a:focus-visible { outline: var(--sk-focus-outline-width) solid var(--sk-color-focus); outline-offset: var(--sk-focus-outline-offset); }
+      .skip-link { position: fixed; inset: 0 auto auto 1rem; z-index: 10; padding: var(--sk-space-3) var(--sk-space-4); background: var(--sk-color-brand-primary); color: var(--sk-color-ink-inverse); transform: translateY(-140%); }
       .skip-link:focus { transform: translateY(1rem); }
-      header, footer { border-block: 1px solid #e5e7eb; }
+      header, footer { border-block: var(--sk-border-width-default) solid var(--sk-color-border-subtle); background: var(--sk-color-surface); }
       header > div, footer > div, main { width: min(100% - 2rem, 72rem); margin-inline: auto; }
       header > div, footer > div { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1rem; }
-      .brand { min-height: 44px; display: inline-flex; align-items: center; color: #0f172a; font-weight: 750; text-decoration: none; }
+      .brand { min-height: 44px; display: inline-flex; align-items: center; color: var(--sk-color-ink-primary); font-weight: var(--sk-font-weight-bold); text-decoration: none; }
       header nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
-      header nav a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; color: #0f172a; }
+      header nav a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; color: var(--sk-color-ink-primary); }
       header nav a[aria-current="page"] { font-weight: 750; text-decoration-thickness: 0.16em; }
       main { padding-block: clamp(3rem, 8vw, 7rem); }
       footer { border-block-end: 0; }
@@ -85,7 +86,8 @@ function isCurrentPrimaryNavItem(href: string, urlPath: string): boolean {
       <div>
         <div class="footer-copy">
           <p>Public product facts and evidence. Sensitive operational data stays private.</p>
-          <a class="colophon" href="https://sanchika.complyeaze.com/">Sanchika — inspect the design evidence.</a>
+          <p><span class="sk-badge sk-tone-neutral sk-size-sm">Sanchika v0.1</span></p>
+          <a class="colophon" href="/sanchika/">Inspect the adopted design evidence.</a>
         </div>
         <nav aria-label="Policy navigation">
           <a href="/privacy/" aria-current={route.urlPath === "/privacy/" ? "page" : undefined}>Privacy</a>
