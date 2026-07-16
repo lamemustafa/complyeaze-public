@@ -1,7 +1,7 @@
 # Visual overlap detector hotfix design
 
 Date: 2026-07-16
-Status: Approved approach; awaiting written-spec review
+Status: Implemented; PR verification in progress
 
 ## Outcome
 
@@ -18,11 +18,11 @@ h2 Use Tools for a first-pass draft
 
 Evidence:
 
-- PR run `29469442235` failed only in the visual step after lint, typecheck, test, build, and browser installation passed.
-- Post-merge run `29469850041` reproduced the same finding on merge commit `fa32fae4dbd0e4310e97d705f897207a7bdd47d5`.
-- The local 36-page by 3-viewport matrix passed all 108 cells.
-- Local desktop, tablet, mobile, 320px, and 200% text-resize checks found no gateway overlap or horizontal overflow.
-- The failure targets the first boundary heading, whose position can differ by a subpixel when Linux system-font metrics change the preceding hero height.
+- [PR #40 CI run `29469442235`](https://github.com/lamemustafa/complyeaze-public/actions/runs/29469442235) failed only in the visual step after lint, typecheck, test, build, and browser installation passed.
+- [Post-merge `main` run `29469850041`](https://github.com/lamemustafa/complyeaze-public/actions/runs/29469850041) reproduced the same finding on merge commit `fa32fae4dbd0e4310e97d705f897207a7bdd47d5`.
+- [Hotfix PR #41 run `29471501979`](https://github.com/lamemustafa/complyeaze-public/actions/runs/29471501979) passed the visual matrix and every subsequent public gate on the implemented head.
+- Local viewport and text-resize runs were diagnostic observations only; they are not treated as release or product-status evidence.
+- Inference from the environment-specific boundary result: Linux system-font metrics moved a subpixel strip of the first boundary heading into the first viewport.
 
 The repeated environment-specific result makes the visual gate the active defect. It does not justify changing page spacing without evidence of a rendered overlap.
 
