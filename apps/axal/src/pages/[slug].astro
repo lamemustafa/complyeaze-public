@@ -1,0 +1,9 @@
+---
+import rawManifest from "../../../../packages/public-content/src/axal.routes.json";
+import { defineAxalRouteManifest } from "../../../../packages/public-content/src/axal-route-schema.ts";
+import AxalDetailPage from "../components/AxalDetailPage.astro";
+import AxalPageLayout from "../layouts/AxalPageLayout.astro";
+export function getStaticPaths(){const manifest=defineAxalRouteManifest(rawManifest);return manifest.routes.filter((route)=>route.kind==="axal-detail").map((route)=>({params:{slug:route.slug},props:{route}}));}
+const { route } = Astro.props;
+---
+<AxalPageLayout currentPath={route.urlPath} description={route.description} title={route.title}><AxalDetailPage route={route} /></AxalPageLayout>

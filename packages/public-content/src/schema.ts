@@ -4,6 +4,13 @@ import type {
   PublicProductsRoute,
 } from "./customer-route-types.ts";
 import type { PublicGatewayRoute } from "./gateway-route-types.ts";
+export { defineAxalRouteManifest } from "./axal-route-schema.ts";
+export type {
+  AxalDetailRoute,
+  AxalHomeRoute,
+  AxalRoute,
+  AxalRouteManifest,
+} from "./axal-route-types.ts";
 
 export type {
   PublicHomeRoute,

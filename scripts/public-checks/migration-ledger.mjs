@@ -340,21 +340,25 @@ export function assertMigrationLedger(root) {
   ]
     .join(" ")
     .toLowerCase();
-  if (!axalFamilyCopy.includes("planned") || !axalFamilyCopy.includes("apps/axal")) {
+  if (
+    !axalFamilyCopy.includes("typed preview parity") ||
+    !axalFamilyCopy.includes("apps/axal") ||
+    !axalFamilyCopy.includes("cleanup blocked")
+  ) {
     findings.push(
-      "Axal marketing: family copy must identify the same-host destinations as planned and state the current apps/axal foundation-only implementation",
+      "Axal marketing: family copy must record apps/axal typed preview parity while keeping cleanup blocked",
     );
   }
   if (
     !axalMarketing?.routes.every((route) => {
       const evidenceStatus = route.evidenceStatus.toLowerCase();
-      return ["planned", "apps/axal", "implemented", "pending"].every((term) =>
+      return ["typed preview parity", "apps/axal", "hosted", "pending"].every((term) =>
         evidenceStatus.includes(term),
       );
     })
   ) {
     findings.push(
-      "Axal marketing: every route must keep its unimplemented apps/axal destination explicit in evidence status",
+      "Axal marketing: every route must record apps/axal typed preview parity and pending hosted evidence",
     );
   }
 

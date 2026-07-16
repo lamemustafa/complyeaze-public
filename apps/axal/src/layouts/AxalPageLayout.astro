@@ -1,0 +1,218 @@
+---
+interface Props {
+  currentPath: string;
+  description: string;
+  title: string;
+}
+
+const { currentPath, description, title } = Astro.props;
+const canonical = new URL(currentPath, Astro.site ?? "https://axal.complyeaze.com");
+const navigation = [
+  { href: "/", label: "Overview" },
+  { href: "/ca-practice-management-software/", label: "Practice" },
+  { href: "/gst-notice-management-software/", label: "GST notices" },
+  { href: "/compliance-calendar-software-india/", label: "Calendar" },
+  { href: "/gst-reconciliation-evidence-review/", label: "Reconciliation" },
+  { href: "/client-document-collection-portal-access/", label: "Documents" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Axal home">
+        <span class="brand-mark" aria-hidden="true">A</span>
+        <span><strong>Axal</strong><small>by ComplyEaze</small></span>
+      </a>
+      <nav aria-label="Primary navigation">
+        {navigation.map((item) => (
+          <a href={item.href} aria-current={currentPath === item.href ? "page" : undefined}>
+            {item.label}
+          </a>
+        ))}
+      </nav>
+      <a class="header-action" href="https://axal.complyeaze.com/signup">Start with Axal</a>
+    </header>
+    <main id="main-content"><slot /></main>
+    <footer>
+      <div>
+        <a class="brand footer-brand" href="/" aria-label="Axal home">
+          <span class="brand-mark" aria-hidden="true">A</span>
+          <span><strong>Axal</strong><small>Compliance workflow, under review</small></span>
+        </a>
+        <p>Public product guidance for CA and CS teams. Authenticated work stays in the Axal app.</p>
+      </div>
+      <nav aria-label="Footer navigation">
+        <a href="https://complyeaze.com/">ComplyEaze</a>
+        <a href="https://complyeaze.com/privacy/">Privacy</a>
+        <a href="https://complyeaze.com/terms/">Terms</a>
+        <a href="https://complyeaze.com/contact/">Contact</a>
+        <a href="https://axal.complyeaze.com/login">Log in</a>
+      </nav>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  @font-face {
+    font-family: "Cormorant Garamond";
+    src: url("/fonts/cormorant/Cormorant-Variable.ttf") format("truetype-variations");
+    font-style: normal;
+    font-weight: 300 700;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Outfit";
+    src: url("/fonts/outfit/Outfit-Variable.ttf") format("truetype-variations");
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+  }
+  :root {
+    --axal-purple: #5b21b6;
+    --axal-purple-dark: #3b1678;
+    --axal-purple-soft: #f2edfb;
+    --axal-gold: #b68027;
+    --axal-gold-ink: #8a5b12;
+    --axal-ink: #201a29;
+    --axal-muted: #5f5868;
+    --axal-line: #ded8e5;
+    --axal-warm: #f8f5f2;
+    --axal-white: #fff;
+    --display: "Cormorant Garamond", Cormorant, Georgia, serif;
+    --body: Outfit, "Avenir Next", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--axal-white);
+    color: var(--axal-ink);
+    font-family: var(--body);
+    line-height: 1.65;
+  }
+  a { color: inherit; }
+  img, svg { display: block; max-width: 100%; }
+  h1, h2, h3, p { margin-top: 0; }
+  h1, h2, h3 {
+    font-family: var(--display);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+  p { color: var(--axal-muted); text-wrap: pretty; }
+  :focus-visible { outline: 3px solid var(--axal-gold); outline-offset: 4px; }
+  .skip-link {
+    position: fixed;
+    z-index: 20;
+    left: 1rem;
+    top: 1rem;
+    padding: .7rem 1rem;
+    background: var(--axal-ink);
+    color: white;
+    transform: translateY(-180%);
+  }
+  .skip-link:focus { transform: translateY(0); }
+  .site-header {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    padding: .8rem clamp(1rem, 4vw, 4rem);
+    border-bottom: 1px solid var(--axal-line);
+    background: rgba(255,255,255,.97);
+  }
+  .brand { display: inline-flex; align-items: center; gap: .7rem; text-decoration: none; }
+  .brand-mark {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 6px;
+    background: var(--axal-purple);
+    color: white;
+    font-family: var(--display);
+    font-size: 1.55rem;
+    font-weight: 700;
+  }
+  .brand strong { display: block; font-size: 1.15rem; line-height: 1; }
+  .brand small { display: block; margin-top: .2rem; color: var(--axal-muted); font-size: .72rem; }
+  .site-header nav { display: flex; align-items: center; gap: .15rem; margin-left: auto; }
+  .site-header nav a, footer nav a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding: .55rem .7rem;
+    color: var(--axal-muted);
+    font-size: .84rem;
+    text-decoration: none;
+  }
+  .site-header nav a:hover, .site-header nav a[aria-current="page"] { color: var(--axal-purple); }
+  .site-header nav a[aria-current="page"] { box-shadow: inset 0 -2px var(--axal-purple); }
+  .header-action, .button {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .7rem 1rem;
+    border: 1px solid var(--axal-purple);
+    border-radius: 6px;
+    background: var(--axal-purple);
+    color: white;
+    font-weight: 650;
+    text-decoration: none;
+  }
+  .header-action:hover, .button:hover { background: var(--axal-purple-dark); }
+  .button.secondary { background: transparent; color: var(--axal-purple); }
+  .button.secondary:hover { background: var(--axal-purple-soft); }
+  footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 3rem clamp(1rem, 5vw, 5rem);
+    border-top: 1px solid var(--axal-line);
+    background: var(--axal-warm);
+  }
+  footer p { max-width: 50ch; margin: 1rem 0 0; font-size: .9rem; }
+  footer nav { display: flex; flex-wrap: wrap; align-content: flex-start; justify-content: flex-end; }
+
+  @media (max-width: 980px) {
+    .site-header { flex-wrap: wrap; }
+    .site-header nav { order: 3; width: 100%; overflow-x: auto; margin-left: 0; }
+    .header-action { margin-left: auto; }
+  }
+  @media (max-width: 620px) {
+    .site-header { padding-inline: 1rem; }
+    .header-action { display: none; }
+    .site-header nav { flex-wrap: wrap; overflow-x: visible; }
+    footer { flex-direction: column; }
+    footer nav { justify-content: flex-start; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0s !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0s !important;
+    }
+  }
+</style>

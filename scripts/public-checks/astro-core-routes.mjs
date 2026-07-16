@@ -164,10 +164,10 @@ function assertAstroCustomerRouteSources(root, findings) {
     findings.push("scripts/visual-check.mjs: obsolete ComplyEaze foundation target remains");
   }
   if (
-    !visualCheck.includes("const expectedVisualTargetCount = 36") ||
+    !visualCheck.includes("const expectedVisualTargetCount = 41") ||
     !visualCheck.includes("visualTargets.length !== expectedVisualTargetCount")
   ) {
-    findings.push("scripts/visual-check.mjs: expected 36-page visual inventory is not enforced");
+    findings.push("scripts/visual-check.mjs: expected 41-page visual inventory is not enforced");
   }
 }
 

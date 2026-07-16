@@ -283,6 +283,7 @@ async function run() {
     await assertMigrationLedgerFixtures(root);
     assertCanonicalManifestClaimFixture();
     assertGatewayPageSources(root);
+    assertAxalPages(root);
     assertPolicyPageSources(root);
     assertRootResourcePageSources();
     assertAstroBuildOutputFixtures();
@@ -316,7 +317,7 @@ async function run() {
     assertGatewayPages(root);
     assertPolicyPages(root);
     assertRootResourcePages(root);
-    assertAxalPages();
+    assertAxalPages(root);
     assertCiArtifacts(root);
     assertContributorIntake(root);
     assertDependencyPolicy(root);

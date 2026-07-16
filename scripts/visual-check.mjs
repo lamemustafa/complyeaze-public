@@ -11,15 +11,6 @@ const root = process.cwd();
 const dist = path.join(root, "dist");
 const astroApps = [
   {
-    slug: "astro-axal-foundation",
-    serverKey: "axal",
-    urlPath: "/",
-    publicPath: "https://axal.complyeaze.com/",
-    heading: "Axal Astro workspace foundation",
-    profile: "foundation",
-    signalTerms: ["Axal"],
-  },
-  {
     slug: "astro-pack-foundation",
     serverKey: "pack",
     urlPath: "/",
@@ -44,7 +35,11 @@ const visualTargets = [
   ...astroApps,
   ...astroRouteTargets,
 ];
-const expectedVisualTargetCount = 36;
+const visualTargetSlugs = visualTargets.map((target) => target.slug);
+if (new Set(visualTargetSlugs).size !== visualTargetSlugs.length) {
+  throw new Error("Visual page slugs must be unique across legacy and Astro targets");
+}
+const expectedVisualTargetCount = 41;
 if (visualTargets.length !== expectedVisualTargetCount) {
   throw new Error(
     `Expected ${expectedVisualTargetCount} visual pages, received ${visualTargets.length}`,

@@ -172,13 +172,20 @@ function assertApp(root, directory, packageName, origin, findings) {
     findings.push(`${base}/astro.config.mjs: output must be static`);
   }
   const ownsTypedCustomerRoot =
-    directory === "complyeaze" &&
-    page.includes("definePublicRouteManifest") &&
-    page.includes("PublicPageLayout");
+    (directory === "complyeaze" &&
+      page.includes("definePublicRouteManifest") &&
+      page.includes("PublicPageLayout")) ||
+    (directory === "axal" &&
+      page.includes("defineAxalRouteManifest") &&
+      page.includes("AxalPageLayout"));
   if (ownsTypedCustomerRoot) {
-    const layout = read(root, `${base}/src/layouts/PublicPageLayout.astro`, findings);
-    if (!layout.includes('name="robots" content={route.robots}')) {
-      findings.push(`${base}/src/layouts/PublicPageLayout.astro: typed root must stay noindex`);
+    const layoutName = directory === "axal" ? "AxalPageLayout.astro" : "PublicPageLayout.astro";
+    const layout = read(root, `${base}/src/layouts/${layoutName}`, findings);
+    if (
+      !layout.includes('name="robots" content={route.robots}') &&
+      !layout.includes('name="robots" content="noindex, nofollow"')
+    ) {
+      findings.push(`${base}/src/layouts/${layoutName}: typed root must stay noindex`);
     }
   } else if (!page.includes('name="robots" content="noindex, nofollow"')) {
     findings.push(`${base}/src/pages/index.astro: foundation route must stay noindex`);
