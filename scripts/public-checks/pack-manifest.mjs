@@ -43,6 +43,13 @@ export async function assertPackManifest(root) {
   const unsafeClaim = structuredClone(rawManifest);
   unsafeClaim.routes[0].summary = "Install now from the Chrome Web Store.";
   assertRejected(definePackRouteManifest, unsafeClaim, "Pack manifest accepted a readiness claim");
+  const unsafeCraftClaim = structuredClone(rawManifest);
+  unsafeCraftClaim.routes[1].summary = "Install now from the Chrome Web Store.";
+  assertRejected(
+    definePackRouteManifest,
+    unsafeCraftClaim,
+    "Pack craft manifest accepted a readiness claim",
+  );
   const unsupportedField = structuredClone(rawManifest);
   unsupportedField.routes[0].installUrl = "https://example.com";
   assertRejected(definePackRouteManifest, unsupportedField, "Pack manifest accepted an unsafe field");

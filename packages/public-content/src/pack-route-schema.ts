@@ -26,6 +26,7 @@ function validateCraft(value: unknown, label: string): asserts value is PackCraf
   assert(value.discoverability === "review-only", `${label}.discoverability must be review-only`);
   assert(Array.isArray(value.signalTerms) && value.signalTerms.length > 0, `${label}.signalTerms must not be empty`);
   defineCraftReviewEvidence(value.reviewEvidence, ["LocalArtifactFlow", "CustodyBoundary", "PermissionExplainer", "SourceProvenanceStrip", "ReleaseStatusBanner"]);
+  assertNoReadinessClaims(value, label);
 }
 
 function validateFoundation(value: unknown, label: string): asserts value is PackFoundationRoute {
@@ -54,6 +55,10 @@ function validateFoundation(value: unknown, label: string): asserts value is Pac
   assert(value.robots === "noindex, nofollow", `${label}.robots must stay noindex, nofollow`);
   assert(Array.isArray(value.signalTerms) && value.signalTerms.length > 0, `${label}.signalTerms must not be empty`);
   value.signalTerms.forEach((term, index) => assertString(term, `${label}.signalTerms[${index}]`));
+  assertNoReadinessClaims(value, label);
+}
+
+function assertNoReadinessClaims(value: unknown, label: string) {
   const text = JSON.stringify(value);
   assert(
     !/chrome web store|production ready|release ready|install now|available now/i.test(text),
