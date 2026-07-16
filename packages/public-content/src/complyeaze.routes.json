@@ -551,7 +551,7 @@
         },
         {
           "title": "Migration posture",
-          "body": "The customer-core homepage, product-family index, Pack and Tools gateways, about, contact, trust, docs, migration, and policy/status/release routes now have canonical Astro previews alongside the legacy rollback build. Axal marketing remains legacy-seeded. Route-level cleanup rows stay blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
+          "body": "All twenty legacy public routes now have typed Astro preview parity: the customer-core homepage and product-family index, Pack and Tools gateways, ten supporting ComplyEaze routes, and six Axal routes alongside the legacy rollback build. Axal hosting and path routing remain pending. Route-level cleanup rows stay blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
         },
         {
           "title": "Hosting posture",
@@ -580,6 +580,10 @@
         "excluded": "Production cutover claims"
       },
       "sections": [
+        {
+          "title": "2026-07-16 - Axal six-route preview port",
+          "body": "Moved the Axal homepage and five customer workflow pages into one typed Axal manifest and the Axal Astro preview, preserved the established public identity, replaced the private product screenshot with a labelled synthetic workbench, and kept authentication, hosting, path routing, indexing, and private cleanup outside the tranche."
+        },
         {
           "title": "2026-07-16 - Product gateway route port",
           "body": "Moved /products/pack/ and /products/tools/ into the canonical typed manifest and ComplyEaze Astro preview, routed product-family choices through customer-safe gateways, and kept product capability and release evidence on product-owned public surfaces."

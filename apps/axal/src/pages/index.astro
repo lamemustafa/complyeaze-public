@@ -1,19 +1,10 @@
 ---
-const product = "Axal";
+import rawManifest from "../../../../packages/public-content/src/axal.routes.json";
+import { defineAxalRouteManifest } from "../../../../packages/public-content/src/axal-route-schema.ts";
+import AxalHomePage from "../components/AxalHomePage.astro";
+import AxalPageLayout from "../layouts/AxalPageLayout.astro";
+const manifest = defineAxalRouteManifest(rawManifest);
+const route = manifest.routes.find((entry) => entry.kind === "axal-home");
+if (!route) throw new Error("Axal home route is missing");
 ---
-
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="robots" content="noindex, nofollow" />
-    <title>{product} Astro workspace foundation</title>
-  </head>
-  <body>
-    <main>
-      <h1>{product} Astro workspace foundation</h1>
-      <p>This foundation does not serve customer routes until route parity is proven.</p>
-    </main>
-  </body>
-</html>
+<AxalPageLayout currentPath={route.urlPath} description={route.description} title={route.title}><AxalHomePage route={route} /></AxalPageLayout>

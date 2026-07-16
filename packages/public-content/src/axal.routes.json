@@ -1,0 +1,536 @@
+{
+  "schemaVersion": 1,
+  "app": "axal",
+  "origin": "https://axal.complyeaze.com",
+  "routes": [
+    {
+      "kind": "axal-home",
+      "slug": "index",
+      "urlPath": "/",
+      "title": "Axal | Compliance workspace for CA and CS teams",
+      "description": "Axal helps CA and CS teams organize compliance matters, obligations, evidence, client follow-up, and professional review.",
+      "eyebrow": "Axal by ComplyEaze",
+      "heading": "Compliance work needs a visible source, owner, and review state",
+      "summary": "Bring matters, obligations, evidence, client follow-up, and professional review into one calm operating view for the firm.",
+      "navLabel": "Overview",
+      "audience": "For CA partners, CS teams, GST leads, practice managers, and staff accountants coordinating client compliance work.",
+      "boundary": "Axal supports workflow and evidence review. Professional judgement, statutory verification, authorization, and final action remain with the firm.",
+      "primaryAction": {
+        "label": "Start with Axal",
+        "href": "https://axal.complyeaze.com/signup"
+      },
+      "secondaryAction": {
+        "label": "Explore workflows",
+        "href": "/ca-practice-management-software/"
+      },
+      "evidenceLinks": [
+        {
+          "label": "Current Axal homepage",
+          "href": "https://axal.complyeaze.com/",
+          "description": "Current public Axal homepage used as the design and customer-positioning baseline."
+        }
+      ],
+      "relatedRoutes": [
+        {
+          "label": "Practice management",
+          "href": "/ca-practice-management-software/"
+        },
+        {
+          "label": "GST notices",
+          "href": "/gst-notice-management-software/"
+        },
+        {
+          "label": "Compliance calendar",
+          "href": "/compliance-calendar-software-india/"
+        }
+      ],
+      "robots": "noindex, nofollow",
+      "signalTerms": [
+        "CA practice",
+        "GST matters",
+        "compliance obligations",
+        "professional review"
+      ],
+      "proof": [
+        "Keep source and evidence close to each work item.",
+        "Make ownership, blockers, and review posture visible.",
+        "Treat assisted output as material for professional review."
+      ],
+      "routeDirectory": [
+        {
+          "label": "Practice management",
+          "href": "/ca-practice-management-software/"
+        },
+        {
+          "label": "GST notices",
+          "href": "/gst-notice-management-software/"
+        },
+        {
+          "label": "Compliance calendar",
+          "href": "/compliance-calendar-software-india/"
+        },
+        {
+          "label": "GST reconciliation",
+          "href": "/gst-reconciliation-evidence-review/"
+        },
+        {
+          "label": "Documents and access",
+          "href": "/client-document-collection-portal-access/"
+        }
+      ],
+      "workbenchStates": [
+        "GST notice matter",
+        "Reconciliation variance",
+        "Compliance obligation",
+        "Evidence requested",
+        "Professional review needed",
+        "Owner assigned",
+        "Client input pending"
+      ],
+      "sections": [
+        {
+          "title": "Built around compliance work",
+          "body": "Axal organizes the work around matters, obligations, evidence, and review posture rather than a generic task list.",
+          "points": [
+            "Connect the source to the work item.",
+            "Keep ownership and blockers visible.",
+            "Preserve the review trail before action."
+          ]
+        },
+        {
+          "title": "A calmer operating view",
+          "body": "Partners and managers can scan what needs attention without assembling another status spreadsheet.",
+          "points": [
+            "Separate due, blocked, pending review, and ready states.",
+            "Keep client follow-up tied to the relevant work.",
+            "Give staff clearer handoffs without hiding professional review."
+          ]
+        },
+        {
+          "title": "Public story, private workspace",
+          "body": "These pages explain the workflow while authentication, client data, documents, credentials, and portal operations stay in the current Axal app.",
+          "points": [
+            "Public pages contain synthetic data only.",
+            "Signup and login remain external app actions.",
+            "Final decisions remain with authorized professionals."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "axal-detail",
+      "slug": "ca-practice-management-software",
+      "urlPath": "/ca-practice-management-software/",
+      "title": "CA practice management software for compliance teams | Axal",
+      "description": "Axal is designed around a shared compliance workspace for matters, obligations, evidence, portal-access follow-up, documents, and tasks.",
+      "eyebrow": "Axal by ComplyEaze",
+      "heading": "Practice management software for Indian CA and CS compliance teams",
+      "summary": "Axal is built for firms where practice management is not just billing, timesheets, and office tasks. It is positioned as a shared compliance workspace for client matters, firm-defined obligations, source evidence, portal-access follow-up, documents, and review handoffs.",
+      "navLabel": "Practice management",
+      "audience": "For CA partners, CS teams, GST leads, practice managers, and staff accountants who need one place to see what needs attention and why.",
+      "boundary": "Axal does not replace professional judgement. It keeps source, owner, status, and review posture visible so the firm can decide safely.",
+      "primaryAction": {
+        "label": "See the Axal workspace",
+        "href": "https://axal.complyeaze.com/signup"
+      },
+      "secondaryAction": {
+        "label": "Explore Axal",
+        "href": "/"
+      },
+      "evidenceLinks": [
+        {
+          "label": "Current Axal product page",
+          "href": "https://axal.complyeaze.com/ca-practice-management-software",
+          "description": "Current public Axal page used to reconcile customer-safe positioning and boundaries."
+        }
+      ],
+      "relatedRoutes": [
+        {
+          "label": "GST notices",
+          "href": "/gst-notice-management-software/"
+        },
+        {
+          "label": "Compliance calendar",
+          "href": "/compliance-calendar-software-india/"
+        }
+      ],
+      "robots": "noindex, nofollow",
+      "signalTerms": [
+        "Practice management",
+        "CA teams",
+        "professional review"
+      ],
+      "sections": [
+        {
+          "title": "Built around compliance work, not generic office admin",
+          "body": "Many practice tools start with clients, tasks, and documents. Axal's public positioning starts with the compliance question: what changed, what is due, what is blocked, what evidence supports it, and who owns the next action.",
+          "points": [
+            "Matter views for notices, orders, replies, evidence, and review state.",
+            "Obligation views for recurring filings, deadlines, applicability, and owner follow-up.",
+            "Document and task context kept close to the work item, not scattered across folders and chats."
+          ]
+        },
+        {
+          "title": "A calm operating layer for growing teams",
+          "body": "Axal is intended to help partners and managers scan across clients without asking the team for another spreadsheet update.",
+          "points": [
+            "See overdue, blocked, pending review, and ready states without opening every file.",
+            "Keep client follow-up tied to the matter or obligation it belongs to.",
+            "Give juniors and articles clearer handoffs without hiding the CA review step."
+          ]
+        },
+        {
+          "title": "Designed for source-backed professional review",
+          "body": "Axal's workflow is intended to treat AI output as a review artifact, not an authority. The workspace is shaped around source documents, timestamps, evidence notes, and human approval.",
+          "points": [
+            "Separate AI draft, staff prepared, CA review needed, client input needed, and ready states.",
+            "Keep portal, document, and task evidence visible before a reviewer acts.",
+            "Avoid black-box confidence claims when a source or reviewer is missing."
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "What is practice management software for CA firms?",
+          "answer": "It is software that helps a CA or CS practice organize clients, work, documents, owners, deadlines, and follow-up. Axal focuses that category on compliance operations: matters, obligations, evidence, portal access, documents, tasks, and review posture."
+        },
+        {
+          "question": "Does Axal replace CA or CS review?",
+          "answer": "No. Axal supports firm workflow. Professional judgement and final action remain with the firm."
+        }
+      ]
+    },
+    {
+      "kind": "axal-detail",
+      "slug": "gst-notice-management-software",
+      "urlPath": "/gst-notice-management-software/",
+      "title": "GST notice management software for CA teams | Axal",
+      "description": "Manage GST notice matters with source documents, owner handoffs, evidence state, response drafts, and CA review posture in Axal.",
+      "eyebrow": "Axal by ComplyEaze",
+      "heading": "GST notice and matter management for CA teams",
+      "summary": "GST notice work is rarely just one PDF. A team needs the notice, client context, portal access, supporting documents, task ownership, draft status, and reviewer decision in one place.",
+      "navLabel": "GST notices",
+      "audience": "For GST practitioners, CA reviewers, and compliance managers handling notice intake, evidence review, client follow-up, and reply preparation.",
+      "boundary": "Axal can organize review material and draft workflows. It does not guarantee a legal outcome or replace the professional judgement required for a reply.",
+      "primaryAction": {
+        "label": "Review the matter workflow",
+        "href": "https://axal.complyeaze.com/signup"
+      },
+      "secondaryAction": {
+        "label": "Explore Axal",
+        "href": "/"
+      },
+      "evidenceLinks": [
+        {
+          "label": "Current Axal product page",
+          "href": "https://axal.complyeaze.com/gst-notice-management-software",
+          "description": "Current public Axal page used to reconcile customer-safe positioning and boundaries."
+        }
+      ],
+      "relatedRoutes": [
+        {
+          "label": "Compliance calendar",
+          "href": "/compliance-calendar-software-india/"
+        },
+        {
+          "label": "GST reconciliation",
+          "href": "/gst-reconciliation-evidence-review/"
+        }
+      ],
+      "robots": "noindex, nofollow",
+      "signalTerms": [
+        "GST notices",
+        "CA teams",
+        "professional review"
+      ],
+      "sections": [
+        {
+          "title": "Keep the notice, evidence, and work plan together",
+          "body": "A notice can trigger document collection, ledger checks, reconciliation review, client clarification, and internal approval. Axal keeps those moving parts attached to the same matter.",
+          "points": [
+            "Matter status shows whether work is new, blocked, under review, ready, replied, or closed.",
+            "Documents and evidence requests stay linked to the matter they support.",
+            "Owners and due dates stay visible so follow-up does not depend on memory."
+          ]
+        },
+        {
+          "title": "Make review posture explicit",
+          "body": "Axal separates staff preparation, AI draft material, CA review, client input, and ready-to-send states so teams do not confuse progress with approval.",
+          "points": [
+            "Mark what still needs client input or source verification.",
+            "Keep reviewer notes close to the documents and analysis.",
+            "Show blocked states before a deadline becomes a surprise."
+          ]
+        },
+        {
+          "title": "Use source-backed summaries, not unsupported certainty",
+          "body": "Notice work is sensitive. Axal is shaped to show source, timestamp, evidence state, and reviewer control instead of presenting a draft as final advice.",
+          "points": [
+            "Attach source documents and portal context where available.",
+            "Preserve the trail of who prepared, reviewed, and moved the matter forward.",
+            "Avoid unsupported claims when evidence or portal access is missing."
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can Axal help manage GST notices and replies?",
+          "answer": "Axal can help teams organize the notice matter, evidence, tasks, draft material, and review posture. The firm remains responsible for source checks, professional judgement, and final response decisions."
+        },
+        {
+          "question": "Does Axal submit GST notice replies without professional review?",
+          "answer": "No. Axal is not positioned as an self-operating filing or reply system. It supports preparation, review, evidence tracking, and team handoff before a professional takes action."
+        }
+      ]
+    },
+    {
+      "kind": "axal-detail",
+      "slug": "compliance-calendar-software-india",
+      "urlPath": "/compliance-calendar-software-india/",
+      "title": "Compliance calendar software for Indian CA and CS teams | Axal",
+      "description": "Organize firm-defined compliance obligations, deadlines, owners, applicability notes, evidence, and review status across clients in Axal.",
+      "eyebrow": "Axal by ComplyEaze",
+      "heading": "Compliance calendar software for Indian CA and CS teams",
+      "summary": "A compliance calendar is useful only when the team trusts the status behind the date. Axal connects obligations with applicability, owner, client context, evidence, filing status, and review posture.",
+      "navLabel": "Compliance calendar",
+      "audience": "For firms organizing recurring GST and related compliance work across clients, entities, and staff owners, with statutory requirements verified from official sources.",
+      "boundary": "Axal helps teams track obligations and workflow state. Your firm should still verify current statutory requirements from official sources and apply professional review.",
+      "primaryAction": {
+        "label": "See obligations in context",
+        "href": "https://axal.complyeaze.com/signup"
+      },
+      "secondaryAction": {
+        "label": "Explore Axal",
+        "href": "/"
+      },
+      "evidenceLinks": [
+        {
+          "label": "Current Axal product page",
+          "href": "https://axal.complyeaze.com/compliance-calendar-software-india",
+          "description": "Current public Axal page used to reconcile customer-safe positioning and boundaries."
+        }
+      ],
+      "relatedRoutes": [
+        {
+          "label": "GST reconciliation",
+          "href": "/gst-reconciliation-evidence-review/"
+        },
+        {
+          "label": "Documents and access",
+          "href": "/client-document-collection-portal-access/"
+        }
+      ],
+      "robots": "noindex, nofollow",
+      "signalTerms": [
+        "Compliance calendar",
+        "CA teams",
+        "professional review"
+      ],
+      "sections": [
+        {
+          "title": "Deadlines need context, not just dates",
+          "body": "A calendar entry is not enough when applicability, client input, payment, evidence, filing status, or reviewer approval is unclear. Axal keeps those details close to the obligation.",
+          "points": [
+            "Track due, overdue, pending review, blocked, filed, and not applicable states.",
+            "See which client, entity, owner, and source note belongs to the obligation.",
+            "Separate calendar visibility from the deeper obligation record."
+          ]
+        },
+        {
+          "title": "Applicability should be reviewable",
+          "body": "Compliance teams need to know why a requirement appears for a client. Axal is designed to show rule context, source notes, and review status instead of presenting a date without explanation.",
+          "points": [
+            "Use applicability notes to explain why work is expected.",
+            "Keep exception, waiver, and blocked-by-input cases visible.",
+            "Route unclear cases to professional review instead of hiding them."
+          ]
+        },
+        {
+          "title": "Managers need a workload view",
+          "body": "The calendar should help a partner or manager decide what needs attention today. Axal groups obligation status across clients so the team can act before deadlines compress.",
+          "points": [
+            "Find work by owner, status, client, and due window.",
+            "Use task handoffs when preparation and review are separate.",
+            "Keep evidence and filing state tied to the obligation."
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "What should compliance calendar software track?",
+          "answer": "For a CA or CS team, the calendar should track the obligation, due date, client, entity, owner, applicability reason, preparation status, filing or completion state, and blockers such as missing evidence or review."
+        },
+        {
+          "question": "Does Axal publish statutory due dates as legal advice?",
+          "answer": "No. Axal helps teams organize obligations and workflow state. Firms should verify current due dates and statutory requirements from official sources before relying on them for client action."
+        }
+      ]
+    },
+    {
+      "kind": "axal-detail",
+      "slug": "gst-reconciliation-evidence-review",
+      "urlPath": "/gst-reconciliation-evidence-review/",
+      "title": "GST reconciliation and evidence review for CA teams | Axal",
+      "description": "Axal is positioned to help organize GST reconciliation review, including GSTR-2B-related variance context where source data is available and reviewed.",
+      "eyebrow": "Axal by ComplyEaze",
+      "heading": "GST reconciliation and evidence review for CA teams",
+      "summary": "GST reconciliation work often fails at the handoff: variance found in one sheet, evidence in another folder, client follow-up in WhatsApp, and review notes in a third place. Axal keeps the review trail together.",
+      "navLabel": "GST reconciliation",
+      "audience": "For GST teams reviewing variance context, purchase records, vendor follow-up, input tax credit questions, and evidence packs with source records available for review.",
+      "boundary": "Axal supports reconciliation review and evidence organization. It does not promise ITC recovery, filing accuracy, or a substitute for checking books and portal source.",
+      "primaryAction": {
+        "label": "Map the reconciliation workflow",
+        "href": "https://axal.complyeaze.com/signup"
+      },
+      "secondaryAction": {
+        "label": "Explore Axal",
+        "href": "/"
+      },
+      "evidenceLinks": [
+        {
+          "label": "Current Axal product page",
+          "href": "https://axal.complyeaze.com/gst-reconciliation-evidence-review",
+          "description": "Current public Axal page used to reconcile customer-safe positioning and boundaries."
+        }
+      ],
+      "relatedRoutes": [
+        {
+          "label": "Practice management",
+          "href": "/ca-practice-management-software/"
+        },
+        {
+          "label": "GST notices",
+          "href": "/gst-notice-management-software/"
+        }
+      ],
+      "robots": "noindex, nofollow",
+      "signalTerms": [
+        "GST reconciliation",
+        "CA teams",
+        "professional review"
+      ],
+      "sections": [
+        {
+          "title": "Variance review needs a visible trail",
+          "body": "A mismatch is only useful when the team can see what source produced it, what evidence is missing, and who needs to act. Axal keeps the review state attached to the underlying work.",
+          "points": [
+            "Track variance context alongside documents and client follow-up.",
+            "Separate detected, explained, evidence requested, reviewed, and resolved states.",
+            "Keep reviewer notes visible before a filing or client communication goes out."
+          ]
+        },
+        {
+          "title": "Evidence matters as much as the number",
+          "body": "Reconciliation is not just comparing totals. Teams need invoices, vendor responses, portal evidence, books, and a decision trail that can be reviewed later.",
+          "points": [
+            "Attach source files and supporting notes to the reconciliation item.",
+            "Use tasks to chase missing vendor or client evidence.",
+            "Keep unresolved items visible instead of burying them in spreadsheet filters."
+          ]
+        },
+        {
+          "title": "Keep assistance under review control",
+          "body": "Axal can help summarize and route reconciliation work, but a draft or suggested explanation is not a final professional conclusion.",
+          "points": [
+            "Show draft and CA review needed as different states.",
+            "Keep source documents close to generated summaries.",
+            "Use reviewer decisions to close or escalate variance items."
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "How does Axal use GSTR-2B in reconciliation review?",
+          "answer": "Axal is positioned to help teams organize GSTR-2B-related variance context, evidence, follow-up, and review state where data is available and configured. The firm should still verify source records and portal data."
+        },
+        {
+          "question": "Does Axal guarantee maximum ITC recovery?",
+          "answer": "No. Axal should not be used to claim guaranteed recovery. It helps make variance, evidence, and review status clearer so professionals can decide the right action."
+        }
+      ]
+    },
+    {
+      "kind": "axal-detail",
+      "slug": "client-document-collection-portal-access",
+      "urlPath": "/client-document-collection-portal-access/",
+      "title": "Client document collection and portal access tracking | Axal",
+      "description": "Coordinate client document requests, evidence state, authorized portal-access follow-up, access-status review, and compliance tasks in Axal.",
+      "eyebrow": "Axal by ComplyEaze",
+      "heading": "Client document collection and portal access tracking for CA firms",
+      "summary": "Much of a compliance team's delay comes from missing documents, unclear access, and follow-up that lives outside the work item. Axal helps firms track what arrived, what still needs review, and what still blocks the team.",
+      "navLabel": "Documents and access",
+      "audience": "For client coordinators, staff accountants, compliance managers, and reviewers who chase documents, evidence, and authorized portal access.",
+      "boundary": "Axal helps track access and evidence workflows. Firms remain responsible for authorization, credential handling, and portal use according to their professional and client controls.",
+      "primaryAction": {
+        "label": "Organize client follow-up",
+        "href": "https://axal.complyeaze.com/signup"
+      },
+      "secondaryAction": {
+        "label": "Explore Axal",
+        "href": "/"
+      },
+      "evidenceLinks": [
+        {
+          "label": "Current Axal product page",
+          "href": "https://axal.complyeaze.com/client-document-collection-portal-access",
+          "description": "Current public Axal page used to reconcile customer-safe positioning and boundaries."
+        }
+      ],
+      "relatedRoutes": [
+        {
+          "label": "GST notices",
+          "href": "/gst-notice-management-software/"
+        },
+        {
+          "label": "Compliance calendar",
+          "href": "/compliance-calendar-software-india/"
+        }
+      ],
+      "robots": "noindex, nofollow",
+      "signalTerms": [
+        "Documents and access",
+        "CA teams",
+        "professional review"
+      ],
+      "sections": [
+        {
+          "title": "Turn scattered follow-up into visible work",
+          "body": "A client request should not disappear into a message thread. Axal keeps document requests, owner, due date, matter context, and received evidence visible to the team.",
+          "points": [
+            "Track requested, received, detail required, reviewed, and blocked states.",
+            "Keep client documents linked to the matter, obligation, or reconciliation item.",
+            "Show who owns the next follow-up before a deadline is at risk."
+          ]
+        },
+        {
+          "title": "Handle portal access with more discipline",
+          "body": "Portal access is sensitive. Axal is designed around authorized workflows, status visibility, and careful review instead of casual credential sharing.",
+          "points": [
+            "Track whether access is available, expired, blocked, or awaiting client action.",
+            "Keep access state visible without exposing sensitive material in public surfaces.",
+            "Route credential and access issues to the right internal owner."
+          ]
+        },
+        {
+          "title": "Make documents useful for review",
+          "body": "The value is not only storing a file. The value is knowing which work item the file supports, whether it is sufficient, and whether a reviewer has accepted it.",
+          "points": [
+            "Attach documents to the relevant matter, obligation, task, or variance.",
+            "Mark evidence quality and missing-detail states explicitly.",
+            "Preserve the trail from request to review decision."
+          ]
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can Axal support client document collection workflows?",
+          "answer": "Axal is designed to support document and evidence workflows for compliance teams. Any client-facing collection flow depends on firm configuration, authorization, and the product status documented for the public release."
+        },
+        {
+          "question": "Does Axal encourage sharing GST portal credentials?",
+          "answer": "No. Axal should be used with authorized access controls and firm-approved credential practices. Public product copy should never encourage casual sharing of portal usernames or passwords."
+        }
+      ]
+    }
+  ]
+}
