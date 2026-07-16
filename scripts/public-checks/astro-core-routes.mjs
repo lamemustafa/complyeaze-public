@@ -20,6 +20,8 @@ const requiredFiles = [
   "apps/complyeaze/src/layouts/PublicPageLayout.astro",
   "apps/complyeaze/src/pages/[...slug].astro",
   "apps/complyeaze/src/pages/index.astro",
+  "apps/complyeaze/src/pages/robots.txt.ts",
+  "apps/complyeaze/src/pages/sitemap.xml.ts",
 ];
 
 const requiredRoutes = [
@@ -41,6 +43,8 @@ export function assertAstroCoreRouteSources(root) {
     const index = readFileSync(path.join(root, "apps/complyeaze/src/pages/index.astro"), "utf8");
     const catchAll = readFileSync(path.join(root, "apps/complyeaze/src/pages/[...slug].astro"), "utf8");
     const layout = readFileSync(path.join(root, "apps/complyeaze/src/layouts/PublicPageLayout.astro"), "utf8");
+    const robots = readFileSync(path.join(root, "apps/complyeaze/src/pages/robots.txt.ts"), "utf8");
+    const sitemap = readFileSync(path.join(root, "apps/complyeaze/src/pages/sitemap.xml.ts"), "utf8");
     if (!index.includes("definePublicRouteManifest") || !index.includes("PublicHomePage")) {
       findings.push("ComplyEaze root must render the canonical home route");
     }
@@ -50,6 +54,12 @@ export function assertAstroCoreRouteSources(root) {
     if (!catchAll.includes("assertNever(route)")) findings.push("catch-all rendering is not exhaustive");
     if (!layout.includes('aria-label="Primary navigation"')) findings.push("customer navigation missing");
     if (/href="\/(?:migration|status|docs)\/"/.test(layout)) findings.push("customer nav exposes methodology");
+    if (!robots.includes("Disallow: /") || !robots.includes("/sitemap.xml")) {
+      findings.push("ComplyEaze robots resource must block indexing and point to the sitemap");
+    }
+    if (!sitemap.includes("definePublicRouteManifest") || !sitemap.includes("route.urlPath")) {
+      findings.push("ComplyEaze sitemap must derive routes from the typed manifest");
+    }
   }
   if (findings.length > 0) throw new Error(`Astro core-route source findings:\n${findings.join("\n")}`);
 }
@@ -83,4 +93,15 @@ export function assertAstroCoreRouteFixtures() {
 export function assertAstroCoreRouteBuild(root) {
   const evidence = createReleaseEvidenceFromBuild(root, publicRouteRegistry);
   if (evidence.pageCount !== 21) throw new Error(`expected 21 Astro outputs, found ${evidence.pageCount}`);
+  const complyeazeDist = path.join(root, "apps/complyeaze/dist");
+  const robots = readFileSync(path.join(complyeazeDist, "robots.txt"), "utf8");
+  const sitemap = readFileSync(path.join(complyeazeDist, "sitemap.xml"), "utf8");
+  if (!robots.includes("Disallow: /") || !robots.includes("https://complyeaze.com/sitemap.xml")) {
+    throw new Error("built ComplyEaze robots resource does not preserve noindex readiness");
+  }
+  for (const route of publicRouteRegistry.filter((entry) => entry.app === "complyeaze")) {
+    if (!sitemap.includes(`<loc>${route.origin}${route.urlPath}</loc>`)) {
+      throw new Error(`built ComplyEaze sitemap is missing ${route.urlPath}`);
+    }
+  }
 }

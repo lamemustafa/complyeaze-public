@@ -28,6 +28,8 @@ const publicClaimScanFiles = [
   "apps/complyeaze/src/layouts/PublicPageLayout.astro",
   "apps/complyeaze/src/pages/[...slug].astro",
   "apps/complyeaze/src/pages/index.astro",
+  "apps/complyeaze/src/pages/robots.txt.ts",
+  "apps/complyeaze/src/pages/sitemap.xml.ts",
   "apps/pack/src/pages/index.astro",
   "AGENTS.md",
   "README.md",
