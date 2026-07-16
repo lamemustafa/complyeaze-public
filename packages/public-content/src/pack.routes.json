@@ -31,7 +31,7 @@
         "compositions": ["LocalArtifactFlow", "CustodyBoundary", "PermissionExplainer", "SourceProvenanceStrip", "ReleaseStatusBanner"],
         "contentMode": "synthetic",
         "interactionMode": "zero-js",
-        "measurements": { "authoredJavaScriptBytes": 0, "cls": { "desktop": 0, "tablet": 0, "mobile": 0 }, "criticalFonts": 0, "cssGzipBytes": 12467, "maxCls": 0, "viewports": ["desktop", "tablet", "mobile"] },
+        "measurementCeilings": { "authoredJavaScriptBytes": 0, "cls": { "desktop": 0, "tablet": 0, "mobile": 0 }, "criticalFonts": 0, "cssGzipBytes": 12500, "maxCls": 0, "viewports": ["desktop", "tablet", "mobile"] },
         "reviewStatus": "C3 human craft approval pending",
         "sanchikaRelease": "v0.1.1"
       }

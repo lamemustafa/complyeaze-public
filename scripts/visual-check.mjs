@@ -23,7 +23,7 @@ const astroRouteTargets = publicRouteRegistry.map((route) => ({
   profile: route.profile,
   signalTerms: route.signalTerms,
   craftReview: route.discoverability === "review-only",
-  reviewMeasurements: route.reviewEvidence?.measurements,
+  reviewMeasurementCeilings: route.reviewEvidence?.measurementCeilings,
 }));
 if (astroRouteArtifactSlug("complyeaze", "products/pack").includes("/")) {
   throw new Error("Nested Astro route slugs must produce flat visual artifact names");
@@ -129,7 +129,7 @@ try {
         const craftEvidence = await collectCraftVisualEvidence(
           page,
           transferredAssets,
-          pageDef.reviewMeasurements,
+          pageDef.reviewMeasurementCeilings,
           viewport.name,
         );
         metrics.issues.push(...transferredAssetIssues, ...craftEvidence.issues);

@@ -63,10 +63,10 @@ const products = [
       <div><dt>Mode</dt><dd>Synthetic · zero JS</dd></div>
       <div><dt>Posture</dt><dd>noindex, nofollow · review-only · excluded from sitemap</dd></div>
       <div><dt>Checks</dt><dd>axe · keyboard · reduced motion · forced colors</dd></div>
-      <div><dt>JavaScript</dt><dd data-craft-measurement="javascript">{route.reviewEvidence.measurements.authoredJavaScriptBytes} B</dd></div>
-      <div><dt>CSS</dt><dd data-craft-measurement="css">{route.reviewEvidence.measurements.cssGzipBytes} B gzip</dd></div>
-      <div><dt>Fonts</dt><dd data-craft-measurement="fonts">{route.reviewEvidence.measurements.criticalFonts}</dd></div>
-      <div><dt>Max CLS</dt><dd data-craft-measurement="cls">{route.reviewEvidence.measurements.maxCls} · desktop, tablet, mobile</dd></div>
+      <div><dt>JavaScript bound</dt><dd data-craft-measurement="javascript">≤ {route.reviewEvidence.measurementCeilings.authoredJavaScriptBytes} B</dd></div>
+      <div><dt>CSS bound</dt><dd data-craft-measurement="css">≤ {route.reviewEvidence.measurementCeilings.cssGzipBytes} B gzip</dd></div>
+      <div><dt>Font bound</dt><dd data-craft-measurement="fonts">≤ {route.reviewEvidence.measurementCeilings.criticalFonts}</dd></div>
+      <div><dt>CLS bound</dt><dd data-craft-measurement="cls">≤ {route.reviewEvidence.measurementCeilings.maxCls} · desktop, tablet, mobile</dd></div>
       <div><dt>Status</dt><dd>{route.reviewEvidence.reviewStatus}</dd></div>
     </dl>
   </aside>

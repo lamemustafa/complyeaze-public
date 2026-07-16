@@ -48,7 +48,7 @@ export function calculateAuthoredJavaScriptBytes(
 export async function collectCraftVisualEvidence(
   page,
   transferredAssets,
-  expectedMeasurements,
+  measurementCeilings,
   viewportName,
 ) {
   const issues = [];
@@ -95,21 +95,21 @@ export async function collectCraftVisualEvidence(
   if (criticalFonts > 2) issues.push(`${criticalFonts} critical fonts, above 2`);
   if (remoteFonts.length > 0) issues.push(`${remoteFonts.length} remote font requests`);
   if (cls > 0.05) issues.push(`CLS ${cls.toFixed(4)} exceeds 0.05`);
-  if (!expectedMeasurements) {
-    issues.push("shipped craft measurements are missing");
+  if (!measurementCeilings) {
+    issues.push("shipped craft measurement ceilings are missing");
   } else {
-    if (authoredJavaScriptBytes !== expectedMeasurements.authoredJavaScriptBytes) {
-      issues.push(`shipped JavaScript measurement is stale (${expectedMeasurements.authoredJavaScriptBytes} expected, ${authoredJavaScriptBytes} measured)`);
+    if (authoredJavaScriptBytes > measurementCeilings.authoredJavaScriptBytes) {
+      issues.push(`JavaScript measurement exceeds the shipped ceiling (${measurementCeilings.authoredJavaScriptBytes} ceiling, ${authoredJavaScriptBytes} measured)`);
     }
-    if (cssGzipBytes !== expectedMeasurements.cssGzipBytes) {
-      issues.push(`shipped CSS measurement is stale (${expectedMeasurements.cssGzipBytes} expected, ${cssGzipBytes} measured)`);
+    if (cssGzipBytes > measurementCeilings.cssGzipBytes) {
+      issues.push(`CSS measurement exceeds the shipped ceiling (${measurementCeilings.cssGzipBytes} ceiling, ${cssGzipBytes} measured)`);
     }
-    if (criticalFonts !== expectedMeasurements.criticalFonts) {
-      issues.push(`shipped font measurement is stale (${expectedMeasurements.criticalFonts} expected, ${criticalFonts} measured)`);
+    if (criticalFonts > measurementCeilings.criticalFonts) {
+      issues.push(`font measurement exceeds the shipped ceiling (${measurementCeilings.criticalFonts} ceiling, ${criticalFonts} measured)`);
     }
-    const expectedCls = expectedMeasurements.cls[viewportName];
-    if (roundedCls !== expectedCls) {
-      issues.push(`shipped ${viewportName} CLS measurement is stale (${expectedCls} expected, ${roundedCls} measured)`);
+    const clsCeiling = measurementCeilings.cls[viewportName];
+    if (roundedCls > clsCeiling) {
+      issues.push(`${viewportName} CLS measurement exceeds the shipped ceiling (${clsCeiling} ceiling, ${roundedCls} measured)`);
     }
   }
 

@@ -11,7 +11,7 @@ export interface CraftReviewEvidence {
   compositions: string[];
   contentMode: "synthetic";
   interactionMode: "zero-js";
-  measurements: {
+  measurementCeilings: {
     authoredJavaScriptBytes: 0;
     cls: { desktop: number; mobile: number; tablet: number };
     criticalFonts: number;

@@ -113,7 +113,7 @@ export async function assertCraftReviewSources(root) {
     accessibility: ["axe", "keyboard", "reduced-motion", "forced-colors"],
     budgets: { authoredJavaScriptBytes: 0, criticalFonts: 2, cssGzipBytes: 61440, maxCls: 0.05 },
     compositions: ["PublicHero"], contentMode: "synthetic", interactionMode: "zero-js",
-    measurements: {
+    measurementCeilings: {
       authoredJavaScriptBytes: 0,
       cls: { desktop: 0.001, tablet: 0, mobile: 0 },
       criticalFonts: 0,
@@ -128,8 +128,8 @@ export async function assertCraftReviewSources(root) {
     (value) => { value.contentMode = "live"; },
     (value) => { value.reviewStatus = "C3 approved"; },
     (value) => { value.budgets.authoredJavaScriptBytes = 1; },
-    (value) => { value.measurements.cssGzipBytes = 70000; },
-    (value) => { value.measurements.cls.mobile = 0.002; },
+    (value) => { value.measurementCeilings.cssGzipBytes = 70000; },
+    (value) => { value.measurementCeilings.cls.mobile = 0.002; },
   ]) {
     const invalid = structuredClone(fixture);
     mutate(invalid);
@@ -147,12 +147,12 @@ export function assertCraftReviewBuild(root) {
     if (html.includes("Pending browser evidence")) {
       findings.push(`${route.app}: built craft route contains placeholder measurements`);
     }
-    const measurements = route.reviewEvidence?.measurements;
-    for (const marker of measurements ? [
-      `data-craft-measurement="javascript">${measurements.authoredJavaScriptBytes} B</dd>`,
-      `data-craft-measurement="css">${measurements.cssGzipBytes} B gzip</dd>`,
-      `data-craft-measurement="fonts">${measurements.criticalFonts}</dd>`,
-      `data-craft-measurement="cls">${measurements.maxCls} · desktop, tablet, mobile</dd>`,
+    const ceilings = route.reviewEvidence?.measurementCeilings;
+    for (const marker of ceilings ? [
+      `data-craft-measurement="javascript">≤ ${ceilings.authoredJavaScriptBytes} B</dd>`,
+      `data-craft-measurement="css">≤ ${ceilings.cssGzipBytes} B gzip</dd>`,
+      `data-craft-measurement="fonts">≤ ${ceilings.criticalFonts}</dd>`,
+      `data-craft-measurement="cls">≤ ${ceilings.maxCls} · desktop, tablet, mobile</dd>`,
     ] : []) {
       if (!html.includes(marker)) findings.push(`${route.app}: built craft route is missing ${marker}`);
     }

@@ -28,34 +28,34 @@ export function defineCraftReviewEvidence(
   assert(value.budgets.cssGzipBytes === 61440, "craft CSS budget must be 60 KiB gzip");
   assert(value.budgets.criticalFonts === 2, "craft critical font budget must be two");
   assert(value.budgets.maxCls === 0.05, "craft CLS budget must be 0.05");
-  assertRecord(value.measurements, "craft measurements");
+  assertRecord(value.measurementCeilings, "craft measurement ceilings");
   assert(
-    value.measurements.authoredJavaScriptBytes === 0,
-    "measured authored JavaScript must be zero",
+    value.measurementCeilings.authoredJavaScriptBytes === 0,
+    "authored JavaScript measurement ceiling must be zero",
   );
   assert(
-    Number.isInteger(value.measurements.cssGzipBytes)
-      && value.measurements.cssGzipBytes >= 0
-      && value.measurements.cssGzipBytes <= value.budgets.cssGzipBytes,
-    "measured craft CSS must fit the CSS budget",
+    Number.isInteger(value.measurementCeilings.cssGzipBytes)
+      && value.measurementCeilings.cssGzipBytes >= 0
+      && value.measurementCeilings.cssGzipBytes <= value.budgets.cssGzipBytes,
+    "craft CSS measurement ceiling must fit the CSS budget",
   );
   assert(
-    Number.isInteger(value.measurements.criticalFonts)
-      && value.measurements.criticalFonts >= 0
-      && value.measurements.criticalFonts <= value.budgets.criticalFonts,
-    "measured critical fonts must fit the font budget",
+    Number.isInteger(value.measurementCeilings.criticalFonts)
+      && value.measurementCeilings.criticalFonts >= 0
+      && value.measurementCeilings.criticalFonts <= value.budgets.criticalFonts,
+    "critical-font measurement ceiling must fit the font budget",
   );
   assert(
-    typeof value.measurements.maxCls === "number"
-      && value.measurements.maxCls >= 0
-      && value.measurements.maxCls <= value.budgets.maxCls,
-    "measured CLS must fit the CLS budget",
+    typeof value.measurementCeilings.maxCls === "number"
+      && value.measurementCeilings.maxCls >= 0
+      && value.measurementCeilings.maxCls <= value.budgets.maxCls,
+    "CLS measurement ceiling must fit the CLS budget",
   );
-  assertRecord(value.measurements.cls, "craft viewport CLS measurements");
+  assertRecord(value.measurementCeilings.cls, "craft viewport CLS measurement ceilings");
   const viewportCls = [
-    value.measurements.cls.desktop,
-    value.measurements.cls.tablet,
-    value.measurements.cls.mobile,
+    value.measurementCeilings.cls.desktop,
+    value.measurementCeilings.cls.tablet,
+    value.measurementCeilings.cls.mobile,
   ];
   assert(
     viewportCls.every((measurement) =>
@@ -63,15 +63,15 @@ export function defineCraftReviewEvidence(
       && measurement >= 0
       && measurement <= value.budgets.maxCls
     ),
-    "each measured viewport CLS must fit the CLS budget",
+    "each viewport CLS measurement ceiling must fit the CLS budget",
   );
   assert(
-    value.measurements.maxCls === Math.max(...viewportCls),
-    "measured maximum CLS must match the viewport evidence",
+    value.measurementCeilings.maxCls === Math.max(...viewportCls),
+    "maximum CLS measurement ceiling must match the viewport ceilings",
   );
   assert(
-    JSON.stringify(value.measurements.viewports) === JSON.stringify(["desktop", "tablet", "mobile"]),
-    "craft measurements must cover desktop, tablet, and mobile",
+    JSON.stringify(value.measurementCeilings.viewports) === JSON.stringify(["desktop", "tablet", "mobile"]),
+    "craft measurement ceilings must cover desktop, tablet, and mobile",
   );
   return value as unknown as CraftReviewEvidence;
 }
