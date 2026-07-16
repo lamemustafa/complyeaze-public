@@ -3,6 +3,7 @@ import { createServer } from "node:http";
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { collectCraftVisualEvidence } from "./public-checks/craft-visual-evidence.mjs";
 import { chromium } from "playwright";
 import { createVisualHitTestEvidence } from "./public-checks/visual-geometry.mjs";
 import { publicRouteRegistry } from "./public-route-registry.mjs";
@@ -16,6 +17,7 @@ const astroRouteTargets = publicRouteRegistry.map((route) => ({
   heading: route.heading,
   profile: route.profile,
   signalTerms: route.signalTerms,
+  craftReview: route.discoverability === "review-only",
 }));
 if (astroRouteArtifactSlug("complyeaze", "products/pack").includes("/")) {
   throw new Error("Nested Astro route slugs must produce flat visual artifact names");
@@ -25,7 +27,7 @@ const visualTargetSlugs = visualTargets.map((target) => target.slug);
 if (new Set(visualTargetSlugs).size !== visualTargetSlugs.length) {
   throw new Error("Visual page slugs must be unique across typed Astro targets");
 }
-const expectedVisualTargetCount = 22;
+const expectedVisualTargetCount = 25;
 if (visualTargets.length !== expectedVisualTargetCount) {
   throw new Error(
     `Expected ${expectedVisualTargetCount} visual pages, received ${visualTargets.length}`,
@@ -63,15 +65,42 @@ try {
   for (const pageDef of visualTargets) {
     for (const viewport of viewports) {
       const context = await browser.newContext({ reducedMotion: "reduce", viewport });
+      await context.addInitScript(() => {
+        window.__craftLayoutShifts = [];
+        new PerformanceObserver((entries) => {
+          for (const entry of entries.getEntries()) {
+            if (!entry.hadRecentInput) window.__craftLayoutShifts.push(entry.value);
+          }
+        }).observe({ type: "layout-shift", buffered: true });
+      });
       const page = await context.newPage();
+      const transferredAssets = [];
+      const transferredAssetTasks = [];
+      page.on("response", (response) => {
+        if (!pageDef.craftReview || !response.ok()) return;
+        const type = response.request().resourceType();
+        if (!['script', 'stylesheet', 'font'].includes(type)) return;
+        transferredAssetTasks.push(
+          response.body()
+            .then((body) => transferredAssets.push({ type, url: response.url(), body }))
+            .catch(() => undefined),
+        );
+      });
       await page.exposeFunction("createVisualHitTestEvidence", createVisualHitTestEvidence);
       await page.goto(`${baseUrls.get(pageDef.serverKey)}${pageDef.urlPath}`, { waitUntil: "networkidle" });
+      await Promise.all(transferredAssetTasks);
       const metrics = await collectMetrics(
         page,
         pageDef.heading,
         pageDef.profile,
         pageDef.signalTerms,
       );
+      if (pageDef.craftReview) {
+        const craftEvidence = await collectCraftVisualEvidence(page, transferredAssets);
+        metrics.issues.push(...craftEvidence.issues);
+        delete craftEvidence.issues;
+        Object.assign(metrics, craftEvidence);
+      }
       const screenshot = `${pageDef.slug}-${viewport.name}.png`;
       await page.evaluate(() => {
         document.activeElement?.blur();
@@ -441,13 +470,16 @@ function writeSummary(summary) {
           item.clippedControls,
           item.overlappedControls + item.overlappedContent,
           item.focusTargets.join("; "),
+          item.authoredJavaScriptBytes === undefined
+            ? "n/a"
+            : `JS ${item.authoredJavaScriptBytes} B; CSS ${item.cssGzipBytes} B gzip; fonts ${item.criticalFonts}; CLS ${item.cls}; axe ${item.axeBlockingViolations}; forced colors ${item.forcedColors ? "yes" : "no"}; disclosure ${item.nativeDisclosure}`,
           item.issues.length === 0 ? "pass" : "fix required",
           item.issues.join("; ") || "none"
         ].map(markdownCell).join(" | ")} |`,
     )
     .join("\n");
   mkdirSync(path.dirname(jsonPath), { recursive: true });
-  const markdown = `# Public Visual Check\n\n| Page | Viewport | Screenshot | Scroll/Viewport | Reduced Motion | Main Landmarks | Named/Unnamed Links | Named/Unnamed Buttons | Small Targets | Broken Images | Blank Blocks | Clipped Controls | Overlap Findings | Focus Targets | Disposition | Failures |\n| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |\n${rows}\n`;
+  const markdown = `# Public Visual Check\n\n| Page | Viewport | Screenshot | Scroll/Viewport | Reduced Motion | Main Landmarks | Named/Unnamed Links | Named/Unnamed Buttons | Small Targets | Broken Images | Blank Blocks | Clipped Controls | Overlap Findings | Focus Targets | Craft Evidence | Disposition | Failures |\n| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |\n${rows}\n`;
   assertVisualSummarySchema(summary, markdown);
   writeFileSync(jsonPath, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
   writeFileSync(markdownPath, markdown, "utf8");

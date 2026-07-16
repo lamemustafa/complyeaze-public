@@ -77,8 +77,8 @@ export function assertLegacyCleanup(root) {
     }
   }
   const visual = readFileSync(path.join(root, "scripts/visual-check.mjs"), "utf8");
-  if (!visual.includes("const expectedVisualTargetCount = 22")) {
-    findings.push("scripts/visual-check.mjs: expected 22-page manifest-only inventory is missing");
+  if (!visual.includes("const expectedVisualTargetCount = 25")) {
+    findings.push("scripts/visual-check.mjs: expected 25-page manifest-only inventory is missing");
   }
   if (visual.includes('serverKey: "legacy"') || visual.includes("...pages.map")) {
     findings.push("scripts/visual-check.mjs: legacy visual discovery remains");
@@ -103,7 +103,7 @@ export function assertLegacyCleanupFixtures() {
     }
     writeFileSync(
       path.join(root, "scripts/visual-check.mjs"),
-      "const expectedVisualTargetCount = 22;",
+      "const expectedVisualTargetCount = 25;",
       "utf8",
     );
     writeFileSync(

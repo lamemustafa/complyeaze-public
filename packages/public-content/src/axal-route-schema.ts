@@ -4,6 +4,7 @@ import type {
   AxalRoute,
   AxalRouteManifest,
 } from "./axal-route-types.ts";
+import { defineCraftReviewEvidence } from "./craft-review-schema.ts";
 
 export function defineAxalRouteManifest(value: unknown): AxalRouteManifest {
   assertRecord(value, "Axal route manifest");
@@ -14,7 +15,7 @@ export function defineAxalRouteManifest(value: unknown): AxalRouteManifest {
     "Axal route manifest must use the canonical Axal origin",
   );
   assert(Array.isArray(value.routes), "Axal route manifest routes must be an array");
-  assert(value.routes.length === 6, "Axal route manifest must contain exactly six routes");
+  assert(value.routes.length === 7, "Axal route manifest must contain exactly seven routes");
 
   const paths = new Set<string>();
   for (const [index, route] of value.routes.entries()) {
@@ -30,7 +31,9 @@ export function defineAxalRouteManifest(value: unknown): AxalRouteManifest {
     value.routes.filter((route) => route.kind === "axal-detail").length === 5,
     "Axal route manifest must contain exactly five axal-detail routes",
   );
+  assert(value.routes.filter((route) => route.kind === "axal-craft-review").length === 1, "Axal route manifest must contain one craft route");
   for (const route of value.routes) {
+    if (route.kind === "axal-craft-review") continue;
     for (const related of route.relatedRoutes) {
       assert(paths.has(related.href), `${route.slug} has unknown related route ${related.href}`);
     }
@@ -40,6 +43,10 @@ export function defineAxalRouteManifest(value: unknown): AxalRouteManifest {
 
 function validateRoute(value: unknown, label: string): asserts value is AxalRoute {
   assertRecord(value, label);
+  if (value.kind === "axal-craft-review") {
+    validateCraftRoute(value, label);
+    return;
+  }
   for (const field of [
     "audience",
     "boundary",
@@ -81,6 +88,16 @@ function validateRoute(value: unknown, label: string): asserts value is AxalRout
   for (const field of ["proof", "routeDirectory", "workbenchStates"] as const) {
     assert(value[field] === undefined, `${label}.${field} is not valid for axal-detail`);
   }
+}
+
+function validateCraftRoute(value: Record<string, any>, label: string) {
+  for (const field of ["description", "heading", "summary", "title"] as const) assertString(value[field], `${label}.${field}`);
+  assert(value.slug === "review/craft", `${label}.slug must be review/craft`);
+  assert(value.urlPath === "/review/craft/", `${label}.urlPath must be /review/craft/`);
+  assert(value.robots === "noindex, nofollow", `${label}.robots must remain noindex, nofollow`);
+  assert(value.discoverability === "review-only", `${label}.discoverability must be review-only`);
+  assertStringArray(value.signalTerms, `${label}.signalTerms`);
+  defineCraftReviewEvidence(value.reviewEvidence, ["ReviewDeskPreview", "WorkQueueRow", "EvidencePanel", "HumanReviewCheckpoint", "AuditTrailPreview", "PricingBlock", "FAQAccordion"]);
 }
 
 function validatePath(slug: string, urlPath: string, label: string) {

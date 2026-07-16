@@ -29,6 +29,7 @@ const requiredRoutes = [
   "/", "/products/", "/products/pack/", "/products/tools/", "/trust/", "/docs/",
   "/migration/", "/about/", "/contact/", "/privacy/", "/terms/", "/status/",
   "/changelog/", "/release-evidence/", "/sanchika/",
+  "/review/craft/",
 ];
 
 export function assertAstroCoreRouteSources(root) {
@@ -36,7 +37,7 @@ export function assertAstroCoreRouteSources(root) {
     .filter((filePath) => !existsSync(path.join(root, filePath)))
     .map((filePath) => `${filePath}: missing`);
   const routes = publicRouteRegistry.filter((route) => route.app === "complyeaze");
-  if (routes.length !== 15) findings.push(`expected 15 ComplyEaze routes, found ${routes.length}`);
+  if (routes.length !== 16) findings.push(`expected 16 ComplyEaze routes, found ${routes.length}`);
   for (const routePath of requiredRoutes) {
     if (!routes.some((route) => route.urlPath === routePath)) findings.push(`missing ${routePath}`);
   }
@@ -56,7 +57,7 @@ export function assertAstroCoreRouteSources(root) {
     if (!index.includes("definePublicRouteManifest") || !index.includes("PublicHomePage")) {
       findings.push("ComplyEaze root must render the canonical home route");
     }
-    for (const kind of ["resource", "policy", "evidence", "gateway", "products", "migration", "adoption"]) {
+    for (const kind of ["resource", "policy", "evidence", "gateway", "products", "migration", "adoption", "public-craft-review"]) {
       if (!catchAll.includes(`route.kind === "${kind}"`)) findings.push(`catch-all missing ${kind} branch`);
     }
     if (!catchAll.includes("assertNever(route)")) findings.push("catch-all rendering is not exhaustive");
@@ -100,16 +101,17 @@ export function assertAstroCoreRouteFixtures() {
 
 export function assertAstroCoreRouteBuild(root) {
   const evidence = createReleaseEvidenceFromBuild(root, publicRouteRegistry);
-  if (evidence.pageCount !== 22) throw new Error(`expected 22 Astro outputs, found ${evidence.pageCount}`);
+  if (evidence.pageCount !== 25) throw new Error(`expected 25 Astro outputs, found ${evidence.pageCount}`);
   const complyeazeDist = path.join(root, "apps/complyeaze/dist");
   const robots = readFileSync(path.join(complyeazeDist, "robots.txt"), "utf8");
   const sitemap = readFileSync(path.join(complyeazeDist, "sitemap.xml"), "utf8");
   if (!robots.includes("Disallow: /") || !robots.includes("https://complyeaze.com/sitemap.xml")) {
     throw new Error("built ComplyEaze robots resource does not preserve noindex readiness");
   }
-  for (const route of publicRouteRegistry.filter((entry) => entry.app === "complyeaze")) {
+  for (const route of publicRouteRegistry.filter((entry) => entry.app === "complyeaze" && entry.discoverability !== "review-only")) {
     if (!sitemap.includes(`<loc>${route.origin}${route.urlPath}</loc>`)) {
       throw new Error(`built ComplyEaze sitemap is missing ${route.urlPath}`);
     }
   }
+  if (sitemap.includes("/review/craft/")) throw new Error("built ComplyEaze sitemap exposes the craft review route");
 }

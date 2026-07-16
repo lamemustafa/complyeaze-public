@@ -1,0 +1,12 @@
+---
+import "../../styles/sanchika.css";
+import rawManifest from "../../../../../packages/public-content/src/pack.routes.json";
+import { definePackRouteManifest } from "../../../../../packages/public-content/src/pack-route-schema.ts";
+import PackCraftReviewPage from "../../components/PackCraftReviewPage.astro";
+const manifest = definePackRouteManifest(rawManifest);
+const route = manifest.routes.find((entry) => entry.kind === "pack-craft-review");
+if (!route) throw new Error("Pack craft review route is missing");
+const canonical = new URL(route.urlPath, manifest.origin);
+---
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width"/><meta name="description" content={route.description}/><meta name="robots" content={route.robots}/><link rel="canonical" href={canonical}/><meta property="og:title" content={route.title}/><meta property="og:description" content={route.description}/><meta property="og:url" content={canonical}/><title>{route.title}</title></head><body><a class="skip-link" href="#main-content">Skip to content</a><main id="main-content"><PackCraftReviewPage {route}/></main></body></html>
+<style is:global>:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0}.skip-link{position:fixed;z-index:10;inset:1rem auto auto 1rem;min-height:44px;display:inline-flex;align-items:center;padding:.75rem 1rem;background:#c8ff38;color:#10150e;transform:translateY(-180%)}.skip-link:focus{transform:none;outline:3px solid #10150e;outline-offset:2px}</style>

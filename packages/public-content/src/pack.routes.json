@@ -13,6 +13,27 @@
       "summary": "This foundation does not serve customer routes until Pack route parity and product-owned evidence are proven.",
       "robots": "noindex, nofollow",
       "signalTerms": ["Pack", "foundation", "noindex"]
+    },
+    {
+      "kind": "pack-craft-review",
+      "slug": "review/craft",
+      "urlPath": "/review/craft/",
+      "title": "Pack craft review | Synthetic local custody",
+      "description": "A synthetic, noindex review of Pack local-custody compositions built with Sanchika v0.1.0.",
+      "heading": "Local evidence needs a visible custody trail",
+      "summary": "A production-quality review excerpt for evaluating local artifact flow, custody, permissions, provenance, release state, and policy.",
+      "robots": "noindex, nofollow",
+      "signalTerms": ["Pack", "synthetic", "craft review", "local custody"],
+      "discoverability": "review-only",
+      "reviewEvidence": {
+        "accessibility": ["axe", "keyboard", "reduced-motion", "forced-colors"],
+        "budgets": { "authoredJavaScriptBytes": 0, "criticalFonts": 2, "cssGzipBytes": 61440, "maxCls": 0.05 },
+        "compositions": ["LocalArtifactFlow", "CustodyBoundary", "PermissionExplainer", "SourceProvenanceStrip", "ReleaseStatusBanner"],
+        "contentMode": "synthetic",
+        "interactionMode": "zero-js",
+        "reviewStatus": "C3 human craft approval pending",
+        "sanchikaRelease": "v0.1.0"
+      }
     }
   ]
 }

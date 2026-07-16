@@ -531,6 +531,27 @@
           "answer": "No. Axal should be used with authorized access controls and firm-approved credential practices. Public product copy should never encourage casual sharing of portal usernames or passwords."
         }
       ]
+    },
+    {
+      "kind": "axal-craft-review",
+      "slug": "review/craft",
+      "urlPath": "/review/craft/",
+      "title": "Axal craft review | Synthetic review desk",
+      "description": "A synthetic, noindex review of Axal human-review desk compositions built with Sanchika v0.1.0.",
+      "heading": "A review desk should show the decision, not hide it",
+      "summary": "A production-quality review excerpt for evaluating queue, evidence, checkpoint, audit, pricing, and FAQ compositions.",
+      "robots": "noindex, nofollow",
+      "signalTerms": ["Axal", "synthetic", "craft review", "human review"],
+      "discoverability": "review-only",
+      "reviewEvidence": {
+        "accessibility": ["axe", "keyboard", "reduced-motion", "forced-colors"],
+        "budgets": { "authoredJavaScriptBytes": 0, "criticalFonts": 2, "cssGzipBytes": 61440, "maxCls": 0.05 },
+        "compositions": ["ReviewDeskPreview", "WorkQueueRow", "EvidencePanel", "HumanReviewCheckpoint", "AuditTrailPreview", "PricingBlock", "FAQAccordion"],
+        "contentMode": "synthetic",
+        "interactionMode": "zero-js",
+        "reviewStatus": "C3 human craft approval pending",
+        "sanchikaRelease": "v0.1.0"
+      }
     }
   ]
 }

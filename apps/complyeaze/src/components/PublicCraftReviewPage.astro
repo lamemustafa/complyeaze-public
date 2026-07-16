@@ -1,0 +1,66 @@
+---
+import { patternClassName } from "@sanchika/patterns";
+import type { PublicCraftReviewRoute } from "@complyeaze-public/content";
+import "../styles/craft-review.css";
+
+interface Props { route: PublicCraftReviewRoute; }
+const { route } = Astro.props;
+const products = [
+  ["Axal", "Human-reviewed compliance work", "Workspace-scoped"],
+  ["Pack", "Browser-local evidence collection", "Local-only"],
+  ["Tools", "Browser-local working drafts", "Draft-only"],
+];
+---
+
+<article class="ce-craft" data-craft-review="synthetic">
+  <header class={patternClassName("PublicHero", { variant: "editorial", state: "with-proof-artifact" })}>
+    <div class="ce-hero-copy">
+      <p class="ce-register">Synthetic craft review · noindex</p>
+      <h1>{route.heading}</h1>
+      <p>{route.summary}</p>
+      <a class="ce-source" href="/sanchika/">Inspect the adopted design contract</a>
+    </div>
+    <dl class="ce-proof-artifact" aria-label="Review boundary">
+      <div><dt>Surface</dt><dd>Public evidence register</dd></div>
+      <div><dt>Content</dt><dd>Synthetic only</dd></div>
+      <div><dt>Decision</dt><dd>C3 pending</dd></div>
+    </dl>
+  </header>
+
+  <section class={patternClassName("ProductRouteMap", { variant: "family", state: "default" })} aria-labelledby="family-map">
+    <div class="ce-section-head"><p>One family, explicit custody</p><h2 id="family-map">Route the job to the product that owns it</h2></div>
+    <div class="ce-route-list">
+      {products.map(([name, job, boundary]) => <article><h3>{name}</h3><p>{job}</p><strong>{boundary}</strong></article>)}
+    </div>
+    <p class="ce-colophon"><strong>Sanchika</strong> supplies the shared contract; it is not a peer product destination.</p>
+  </section>
+
+  <dl class={patternClassName("ProofStrip", { variant: "inline", state: "verified" })} aria-label="Public proof">
+    <div><dt>Route ownership</dt><dd>3 app manifests<small>Typed registry · review routes excluded from sitemap</small></dd></div>
+    <div><dt>Interaction</dt><dd>Zero authored JS<small>Native links and document order</small></dd></div>
+    <div><dt>Limitation</dt><dd>Review artifact<small>Not a live product or C3 approval</small></dd></div>
+  </dl>
+
+  <section class="ce-desk" aria-labelledby="decision-desk">
+    <div class="ce-section-head"><p>Human review excerpt</p><h2 id="decision-desk">Keep source, question, and decision together</h2></div>
+    <div class={patternClassName("ReviewDeskPreview", { variant: "three-pane", state: "ca-review-needed" })}>
+      <section><span>Review queue</span><h3>Northwind Books · evidence note</h3><p>Synthetic case · reviewer attention required</p></section>
+      <aside class={patternClassName("EvidencePanel", { variant: "rail", state: "available" })} aria-label="Available evidence">
+        <span>Evidence available</span><strong>Source receipt CE-SYN-042</strong><p>Prepared 16 Jul · fictional record</p>
+      </aside>
+      <aside class={patternClassName("HumanReviewCheckpoint", { variant: "inline", state: "review-needed" })} aria-label="Human review checkpoint">
+        <span>Checkpoint</span><strong>Professional review needed</strong><p>No conclusion is published from this preview.</p>
+      </aside>
+    </div>
+  </section>
+
+  <aside class="ce-receipt" aria-labelledby="review-receipt">
+    <div><p>Reviewer evidence</p><h2 id="review-receipt">Composition receipt</h2></div>
+    <dl>
+      <div><dt>Release</dt><dd>{route.reviewEvidence.sanchikaRelease}</dd></div>
+      <div><dt>Mode</dt><dd>Synthetic · zero JS</dd></div>
+      <div><dt>Checks</dt><dd>axe · keyboard · reduced motion · forced colors</dd></div>
+      <div><dt>Status</dt><dd>{route.reviewEvidence.reviewStatus}</dd></div>
+    </dl>
+  </aside>
+</article>

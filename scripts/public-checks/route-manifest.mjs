@@ -55,6 +55,7 @@ export function assertRouteManifest(root) {
       "outputPath",
       "title",
       "description",
+      "discoverability",
       "origin",
       "robots",
     ]) {

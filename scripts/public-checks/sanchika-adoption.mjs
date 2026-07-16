@@ -97,8 +97,8 @@ export async function assertSanchikaAdoptionSources(root) {
     throw new Error("ComplyEaze Sanchika evidence page must render manifest-backed primitive evidence");
   }
   const complyeazeRoutes = publicRouteRegistry.filter((route) => route.app === "complyeaze");
-  if (publicRouteRegistry.length !== 22 || complyeazeRoutes.length !== 15) {
-    throw new Error(`Sanchika adoption requires 22 public routes with 15 owned by ComplyEaze`);
+  if (publicRouteRegistry.length !== 25 || complyeazeRoutes.length !== 16) {
+    throw new Error(`Sanchika adoption requires 25 public routes with 16 owned by ComplyEaze`);
   }
   if (!complyeazeRoutes.some((route) => route.urlPath === "/sanchika/")) {
     throw new Error("ComplyEaze manifest is missing the noindex /sanchika/ evidence route");

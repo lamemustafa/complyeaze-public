@@ -21,7 +21,7 @@ export function assertAxalPages(root) {
   const manifest = defineAxalRouteManifest(
     JSON.parse(readFileSync(path.join(root, "packages/public-content/src/axal.routes.json"), "utf8")),
   );
-  if (manifest.routes.length !== 6) findings.push(`expected 6 Axal routes, found ${manifest.routes.length}`);
+  if (manifest.routes.length !== 7) findings.push(`expected 7 Axal routes, found ${manifest.routes.length}`);
   const index = readFileSync(path.join(root, "apps/axal/src/pages/index.astro"), "utf8");
   if (!index.includes("defineAxalRouteManifest") || !index.includes("AxalHomePage")) {
     findings.push("Axal root must render the canonical home route");

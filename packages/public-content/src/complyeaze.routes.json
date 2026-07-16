@@ -551,7 +551,7 @@
         },
         {
           "title": "Migration posture",
-          "body": "The typed manifests now own 15 ComplyEaze routes, six Axal routes, and one conservative Pack foundation. The old string renderer and its duplicate adapters are removed. Hosting and path routing remain pending, and route-level cleanup stays blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
+          "body": "The typed manifests now own 16 ComplyEaze routes, seven Axal routes, and two Pack routes, including three noindex craft-review records. The old string renderer and its duplicate adapters are removed. Hosting and path routing remain pending, and route-level cleanup stays blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
         },
         {
           "title": "Hosting posture",
@@ -677,7 +677,7 @@
       "sections": [
         {
           "title": "Route manifest",
-          "body": "Three canonical typed route manifests feed the ComplyEaze, Axal, and Pack Astro apps. The root build validates all 22 actual HTML outputs and writes non-deployable aggregate evidence to test-results/public-build/route-manifest.json."
+          "body": "Three canonical typed route manifests feed the ComplyEaze, Axal, and Pack Astro apps. The root build validates all 25 actual HTML outputs and writes non-deployable aggregate evidence to test-results/public-build/route-manifest.json."
         },
         {
           "title": "Visual artifacts",
@@ -750,6 +750,29 @@
           "body": "The complete package set rolls back together to the reviewed v0.0.2 artifacts without deployment, domain, database, or private-application changes."
         }
       ]
+    },
+    {
+      "slug": "review/craft",
+      "urlPath": "/review/craft/",
+      "title": "ComplyEaze craft review | Synthetic preview",
+      "description": "A synthetic, noindex review of ComplyEaze evidence-register compositions built with Sanchika v0.1.0.",
+      "eyebrow": "Synthetic craft review",
+      "heading": "Evidence should make the boundary visible",
+      "kind": "public-craft-review",
+      "summary": "A production-quality review excerpt for evaluating product-family ownership, evidence posture, and human review before public rebuild work begins.",
+      "robots": "noindex, nofollow",
+      "signalTerms": ["ComplyEaze", "synthetic", "craft review", "evidence register"],
+      "sections": [{ "title": "Review boundary", "body": "This synthetic route demonstrates composition and visual language only. It does not expose private operations or grant C3 approval." }],
+      "discoverability": "review-only",
+      "reviewEvidence": {
+        "accessibility": ["axe", "keyboard", "reduced-motion", "forced-colors"],
+        "budgets": { "authoredJavaScriptBytes": 0, "criticalFonts": 2, "cssGzipBytes": 61440, "maxCls": 0.05 },
+        "compositions": ["PublicHero", "ProductRouteMap", "ProofStrip", "ReviewDeskPreview", "EvidencePanel", "HumanReviewCheckpoint"],
+        "contentMode": "synthetic",
+        "interactionMode": "zero-js",
+        "reviewStatus": "C3 human craft approval pending",
+        "sanchikaRelease": "v0.1.0"
+      }
     }
   ]
 }

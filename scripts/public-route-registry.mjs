@@ -15,6 +15,7 @@ export const publicRouteRegistry = manifests.flatMap((manifest) =>
   manifest.routes.map((route) => ({
     app: manifest.app,
     description: route.description,
+    discoverability: route.discoverability ?? "standard",
     heading: route.heading,
     origin: manifest.origin,
     outputPath: routeOutputPath(route.urlPath),

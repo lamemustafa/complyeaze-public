@@ -1,4 +1,5 @@
 import type { PublicAction, PublicEvidenceLink, PublicSection } from "./schema.ts";
+import type { CraftReviewRouteBase } from "./craft-review-types.ts";
 
 export interface AxalWorkflowSection extends PublicSection {
   points: string[];
@@ -47,7 +48,11 @@ export interface AxalDetailRoute extends AxalRouteBase {
   sections: AxalWorkflowSection[];
 }
 
-export type AxalRoute = AxalDetailRoute | AxalHomeRoute;
+export interface AxalCraftReviewRoute extends CraftReviewRouteBase {
+  kind: "axal-craft-review";
+}
+
+export type AxalRoute = AxalCraftReviewRoute | AxalDetailRoute | AxalHomeRoute;
 
 export interface AxalRouteManifest {
   app: "axal";

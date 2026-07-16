@@ -25,6 +25,7 @@ export function createReleaseEvidence(routes, readHtml) {
       buildEvidence: appDistPath(route),
       canonical,
       description: route.description,
+      discoverability: route.discoverability ?? "standard",
       origin: route.origin,
       outputPath: route.outputPath,
       robots: route.robots,

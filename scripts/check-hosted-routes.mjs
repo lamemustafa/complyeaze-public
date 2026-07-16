@@ -95,8 +95,11 @@ async function checkSitemap() {
   const sitemap = await fetchText("/sitemap.xml");
   const findings = sitemap.error ? [sitemap.error] : [];
   if (!sitemap.error) {
-    for (const route of routes) {
+    for (const route of routes.filter(({ discoverability }) => discoverability !== "review-only")) {
       assertIncludes(sitemap.text, `<loc>${route.canonical}</loc>`, `${route.urlPath} sitemap loc`, findings);
+    }
+    for (const route of routes.filter(({ discoverability }) => discoverability === "review-only")) {
+      if (sitemap.text.includes(`<loc>${route.canonical}</loc>`)) findings.push(`${route.urlPath} review-only route appears in sitemap`);
     }
   }
   checks.push({

@@ -1,0 +1,10 @@
+---
+import rawManifest from "../../../../../packages/public-content/src/axal.routes.json";
+import { defineAxalRouteManifest } from "../../../../../packages/public-content/src/axal-route-schema.ts";
+import AxalCraftReviewPage from "../../components/AxalCraftReviewPage.astro";
+import AxalPageLayout from "../../layouts/AxalPageLayout.astro";
+const manifest = defineAxalRouteManifest(rawManifest);
+const route = manifest.routes.find((entry) => entry.kind === "axal-craft-review");
+if (!route) throw new Error("Axal craft review route is missing");
+---
+<AxalPageLayout currentPath={route.urlPath} description={route.description} title={route.title}><AxalCraftReviewPage {route} /></AxalPageLayout>

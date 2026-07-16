@@ -1,0 +1,45 @@
+---
+import { patternClassName } from "@sanchika/patterns";
+import type { AxalCraftReviewRoute } from "../../../../packages/public-content/src/axal-route-types.ts";
+import "../styles/craft-review.css";
+interface Props { route: AxalCraftReviewRoute; }
+const { route } = Astro.props;
+const queue: Array<[string, string, "ready" | "waiting" | "selected" | "overdue"]> = [["SYN-108", "Ready", "ready"], ["SYN-214", "Waiting", "waiting"], ["SYN-305", "Review", "selected"], ["SYN-411", "Overdue", "overdue"]];
+---
+
+<article class="ax-craft" data-craft-review="synthetic">
+  <header class="ax-intro">
+    <p>Synthetic Axal craft review · noindex</p><h1>{route.heading}</h1><p>{route.summary}</p>
+    <a href="#review-desk">Enter the synthetic review desk</a>
+  </header>
+
+  <section id="review-desk" class={patternClassName("ReviewDeskPreview", { variant: "three-pane", state: "ca-review-needed" })} aria-labelledby="desk-title">
+    <aside class="ax-queue" aria-label="Synthetic review queue">
+      <p>Today · 4 review items</p><h2 id="desk-title">Decision queue</h2>
+      <div>{queue.map(([id, label, state]) => <article class={patternClassName("WorkQueueRow", { variant: "compact", state })}><span>{id}</span><strong>{label}</strong><small>Northwind Books · fictional</small></article>)}</div>
+    </aside>
+    <section class="ax-matter">
+      <p>Evidence note · SYN-305</p><h2>Decide what the source supports</h2>
+      <p>The synthetic variance note has one available source, one requested item, and no published conclusion.</p>
+      <dl><div><dt>Prepared by</dt><dd>A. Reviewer</dd></div><div><dt>Due</dt><dd>Today, 16:00</dd></div><div><dt>Scope</dt><dd>Fictional evidence review</dd></div></dl>
+      <aside class={patternClassName("HumanReviewCheckpoint", { variant: "inverse", state: "review-needed" })}><span>Human checkpoint</span><strong>CA review needed</strong><p>Evidence can support a decision; it cannot make one here.</p></aside>
+    </section>
+    <aside class={patternClassName("EvidencePanel", { variant: "rail", state: "available" })} aria-label="Synthetic evidence">
+      <p>Evidence rail</p><h2>2 of 3 sources</h2>
+      <ul><li><strong>Books extract</strong><span>Available · synthetic CSV</span></li><li><strong>Portal receipt</strong><span>Available · SYN-RCPT-18</span></li><li><strong>Client note</strong><span>Requested · not received</span></li></ul>
+    </aside>
+  </section>
+
+  <section class="ax-lower" aria-label="Audit, offer, and questions">
+    <article class={patternClassName("AuditTrailPreview", { variant: "list", state: "compact" })}><p>Decision trail</p><h2>Every handoff leaves a readable mark</h2><ol><li><time>09:12</time> Evidence set prepared</li><li><time>10:04</time> Source receipt attached</li><li><time>10:31</time> Routed to professional review</li></ol></article>
+    <aside class={patternClassName("PricingBlock", { variant: "single-offer", state: "available" })}><p>Review copy · future offer</p><h2>Practice desk</h2><strong>Pricing under review</strong><p>No checkout or commercial commitment is available from this route.</p></aside>
+  </section>
+
+  <section class={patternClassName("FAQAccordion", { variant: "stack", state: "collapsed" })} aria-labelledby="ax-questions">
+    <p>Native disclosure</p><h2 id="ax-questions">Questions a reviewer should ask</h2>
+    <details><summary>Is this a live client matter?</summary><p>No. Every organisation, identifier, timestamp, and evidence item is synthetic.</p></details>
+    <details><summary>Does this preview make a compliance decision?</summary><p>No. It demonstrates how source and human judgement can stay visibly connected.</p></details>
+  </section>
+
+  <aside class="ax-receipt" aria-labelledby="ax-receipt"><div><p>Reviewer evidence</p><h2 id="ax-receipt">Axal composition receipt</h2></div><dl><div><dt>Release</dt><dd>{route.reviewEvidence.sanchikaRelease}</dd></div><div><dt>Mode</dt><dd>Synthetic · zero JS</dd></div><div><dt>Checks</dt><dd>axe · keyboard · reduced motion · forced colors</dd></div><div><dt>Status</dt><dd>{route.reviewEvidence.reviewStatus}</dd></div></dl></aside>
+</article>
