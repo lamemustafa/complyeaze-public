@@ -13,9 +13,9 @@ import path from "node:path";
 const rootManifestPath = "package.json";
 const lockfilePath = "pnpm-lock.yaml";
 const appDevDependencies = new Map([
-  ["@sanchika/patterns", "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz"],
-  ["@sanchika/primitives", "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz"],
-  ["@sanchika/tokens", "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz"],
+  ["@sanchika/patterns", "https://github.com/lamemustafa/sanchika/releases/download/v0.1.1/sanchika-patterns-0.1.1.tgz"],
+  ["@sanchika/primitives", "https://github.com/lamemustafa/sanchika/releases/download/v0.1.1/sanchika-primitives-0.1.1.tgz"],
+  ["@sanchika/tokens", "https://github.com/lamemustafa/sanchika/releases/download/v0.1.1/sanchika-tokens-0.1.1.tgz"],
   ["@astrojs/check", "catalog:"],
   ["astro", "catalog:"],
   ["typescript", "catalog:"],

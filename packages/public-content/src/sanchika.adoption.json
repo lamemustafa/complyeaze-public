@@ -1,30 +1,30 @@
 {
   "schemaVersion": 1,
   "release": {
-    "tag": "v0.1.0",
-    "version": "0.1.0",
-    "sourceCommit": "050e444d50e8e4800f471709411eefca40058ab4",
-    "releaseUrl": "https://github.com/lamemustafa/sanchika/releases/tag/v0.1.0",
+    "tag": "v0.1.1",
+    "version": "0.1.1",
+    "sourceCommit": "f5f86eae29d573576a40c002da7210d7bc7a4dc4",
+    "releaseUrl": "https://github.com/lamemustafa/sanchika/releases/tag/v0.1.1",
     "distribution": "github-release-artifacts"
   },
   "packages": [
     {
       "name": "@sanchika/tokens",
-      "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz",
-      "sha256": "92148781457a3797db7f643235c8f23d881a4842426d50961bf6ec65bd718c55",
-      "assetDigest": "sha256:92148781457a3797db7f643235c8f23d881a4842426d50961bf6ec65bd718c55"
+      "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.1.1/sanchika-tokens-0.1.1.tgz",
+      "sha256": "b8149ced363966fa72c9fbe802c0186e062b3be0a464909ec12799503e601c27",
+      "assetDigest": "sha256:b8149ced363966fa72c9fbe802c0186e062b3be0a464909ec12799503e601c27"
     },
     {
       "name": "@sanchika/primitives",
-      "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz",
-      "sha256": "2d22f4a07f3d0ae1064e663551cecafc3dedeae4bf700889a0c900935e8b9585",
-      "assetDigest": "sha256:2d22f4a07f3d0ae1064e663551cecafc3dedeae4bf700889a0c900935e8b9585"
+      "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.1.1/sanchika-primitives-0.1.1.tgz",
+      "sha256": "08f5ecefe626e65e8ce7656d7409753aa77e07a5467a5ca2876c20d540a6fcec",
+      "assetDigest": "sha256:08f5ecefe626e65e8ce7656d7409753aa77e07a5467a5ca2876c20d540a6fcec"
     },
     {
       "name": "@sanchika/patterns",
-      "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz",
-      "sha256": "3b0b6e6e5b42712222bcf5badeca63a9fee6c0466904de0a2f5d27f2cd5428f5",
-      "assetDigest": "sha256:3b0b6e6e5b42712222bcf5badeca63a9fee6c0466904de0a2f5d27f2cd5428f5"
+      "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.1.1/sanchika-patterns-0.1.1.tgz",
+      "sha256": "8b50491eaa2d4cdee4f07ec6e742c05253623e7c413d3974800a9bf437af9b83",
+      "assetDigest": "sha256:8b50491eaa2d4cdee4f07ec6e742c05253623e7c413d3974800a9bf437af9b83"
     }
   ],
   "adoptedApps": [
@@ -43,26 +43,26 @@
     "patternExport": "patternClassName"
   },
   "rollback": {
-    "version": "0.0.2",
-    "releaseUrl": "https://github.com/lamemustafa/sanchika/releases/tag/v0.0.2",
+    "version": "0.1.0",
+    "releaseUrl": "https://github.com/lamemustafa/sanchika/releases/tag/v0.1.0",
     "packages": [
       {
         "name": "@sanchika/tokens",
-        "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.0.2/sanchika-tokens-0.0.2.tgz",
-        "sha256": "6a82a1efd83a0af2f351b86af6cd7ff9ba724c3d41c3564c582400854b96189c",
-        "assetDigest": "sha256:6a82a1efd83a0af2f351b86af6cd7ff9ba724c3d41c3564c582400854b96189c"
+        "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz",
+        "sha256": "92148781457a3797db7f643235c8f23d881a4842426d50961bf6ec65bd718c55",
+        "assetDigest": "sha256:92148781457a3797db7f643235c8f23d881a4842426d50961bf6ec65bd718c55"
       },
       {
         "name": "@sanchika/primitives",
-        "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.0.2/sanchika-primitives-0.0.2.tgz",
-        "sha256": "76a37620fa25d256377222f6caf0beadae4c755ddc124dc9c42a51a29ca09742",
-        "assetDigest": "sha256:76a37620fa25d256377222f6caf0beadae4c755ddc124dc9c42a51a29ca09742"
+        "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz",
+        "sha256": "2d22f4a07f3d0ae1064e663551cecafc3dedeae4bf700889a0c900935e8b9585",
+        "assetDigest": "sha256:2d22f4a07f3d0ae1064e663551cecafc3dedeae4bf700889a0c900935e8b9585"
       },
       {
         "name": "@sanchika/patterns",
-        "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.0.2/sanchika-patterns-0.0.2.tgz",
-        "sha256": "d50fe702112d337f28afea40f0012492344dca8dc6964dfadea4e70ce71c75da",
-        "assetDigest": "sha256:d50fe702112d337f28afea40f0012492344dca8dc6964dfadea4e70ce71c75da"
+        "tarballUrl": "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz",
+        "sha256": "3b0b6e6e5b42712222bcf5badeca63a9fee6c0466904de0a2f5d27f2cd5428f5",
+        "assetDigest": "sha256:3b0b6e6e5b42712222bcf5badeca63a9fee6c0466904de0a2f5d27f2cd5428f5"
       }
     ]
   },
