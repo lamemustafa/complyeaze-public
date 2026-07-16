@@ -43,7 +43,7 @@ const visualTargets = [
   ...astroApps,
   ...astroRouteTargets,
 ];
-const expectedVisualTargetCount = 34;
+const expectedVisualTargetCount = 36;
 if (visualTargets.length !== expectedVisualTargetCount) {
   throw new Error(
     `Expected ${expectedVisualTargetCount} visual pages, received ${visualTargets.length}`,

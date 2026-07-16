@@ -16,6 +16,7 @@ const requiredSourceFiles = [
   "packages/public-content/src/schema.ts",
   "packages/public-shell/src/metadata.ts",
   "apps/complyeaze/src/components/PublicEvidencePage.astro",
+  "apps/complyeaze/src/components/PublicGatewayPage.astro",
   "apps/complyeaze/src/components/PublicHomePage.astro",
   "apps/complyeaze/src/components/PublicMigrationLedger.astro",
   "apps/complyeaze/src/components/PublicMigrationPage.astro",
@@ -29,6 +30,8 @@ const requiredSourceFiles = [
 const requiredRoutes = [
   "/",
   "/products/",
+  "/products/pack/",
+  "/products/tools/",
   "/trust/",
   "/docs/",
   "/migration/",
@@ -92,7 +95,7 @@ function assertAstroCustomerRouteSources(root, findings) {
   if (!catchAllPage.includes('route.kind !== "home"')) {
     findings.push("apps/complyeaze/src/pages/[...slug].astro: catch-all must exclude the home route");
   }
-  for (const kind of ["resource", "policy", "evidence", "home", "products", "migration"]) {
+  for (const kind of ["resource", "policy", "evidence", "gateway", "home", "products", "migration"]) {
     const routeBranch = `route.kind === "${kind}"`;
     if (kind !== "home" && !catchAllPage.includes(routeBranch)) {
       findings.push(`apps/complyeaze/src/pages/[...slug].astro: missing explicit ${kind} branch`);
@@ -110,8 +113,35 @@ function assertAstroCustomerRouteSources(root, findings) {
   if (!productsPage.includes("product.evidence.href") || !productsPage.includes("product.evidence.label")) {
     findings.push("PublicProductsPage.astro: public product evidence links are missing");
   }
+  const gatewayPage = readFileSync(
+    path.join(root, "apps", "complyeaze", "src", "components", "PublicGatewayPage.astro"),
+    "utf8",
+  );
+  for (const value of [
+    'class="gateway-actions"',
+    'class="gateway-evidence"',
+    "route.primaryAction",
+    "route.secondaryAction",
+    "route.evidenceLinks",
+  ]) {
+    if (!gatewayPage.includes(value)) {
+      findings.push(`PublicGatewayPage.astro: missing canonical gateway rendering for ${value}`);
+    }
+  }
+  if (!/h1\s*\{[^}]*overflow-wrap:\s*anywhere/s.test(gatewayPage)) {
+    findings.push("PublicGatewayPage.astro: display heading must reflow at enlarged text sizes");
+  }
   if (!layout.includes('aria-label="Primary navigation"')) {
     findings.push("PublicPageLayout.astro: customer primary navigation is missing");
+  }
+  if (
+    !layout.includes("isCurrentPrimaryNavItem") ||
+    !layout.includes("urlPath.startsWith(href)")
+  ) {
+    findings.push("PublicPageLayout.astro: nested product routes must keep Products current");
+  }
+  if (!layout.includes('header nav a[aria-current="page"]')) {
+    findings.push("PublicPageLayout.astro: current primary navigation item needs a visible style");
   }
   if (!/header nav a\s*\{[^}]*min-width:\s*44px/s.test(layout)) {
     findings.push("PublicPageLayout.astro: primary navigation targets need 44px minimum width");
@@ -134,10 +164,10 @@ function assertAstroCustomerRouteSources(root, findings) {
     findings.push("scripts/visual-check.mjs: obsolete ComplyEaze foundation target remains");
   }
   if (
-    !visualCheck.includes("const expectedVisualTargetCount = 34") ||
+    !visualCheck.includes("const expectedVisualTargetCount = 36") ||
     !visualCheck.includes("visualTargets.length !== expectedVisualTargetCount")
   ) {
-    findings.push("scripts/visual-check.mjs: expected 34-page visual inventory is not enforced");
+    findings.push("scripts/visual-check.mjs: expected 36-page visual inventory is not enforced");
   }
 }
 
@@ -481,6 +511,86 @@ export function assertAstroCoreRouteFixtures() {
       ],
     },
     "products route accepted home-only fields",
+  );
+
+  const gatewayManifest = {
+    ...nestedManifest,
+    routes: [
+      {
+        description: "Pack product gateway fixture",
+        evidenceLinks: [
+          {
+            description: "Review the product-owned public source.",
+            href: "https://github.com/lamemustafa/pack",
+            label: "Review Pack source",
+          },
+        ],
+        eyebrow: "Pack gateway",
+        heading: "Continue with product-owned evidence",
+        kind: "gateway",
+        primaryAction: { href: "https://pack.complyeaze.com/", label: "Open Pack" },
+        product: "Pack",
+        robots: "noindex, nofollow",
+        sections: [{ body: "Fixture body", title: "Fixture" }],
+        secondaryAction: { href: "/products/", label: "Compare products" },
+        signalTerms: ["Pack", "gateway", "evidence"],
+        slug: "products/pack",
+        summary: "Pack gateway fixture",
+        title: "Pack | ComplyEaze",
+        urlPath: "/products/pack/",
+      },
+    ],
+  };
+  definePublicRouteManifest(gatewayManifest);
+  for (const field of ["product", "primaryAction", "secondaryAction", "evidenceLinks"]) {
+    const missingFieldManifest = structuredClone(gatewayManifest);
+    delete missingFieldManifest.routes[0][field];
+    assertRejectedManifest(missingFieldManifest, `gateway route accepted missing ${field}`);
+  }
+  assertRejectedManifest(
+    { ...gatewayManifest, routes: [{ ...gatewayManifest.routes[0], primaryAction: { href: "/products/", label: "Products" } }] },
+    "gateway route accepted an internal primary destination",
+  );
+  assertRejectedManifest(
+    {
+      ...gatewayManifest,
+      routes: [
+        {
+          ...gatewayManifest.routes[0],
+          secondaryAction: { href: "https://example.com/products", label: "Products" },
+        },
+      ],
+    },
+    "gateway route accepted an external secondary destination",
+  );
+  assertRejectedManifest(
+    { ...gatewayManifest, routes: [{ ...gatewayManifest.routes[0], evidenceLinks: [] }] },
+    "gateway route accepted an empty evidence-link list",
+  );
+  assertRejectedManifest(
+    {
+      ...gatewayManifest,
+      routes: [
+        {
+          ...gatewayManifest.routes[0],
+          evidenceLinks: [
+            gatewayManifest.routes[0].evidenceLinks[0],
+            {
+              ...gatewayManifest.routes[0].evidenceLinks[0],
+              label: "Duplicate Pack source",
+            },
+          ],
+        },
+      ],
+    },
+    "gateway route accepted duplicate evidence URLs",
+  );
+  assertRejectedManifest(
+    {
+      ...gatewayManifest,
+      routes: [{ ...gatewayManifest.routes[0], policySummary: { evidence: "x", excluded: "y", scope: "z" } }],
+    },
+    "gateway route accepted fields from another route kind",
   );
 
   const policyManifest = {
@@ -853,11 +963,22 @@ export function assertAstroCoreRouteBuild(root) {
         findings.push(`${route.urlPath}: Astro product evidence links missing`);
       }
     }
+    if (route.kind === "gateway") {
+      if (!html.includes('class="gateway-actions"') || !html.includes('class="gateway-evidence"')) {
+        findings.push(`${route.urlPath}: Astro semantic gateway content missing`);
+      }
+      if (!/href="\/products\/" aria-current="page"/.test(html)) {
+        findings.push(`${route.urlPath}: Products navigation is not current`);
+      }
+      if (html.includes("<script")) {
+        findings.push(`${route.urlPath}: Astro gateway emitted client JavaScript`);
+      }
+    }
     for (const [label, value] of expectedRouteValues(route)) {
       if (!legacyHtml.includes(value)) {
         findings.push(`${route.urlPath}: legacy build diverges on ${label}`);
       }
-      if (!html.includes(value)) {
+      if (!html.includes(value) && !html.includes(escapeHtmlText(value))) {
         findings.push(`${route.urlPath}: Astro build diverges on ${label}`);
       }
     }
@@ -943,6 +1064,21 @@ function expectedRouteValues(route) {
       ]),
     ];
   }
+  if (route.kind === "gateway") {
+    return [
+      ...values,
+      ["product", route.product],
+      ["primary action label", route.primaryAction.label],
+      ["primary action href", route.primaryAction.href],
+      ["secondary action label", route.secondaryAction.label],
+      ["secondary action href", route.secondaryAction.href],
+      ...route.evidenceLinks.flatMap((link) => [
+        ["evidence link label", link.label],
+        ["evidence link description", link.description],
+        ["evidence link href", link.href],
+      ]),
+    ];
+  }
   if (route.kind === "policy") {
     return [
       ...values,
@@ -993,7 +1129,7 @@ function validateManifest(manifest, findings) {
     if (!paths.includes(requiredRoute)) findings.push(`${manifestPath}: missing ${requiredRoute}`);
   }
   if (new Set(paths).size !== paths.length) findings.push(`${manifestPath}: duplicate route paths`);
-  if (paths.length !== 12) findings.push(`${manifestPath}: expected exactly 12 routes`);
+  if (paths.length !== 14) findings.push(`${manifestPath}: expected exactly 14 routes`);
 
   for (const route of routeObjects) {
     for (const field of ["slug", "urlPath", "title", "description", "heading", "summary"]) {
@@ -1030,9 +1166,34 @@ function validateManifest(manifest, findings) {
   if (!statusRoute || !JSON.stringify(statusRoute).includes("customer-core")) {
     findings.push(`${manifestPath}: /status/ must report the customer-core route port`);
   }
+  if (
+    !statusRoute ||
+    !JSON.stringify(statusRoute).includes("Pack and Tools gateways") ||
+    JSON.stringify(statusRoute).includes("Pack and Tools gateways plus Axal marketing remain legacy-seeded")
+  ) {
+    findings.push(`${manifestPath}: /status/ must report typed Pack and Tools gateway parity`);
+  }
   const changelogRoute = routeObjects.find((route) => route.urlPath === "/changelog/");
   if (!changelogRoute || !JSON.stringify(changelogRoute).includes("Customer-core route port")) {
     findings.push(`${manifestPath}: /changelog/ must record the customer-core route port`);
+  }
+  if (!changelogRoute || !JSON.stringify(changelogRoute).includes("Product gateway route port")) {
+    findings.push(`${manifestPath}: /changelog/ must record the product gateway route port`);
+  }
+  const productsRoute = routeObjects.find((route) => route.urlPath === "/products/");
+  const productDestinations = Object.fromEntries(
+    (productsRoute?.products ?? []).map((product) => [product.name, product.href]),
+  );
+  for (const [product, href] of [
+    ["Pack", "/products/pack/"],
+    ["Tools", "/products/tools/"],
+  ]) {
+    if (productDestinations[product] !== href) {
+      findings.push(`${manifestPath}: ${product} must route through ${href}`);
+    }
+  }
+  if (productDestinations.Axal !== "https://axal.complyeaze.com/") {
+    findings.push(`${manifestPath}: Axal must remain external until its route port`);
   }
 }
 
@@ -1053,4 +1214,13 @@ function fail(findings) {
 
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function escapeHtmlText(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }

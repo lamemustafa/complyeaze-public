@@ -3,12 +3,14 @@ import type {
   PublicProduct,
   PublicProductsRoute,
 } from "./customer-route-types.ts";
+import type { PublicGatewayRoute } from "./gateway-route-types.ts";
 
 export type {
   PublicHomeRoute,
   PublicProduct,
   PublicProductsRoute,
 } from "./customer-route-types.ts";
+export type { PublicGatewayRoute } from "./gateway-route-types.ts";
 
 export interface PublicAction {
   href: string;
@@ -36,7 +38,7 @@ export interface PublicRouteBase {
   description: string;
   eyebrow: string;
   heading: string;
-  kind: "evidence" | "home" | "migration" | "policy" | "products" | "resource";
+  kind: "evidence" | "gateway" | "home" | "migration" | "policy" | "products" | "resource";
   robots: "noindex, nofollow";
   sections: PublicSection[];
   signalTerms: string[];
@@ -74,6 +76,7 @@ export interface PublicMigrationRoute extends PublicRouteBase {
 
 export type PublicRoute =
   | PublicEvidenceRoute
+  | PublicGatewayRoute
   | PublicHomeRoute
   | PublicMigrationRoute
   | PublicPolicyRoute
@@ -126,7 +129,7 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
   value.sections.forEach((section, index) => validateSection(section, `${label}.sections[${index}]`));
   assertStringArray(value.signalTerms, `${label}.signalTerms`);
   if (value.kind === "home") {
-    for (const field of ["evidenceLinks", "policySummary", "products", "proof", "steps"] as const) {
+    for (const field of ["evidenceLinks", "policySummary", "product", "products", "proof", "steps"] as const) {
       assert(value[field] === undefined, `${label}.${field} is not valid for home routes`);
     }
     assert(value.urlPath === "/", `${label}.urlPath must be / for home routes`);
@@ -139,6 +142,7 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
       "evidenceLinks",
       "policySummary",
       "primaryAction",
+      "product",
       "proof",
       "secondaryAction",
       "steps",
@@ -164,8 +168,32 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
     );
     return;
   }
+  if (value.kind === "gateway") {
+    for (const field of ["policySummary", "products", "proof", "steps"] as const) {
+      assert(value[field] === undefined, `${label}.${field} is not valid for gateway routes`);
+    }
+    assertString(value.product, `${label}.product`);
+    validateAction(value.primaryAction, `${label}.primaryAction`);
+    assertHttpsHref(value.primaryAction.href, `${label}.primaryAction.href`);
+    validateAction(value.secondaryAction, `${label}.secondaryAction`);
+    assertInternalHref(value.secondaryAction.href, `${label}.secondaryAction.href`);
+    assert(
+      Array.isArray(value.evidenceLinks) && value.evidenceLinks.length > 0,
+      `${label}.evidenceLinks must not be empty`,
+    );
+    value.evidenceLinks.forEach((link, index) => {
+      validateEvidenceLink(link, `${label}.evidenceLinks[${index}]`);
+      assertHttpsHref(link.href, `${label}.evidenceLinks[${index}].href`);
+    });
+    const evidenceHrefs = value.evidenceLinks.map((link) => link.href);
+    assert(
+      new Set(evidenceHrefs).size === evidenceHrefs.length,
+      `${label}.evidenceLinks href values must be unique`,
+    );
+    return;
+  }
   if (value.kind === "resource") {
-    for (const field of ["evidenceLinks", "policySummary", "products", "steps"] as const) {
+    for (const field of ["evidenceLinks", "policySummary", "product", "products", "steps"] as const) {
       assert(value[field] === undefined, `${label}.${field} is not valid for resource routes`);
     }
     validateAction(value.primaryAction, `${label}.primaryAction`);
@@ -177,6 +205,7 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
     for (const field of [
       "policySummary",
       "primaryAction",
+      "product",
       "products",
       "proof",
       "secondaryAction",
@@ -203,6 +232,7 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
       "evidenceLinks",
       "policySummary",
       "primaryAction",
+      "product",
       "products",
       "proof",
       "secondaryAction",
@@ -223,11 +253,12 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
   }
   assert(
     value.kind === "policy",
-    `${label}.kind must be evidence, home, migration, policy, products, or resource`,
+    `${label}.kind must be evidence, gateway, home, migration, policy, products, or resource`,
   );
   for (const field of [
     "evidenceLinks",
     "primaryAction",
+    "product",
     "products",
     "proof",
     "secondaryAction",
@@ -296,6 +327,20 @@ function assertPublicHref(value: unknown, label: string): asserts value is strin
   if (/^\/(?:[a-z0-9-]+\/)*$/.test(value)) return;
   const url = new URL(value);
   assert(url.protocol === "https:", `${label} must be an internal trailing-slash path or HTTPS URL`);
+}
+
+function assertHttpsHref(value: unknown, label: string): asserts value is string {
+  assertString(value, label);
+  const url = new URL(value);
+  assert(url.protocol === "https:", `${label} must be an HTTPS URL`);
+}
+
+function assertInternalHref(value: unknown, label: string): asserts value is string {
+  assertString(value, label);
+  assert(
+    /^\/(?:[a-z0-9-]+\/)*$/.test(value),
+    `${label} must be an internal trailing-slash path`,
+  );
 }
 
 function assertRecord(value: unknown, label: string): asserts value is Record<string, unknown> {
