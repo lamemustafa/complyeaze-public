@@ -1,7 +1,7 @@
 # Astro Axal six-route port design
 
 Date: 2026-07-16
-Status: Approved design; awaiting written-spec review
+Status: Approved
 
 ## Outcome
 
