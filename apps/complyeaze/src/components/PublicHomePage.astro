@@ -15,17 +15,19 @@ const { products, route } = Astro.props;
     <div class="p4-hero__copy">
       <p class="p4-register">{route.eyebrow}</p>
       <h1 id="page-title">{route.heading}</h1>
-      <p class="p4-lead">{route.summary}</p>
-      <nav class="p4-actions" aria-label="Homepage actions">
-        <a class="p4-action p4-action--primary" href={route.primaryAction.href}>{route.primaryAction.label}</a>
-        <a class="p4-action" href={route.secondaryAction.href}>{route.secondaryAction.label}</a>
-      </nav>
     </div>
     <dl class="p4-hero__index" aria-label="Product choices">
       {products.map((product) => (
         <div><dt>{product.name}</dt><dd><a href={product.href}>{product.role}</a></dd></div>
       ))}
     </dl>
+    <div class="p4-hero__support">
+      <p class="p4-lead">{route.summary}</p>
+      <nav class="p4-actions" aria-label="Homepage actions">
+        <a class="p4-action p4-action--primary" href={route.primaryAction.href}>{route.primaryAction.label}</a>
+        <a class="p4-action" href={route.secondaryAction.href}>{route.secondaryAction.label}</a>
+      </nav>
+    </div>
   </header>
 
   <section class:list={["p4-product-map", patternClassName("ProductRouteMap", { variant: "family", state: "default" })]} aria-labelledby="product-route-title">

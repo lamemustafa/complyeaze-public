@@ -104,6 +104,11 @@ export function assertP4ComplyEazeBuild(root) {
     const head = html.match(/<head>([\s\S]*?)<\/head>/i)?.[1] ?? "";
     if (!head.includes("p4-register")) findings.push(`${route.urlPath}: P4 stylesheet must load in the document head`);
     if (route.urlPath === "/") {
+      const productIndexPosition = html.indexOf('class="p4-hero__index"');
+      const supportPosition = html.indexOf('class="p4-hero__support"');
+      if (productIndexPosition === -1 || supportPosition === -1 || productIndexPosition > supportPosition) {
+        findings.push("/: product choices must precede supporting copy and actions in mobile reading order");
+      }
       for (const product of productsRoute?.products ?? []) {
         if (!html.includes(product.proof)) findings.push(`/: missing ${product.name} proof in the decision register`);
         const hero = html.match(/<header[^>]*class="[^"]*p4-hero[^"]*"[\s\S]*?<\/header>/i)?.[0] ?? "";
