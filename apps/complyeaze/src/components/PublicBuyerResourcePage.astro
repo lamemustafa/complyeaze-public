@@ -35,7 +35,19 @@ const isContact = route.urlPath === "/contact/";
     <header class="p4-section-heading"><p>{isContact ? "Product destinations" : "Distinct owners"}</p><h2 id="product-destinations-title">Continue with the product that owns the work</h2></header>
     <div>
       {products.map((product) => (
-        <article class={`p4-product--${product.name.toLowerCase()}`}><h3>{product.name}</h3><p>{product.job}</p><a href={product.href}>Continue to {product.name}<span aria-hidden="true"> →</span></a></article>
+        <article class={`p4-product--${product.name.toLowerCase()}`}>
+          <h3>{product.name}</h3>
+          <p>{product.job}</p>
+          <dl>
+            <div><dt>Custody</dt><dd>{product.boundary}</dd></div>
+            <div><dt>Proof</dt><dd>{product.proof}</dd></div>
+            <div><dt>Posture</dt><dd>{product.status}</dd></div>
+          </dl>
+          <div class="p4-destination-actions">
+            <a href={product.evidence.href}>{product.evidence.label}</a>
+            <a href={product.href}>Continue to {product.name}<span aria-hidden="true"> →</span></a>
+          </div>
+        </article>
       ))}
     </div>
   </section>

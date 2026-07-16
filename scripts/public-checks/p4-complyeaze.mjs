@@ -99,6 +99,18 @@ export function assertP4ComplyEazeBuild(root) {
     if (route.urlPath === "/") {
       for (const product of productsRoute?.products ?? []) {
         if (!html.includes(product.proof)) findings.push(`/: missing ${product.name} proof in the decision register`);
+        const hero = html.match(/<header[^>]*class="[^"]*p4-hero[^"]*"[\s\S]*?<\/header>/i)?.[0] ?? "";
+        if (!hero.includes(product.name) || !hero.includes(product.role)) {
+          findings.push(`/: first viewport must identify ${product.name}`);
+        }
+      }
+    }
+    if (["/about/", "/contact/"].includes(route.urlPath)) {
+      for (const product of productsRoute?.products ?? []) {
+        for (const field of ["boundary", "proof", "status"]) {
+          if (!html.includes(product[field])) findings.push(`${route.urlPath}: missing ${product.name} ${field}`);
+        }
+        if (!html.includes(product.evidence.href)) findings.push(`${route.urlPath}: missing ${product.name} evidence action`);
       }
     }
   }
