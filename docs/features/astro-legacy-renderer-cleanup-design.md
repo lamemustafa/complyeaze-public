@@ -1,7 +1,7 @@
 # Astro legacy-renderer cleanup design
 
 Date: 2026-07-16
-Status: Approved design; awaiting written-spec review
+Status: Approved
 Phase: P1 final cleanup
 
 ## Outcome
