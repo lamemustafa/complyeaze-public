@@ -11,9 +11,9 @@ const requiredFiles = [
 ];
 
 const packageUrls = new Map([
-  ["@sanchika/tokens", "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-tokens-0.1.0.tgz"],
-  ["@sanchika/primitives", "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-primitives-0.1.0.tgz"],
-  ["@sanchika/patterns", "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz"],
+  ["@sanchika/tokens", "https://github.com/lamemustafa/sanchika/releases/download/v0.1.1/sanchika-tokens-0.1.1.tgz"],
+  ["@sanchika/primitives", "https://github.com/lamemustafa/sanchika/releases/download/v0.1.1/sanchika-primitives-0.1.1.tgz"],
+  ["@sanchika/patterns", "https://github.com/lamemustafa/sanchika/releases/download/v0.1.1/sanchika-patterns-0.1.1.tgz"],
 ]);
 
 export async function assertSanchikaAdoptionSources(root) {
@@ -26,13 +26,13 @@ export async function assertSanchikaAdoptionSources(root) {
     const manifest = JSON.parse(readFileSync(path.join(root, manifestPath), "utf8"));
     for (const [packageName, expectedUrl] of packageUrls) {
       if (manifest.devDependencies?.[packageName] !== expectedUrl) {
-        findings.push(`${manifestPath}: ${packageName} must use the reviewed v0.1.0 tarball`);
+        findings.push(`${manifestPath}: ${packageName} must use the reviewed v0.1.1 tarball`);
       }
     }
   }
 
   const workspace = readFileSync(path.join(root, "pnpm-workspace.yaml"), "utf8");
-  for (const selector of ["@sanchika/tokens@0.1.0", "@sanchika/primitives@0.1.0"]) {
+  for (const selector of ["@sanchika/tokens@0.1.1", "@sanchika/primitives@0.1.1"]) {
     if (!workspace.includes(selector)) findings.push(`pnpm-workspace.yaml: missing override ${selector}`);
   }
 
@@ -42,8 +42,12 @@ export async function assertSanchikaAdoptionSources(root) {
       findings.push(`pnpm-lock.yaml: missing reviewed tarball resolution ${expectedUrl}`);
     }
   }
-  if (/['"]?@sanchika\/(?:tokens|primitives|patterns)@0\.1\.0['"]?:\s*\n\s+resolution: \{integrity:/m.test(lockfile)) {
+  if (hasSanchikaNpmResolution(lockfile)) {
     findings.push("pnpm-lock.yaml: Sanchika package resolved from npm instead of GitHub artifacts");
+  }
+  const npmResolutionFixture = "\n  '@sanchika/tokens@0.1.1':\n    resolution: {integrity: sha512-test}\n";
+  if (!hasSanchikaNpmResolution(npmResolutionFixture)) {
+    throw new Error("Sanchika npm-resolution fixture was not detected");
   }
 
   if (findings.length > 0) {
@@ -58,17 +62,31 @@ export async function assertSanchikaAdoptionSources(root) {
   );
   defineSanchikaAdoptionManifest(rawManifest);
 
-  for (const mutate of [
-    (fixture) => { fixture.release.version = "0.1.1"; },
-    (fixture) => { fixture.packages[0].sha256 = "0".repeat(64); },
-    (fixture) => { fixture.packages[1].assetDigest = `sha256:${"1".repeat(64)}`; },
-    (fixture) => { fixture.adoptedApps.pop(); },
-    (fixture) => { fixture.rollback.packages.pop(); },
-    (fixture) => { fixture.nonGoals.push("P3 craft routes"); },
+  for (const [label, mutate] of [
+    ["invalid future version", (fixture) => { fixture.release.version = "0.1.2"; }],
+    ["stale v0.1.0 active release", (fixture) => {
+      fixture.release = {
+        distribution: "github-release-artifacts",
+        releaseUrl: "https://github.com/lamemustafa/sanchika/releases/tag/v0.1.0",
+        sourceCommit: "050e444d50e8e4800f471709411eefca40058ab4",
+        tag: "v0.1.0",
+        version: "0.1.0",
+      };
+      fixture.packages = structuredClone(fixture.rollback.packages);
+    }],
+    ["mixed v0.1.1 and v0.1.0 packages", (fixture) => {
+      fixture.packages[1] = structuredClone(fixture.rollback.packages[1]);
+    }],
+    ["wrong active checksum", (fixture) => { fixture.packages[0].sha256 = "0".repeat(64); }],
+    ["wrong active digest", (fixture) => { fixture.packages[1].assetDigest = `sha256:${"1".repeat(64)}`; }],
+    ["missing adopted app", (fixture) => { fixture.adoptedApps.pop(); }],
+    ["wrong rollback version", (fixture) => { fixture.rollback.version = "0.0.2"; }],
+    ["incomplete rollback", (fixture) => { fixture.rollback.packages.pop(); }],
+    ["later-phase non-goal drift", (fixture) => { fixture.nonGoals.push("P3 craft routes"); }],
   ]) {
     const fixture = structuredClone(rawManifest);
     mutate(fixture);
-    assertRejected(defineSanchikaAdoptionManifest, fixture);
+    assertRejected(defineSanchikaAdoptionManifest, fixture, label);
   }
 
 
@@ -191,13 +209,17 @@ function assertCssImportOrder(css, filePath) {
   }
 }
 
-function assertRejected(validator, value) {
+function hasSanchikaNpmResolution(lockfile) {
+  return /['"]?@sanchika\/(?:tokens|primitives|patterns)@0\.1\.1['"]?:\s*\n\s+resolution: \{integrity:/m.test(lockfile);
+}
+
+function assertRejected(validator, value, label) {
   try {
     validator(value);
   } catch {
     return;
   }
-  throw new Error("Sanchika adoption schema accepted an invalid fixture");
+  throw new Error(`Sanchika adoption schema accepted invalid fixture: ${label}`);
 }
 
 function walkFiles(directory) {

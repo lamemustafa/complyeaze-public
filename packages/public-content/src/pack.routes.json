@@ -19,7 +19,7 @@
       "slug": "review/craft",
       "urlPath": "/review/craft/",
       "title": "Pack craft review | Synthetic local custody",
-      "description": "A synthetic, noindex review of Pack local-custody compositions built with Sanchika v0.1.0.",
+      "description": "A synthetic, noindex review of Pack local-custody compositions built with Sanchika v0.1.1.",
       "heading": "Local evidence needs a visible custody trail",
       "summary": "A production-quality review excerpt for evaluating local artifact flow, custody, permissions, provenance, release state, and policy.",
       "robots": "noindex, nofollow",
@@ -32,7 +32,7 @@
         "contentMode": "synthetic",
         "interactionMode": "zero-js",
         "reviewStatus": "C3 human craft approval pending",
-        "sanchikaRelease": "v0.1.0"
+        "sanchikaRelease": "v0.1.1"
       }
     }
   ]

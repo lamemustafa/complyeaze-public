@@ -63,7 +63,7 @@ export async function assertCraftReviewSources(root) {
     accessibility: ["axe", "keyboard", "reduced-motion", "forced-colors"],
     budgets: { authoredJavaScriptBytes: 0, criticalFonts: 2, cssGzipBytes: 61440, maxCls: 0.05 },
     compositions: ["PublicHero"], contentMode: "synthetic", interactionMode: "zero-js",
-    reviewStatus: "C3 human craft approval pending", sanchikaRelease: "v0.1.0",
+    reviewStatus: "C3 human craft approval pending", sanchikaRelease: "v0.1.1",
   };
   for (const mutate of [
     (value) => value.compositions.pop(),

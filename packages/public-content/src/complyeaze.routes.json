@@ -729,13 +729,13 @@
       "slug": "sanchika",
       "urlPath": "/sanchika/",
       "title": "Sanchika Adoption Evidence | ComplyEaze",
-      "description": "Artifact-backed Sanchika v0.1.0 adoption evidence for the three ComplyEaze public Astro applications.",
+      "description": "Artifact-backed Sanchika v0.1.1 adoption evidence for the three ComplyEaze public Astro applications.",
       "eyebrow": "Open-source adoption evidence",
       "heading": "Sanchika adoption is tied to reviewed release artifacts",
       "kind": "adoption",
-      "summary": "ComplyEaze, Axal, and Pack consume the same reviewed Sanchika v0.1.0 GitHub artifact set for a bounded public-shell baseline.",
+      "summary": "ComplyEaze, Axal, and Pack consume the same reviewed Sanchika v0.1.1 GitHub artifact set for a bounded public-shell baseline.",
       "robots": "noindex, nofollow",
-      "signalTerms": ["Sanchika", "v0.1.0", "artifact adoption"],
+      "signalTerms": ["Sanchika", "v0.1.1", "artifact adoption"],
       "sections": [
         {
           "title": "Artifact boundary",
@@ -747,7 +747,7 @@
         },
         {
           "title": "Rollback boundary",
-          "body": "The complete package set rolls back together to the reviewed v0.0.2 artifacts without deployment, domain, database, or private-application changes."
+          "body": "The complete package set rolls back together to the reviewed v0.1.0 artifacts without deployment, domain, database, or private-application changes."
         }
       ]
     },
@@ -755,7 +755,7 @@
       "slug": "review/craft",
       "urlPath": "/review/craft/",
       "title": "ComplyEaze craft review | Synthetic preview",
-      "description": "A synthetic, noindex review of ComplyEaze evidence-register compositions built with Sanchika v0.1.0.",
+      "description": "A synthetic, noindex review of ComplyEaze evidence-register compositions built with Sanchika v0.1.1.",
       "eyebrow": "Synthetic craft review",
       "heading": "Evidence should make the boundary visible",
       "kind": "public-craft-review",
@@ -771,7 +771,7 @@
         "contentMode": "synthetic",
         "interactionMode": "zero-js",
         "reviewStatus": "C3 human craft approval pending",
-        "sanchikaRelease": "v0.1.0"
+        "sanchikaRelease": "v0.1.1"
       }
     }
   ]

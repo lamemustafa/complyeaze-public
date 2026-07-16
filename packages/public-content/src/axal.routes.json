@@ -537,7 +537,7 @@
       "slug": "review/craft",
       "urlPath": "/review/craft/",
       "title": "Axal craft review | Synthetic review desk",
-      "description": "A synthetic, noindex review of Axal human-review desk compositions built with Sanchika v0.1.0.",
+      "description": "A synthetic, noindex review of Axal human-review desk compositions built with Sanchika v0.1.1.",
       "heading": "A review desk should show the decision, not hide it",
       "summary": "A production-quality review excerpt for evaluating queue, evidence, checkpoint, audit, pricing, and FAQ compositions.",
       "robots": "noindex, nofollow",
@@ -550,7 +550,7 @@
         "contentMode": "synthetic",
         "interactionMode": "zero-js",
         "reviewStatus": "C3 human craft approval pending",
-        "sanchikaRelease": "v0.1.0"
+        "sanchikaRelease": "v0.1.1"
       }
     }
   ]

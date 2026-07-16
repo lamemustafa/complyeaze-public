@@ -12,7 +12,7 @@ export interface CraftReviewEvidence {
   contentMode: "synthetic";
   interactionMode: "zero-js";
   reviewStatus: "C3 human craft approval pending";
-  sanchikaRelease: "v0.1.0";
+  sanchikaRelease: "v0.1.1";
 }
 
 export interface CraftReviewRouteBase {

@@ -21,15 +21,15 @@ export interface SanchikaAdoptionManifest {
   packages: [SanchikaArtifact, SanchikaArtifact, SanchikaArtifact];
   release: {
     distribution: "github-release-artifacts";
-    releaseUrl: "https://github.com/lamemustafa/sanchika/releases/tag/v0.1.0";
-    sourceCommit: "050e444d50e8e4800f471709411eefca40058ab4";
-    tag: "v0.1.0";
-    version: "0.1.0";
+    releaseUrl: "https://github.com/lamemustafa/sanchika/releases/tag/v0.1.1";
+    sourceCommit: "f5f86eae29d573576a40c002da7210d7bc7a4dc4";
+    tag: "v0.1.1";
+    version: "0.1.1";
   };
   rollback: {
     packages: [SanchikaArtifact, SanchikaArtifact, SanchikaArtifact];
-    releaseUrl: "https://github.com/lamemustafa/sanchika/releases/tag/v0.0.2";
-    version: "0.0.2";
+    releaseUrl: "https://github.com/lamemustafa/sanchika/releases/tag/v0.1.0";
+    version: "0.1.0";
   };
   schemaVersion: 1;
   smoke: {

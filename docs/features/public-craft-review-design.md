@@ -54,7 +54,7 @@ selection and licensing remain part of later public-page approval.
 
 ### In scope
 
-- three static Astro routes with real Sanchika v0.1.0 pattern contracts;
+- three static Astro routes with real Sanchika v0.1.1 pattern contracts;
 - app-owned synthetic content and route-specific visual identity;
 - zero authored client JavaScript;
 - responsive desktop, tablet, and mobile compositions;
@@ -116,7 +116,7 @@ owning validators; they do not embed a duplicate metadata or content source.
 
 ## Sanchika composition contract
 
-Sanchika v0.1.0 provides semantic pattern contracts and CSS, not React/Astro
+Sanchika v0.1.1 provides semantic pattern contracts and CSS, not React/Astro
 components or page templates. Each route therefore builds accessible Astro
 markup matching the published anatomy and applies classes through the public
 `patternClassName` entrypoint. Consumer CSS may style app-owned wrappers and
@@ -231,7 +231,7 @@ The final section is a compact evidence receipt, not an internal debug console.
 It reports only verifiable facts:
 
 - app and exact `/review/craft/` path;
-- Sanchika `v0.1.0` and composition names used;
+- Sanchika `v0.1.1` and composition names used;
 - `synthetic` content and `zero-js` interaction posture;
 - noindex, nofollow, review-only discoverability, and sitemap exclusion;
 - keyboard, reduced-motion, forced-colors, and axe checks;

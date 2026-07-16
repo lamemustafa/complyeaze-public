@@ -9,7 +9,7 @@ export function defineCraftReviewEvidence(
   assertRecord(value, "craft review evidence");
   assert(value.contentMode === "synthetic", "craft content must be synthetic");
   assert(value.interactionMode === "zero-js", "craft interaction must be zero-js");
-  assert(value.sanchikaRelease === "v0.1.0", "craft route must use Sanchika v0.1.0");
+  assert(value.sanchikaRelease === "v0.1.1", "craft route must use Sanchika v0.1.1");
   assert(
     value.reviewStatus === "C3 human craft approval pending",
     "craft route must leave C3 human approval pending",

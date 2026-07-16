@@ -10,7 +10,7 @@
 
 Add one typed, noindex, review-only `/review/craft/` route to ComplyEaze,
 Axal, and Pack. Render three distinct Ledger Atelier identities through public
-Sanchika v0.1.0 contracts, with synthetic data, zero authored client JavaScript,
+Sanchika v0.1.1 contracts, with synthetic data, zero authored client JavaScript,
 and complete 25-route/75-cell verification evidence.
 
 ## Success criteria
@@ -62,7 +62,7 @@ Implement focused Astro components and route rendering:
 - Axal and Pack through explicit `src/pages/review/craft.astro` entrypoints
   loading their exact manifest records.
 
-Use only the approved Sanchika v0.1.0 public API. Add one app-owned craft CSS
+Use only the approved Sanchika v0.1.1 public API. Add one app-owned craft CSS
 file per app for the teal/chalk, aubergine/coral, and moss/near-black/lime
 identities. Use semantic markup, native `details/summary`, system fonts, visible
 focus, responsive reflow, reduced-motion handling, and forced-colors support.
