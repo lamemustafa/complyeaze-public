@@ -50,6 +50,13 @@ export async function assertPackManifest(root) {
     unsafeCraftClaim,
     "Pack craft manifest accepted a readiness claim",
   );
+  const invalidCraftSignalTerm = structuredClone(rawManifest);
+  invalidCraftSignalTerm.routes[1].signalTerms = [1];
+  assertRejected(
+    definePackRouteManifest,
+    invalidCraftSignalTerm,
+    "Pack craft manifest accepted a non-string signal term",
+  );
   const unsupportedField = structuredClone(rawManifest);
   unsupportedField.routes[0].installUrl = "https://example.com";
   assertRejected(definePackRouteManifest, unsupportedField, "Pack manifest accepted an unsafe field");

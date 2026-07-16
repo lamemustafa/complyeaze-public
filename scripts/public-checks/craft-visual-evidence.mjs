@@ -32,6 +32,19 @@ export function calculateCraftCssGzipBytes(transferredAssets, inlineStyleTexts) 
   return transferredBytes + inlineBytes;
 }
 
+export function calculateAuthoredJavaScriptBytes(
+  transferredAssets,
+  inlineScriptTexts,
+  inlineEventHandlerTexts,
+) {
+  const transferredBytes = transferredAssets
+    .filter(({ type }) => type === "script")
+    .reduce((total, asset) => total + asset.body.byteLength, 0);
+  const inlineBytes = [...inlineScriptTexts, ...inlineEventHandlerTexts]
+    .reduce((total, source) => total + Buffer.byteLength(source), 0);
+  return transferredBytes + inlineBytes;
+}
+
 export async function collectCraftVisualEvidence(page, transferredAssets) {
   const issues = [];
   const axeResults = await new AxeBuilder({ page })
@@ -47,9 +60,19 @@ export async function collectCraftVisualEvidence(page, transferredAssets) {
     issues.push(`axe critical/serious: ${evidence.join(", ")}`);
   }
 
-  const authoredJavaScriptBytes = transferredAssets
-    .filter(({ type }) => type === "script")
-    .reduce((total, asset) => total + asset.body.byteLength, 0);
+  const inlineScriptTexts = await page.locator("script:not([src])").allTextContents();
+  const inlineEventHandlerTexts = await page.evaluate(() =>
+    [...document.querySelectorAll("*")].flatMap((element) =>
+      [...element.attributes]
+        .filter((attribute) => attribute.name.toLowerCase().startsWith("on"))
+        .map((attribute) => attribute.value),
+    ),
+  );
+  const authoredJavaScriptBytes = calculateAuthoredJavaScriptBytes(
+    transferredAssets,
+    inlineScriptTexts,
+    inlineEventHandlerTexts,
+  );
   const inlineStyleTexts = await page.locator("style").allTextContents();
   const cssGzipBytes = calculateCraftCssGzipBytes(transferredAssets, inlineStyleTexts);
   const criticalFonts = new Set(

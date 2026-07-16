@@ -25,6 +25,7 @@ function validateCraft(value: unknown, label: string): asserts value is PackCraf
   assert(value.robots === "noindex, nofollow", `${label}.robots must stay noindex, nofollow`);
   assert(value.discoverability === "review-only", `${label}.discoverability must be review-only`);
   assert(Array.isArray(value.signalTerms) && value.signalTerms.length > 0, `${label}.signalTerms must not be empty`);
+  value.signalTerms.forEach((term, index) => assertString(term, `${label}.signalTerms[${index}]`));
   defineCraftReviewEvidence(value.reviewEvidence, ["LocalArtifactFlow", "CustodyBoundary", "PermissionExplainer", "SourceProvenanceStrip", "ReleaseStatusBanner"]);
   assertNoReadinessClaims(value, label);
 }

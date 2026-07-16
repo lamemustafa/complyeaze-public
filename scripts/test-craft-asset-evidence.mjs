@@ -5,6 +5,7 @@ import * as craftEvidence from "./public-checks/craft-visual-evidence.mjs";
 assert.equal(typeof craftEvidence.craftAssetResponseIssue, "function");
 assert.equal(typeof craftEvidence.craftAssetRequestFailureIssue, "function");
 assert.equal(typeof craftEvidence.calculateCraftCssGzipBytes, "function");
+assert.equal(typeof craftEvidence.calculateAuthoredJavaScriptBytes, "function");
 assert.equal(craftEvidence.isCraftAssetResource(true, "font"), true);
 assert.equal(craftEvidence.isCraftAssetResource(true, "image"), false);
 assert.equal(craftEvidence.isCraftAssetResource(false, "font"), false);
@@ -60,6 +61,16 @@ assert.equal(
     inlineCss,
   ),
   gzipSync(transferredCss).byteLength + gzipSync(Buffer.from(inlineCss.join("\n"))).byteLength,
+);
+assert.equal(
+  craftEvidence.calculateAuthoredJavaScriptBytes(
+    [{ type: "script", body: Buffer.from("window.external = true;") }],
+    ["window.inline = true;"],
+    ["window.clicked = true;"],
+  ),
+  Buffer.byteLength("window.external = true;")
+    + Buffer.byteLength("window.inline = true;")
+    + Buffer.byteLength("window.clicked = true;"),
 );
 
 console.log("Craft asset evidence fixtures passed");
