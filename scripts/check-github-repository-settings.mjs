@@ -29,7 +29,7 @@ function run() {
 
   assertEqual("repository", repo.nameWithOwner, repository, findings);
   assertEqual("visibility", repo.visibility, "PUBLIC", findings);
-  assertEqual("default branch", repo.defaultBranchRef?.name, "main", findings);
+  assertEqual("default branch", repo.defaultBranchRef?.name, "master", findings);
   assertEqual("homepage", repo.homepageUrl, "https://complyeaze.com", findings);
   assertEqual("issues", repo.hasIssuesEnabled, true, findings);
   assertEqual("projects", repo.hasProjectsEnabled, false, findings);
@@ -42,19 +42,19 @@ function run() {
   }
 
   const rulesets = ghJson(["api", `repos/${repository}/rulesets`]);
-  const protectMain = rulesets.find((ruleset) => ruleset.name === "Protect main" && ruleset.target === "branch");
-  if (!protectMain) {
-    findings.push("ruleset missing: Protect main branch ruleset");
+  const protectMaster = rulesets.find((ruleset) => ruleset.name === "Protect master" && ruleset.target === "branch");
+  if (!protectMaster) {
+    findings.push("ruleset missing: Protect master branch ruleset");
   } else {
-    const ruleset = ghJson(["api", `repos/${repository}/rulesets/${protectMain.id}`]);
-    assertEqual("Protect main enforcement", ruleset.enforcement, "active", findings);
+    const ruleset = ghJson(["api", `repos/${repository}/rulesets/${protectMaster.id}`]);
+    assertEqual("Protect master enforcement", ruleset.enforcement, "active", findings);
     const include = ruleset.conditions?.ref_name?.include ?? [];
-    if (!include.includes("refs/heads/main")) {
-      findings.push("Protect main ruleset must include refs/heads/main");
+    if (!include.includes("refs/heads/master")) {
+      findings.push("Protect master ruleset must include refs/heads/master");
     }
     const rulesByType = new Map((ruleset.rules ?? []).map((rule) => [rule.type, rule]));
     for (const ruleType of expectedRuleTypes) {
-      if (!rulesByType.has(ruleType)) findings.push(`Protect main ruleset missing rule: ${ruleType}`);
+      if (!rulesByType.has(ruleType)) findings.push(`Protect master ruleset missing rule: ${ruleType}`);
     }
 
     const pullRequestRule = rulesByType.get("pull_request");
@@ -70,7 +70,7 @@ function run() {
     assertEqual("strict required status checks", checksParameters.strict_required_status_checks_policy, true, findings);
     const checks = new Set((checksParameters.required_status_checks ?? []).map((check) => check.context));
     for (const check of expectedRequiredChecks) {
-      if (!checks.has(check)) findings.push(`Protect main required check missing: ${check}`);
+      if (!checks.has(check)) findings.push(`Protect master required check missing: ${check}`);
     }
   }
 

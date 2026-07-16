@@ -42,7 +42,7 @@ Store visual evidence as CI artifacts or reviewed local artifacts:
 - A 22-page, three-viewport matrix: 66 unique route/viewport cells.
 - GitHub Actions artifact `public-site-build` for the three Astro build outputs
   and aggregate release evidence that generated the screenshots.
-- GitHub Actions artifact `public-visual-evidence` for PR and `main` runs.
+- GitHub Actions artifact `public-visual-evidence` for PR and `master` runs.
 
 Do not commit screenshots that contain real taxpayer data, portal data,
 credentials, local paths, or production customer information.

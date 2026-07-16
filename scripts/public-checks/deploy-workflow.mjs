@@ -9,14 +9,14 @@ const requiredWorkflowSnippets = [
   "name: Pages deploy",
   "workflow_dispatch:",
   "push:",
-  "- main",
+  "- master",
   "contents: read",
   "pages: write",
   "id-token: write"
 ];
 
 const requiredJobSnippets = [
-  "if: ${{ github.ref == 'refs/heads/main' && vars.ENABLE_GITHUB_PAGES_DEPLOY == 'true' }}",
+  "if: ${{ github.ref == 'refs/heads/master' && vars.ENABLE_GITHUB_PAGES_DEPLOY == 'true' }}",
   "name: github-pages",
   "pnpm verify",
   "path: apps/complyeaze/dist",
