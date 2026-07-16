@@ -40,6 +40,13 @@ export function assertAstroCoreRouteSources(root) {
   for (const routePath of requiredRoutes) {
     if (!routes.some((route) => route.urlPath === routePath)) findings.push(`missing ${routePath}`);
   }
+  const manifest = definePublicRouteManifest(JSON.parse(
+    readFileSync(path.join(root, "packages/public-content/src/complyeaze.routes.json"), "utf8"),
+  ));
+  const statusRoute = manifest.routes.find((route) => route.urlPath === "/status/");
+  if (!statusRoute?.sections.some((section) => section.body.includes(`${routes.length} ComplyEaze routes`))) {
+    findings.push("status migration posture must match the canonical ComplyEaze route count");
+  }
   if (findings.length === 0) {
     const index = readFileSync(path.join(root, "apps/complyeaze/src/pages/index.astro"), "utf8");
     const catchAll = readFileSync(path.join(root, "apps/complyeaze/src/pages/[...slug].astro"), "utf8");

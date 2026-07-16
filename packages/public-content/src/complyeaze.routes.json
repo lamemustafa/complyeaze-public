@@ -551,7 +551,7 @@
         },
         {
           "title": "Migration posture",
-          "body": "The typed manifests now own 14 ComplyEaze routes, six Axal routes, and one conservative Pack foundation. The old string renderer and its duplicate adapters are removed. Hosting and path routing remain pending, and route-level cleanup stays blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
+          "body": "The typed manifests now own 15 ComplyEaze routes, six Axal routes, and one conservative Pack foundation. The old string renderer and its duplicate adapters are removed. Hosting and path routing remain pending, and route-level cleanup stays blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
         },
         {
           "title": "Hosting posture",
