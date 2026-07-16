@@ -1,6 +1,6 @@
 # Sanchika v0.1.0 public adoption design
 
-**Status:** Approved in conversation; written-spec review pending
+**Status:** Approved
 
 **Repository:** `complyeaze-public`
 
