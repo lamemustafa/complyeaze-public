@@ -30,6 +30,11 @@ audit:
 pnpm github:settings
 ```
 
+The one-time default-branch migration PR may use
+`pnpm github:settings --allow-main-transition` before the live cutover. That
+mode still validates the complete matching branch ruleset; post-cutover
+evidence must use the strict command above.
+
 This live audit is separate from `pnpm verify` because it uses the GitHub API to
 confirm repository metadata and branch-ruleset state.
 

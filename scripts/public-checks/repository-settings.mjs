@@ -40,6 +40,7 @@ const requiredRepositoryTerms = [
   "Do not enable Projects or Wiki",
   "Do not make `master` directly pushable",
   "pnpm github:settings",
+  "pnpm github:settings --allow-main-transition",
   "Live Settings Audit"
 ];
 
@@ -80,8 +81,10 @@ const requiredPackageTerms = [
 
 const requiredGithubSettingsScriptTerms = [
   "lamemustafa/complyeaze-public",
-  "Protect master",
-  "refs/heads/master",
+  "--allow-main-transition",
+  "acceptedDefaultBranches",
+  "rulesetName",
+  "protectedRef",
   "allowed_merge_methods",
   "required_approving_review_count",
   "require_code_owner_review",

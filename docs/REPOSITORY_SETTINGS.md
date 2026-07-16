@@ -64,6 +64,17 @@ Command:
 pnpm github:settings
 ```
 
+During the one-time default-branch migration PR, before the live cutover, run:
+
+```bash
+pnpm github:settings --allow-main-transition
+```
+
+The transition flag accepts either `main` or `master` as the live default but
+still requires the matching `Protect main` or `Protect master` ruleset and the
+complete review, merge-method, and required-check policy. Remove the flag after
+the live default changes; the ordinary command remains strict for `master`.
+
 The audit uses the GitHub CLI to verify the live
 `lamemustafa/complyeaze-public` repository metadata and `Protect master` ruleset:
 public visibility, default branch, homepage, issue/project/wiki posture, topic
