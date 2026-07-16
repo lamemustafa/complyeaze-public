@@ -6,7 +6,7 @@ uploads, or authenticated app infrastructure.
 
 ## Required Checks
 
-The protected `main` ruleset should require the GitHub `Public site gates` and
+The protected `master` ruleset should require the GitHub `Public site gates` and
 `Review gate` checks. `Public site gates` should stay aligned with the local
 gate below; `Review gate` complements, but does not replace the review-rectify
 table and maintainer review of the current diff.
@@ -29,6 +29,11 @@ audit:
 ```bash
 pnpm github:settings
 ```
+
+The one-time default-branch migration PR may use
+`pnpm github:settings --allow-main-transition` before the live cutover. That
+mode still validates the complete matching branch ruleset; post-cutover
+evidence must use the strict command above.
 
 This live audit is separate from `pnpm verify` because it uses the GitHub API to
 confirm repository metadata and branch-ruleset state.
@@ -100,6 +105,6 @@ Each release should record:
 ## Astro Cutover Rollback
 
 If the manifest-only cutover regresses an unhosted public build, revert the
-cutover commit to the last pre-cutover `main` revision and inspect the retained
+cutover commit to the last pre-cutover `master` revision and inspect the retained
 seven-day `public-site-build` and `public-visual-evidence` artifacts. Do not
 enable Pages, change DNS, or remove private-app routes as part of that rollback.

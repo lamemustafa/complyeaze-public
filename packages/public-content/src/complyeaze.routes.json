@@ -73,7 +73,7 @@
           "href": "https://axal.complyeaze.com/",
           "evidence": {
             "label": "Review Axal public source",
-            "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/packages/public-content/src/axal.routes.json"
+            "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/packages/public-content/src/axal.routes.json"
           }
         },
         {
@@ -270,11 +270,11 @@
       "signalTerms": ["ComplyEaze", "public", "channel"],
       "primaryAction": {
         "label": "Read the support policy",
-        "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/SUPPORT.md"
+        "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/SUPPORT.md"
       },
       "secondaryAction": {
         "label": "Read the security policy",
-        "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/SECURITY.md"
+        "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/SECURITY.md"
       },
       "sections": [
         {
@@ -328,27 +328,27 @@
         {
           "label": "Security policy",
           "description": "Private reporting path and sensitive-data boundaries for public repository issues.",
-          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/SECURITY.md"
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/SECURITY.md"
         },
         {
           "label": "Public claim policy",
           "description": "Evidence requirements and prohibited public readiness or endorsement claims.",
-          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/PUBLIC_CLAIM_POLICY.md"
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/docs/PUBLIC_CLAIM_POLICY.md"
         },
         {
           "label": "Dependency policy",
           "description": "Reviewed package, lockfile, workflow, lifecycle-script, and action-pinning boundaries.",
-          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/DEPENDENCY_POLICY.md"
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/docs/DEPENDENCY_POLICY.md"
         },
         {
           "label": "Repository settings",
           "description": "Protected-check, review-gate, Pages-guard, and repository posture evidence.",
-          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/REPOSITORY_SETTINGS.md"
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/docs/REPOSITORY_SETTINGS.md"
         },
         {
           "label": "Review and rectify",
           "description": "Required local and current-head review loop for meaningful public changes.",
-          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/REVIEW_RECTIFY.md"
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/docs/REVIEW_RECTIFY.md"
         }
       ]
     },
@@ -381,32 +381,32 @@
         {
           "label": "Migration plan",
           "description": "Public-surface extraction order, evidence requirements, and cleanup boundary.",
-          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/MIGRATION.md"
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/docs/MIGRATION.md"
         },
         {
           "label": "Route migration ledger",
           "description": "Host-aware source, destination, evidence, redirect, cleanup, and rollback records.",
-          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/ROUTE_MIGRATION_LEDGER.md"
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/docs/ROUTE_MIGRATION_LEDGER.md"
         },
         {
           "label": "Release gates",
           "description": "Required checks, artifacts, review state, and dependency evidence before merge.",
-          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/RELEASE_GATES.md"
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/docs/RELEASE_GATES.md"
         },
         {
           "label": "Visual testing",
           "description": "Desktop, tablet, mobile, accessibility, overflow, focus, and screenshot review rules.",
-          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/VISUAL_TESTING.md"
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/docs/VISUAL_TESTING.md"
         },
         {
           "label": "Public claim policy",
           "description": "Source and evidence standards for compliance, privacy, release, and product claims.",
-          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/PUBLIC_CLAIM_POLICY.md"
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/docs/PUBLIC_CLAIM_POLICY.md"
         },
         {
           "label": "Review and rectify",
           "description": "Before-every-commit local review and current-head GitHub review requirements.",
-          "href": "https://github.com/lamemustafa/complyeaze-public/blob/main/docs/REVIEW_RECTIFY.md"
+          "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/docs/REVIEW_RECTIFY.md"
         }
       ]
     },
@@ -717,7 +717,7 @@
         },
         {
           "title": "Pages deploy guard",
-          "body": "The GitHub Pages workflow is readiness-only unless it runs on main with ENABLE_GITHUB_PAGES_DEPLOY set to true. It runs the full verify gate before uploading only apps/complyeaze/dist, and it is not parent-route cleanup evidence without hosted route, canonical, redirect, and rollback review."
+          "body": "The GitHub Pages workflow is readiness-only unless it runs on master with ENABLE_GITHUB_PAGES_DEPLOY set to true. It runs the full verify gate before uploading only apps/complyeaze/dist, and it is not parent-route cleanup evidence without hosted route, canonical, redirect, and rollback review."
         },
         {
           "title": "Review gate",
