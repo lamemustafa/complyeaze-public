@@ -6,6 +6,27 @@ import type {
 
 const releasePackages = [
   {
+    assetDigest: "sha256:b8149ced363966fa72c9fbe802c0186e062b3be0a464909ec12799503e601c27",
+    name: "@sanchika/tokens",
+    sha256: "b8149ced363966fa72c9fbe802c0186e062b3be0a464909ec12799503e601c27",
+    tarballUrl: "https://github.com/lamemustafa/sanchika/releases/download/v0.1.1/sanchika-tokens-0.1.1.tgz",
+  },
+  {
+    assetDigest: "sha256:08f5ecefe626e65e8ce7656d7409753aa77e07a5467a5ca2876c20d540a6fcec",
+    name: "@sanchika/primitives",
+    sha256: "08f5ecefe626e65e8ce7656d7409753aa77e07a5467a5ca2876c20d540a6fcec",
+    tarballUrl: "https://github.com/lamemustafa/sanchika/releases/download/v0.1.1/sanchika-primitives-0.1.1.tgz",
+  },
+  {
+    assetDigest: "sha256:8b50491eaa2d4cdee4f07ec6e742c05253623e7c413d3974800a9bf437af9b83",
+    name: "@sanchika/patterns",
+    sha256: "8b50491eaa2d4cdee4f07ec6e742c05253623e7c413d3974800a9bf437af9b83",
+    tarballUrl: "https://github.com/lamemustafa/sanchika/releases/download/v0.1.1/sanchika-patterns-0.1.1.tgz",
+  },
+] as const;
+
+const rollbackPackages = [
+  {
     assetDigest: "sha256:92148781457a3797db7f643235c8f23d881a4842426d50961bf6ec65bd718c55",
     name: "@sanchika/tokens",
     sha256: "92148781457a3797db7f643235c8f23d881a4842426d50961bf6ec65bd718c55",
@@ -22,27 +43,6 @@ const releasePackages = [
     name: "@sanchika/patterns",
     sha256: "3b0b6e6e5b42712222bcf5badeca63a9fee6c0466904de0a2f5d27f2cd5428f5",
     tarballUrl: "https://github.com/lamemustafa/sanchika/releases/download/v0.1.0/sanchika-patterns-0.1.0.tgz",
-  },
-] as const;
-
-const rollbackPackages = [
-  {
-    assetDigest: "sha256:6a82a1efd83a0af2f351b86af6cd7ff9ba724c3d41c3564c582400854b96189c",
-    name: "@sanchika/tokens",
-    sha256: "6a82a1efd83a0af2f351b86af6cd7ff9ba724c3d41c3564c582400854b96189c",
-    tarballUrl: "https://github.com/lamemustafa/sanchika/releases/download/v0.0.2/sanchika-tokens-0.0.2.tgz",
-  },
-  {
-    assetDigest: "sha256:76a37620fa25d256377222f6caf0beadae4c755ddc124dc9c42a51a29ca09742",
-    name: "@sanchika/primitives",
-    sha256: "76a37620fa25d256377222f6caf0beadae4c755ddc124dc9c42a51a29ca09742",
-    tarballUrl: "https://github.com/lamemustafa/sanchika/releases/download/v0.0.2/sanchika-primitives-0.0.2.tgz",
-  },
-  {
-    assetDigest: "sha256:d50fe702112d337f28afea40f0012492344dca8dc6964dfadea4e70ce71c75da",
-    name: "@sanchika/patterns",
-    sha256: "d50fe702112d337f28afea40f0012492344dca8dc6964dfadea4e70ce71c75da",
-    tarballUrl: "https://github.com/lamemustafa/sanchika/releases/download/v0.0.2/sanchika-patterns-0.0.2.tgz",
   },
 ] as const;
 
@@ -78,9 +78,9 @@ function validateRelease(value: unknown) {
   assertRecord(value, "release");
   assertExactKeys(value, ["distribution", "releaseUrl", "sourceCommit", "tag", "version"], "release");
   assert(value.distribution === "github-release-artifacts", "release distribution must use GitHub artifacts");
-  assert(value.releaseUrl === "https://github.com/lamemustafa/sanchika/releases/tag/v0.1.0", "release URL must identify v0.1.0");
-  assert(value.sourceCommit === "050e444d50e8e4800f471709411eefca40058ab4", "release source commit is stale");
-  assert(value.tag === "v0.1.0" && value.version === "0.1.0", "release version must be v0.1.0");
+  assert(value.releaseUrl === "https://github.com/lamemustafa/sanchika/releases/tag/v0.1.1", "release URL must identify v0.1.1");
+  assert(value.sourceCommit === "f5f86eae29d573576a40c002da7210d7bc7a4dc4", "release source commit is stale");
+  assert(value.tag === "v0.1.1" && value.version === "0.1.1", "release version must be v0.1.1");
 }
 
 function validateArtifacts(value: unknown, expected: readonly SanchikaArtifact[], label: string) {
@@ -115,8 +115,8 @@ function validateSmoke(value: unknown) {
 function validateRollback(value: unknown) {
   assertRecord(value, "rollback");
   assertExactKeys(value, ["packages", "releaseUrl", "version"], "rollback");
-  assert(value.version === "0.0.2", "rollback version must be 0.0.2");
-  assert(value.releaseUrl === "https://github.com/lamemustafa/sanchika/releases/tag/v0.0.2", "rollback URL must identify v0.0.2");
+  assert(value.version === "0.1.0", "rollback version must be 0.1.0");
+  assert(value.releaseUrl === "https://github.com/lamemustafa/sanchika/releases/tag/v0.1.0", "rollback URL must identify v0.1.0");
   validateArtifacts(value.packages, rollbackPackages, "rollback.packages");
 }
 
