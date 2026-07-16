@@ -71,6 +71,13 @@ export function assertP4ComplyEazeSources(root) {
   if (!catchAll.includes("PublicBuyerResourcePage")) {
     findings.push("ComplyEaze resource routing must isolate the P4 About/Contact presentation");
   }
+  const layout = readFileSync(path.join(root, "apps/complyeaze/src/layouts/PublicPageLayout.astro"), "utf8");
+  if (!layout.includes('class="site-header"') || !layout.includes('class="site-footer"')) {
+    findings.push("Public shell chrome must use explicit site-header and site-footer scope");
+  }
+  if (/\n\s*header(?:\s|,|>)/.test(layout) || /\n\s*footer(?:\s|,|>)/.test(layout)) {
+    findings.push("Public shell styles must not target nested semantic headers or footers");
+  }
 
   if (findings.length > 0) throw new Error(`P4 ComplyEaze source findings:\n${findings.join("\n")}`);
 }
