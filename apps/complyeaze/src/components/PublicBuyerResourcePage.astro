@@ -1,0 +1,49 @@
+---
+import { patternClassName } from "@sanchika/patterns";
+import type { PublicProduct, PublicResourceRoute } from "@complyeaze-public/content";
+
+interface Props {
+  products: PublicProduct[];
+  route: PublicResourceRoute;
+}
+
+const { products, route } = Astro.props;
+const isContact = route.urlPath === "/contact/";
+---
+
+<article class={`p4-page p4-resource ${isContact ? "p4-contact" : "p4-about"}`} data-p4-register="true">
+  <header class:list={["p4-hero p4-hero--compact", patternClassName("PublicHero", { variant: "editorial", state: "with-proof-artifact" })]} aria-labelledby="page-title">
+    <div class="p4-hero__copy">
+      <p class="p4-register">{route.eyebrow}</p>
+      <h1 id="page-title">{route.heading}</h1>
+      <p class="p4-lead">{route.summary}</p>
+      <nav class="p4-actions" aria-label={`${isContact ? "Contact" : "About"} actions`}>
+        <a class="p4-action p4-action--primary" href={route.primaryAction.href}>{route.primaryAction.label}</a>
+        <a class="p4-action" href={route.secondaryAction.href}>{route.secondaryAction.label}</a>
+      </nav>
+    </div>
+    <p class="p4-hero__note"><strong>{isContact ? "Share safely" : "Public by design"}</strong>{isContact ? " Use public issues only for synthetic, non-sensitive website evidence. Security reports stay private." : " Product proof is inspectable here. Authenticated work and sensitive operational context are not."}</p>
+  </header>
+
+  <section class:list={["p4-boundary-ledger", patternClassName("ProductRouteMap", { variant: "family", state: "default" })]} aria-label={isContact ? "Contact channels" : "Public product boundaries"}>
+    {route.sections.map((section, index) => (
+      <article><span>0{index + 1}</span><div><h2>{section.title}</h2>{section.meta && <strong>{section.meta}</strong>}</div><p>{section.body}</p></article>
+    ))}
+  </section>
+
+  <section class="p4-product-destinations" aria-labelledby="product-destinations-title">
+    <header class="p4-section-heading"><p>{isContact ? "Product destinations" : "Distinct owners"}</p><h2 id="product-destinations-title">Continue with the product that owns the work</h2></header>
+    <div>
+      {products.map((product) => (
+        <article class={`p4-product--${product.name.toLowerCase()}`}><h3>{product.name}</h3><p>{product.job}</p><a href={product.href}>Continue to {product.name}<span aria-hidden="true"> →</span></a></article>
+      ))}
+    </div>
+  </section>
+
+  <section aria-labelledby="route-proof-title">
+    <h2 class="p4-visually-hidden" id="route-proof-title">What this route proves</h2>
+    <ul class:list={["p4-proof-strip", patternClassName("ProofStrip", { variant: "inline", state: "verified" })]}>
+      {route.proof.map((item) => <li>{item}</li>)}
+    </ul>
+  </section>
+</article>

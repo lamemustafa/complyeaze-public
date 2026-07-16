@@ -110,8 +110,10 @@ The Contact page routes visitors among:
   issue;
 - a public-site issue through
   `https://github.com/lamemustafa/complyeaze-public/issues`;
-- a sensitive or security report through
-  `https://github.com/lamemustafa/complyeaze-public/security/advisories/new`.
+- a sensitive or security report through the repository security policy at
+  `https://github.com/lamemustafa/complyeaze-public/blob/master/SECURITY.md`,
+  which preserves the documented private-channel fallback while GitHub private
+  vulnerability reporting is disabled.
 
 No public URL for the private product channel is currently verified in the
 repository. P4 therefore does not invent or expose one; the product-inquiry

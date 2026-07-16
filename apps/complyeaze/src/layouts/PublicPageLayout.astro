@@ -1,6 +1,7 @@
 ---
 import type { PublicRoute } from "@complyeaze-public/content";
 import { canonicalUrl } from "@complyeaze-public/shell";
+import p4CssUrl from "../styles/p4-register.css?url";
 import "../styles/sanchika.css";
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
 
 const { origin, route } = Astro.props;
 const canonical = canonicalUrl(origin, route.urlPath);
+const p4Paths = new Set(["/", "/products/", "/products/pack/", "/products/tools/", "/about/", "/contact/"]);
+const isP4Route = p4Paths.has(route.urlPath);
 const primaryNavigation = [
   { href: "/", label: "Home" },
   { href: "/products/", label: "Products" },
@@ -35,10 +38,12 @@ function isCurrentPrimaryNavItem(href: string, urlPath: string): boolean {
     <meta property="og:description" content={route.description} />
     <meta property="og:url" content={canonical} />
     <title>{route.title}</title>
+    {isP4Route && <link rel="stylesheet" href={p4CssUrl} />}
     <style is:global>
       :root { color-scheme: light; font-family: var(--sk-font-body); }
       * { box-sizing: border-box; }
       body { margin: 0; color: var(--sk-color-ink-primary); background: var(--sk-color-canvas); line-height: var(--sk-line-height-body); }
+      body.p4-shell { background: #f7faf9; }
       a { color: var(--sk-color-link); text-underline-offset: 0.2em; }
       a:focus-visible { outline: var(--sk-focus-outline-width) solid var(--sk-color-focus); outline-offset: var(--sk-focus-outline-offset); }
       .skip-link { position: fixed; inset: 0 auto auto 1rem; z-index: 10; padding: var(--sk-space-3) var(--sk-space-4); background: var(--sk-color-brand-primary); color: var(--sk-color-ink-inverse); transform: translateY(-140%); }
@@ -50,6 +55,10 @@ function isCurrentPrimaryNavItem(href: string, urlPath: string): boolean {
       header nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
       header nav a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; color: var(--sk-color-ink-primary); }
       header nav a[aria-current="page"] { font-weight: 750; text-decoration-thickness: 0.16em; }
+      body.p4-shell > header { border-color: #91aaa5; background: #f7faf9; }
+      body.p4-shell .brand { color: #073c37; font-size: 1.1rem; letter-spacing: -0.02em; }
+      body.p4-shell > header nav a { color: #102522; font-weight: 700; }
+      body.p4-shell > header nav a[aria-current="page"] { color: #073c37; }
       main { padding-block: clamp(3rem, 8vw, 7rem); }
       footer { border-block-end: 0; }
       footer p { margin: 0; }
@@ -65,7 +74,7 @@ function isCurrentPrimaryNavItem(href: string, urlPath: string): boolean {
       }
     </style>
   </head>
-  <body>
+  <body class:list={{ "p4-shell": isP4Route }}>
     <a class="skip-link" href="#main-content">Skip to content</a>
     <header>
       <div>
