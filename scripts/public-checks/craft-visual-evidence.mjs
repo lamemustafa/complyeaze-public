@@ -37,6 +37,41 @@ export async function collectCraftVisualEvidence(page, transferredAssets) {
   if (remoteFonts.length > 0) issues.push(`${remoteFonts.length} remote font requests`);
   if (cls > 0.05) issues.push(`CLS ${cls.toFixed(4)} exceeds 0.05`);
 
+  const readability = await page.evaluate(() => {
+    const collapsedText = [...document.querySelectorAll("main h1, main h2, main h3, main p, main strong")]
+      .filter((element) => {
+        const rect = element.getBoundingClientRect();
+        return (element.textContent?.trim().length ?? 0) > 0 && (rect.width < 1 || rect.height < 1);
+      })
+      .map((element) => element.textContent?.trim().slice(0, 48));
+    const crampedParagraphs = [...document.querySelectorAll("main p")]
+      .filter((element) => {
+        const rect = element.getBoundingClientRect();
+        const fontSize = Number.parseFloat(window.getComputedStyle(element).fontSize);
+        return (element.textContent?.trim().length ?? 0) >= 60 && rect.width < fontSize * 8;
+      })
+      .map((element) => element.textContent?.trim().slice(0, 48));
+    const joinedLabels = [...document.querySelectorAll("main span")]
+      .filter((label) => {
+        const value = label.nextElementSibling;
+        if (!value) return false;
+        const labelRect = label.getBoundingClientRect();
+        const valueRect = value.getBoundingClientRect();
+        return Math.abs(labelRect.top - valueRect.top) < 2 && valueRect.left - labelRect.right < 4;
+      })
+      .map((element) => element.textContent?.trim().slice(0, 48));
+    return { collapsedText, crampedParagraphs, joinedLabels };
+  });
+  if (readability.collapsedText.length > 0) {
+    issues.push(`collapsed visible text: ${readability.collapsedText.join(", ")}`);
+  }
+  if (readability.crampedParagraphs.length > 0) {
+    issues.push(`cramped long-form text: ${readability.crampedParagraphs.join(", ")}`);
+  }
+  if (readability.joinedLabels.length > 0) {
+    issues.push(`labels visually join adjacent values: ${readability.joinedLabels.join(", ")}`);
+  }
+
   const disclosure = page.locator("details").first();
   let nativeDisclosure = "not-applicable";
   if (await disclosure.count()) {
@@ -70,6 +105,7 @@ export async function collectCraftVisualEvidence(page, transferredAssets) {
     cssGzipBytes,
     forcedColors: forcedColors.active,
     nativeDisclosure,
+    readability,
     issues,
   };
 }
