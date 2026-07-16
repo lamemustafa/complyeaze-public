@@ -5,6 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import { chromium } from "playwright";
 import { pages } from "../src/site-data.mjs";
+import { createVisualHitTestEvidence } from "./public-checks/visual-geometry.mjs";
 
 const root = process.cwd();
 const dist = path.join(root, "dist");
@@ -83,6 +84,7 @@ try {
     for (const viewport of viewports) {
       const context = await browser.newContext({ reducedMotion: "reduce", viewport });
       const page = await context.newPage();
+      await page.exposeFunction("createVisualHitTestEvidence", createVisualHitTestEvidence);
       await page.goto(`${baseUrls.get(pageDef.serverKey)}${pageDef.urlPath}`, { waitUntil: "networkidle" });
       const metrics = await collectMetrics(
         page,
@@ -215,7 +217,7 @@ function browserLaunchOptions() {
 }
 
 async function collectMetrics(page, expectedHeading, profile, signalTerms) {
-  const metrics = await page.evaluate(({ heading, profile, signalTerms }) => {
+  const metrics = await page.evaluate(async ({ heading, profile, signalTerms }) => {
     function hasReducedMotionRule() {
       for (const sheet of document.styleSheets) {
         if (hasReducedMotionRuleInList(sheet.cssRules)) return true;
@@ -260,28 +262,23 @@ async function collectMetrics(page, expectedHeading, profile, signalTerms) {
       return false;
     }
 
-    function hitTestPasses(element) {
-      const points = [...element.getClientRects()].flatMap((lineRect) => {
-        if (lineRect.width === 0 || lineRect.height === 0 || lineRect.bottom < 0 || lineRect.top > window.innerHeight) {
-          return [];
-        }
-        const visibleLeft = Math.max(lineRect.left, 0);
-        const visibleRight = Math.min(lineRect.right, window.innerWidth);
-        const visibleTop = Math.max(lineRect.top, 0);
-        const visibleBottom = Math.min(lineRect.bottom, window.innerHeight);
-        const visibleWidth = visibleRight - visibleLeft;
-        const visibleHeight = visibleBottom - visibleTop;
-        if (visibleWidth <= 0 || visibleHeight <= 0) return [];
-        const insetX = Math.min(8, visibleWidth / 4);
-        const insetY = Math.min(8, visibleHeight / 4);
-        const xs = [visibleLeft + insetX, visibleLeft + visibleWidth / 2, visibleRight - insetX];
-        const ys = [visibleTop + insetY, visibleTop + visibleHeight / 2, visibleBottom - insetY];
-        return xs.flatMap((x) => ys.map((y) => [x, y]));
-      });
+    function hitTestPasses(element, evidence) {
+      const { points } = evidence;
+      if (points.length === 0) return true;
       return points.some(([x, y]) => {
         const target = document.elementFromPoint(x, y);
         return target && (target === element || element.contains(target) || target.contains(element));
       });
+    }
+
+    function hitTestEvidenceLabel(evidence) {
+      const rect = evidence.rects[0];
+      const intersection = evidence.intersections[0];
+      const formatRect = (value) =>
+        value
+          ? [value.left, value.top, value.right, value.bottom].map((part) => Number(part.toFixed(2))).join(",")
+          : "none";
+      return `rect=${formatRect(rect)} visible=${formatRect(intersection)} viewport=${window.innerWidth}x${window.innerHeight} points=${evidence.points.length}`;
     }
 
     function durationSeconds(value) {
@@ -335,19 +332,45 @@ async function collectMetrics(page, expectedHeading, profile, signalTerms) {
       return visibleInViewport(element) && (rect.left < -1 || rect.right > window.innerWidth + 1 || rect.top < -1 || clippedByOverflowAncestor(element));
     });
     if (clippedControls.length > 0) issues.push(`${clippedControls.length} clipped controls`);
-    const overlappedControls = [...document.querySelectorAll("a, button")].filter((element) => {
-      return visibleInViewport(element) && !hitTestPasses(element);
-    });
-    if (overlappedControls.length > 0) {
-      const labels = overlappedControls.map((element) => controlLabel(element)).join(", ");
-      issues.push(`${overlappedControls.length} overlapped first-viewport controls: ${labels}`);
+    const overlapControlCandidates = [...document.querySelectorAll("a, button")].filter(visibleInViewport);
+    const overlapContentCandidates = [
+      ...document.querySelectorAll("main h1, main h2, main h3, main article"),
+    ].filter(visibleInViewport);
+    const overlapCandidates = [...overlapControlCandidates, ...overlapContentCandidates];
+    const hitTestEvidence = await window.createVisualHitTestEvidence(
+      overlapCandidates.map((element) =>
+        [...element.getClientRects()].map((rect) => ({
+          bottom: rect.bottom,
+          height: rect.height,
+          left: rect.left,
+          right: rect.right,
+          top: rect.top,
+          width: rect.width,
+        })),
+      ),
+      { height: window.innerHeight, width: window.innerWidth },
+    );
+    const overlappedControlChecks = overlapControlCandidates
+      .map((element, index) => ({ element, evidence: hitTestEvidence[index] }))
+      .filter(({ element, evidence }) => !hitTestPasses(element, evidence));
+    if (overlappedControlChecks.length > 0) {
+      const labels = overlappedControlChecks
+        .map(({ element, evidence }) => `${controlLabel(element)} [${hitTestEvidenceLabel(evidence)}]`)
+        .join(", ");
+      issues.push(`${overlappedControlChecks.length} overlapped first-viewport controls: ${labels}`);
     }
-    const overlappedContent = [...document.querySelectorAll("main h1, main h2, main h3, main article")].filter((element) => {
-      return visibleInViewport(element) && !hitTestPasses(element);
-    });
-    if (overlappedContent.length > 0) {
-      const labels = overlappedContent.map((element) => controlLabel(element)).join(", ");
-      issues.push(`${overlappedContent.length} overlapped first-viewport content blocks: ${labels}`);
+    const contentEvidenceOffset = overlapControlCandidates.length;
+    const overlappedContentChecks = overlapContentCandidates
+      .map((element, index) => ({
+        element,
+        evidence: hitTestEvidence[contentEvidenceOffset + index],
+      }))
+      .filter(({ element, evidence }) => !hitTestPasses(element, evidence));
+    if (overlappedContentChecks.length > 0) {
+      const labels = overlappedContentChecks
+        .map(({ element, evidence }) => `${controlLabel(element)} [${hitTestEvidenceLabel(evidence)}]`)
+        .join(", ");
+      issues.push(`${overlappedContentChecks.length} overlapped first-viewport content blocks: ${labels}`);
     }
     const hero = document.querySelector(".hero");
     const heroRect = hero?.getBoundingClientRect();
@@ -385,8 +408,8 @@ async function collectMetrics(page, expectedHeading, profile, signalTerms) {
       brokenImages: brokenImages.length,
       blankBlocks: blankBlocks.length,
       clippedControls: clippedControls.length,
-      overlappedControls: overlappedControls.length,
-      overlappedContent: overlappedContent.length,
+      overlappedControls: overlappedControlChecks.length,
+      overlappedContent: overlappedContentChecks.length,
       activeMotionElements: activeMotionElements.length,
       issues
     };

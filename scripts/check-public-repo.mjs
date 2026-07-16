@@ -55,6 +55,7 @@ import {
   assertSensitiveContent,
   assertSensitiveContentFixturePolicy
 } from "./public-checks/sensitive-content.mjs";
+import { assertVisualGeometryFixtures } from "./public-checks/visual-geometry.mjs";
 import { pages } from "../src/site-data.mjs";
 
 const root = process.cwd();
@@ -289,6 +290,7 @@ async function run() {
     assertSensitiveContentFixturePolicy();
     assertCiArtifactPolicyFixtures();
     assertReviewGateFixtures(root);
+    assertVisualGeometryFixtures();
   }
   if (["--all", "--test", "--public"].includes(mode)) {
     assertReviewGateFixturePolicy(root);
