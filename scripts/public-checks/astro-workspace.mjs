@@ -46,7 +46,7 @@ export function assertAstroWorkspace(root) {
   }
   for (const catalogEntry of [
     '"@astrojs/check": "0.9.9"',
-    'astro: "7.0.9"',
+    'astro: "7.1.1"',
     'typescript: "6.0.3"',
   ]) {
     if (!workspace.includes(catalogEntry)) {

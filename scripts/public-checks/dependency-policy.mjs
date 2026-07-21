@@ -32,7 +32,7 @@ const requiredPolicyTerms = [
   "public-site-build",
   "public-visual-evidence",
   "no runtime `dependencies`",
-  "Astro 7.0.9",
+  "Astro 7.1.1",
   "TypeScript 6.0.3",
   "workspace manifests",
   "ASTRO_TELEMETRY_DISABLED=1",
