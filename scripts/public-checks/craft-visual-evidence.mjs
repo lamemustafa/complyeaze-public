@@ -65,7 +65,9 @@ export async function collectCraftVisualEvidence(
     issues.push(`axe critical/serious: ${evidence.join(", ")}`);
   }
 
-  const inlineScriptTexts = await page.locator("script:not([src])").allTextContents();
+  const inlineScriptTexts = await page
+    .locator('script:not([src]):not([type="application/ld+json"])')
+    .allTextContents();
   const inlineEventHandlerTexts = await page.evaluate(() =>
     [...document.querySelectorAll("*")].flatMap((element) =>
       [...element.attributes]

@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { appDistPath, publicRouteRegistry } from "../public-route-registry.mjs";
+import { hasAuthoredClientScript } from "./static-json-ld.mjs";
 
 export const p4ComplyEazePaths = [
   "/",
@@ -99,7 +100,7 @@ export function assertP4ComplyEazeBuild(root) {
     if (!html.includes('data-p4-register="true"')) {
       findings.push(`${route.urlPath}: missing rendered P4 register marker`);
     }
-    if (/<script(?:\s|>)/i.test(html)) findings.push(`${route.urlPath}: authored script found`);
+    if (hasAuthoredClientScript(html)) findings.push(`${route.urlPath}: authored script found`);
     if (/<form(?:\s|>)/i.test(html)) findings.push(`${route.urlPath}: form found`);
     const head = html.match(/<head>([\s\S]*?)<\/head>/i)?.[1] ?? "";
     if (!head.includes("p4-register")) findings.push(`${route.urlPath}: P4 stylesheet must load in the document head`);

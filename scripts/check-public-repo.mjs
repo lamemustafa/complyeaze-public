@@ -39,6 +39,10 @@ import {
   assertP4ComplyEazeSources,
 } from "./public-checks/p4-complyeaze.mjs";
 import {
+  assertP4StructuredDataBuild,
+  assertP4StructuredDataSources,
+} from "./public-checks/p4-structured-data.mjs";
+import {
   assertMigrationLedger,
   assertMigrationLedgerFixtures,
   assertRenderedMigrationLedger
@@ -313,6 +317,7 @@ async function run() {
     await assertSanchikaAdoptionSources(root);
     await assertCraftReviewSources(root);
     assertP4ComplyEazeSources(root);
+    assertP4StructuredDataSources(root);
     assertVisualGeometryFixtures();
     assertLegacyCleanupFixtures();
     assertLegacyCleanup(root);
@@ -358,6 +363,7 @@ async function run() {
   }
   if (["--all", "--metadata"].includes(mode)) {
     assertMetadata();
+    assertP4StructuredDataBuild(root);
     assertRouteManifest(root);
   }
 
