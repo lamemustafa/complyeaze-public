@@ -2,8 +2,10 @@
 import rawManifest from "@complyeaze-public/content/complyeaze-routes";
 import {
   definePublicRouteManifest,
+  type PublicProductsRoute,
   type PublicRoute,
 } from "@complyeaze-public/content";
+import PublicBuyerResourcePage from "../components/PublicBuyerResourcePage.astro";
 import PublicEvidencePage from "../components/PublicEvidencePage.astro";
 import PublicSanchikaAdoptionPage from "../components/PublicSanchikaAdoptionPage.astro";
 import PublicCraftReviewPage from "../components/PublicCraftReviewPage.astro";
@@ -36,10 +38,18 @@ function assertNever(route: never): never {
 }
 
 const { origin, route } = Astro.props;
+const manifest = definePublicRouteManifest(rawManifest);
+const productsRoute = manifest.routes.find(
+  (candidate): candidate is PublicProductsRoute => candidate.kind === "products",
+);
+if (!productsRoute) throw new Error("Canonical ComplyEaze products route is missing");
+const buyerResourcePaths = new Set(["/about/", "/contact/"]);
 ---
 
 <PublicPageLayout {origin} {route}>
-  {route.kind === "resource" ? (
+  {route.kind === "resource" && buyerResourcePaths.has(route.urlPath) ? (
+    <PublicBuyerResourcePage {route} products={productsRoute.products} />
+  ) : route.kind === "resource" ? (
     <PublicResourcePage {route} />
   ) : route.kind === "policy" ? (
     <PublicPolicyPage {route} />

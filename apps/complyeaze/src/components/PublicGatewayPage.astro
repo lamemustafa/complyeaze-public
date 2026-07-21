@@ -1,66 +1,42 @@
 ---
+import { patternClassName } from "@sanchika/patterns";
 import type { PublicGatewayRoute } from "@complyeaze-public/content";
 
-interface Props {
-  route: PublicGatewayRoute;
-}
-
+interface Props { route: PublicGatewayRoute; }
 const { route } = Astro.props;
+const productClass = route.product.toLowerCase();
 ---
 
-<section class="intro" aria-labelledby="page-title">
-  <p class="eyebrow">{route.eyebrow}</p>
-  <h1 id="page-title">{route.heading}</h1>
-  <p class="summary">{route.summary}</p>
-  <nav class="gateway-actions" aria-label={`${route.product} gateway actions`}>
-    <a class="primary-action" href={route.primaryAction.href}>{route.primaryAction.label}</a>
-    <a href={route.secondaryAction.href}>{route.secondaryAction.label}</a>
-  </nav>
-</section>
-
-<section class="gateway-boundaries" aria-label={`${route.product} job and boundaries`}>
-  {route.sections.map((section) => (
-    <article>
-      <h2>{section.title}</h2>
-      <p>{section.body}</p>
-    </article>
-  ))}
-</section>
-
-<section class="gateway-evidence" aria-labelledby="gateway-evidence-title">
-  <header>
-    <h2 id="gateway-evidence-title">Review product-owned evidence</h2>
-    <p>Check the current public source before relying on product capability or posture.</p>
+<article class={`p4-page p4-gateway p4-gateway--${productClass}`} data-p4-register="true">
+  <header class:list={["p4-hero p4-hero--gateway", patternClassName("PublicHero", { variant: "editorial", state: "with-proof-artifact" })]} aria-labelledby="page-title">
+    <div class="p4-hero__copy">
+      <p class="p4-register">{route.eyebrow}</p>
+      <h1 id="page-title">{route.heading}</h1>
+      <p class="p4-lead">{route.summary}</p>
+      <nav class="p4-actions" aria-label={`${route.product} gateway actions`}>
+        <a class="p4-action p4-action--primary" href={route.primaryAction.href}>{route.primaryAction.label}</a>
+        <a class="p4-action" href={route.secondaryAction.href}>{route.secondaryAction.label}</a>
+      </nav>
+    </div>
+    <dl class="p4-hero__index" aria-label={`${route.product} boundary summary`}>
+      <div><dt>Product owner</dt><dd>{route.product}</dd></div>
+      <div><dt>ComplyEaze role</dt><dd>Public gateway</dd></div>
+      <div><dt>Before relying</dt><dd>Check product evidence</dd></div>
+    </dl>
   </header>
-  <ul>
-    {route.evidenceLinks.map((link) => (
-      <li>
-        <a href={link.href}>{link.label}</a>
-        <p>{link.description}</p>
-      </li>
-    ))}
-  </ul>
-</section>
 
-<style>
-  .intro { max-width: 74ch; }
-  .eyebrow { margin: 0 0 1rem; color: #475569; font-size: 0.82rem; font-weight: 750; letter-spacing: 0.12em; text-transform: uppercase; }
-  h1 { max-width: 17ch; margin: 0; font-size: clamp(2.45rem, 7vw, 5.5rem); line-height: 1.02; letter-spacing: -0.035em; overflow-wrap: anywhere; text-wrap: balance; }
-  h2 { margin: 0; font-size: clamp(1.3rem, 3vw, 1.9rem); line-height: 1.2; text-wrap: balance; }
-  p { max-width: 72ch; text-wrap: pretty; }
-  .summary { margin-block: 1.5rem 0; font-size: clamp(1.08rem, 2vw, 1.28rem); }
-  .gateway-actions { display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; margin-block: 2rem 0; }
-  .gateway-actions a { min-height: 44px; display: inline-flex; align-items: center; padding-inline: 0.2rem; font-weight: 750; }
-  .gateway-actions .primary-action { padding-inline: 1rem; background: #0f172a; color: #fff; text-decoration: none; }
-  .gateway-boundaries { margin-block: clamp(4rem, 10vw, 8rem); border-top: 1px solid #94a3b8; }
-  .gateway-boundaries article { display: grid; grid-template-columns: minmax(13rem, 0.8fr) minmax(0, 1.2fr); gap: 1rem clamp(2rem, 7vw, 7rem); padding-block: clamp(1.75rem, 4vw, 2.75rem); border-bottom: 1px solid #cbd5e1; }
-  .gateway-boundaries p, .gateway-evidence p { margin: 0; }
-  .gateway-evidence { border-block: 1px solid #0f172a; }
-  .gateway-evidence > header { display: grid; grid-template-columns: minmax(13rem, 0.8fr) minmax(0, 1.2fr); gap: 1rem clamp(2rem, 7vw, 7rem); padding-block: 1.5rem; }
-  .gateway-evidence ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid #cbd5e1; }
-  .gateway-evidence li { display: grid; grid-template-columns: minmax(13rem, 0.8fr) minmax(0, 1.2fr); gap: 0.5rem clamp(2rem, 7vw, 7rem); padding-block: 1.25rem; border-bottom: 1px solid #cbd5e1; }
-  .gateway-evidence a { min-height: 44px; display: inline-flex; align-items: center; width: fit-content; font-weight: 750; }
-  @media (max-width: 42rem) {
-    .gateway-boundaries article, .gateway-evidence > header, .gateway-evidence li { grid-template-columns: 1fr; }
-  }
-</style>
+  <section class:list={["p4-boundary-ledger", patternClassName("ProductRouteMap", { variant: "family", state: "default" })]} aria-label={`${route.product} job and custody boundaries`}>
+    {route.sections.map((section, index) => (
+      <article><span>0{index + 1}</span><h2>{section.title}</h2><p>{section.body}</p></article>
+    ))}
+  </section>
+
+  <section class="p4-evidence" aria-labelledby="gateway-evidence-title">
+    <header class="p4-section-heading"><p>Product-owned proof</p><h2 id="gateway-evidence-title">Check the current evidence before relying</h2></header>
+    <ul>
+      {route.evidenceLinks.map((link) => (
+        <li><a href={link.href}>{link.label}<span aria-hidden="true"> ↗</span></a><p>{link.description}</p></li>
+      ))}
+    </ul>
+  </section>
+</article>

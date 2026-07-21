@@ -3,19 +3,23 @@ name: ComplyEaze Public
 description: Public website and trust surfaces for the ComplyEaze product family.
 register: brand
 colors:
-  ink: "#0F172A"
-  surface: "#FFFFFF"
-  muted: "#F5F5F5"
-  border: "#E5E5E5"
+  ink: "#102522"
+  surface: "#F7FAF9"
+  muted: "#E4F1EE"
+  border: "#91AAA5"
+  complyeaze-teal: "#0C514A"
+  complyeaze-teal-deep: "#073C37"
+  pack-signal: "#A8DF55"
+  tools-signal: "#E7A63A"
   axal-blue: "#2F80ED"
   axal-purple-brand: "#5B21B6"
 typography:
   display:
-    fontFamily: "Selected during the first brand shape pass"
-    usage: "Public brand pages only; do not inherit authenticated app typography by default."
+    fontFamily: "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+    usage: "Large evidence-register decisions with a -0.04em tracking floor and a 6rem ceiling."
   body:
-    fontFamily: "Selected during the first brand shape pass"
-    usage: "Public content, policy, and docs; optimize for trust copy and long-form readability."
+    fontFamily: "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+    usage: "Deterministic public content with no remote font dependency and a 65-75ch reading measure."
 ---
 
 # Design System: ComplyEaze Public
@@ -28,15 +32,17 @@ distinct public identity.
 
 ## Colors
 
-The first implementation slice must choose a public brand palette deliberately.
-Do not default to generic SaaS purple gradients, beige editorial restraint, or a
-dark dashboard theme. Preserve Axal purple only where the Axal mark requires it.
+ComplyEaze uses deep teal, chalk white, redaction black, and a mint evidence
+ramp. Pack lime and Tools amber appear only as narrow ownership signals inside
+the ComplyEaze register. The strategy is committed but controlled: teal carries
+the public identity while product colors orient rather than compete.
 
 ## Typography
 
-The first implementation slice must choose public-site typography after a brand
-shape pass. Do not reuse authenticated app typography by default just because it
-exists.
+The public evidence register uses a deterministic system sans stack. Identity
+comes from large compressed decisions, compact provenance rows, density, and
+color—not an unapproved remote font. Display tracking never exceeds `-0.04em`;
+body copy remains at least `1rem` with a maximum `65–75ch` measure.
 
 ## Components
 

@@ -3,6 +3,7 @@ import rawManifest from "@complyeaze-public/content/complyeaze-routes";
 import {
   definePublicRouteManifest,
   type PublicHomeRoute,
+  type PublicProductsRoute,
 } from "@complyeaze-public/content";
 import PublicHomePage from "../components/PublicHomePage.astro";
 import PublicPageLayout from "../layouts/PublicPageLayout.astro";
@@ -13,8 +14,12 @@ const route = manifest.routes.find(
 );
 
 if (!route) throw new Error("Canonical ComplyEaze home route is missing");
+const productsRoute = manifest.routes.find(
+  (candidate): candidate is PublicProductsRoute => candidate.kind === "products",
+);
+if (!productsRoute) throw new Error("Canonical ComplyEaze products route is missing");
 ---
 
 <PublicPageLayout origin={manifest.origin} {route}>
-  <PublicHomePage {route} />
+  <PublicHomePage {route} products={productsRoute.products} />
 </PublicPageLayout>
