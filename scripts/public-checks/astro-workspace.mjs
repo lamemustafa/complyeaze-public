@@ -10,6 +10,7 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { hasAuthoredClientScript } from "./static-json-ld.mjs";
 
 const apps = [
   ["complyeaze", "@complyeaze-public/core", "https://complyeaze.com"],
@@ -100,7 +101,7 @@ export function assertAstroBuildOutput(root) {
     const outputFiles = walkFiles(dist);
     const htmlFiles = outputFiles.filter((filePath) => filePath.endsWith(".html"));
     for (const htmlPath of htmlFiles) {
-      if (/<script(?:\s|>)/i.test(readFileSync(htmlPath, "utf8"))) {
+      if (hasAuthoredClientScript(readFileSync(htmlPath, "utf8"))) {
         findings.push(
           `apps/${directory}/dist/${path.relative(dist, htmlPath)}: unexpected script output`,
         );
@@ -123,6 +124,14 @@ export function assertAstroBuildOutputFixtures() {
     mkdirSync(dist, { recursive: true });
     writeFileSync(path.join(dist, "index.html"), "<main><h1>Safe</h1></main>", "utf8");
   }
+  const structuredDataPage = path.join(root, "apps", "complyeaze", "dist", "structured", "index.html");
+  mkdirSync(path.dirname(structuredDataPage), { recursive: true });
+  writeFileSync(
+    structuredDataPage,
+    '<main><h1>Structured</h1></main><script type="application/ld+json">{"@context":"https://schema.org"}</script>',
+    "utf8",
+  );
+  assertAstroBuildOutput(root);
   const nestedPage = path.join(root, "apps", "axal", "dist", "nested", "index.html");
   mkdirSync(path.dirname(nestedPage), { recursive: true });
   writeFileSync(nestedPage, "<main><h1>Unsafe</h1></main><script>unsafe()</script>", "utf8");

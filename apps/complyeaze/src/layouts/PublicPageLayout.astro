@@ -11,6 +11,28 @@ interface Props {
 
 const { origin, route } = Astro.props;
 const canonical = canonicalUrl(origin, route.urlPath);
+const canonicalOrigin = canonicalUrl(origin, "/");
+const organizationId = `${canonicalOrigin}#organization`;
+const websiteId = `${canonicalOrigin}#website`;
+const schemaGraph = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@id": organizationId,
+      "@type": "Organization",
+      name: "ComplyEaze",
+      url: canonicalOrigin,
+    },
+    {
+      "@id": websiteId,
+      "@type": "WebSite",
+      name: "ComplyEaze",
+      url: canonicalOrigin,
+      publisher: { "@id": organizationId },
+    },
+  ],
+};
+const schemaJson = JSON.stringify(schemaGraph).replace(/</g, "\\u003c");
 const p4Paths = new Set(["/", "/products/", "/products/pack/", "/products/tools/", "/about/", "/contact/"]);
 const isP4Route = p4Paths.has(route.urlPath);
 const primaryNavigation = [
@@ -37,6 +59,7 @@ function isCurrentPrimaryNavItem(href: string, urlPath: string): boolean {
     <meta property="og:title" content={route.title} />
     <meta property="og:description" content={route.description} />
     <meta property="og:url" content={canonical} />
+    <script is:inline type="application/ld+json" set:html={schemaJson}></script>
     <title>{route.title}</title>
     {isP4Route && <link rel="stylesheet" href={p4CssUrl} />}
     <style is:global>

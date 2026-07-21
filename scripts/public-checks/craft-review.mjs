@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { appDistPath, publicRouteRegistry } from "../public-route-registry.mjs";
+import { hasAuthoredClientScript } from "./static-json-ld.mjs";
 
 const requiredFiles = [
   "packages/public-content/src/craft-review-schema.ts",
@@ -164,7 +165,7 @@ export function assertCraftReviewBuild(root) {
     ] : []) {
       if (!html.includes(marker)) findings.push(`${route.app}: built craft route is missing ${marker}`);
     }
-    if (/<script(?:\s|>)/i.test(html)) findings.push(`${route.app}: built craft route contains authored client JavaScript`);
+    if (hasAuthoredClientScript(html)) findings.push(`${route.app}: built craft route contains authored client JavaScript`);
   }
   const sitemap = readFileSync(path.join(root, "apps/complyeaze/dist/sitemap.xml"), "utf8");
   if (sitemap.includes("/review/craft/")) findings.push("built sitemap exposes /review/craft/");
