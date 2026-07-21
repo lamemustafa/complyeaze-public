@@ -9,9 +9,9 @@
       "title": "ComplyEaze | Choose the right compliance surface",
       "description": "Compare the public job, evidence, and custody boundary for Axal, Pack, and Tools before choosing where to continue.",
       "eyebrow": "ComplyEaze product family",
-      "heading": "Choose the work. See the boundary. Check the evidence.",
+      "heading": "Know where the work belongs before you act.",
       "kind": "home",
-      "summary": "ComplyEaze helps CA firms, compliance teams, and business operators route work to Axal for coordinated practice review, Pack for local GST evidence collection, or Tools for browser-local utility work.",
+      "summary": "Start with the job. Then compare who owns the workflow, where the working context stays, and which public evidence supports the next step.",
       "robots": "noindex, nofollow",
       "signalTerms": ["ComplyEaze", "Axal", "Pack", "Tools"],
       "primaryAction": {
@@ -24,16 +24,16 @@
       },
       "sections": [
         {
-          "title": "Coordinate practice work with Axal",
-          "body": "Use the authenticated workspace when matters, obligations, evidence, clients, documents, and tasks need permission-aware coordination and human review."
+          "title": "Choose by work, not by feature count",
+          "body": "Axal coordinates professional practice work, Pack collects a narrow set of portal evidence locally, and Tools prepares browser-local drafts. The job determines the destination."
         },
         {
-          "title": "Collect GST evidence locally with Pack",
-          "body": "Use the browser extension for the narrow filed-return collection job when local artifact control and source provenance matter more than shared workspace custody."
+          "title": "Treat custody as part of the product",
+          "body": "Authenticated firm context, extension-local artifacts, and browser-local drafts carry different privacy and operational boundaries. Those boundaries stay visible before the product action."
         },
         {
-          "title": "Create quick browser-local artifacts with Tools",
-          "body": "Use the public utilities for focused review work from pasted rows or plain text when no account, upload, or saved tenant context is needed."
+          "title": "Check the proof before relying",
+          "body": "Public source, release, privacy, security, and limitation evidence belongs beside each product description—not behind a generic promise."
         }
       ]
     },
@@ -43,9 +43,9 @@
       "title": "Products | ComplyEaze",
       "description": "Compare Axal, Pack, and Tools by job, public evidence, custody boundary, and current public posture.",
       "eyebrow": "Product family",
-      "heading": "Choose by job and custody boundary",
+      "heading": "Compare the job, custody, proof, and next action.",
       "kind": "products",
-      "summary": "The products share a trust posture, not a single workflow. Start with the work you need to complete, then verify where context lives and which public evidence supports the product description.",
+      "summary": "The product family shares public evidence standards, not one workflow. Use this register to identify the owner of the work and verify its current boundary before continuing.",
       "robots": "noindex, nofollow",
       "signalTerms": ["ComplyEaze", "products", "custody", "evidence"],
       "sections": [
@@ -110,10 +110,10 @@
       "title": "Pack | ComplyEaze",
       "description": "Understand Pack's local-first GST evidence role, custody boundary, and product-owned public proof before continuing.",
       "eyebrow": "Pack product gateway",
-      "heading": "Keep the evidence job local. Verify the product proof.",
+      "heading": "Collect the portal evidence locally. Verify Pack before use.",
       "kind": "gateway",
       "product": "Pack",
-      "summary": "Pack is the ComplyEaze-family browser-extension lane for authorised users collecting selected GST Portal evidence into their own browser environment. Pack owns the current capability, release, permission, privacy, and security evidence.",
+      "summary": "Pack is the product-owned browser-extension route for authorised users performing a narrow GST Portal evidence task. Its source and release surfaces—not this gateway—define current capability and posture.",
       "robots": "noindex, nofollow",
       "signalTerms": ["Pack", "GST evidence", "local-first", "source"],
       "primaryAction": {
@@ -167,10 +167,10 @@
       "title": "Tools | ComplyEaze",
       "description": "Understand the browser-local Tools job, custody boundary, and product-owned public proof before choosing a utility.",
       "eyebrow": "Tools product gateway",
-      "heading": "Create a local draft. Keep professional review in the loop.",
+      "heading": "Prepare the first-pass draft locally. Keep judgement human.",
       "kind": "gateway",
       "product": "Tools",
-      "summary": "Tools is the ComplyEaze-family lane for browser-local first-pass compliance drafts created from pasted rows or plain text. The Tools host owns each utility's runtime, input, output, accessibility, privacy, and release evidence.",
+      "summary": "Tools is the browser-local route for focused working drafts from pasted rows or plain text. Each utility owns its runtime and evidence; every output remains material for human and professional review.",
       "robots": "noindex, nofollow",
       "signalTerms": ["Tools", "browser-local", "draft", "evidence"],
       "primaryAction": {
@@ -224,9 +224,9 @@
       "title": "About ComplyEaze",
       "description": "How ComplyEaze separates public product proof from authenticated compliance operations.",
       "eyebrow": "About the public boundary",
-      "heading": "A public surface for proof, not private operations",
+      "heading": "Make product ownership visible before trust is requested.",
       "kind": "resource",
-      "summary": "ComplyEaze explains its product family and the evidence required before public claims, route migrations, or private-app cleanup move forward.",
+      "summary": "ComplyEaze is the public evidence register for a product family whose workflows, custody models, and operating boundaries remain deliberately separate.",
       "robots": "noindex, nofollow",
       "signalTerms": ["ComplyEaze", "public", "proof"],
       "primaryAction": {
@@ -263,17 +263,17 @@
       "title": "Contact routing | ComplyEaze",
       "description": "Choose the safe channel for public-site feedback, security reports, and private product inquiries.",
       "eyebrow": "Contact routing",
-      "heading": "Pick the channel before sharing details",
+      "heading": "Route the question without exposing the work.",
       "kind": "resource",
-      "summary": "Public website feedback belongs in the public repository, but customer, taxpayer, credential, document, and portal details must stay out of public issues.",
+      "summary": "Use the public tracker for synthetic website evidence and the security policy for sensitive reporting guidance. Product work and sensitive context do not belong in public copy or issues.",
       "robots": "noindex, nofollow",
       "signalTerms": ["ComplyEaze", "public", "channel"],
       "primaryAction": {
-        "label": "Read the support policy",
-        "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/SUPPORT.md"
+        "label": "Review public-site issues",
+        "href": "https://github.com/lamemustafa/complyeaze-public/issues"
       },
       "secondaryAction": {
-        "label": "Read the security policy",
+        "label": "Read security reporting guidance",
         "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/SECURITY.md"
       },
       "sections": [
@@ -285,7 +285,7 @@
         {
           "title": "Sensitive report",
           "meta": "Security policy",
-          "body": "Use the private vulnerability reporting path for suspected secrets, sensitive-data exposure, misleading collection behavior, or security issues."
+          "body": "Read the security policy for suspected secrets, sensitive-data exposure, misleading collection behavior, or security issues. It directs reporters to private vulnerability reporting when available and otherwise to the established private maintainer channel."
         },
         {
           "title": "Product or customer inquiry",

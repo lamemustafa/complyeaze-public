@@ -35,6 +35,10 @@ import {
 } from "./public-checks/legacy-cleanup.mjs";
 import { assertPackManifest } from "./public-checks/pack-manifest.mjs";
 import {
+  assertP4ComplyEazeBuild,
+  assertP4ComplyEazeSources,
+} from "./public-checks/p4-complyeaze.mjs";
+import {
   assertMigrationLedger,
   assertMigrationLedgerFixtures,
   assertRenderedMigrationLedger
@@ -308,6 +312,7 @@ async function run() {
     await assertReleaseEvidenceSources(root);
     await assertSanchikaAdoptionSources(root);
     await assertCraftReviewSources(root);
+    assertP4ComplyEazeSources(root);
     assertVisualGeometryFixtures();
     assertLegacyCleanupFixtures();
     assertLegacyCleanup(root);
@@ -339,6 +344,7 @@ async function run() {
     assertCiArtifacts(root);
     assertContributorIntake(root);
     assertCraftReviewBuild(root);
+    assertP4ComplyEazeBuild(root);
     assertDependencyPolicy(root);
     assertSanchikaAdoptionBuild(root);
     assertDeployWorkflow(root);

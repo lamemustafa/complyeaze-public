@@ -20,6 +20,7 @@ const publicClaimScanFiles = [
   "apps/axal/src/pages/[slug].astro",
   "apps/axal/src/pages/index.astro",
   "apps/complyeaze/src/components/PublicEvidencePage.astro",
+  "apps/complyeaze/src/components/PublicBuyerResourcePage.astro",
   "apps/complyeaze/src/components/PublicCraftReviewPage.astro",
   "apps/complyeaze/src/components/PublicGatewayPage.astro",
   "apps/complyeaze/src/components/PublicHomePage.astro",
