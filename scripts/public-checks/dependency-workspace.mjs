@@ -187,7 +187,7 @@ function assertLockfile(lockfile, workspacePackages, findings) {
   const requiredSnippets = [
     "playwright:\n        specifier: 1.61.1",
     "'@astrojs/check@0.9.9':",
-    "astro@7.0.9",
+    "astro@7.1.1",
     "typescript@6.0.3",
   ];
   for (const snippet of requiredSnippets) {
