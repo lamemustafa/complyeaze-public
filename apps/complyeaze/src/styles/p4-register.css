@@ -73,8 +73,20 @@
 .p4-product-map, .p4-comparison, .p4-boundary-ledger, .p4-product-destinations, .p4-evidence { margin-block-start: clamp(4.5rem, 10vw, 9rem); }
 .p4-page .p4-product-map, .p4-page .p4-comparison { border: 0; border-radius: 0; overflow: visible; background: transparent; color: var(--p4-ink); }
 .p4-product-map > .p4-section-heading, .p4-comparison > .p4-section-heading { color: var(--p4-ink); }
-.p4-product-list, .p4-comparison { border-block-start: 1px solid var(--p4-ink); }
-.p4-product-list { overflow: hidden; border-radius: 12px; background: #001419; color: white; }
+.p4-product-register, .p4-comparison { border-block-start: 1px solid var(--p4-ink); }
+.p4-product-register { overflow: hidden; border-radius: 12px; background: #001419; color: white; }
+.p4-product-register__head {
+  display: grid;
+  grid-template-columns: minmax(11rem, .5fr) minmax(18rem, 1.15fr) minmax(10rem, .35fr);
+  gap: 1.5rem clamp(1.5rem, 5vw, 5rem);
+  padding: 1rem clamp(1rem, 2vw, 1.5rem);
+  border-block-end: 1px solid var(--p4-line);
+  color: #b9ddd6;
+  font-size: .78rem;
+  font-weight: 900;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
 .p4-product {
   display: grid;
   grid-template-columns: minmax(11rem, .5fr) minmax(18rem, 1.15fr) minmax(10rem, .35fr);
@@ -94,14 +106,22 @@
 .p4-product__decision dt { color: #49645f; font-weight: 800; }
 .p4-product__decision dd { margin: 0; }
 .p4-product__action { align-self: start; }
-.p4-product-list .p4-product__identity p,
-.p4-product-list .p4-product__decision dt,
+.p4-product-register .p4-product__identity p,
+.p4-product-register .p4-product__decision dt,
 .p4-comparison-row .p4-comparison-row__identity p,
 .p4-comparison-row .p4-comparison-row__facts dt { color: #b9ddd6; }
-.p4-product-list .p4-product__action,
+.p4-product-register .p4-product__action,
 .p4-comparison-row .p4-action:not(.p4-action--primary) { color: #8fd6ca; }
-.p4-product-list .p4-product__identity span,
+.p4-product-register .p4-product__identity span,
 .p4-comparison-row .p4-comparison-row__identity span { color: #8fd6ca; }
+.p4-product-register .p4-product__decision a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+  text-decoration-color: #8fd6ca;
+  text-underline-offset: .2em;
+}
 
 .p4-product--pack { --p4-product-signal: var(--p4-pack); }
 .p4-product--tools { --p4-product-signal: var(--p4-tools); }
@@ -168,7 +188,8 @@
 .p4-destination-actions { display: grid; justify-items: start; gap: .25rem; }
 
 @media (max-width: 58rem) {
-  .p4-product, .p4-comparison-row { grid-template-columns: minmax(10rem, .55fr) minmax(0, 1.45fr); }
+  .p4-product, .p4-product-register__head, .p4-comparison-row { grid-template-columns: minmax(10rem, .55fr) minmax(0, 1.45fr); }
+  .p4-product-register__head { display: none; }
   .p4-product__action, .p4-comparison-row__actions { grid-column: 2; }
   .p4-product-destinations > div { grid-template-columns: 1fr; }
   .p4-product-destinations article { border-inline-end: 0; border-block-end: 1px solid var(--p4-line); }

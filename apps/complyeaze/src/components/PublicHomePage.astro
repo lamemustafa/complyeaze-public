@@ -35,7 +35,12 @@ const { products, route } = Astro.props;
       <p>Three routes, one explicit choice</p>
       <h2 id="product-route-title">Match the work to the boundary</h2>
     </header>
-    <div class="p4-product-list">
+    <div class="p4-product-register">
+      <div class="p4-product-register__head" aria-hidden="true">
+        <span>Product</span>
+        <span>Job, custody, proof</span>
+        <span>Next action</span>
+      </div>
       {products.map((product, index) => (
         <article class={`p4-product p4-product--${product.name.toLowerCase()}`}>
           <div class="p4-product__identity">
@@ -47,7 +52,7 @@ const { products, route } = Astro.props;
             <p>{product.job}</p>
             <dl>
               <div><dt>Custody</dt><dd>{product.boundary}</dd></div>
-              <div><dt>Proof</dt><dd>{product.proof}</dd></div>
+              <div><dt>Proof</dt><dd><a href={product.evidence.href}>{product.proof}</a></dd></div>
               <div><dt>Posture</dt><dd>{product.status}</dd></div>
             </dl>
           </div>

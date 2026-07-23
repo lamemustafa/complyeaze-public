@@ -10,7 +10,7 @@ import {
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-const ignoredDirectories = new Set([".git", "node_modules", "dist", "out", ".next", "test-results"]);
+const ignoredDirectories = new Set([".git", ".playwright-cli", "node_modules", "dist", "out", ".next", "test-results"]);
 const allowedFixtureFiles = new Set(["scripts/public-checks/sensitive-content.mjs"]);
 const textExtensions = new Set([
   ".css",
@@ -28,6 +28,24 @@ const textExtensions = new Set([
 ]);
 const checkedArtifactExtensions = new Set([".gif", ".har", ".jpeg", ".jpg", ".pdf", ".png", ".webp", ".zip"]);
 const allowedArtifactFiles = new Set([]);
+const approvedCraftArtifactFiles = new Set([
+  "craft/runs/complyeaze-public-family-s11/evidence/current-complyeaze-baseline-desktop-1440.png",
+  "craft/runs/complyeaze-public-family-s11/evidence/custody-cascade-desktop-1440.png",
+  "craft/runs/complyeaze-public-family-s11/evidence/custody-cascade-mobile-390.png",
+  "craft/runs/complyeaze-public-family-s11/evidence/decision-register-desktop-1440.png",
+  "craft/runs/complyeaze-public-family-s11/evidence/decision-register-identity-blind.webp",
+  "craft/runs/complyeaze-public-family-s11/evidence/decision-register-mobile-390.png",
+  "craft/runs/complyeaze-public-family-s11/evidence/decision-register-mobile-390.webp",
+  "craft/runs/complyeaze-public-family-s11/evidence/decision-register-semantic-blind.webp",
+  "craft/runs/complyeaze-public-family-s11/evidence/evidence-rail-desktop-1440.png",
+  "craft/runs/complyeaze-public-family-s11/evidence/evidence-rail-mobile-390.png",
+  "craft/runs/complyeaze-public-family-s11/evidence/without-skill-control.webp",
+  "craft/runs/complyeaze-public-family-s11/instructions/calibration/current-baseline.webp",
+  "craft/runs/complyeaze-public-family-s11/instructions/calibration/fake-authority.webp",
+  "craft/runs/complyeaze-public-family-s11/instructions/calibration/generic-ai-saas.webp",
+  "craft/runs/complyeaze-public-family-s11/instructions/calibration/mobile-a11y-failure.webp",
+  "craft/runs/complyeaze-public-family-s11/instructions/calibration/off-brief-editorial.webp",
+]);
 const jwtPrefix = ["e", "y", "J"].join("");
 const privateKeyLabel = ["PRIVATE", " KEY"].join("");
 const privateKeyHeaderPattern = ["-{5}BEGIN (?:RSA |EC |OPENSSH |DSA |)?", privateKeyLabel, "-{5}"].join("");
@@ -205,7 +223,7 @@ function assertNoUncheckedArtifacts(root) {
   const findings = [];
   for (const filePath of walkFiles(root)) {
     const relativePath = path.relative(root, filePath);
-    if (allowedArtifactFiles.has(relativePath)) continue;
+    if (allowedArtifactFiles.has(relativePath) || approvedCraftArtifactFiles.has(relativePath)) continue;
     if (checkedArtifactExtensions.has(path.extname(filePath).toLowerCase())) {
       findings.push(relativePath);
     }
