@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "evidenceLabels": ["browser-verified", "not-user-validated"],
+  "kind": "local-laboratory-mobile-performance",
+  "surface": "https://complyeaze.com/",
+  "build": "local static build from the selected S11 worktree",
+  "browser": "Chromium 149.0.7827.55",
+  "viewport": { "width": 390, "height": 844 },
+  "profile": {
+    "id": "chromium-mobile-390-4xcpu-1.6mbps-150ms",
+    "cpuThrottlingRate": 4,
+    "latencyMs": 150,
+    "downloadBytesPerSecond": 200000,
+    "uploadBytesPerSecond": 93750,
+    "cache": "disabled and cleared before every run"
+  },
+  "measurements": [
+    { "runId": "s11-mobile-cold-1", "coldCache": true, "lcpMs": 1112, "cls": 0 },
+    { "runId": "s11-mobile-cold-2", "coldCache": true, "lcpMs": 892, "cls": 0 },
+    { "runId": "s11-mobile-cold-3", "coldCache": true, "lcpMs": 892, "cls": 0 }
+  ],
+  "median": { "lcpMs": 892, "cls": 0 },
+  "limits": { "lcpMs": 2500, "cls": 0.05 },
+  "result": "passed",
+  "limitation": "Local laboratory evidence only; this is not field Core Web Vitals, user performance, or statistical confidence."
+}

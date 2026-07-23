@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": "0.1.0",
+  "sourceCommit": "7b3b24417546a1cb59ca5dc53a6236d0cfcae4eb",
+  "plainRequest": "Improve the ComplyEaze public homepage product-family section so a buyer can safely choose the correct public product surface without generic cards, unverified promises, or a private-app redesign.",
+  "plainRequestControl": {
+    "isolation": "fresh context with only the plain owner request and same-commit public repository access",
+    "retainedArtifact": "evidence/without-skill-control.webp",
+    "sha256": "69c13aab4a9a628771dc1eaa1a78557bc56212274ffc2d38108fe35c38fac3f2",
+    "codeRetained": false
+  },
+  "hashes": {
+    "canonicalSkill": "69713515c37a7746eca7b7e8e28b97d5198a1b4b14b92af7b5f700f46030506a",
+    "protocol": "d6741cd5095cca0168c32bf46a9d292b5475a7cfb9e3de9df0aabb17bd765bd0",
+    "runTemplate": "ed8dcec16d15c8bc78944ad69502b9205f3698ad8c81ef271c2b66e6b6e21397",
+    "calibrationMetadata": "30feec4799df1944699dc0c6f12f061acf0aaea65d84679ce7953f34745aa038",
+    "ownerBrief": "a51228efdee724594bd1b6567a676d8e1bb5c63dca97fa315c56e8b2cce302db"
+  },
+  "sources": {
+    "canonicalSkill": "craft/runs/complyeaze-public-family-s11/instructions/SKILL.md",
+    "protocol": "craft/runs/complyeaze-public-family-s11/instructions/protocol.md",
+    "runTemplate": "craft/runs/complyeaze-public-family-s11/instructions/run-template.json",
+    "calibrationMetadata": "craft/runs/complyeaze-public-family-s11/instructions/calibration/metadata.json"
+  },
+  "ownerBrief": "craft/runs/complyeaze-public-family-s11/instructions/owner-brief.md",
+  "reviewIsolation": {
+    "visualReviewerCount": 4,
+    "recognitionMatcherCount": 3,
+    "producerReviewedOwnOutput": false,
+    "evidenceLabels": ["ai-visual-proxy", "ai-recognition-proxy", "not-user-validated"]
+  },
+  "transition": {
+    "previousState": "craft/runs/complyeaze-public-family-s11/transitions/previous-state.json",
+    "sha256": "9edb59946279d5d768b06e37cf46cf29814a1258f0b0d64387c06eb38e13851b"
+  }
+}

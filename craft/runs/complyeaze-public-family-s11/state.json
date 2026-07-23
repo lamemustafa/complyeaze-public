@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": "0.1.0",
+  "runId": "complyeaze-public-family-s11",
+  "surface": { "repo": "lamemustafa/complyeaze-public", "route": "/", "sourceCommit": "7b3b24417546a1cb59ca5dc53a6236d0cfcae4eb" },
+  "capabilities": { "browser": true, "isolatedReview": true, "rasterGeneration": false },
+  "phase": "reconcile",
+  "status": "active",
+  "reviewRound": 1,
+  "trustBrief": {
+    "id": "complyeaze-public-family-s11-trust-v1",
+    "consumerMode": "external/operational-saas",
+    "register": "product",
+    "surface": "/",
+    "userJob": "Understand one regulated decision and its evidence before acting.",
+    "primaryDecision": "Decide whether the direction is safe to explore.",
+    "dataSensitivity": ["public-copy"],
+    "trustBoundaries": ["Synthetic evidence only; human accountability remains visible."],
+    "evidenceRequirements": ["Source, uncertainty, review state, and owner decision remain distinct."],
+    "selectedPatterns": [{ "name": "EvidencePanel", "states": ["pending-review"] }],
+    "claims": [{ "claim": "Synthetic pilot evidence", "evidence": "Repository-owned fixture and review record" }],
+    "nonGoals": ["No AI runtime, compliance judgment, customer evidence, or app scaffolding."],
+    "verificationGates": ["wcag-22-aa", "keyboard-focus", "non-color-state", "desktop-render", "mobile-render", "reduced-motion", "rollback-path"]
+  },
+  "designBrief": {
+    "id": "complyeaze-public-family-s11-design-v1",
+    "trustBrief": {
+      "id": "complyeaze-public-family-s11-trust-v1",
+      "consumerMode": "external/operational-saas",
+      "register": "product",
+      "surface": "/",
+      "userJob": "Understand one regulated decision and its evidence before acting.",
+      "primaryDecision": "Decide whether the direction is safe to explore.",
+      "dataSensitivity": ["public-copy"],
+      "trustBoundaries": ["Synthetic evidence only; human accountability remains visible."],
+      "evidenceRequirements": ["Source, uncertainty, review state, and owner decision remain distinct."],
+      "selectedPatterns": [{ "name": "EvidencePanel", "states": ["pending-review"] }],
+      "claims": [{ "claim": "Synthetic pilot evidence", "evidence": "Repository-owned fixture and review record" }],
+      "nonGoals": ["No AI runtime, compliance judgment, customer evidence, or app scaffolding."],
+      "verificationGates": ["wcag-22-aa", "keyboard-focus", "non-color-state", "desktop-render", "mobile-render", "reduced-motion", "rollback-path"]
+    },
+    "register": "product",
+    "surface": "/",
+    "firstViewportSignal": "One source-backed decision and its human review boundary are visible immediately.",
+    "emotionalIntent": "Prepared, clear, and accountable under pressure.",
+    "narrativeArc": ["Reveal the source", "Separate interpretation", "Pause at accountable human review"],
+    "informationPriority": ["Source", "Uncertainty", "Human decision", "Next safe action"],
+    "responsiveConstraints": ["Mobile keeps source and decision in reading order.", "Desktop preserves their visual separation."],
+    "interactionStates": ["focus", "hover", "selected", "blocked"],
+    "visualQualityGates": ["not-generic-saas", "first-viewport-product-signal", "source-visible", "human-review-visible", "responsive-fit", "keyboardable", "reduced-motion", "performance-budget"],
+    "verificationEvidence": ["Desktop render", "Mobile render", "Keyboard and reduced-motion notes"],
+    "nonGoals": ["No dashboard shell, fake authority, rasterized UI, or motion-gated content."]
+  },
+  "directions": [
+    {
+      "id": "evidence-rail",
+      "designBriefId": "complyeaze-public-family-s11-design-v1",
+      "reviewRound": 1,
+      "territory": "asymmetric-evidence-rail",
+      "artifactRefs": [
+        "craft/runs/complyeaze-public-family-s11/evidence/evidence-rail.html",
+        "craft/runs/complyeaze-public-family-s11/evidence/evidence-rail-desktop-1440.png",
+        "craft/runs/complyeaze-public-family-s11/evidence/evidence-rail-mobile-390.png"
+      ],
+      "qualified": false,
+      "disqualificationReasons": ["The retained mobile capture is not a genuine 390px render, so this direction cannot qualify."]
+    },
+    {
+      "id": "custody-cascade",
+      "designBriefId": "complyeaze-public-family-s11-design-v1",
+      "reviewRound": 1,
+      "territory": "progressive-custody-cascade",
+      "artifactRefs": [
+        "craft/runs/complyeaze-public-family-s11/evidence/custody-cascade.html",
+        "craft/runs/complyeaze-public-family-s11/evidence/custody-cascade-desktop-1440.png",
+        "craft/runs/complyeaze-public-family-s11/evidence/custody-cascade-mobile-390.png"
+      ],
+      "qualified": false,
+      "disqualificationReasons": ["The offset sequence risks implying an unsupported product hierarchy and both named viewport captures are invalid."]
+    },
+    {
+      "id": "decision-register",
+      "designBriefId": "complyeaze-public-family-s11-design-v1",
+      "reviewRound": 1,
+      "territory": "evidence-register-decision-sequence",
+      "artifactRefs": [
+        "craft/runs/complyeaze-public-family-s11/evidence/decision-register.html",
+        "craft/runs/complyeaze-public-family-s11/evidence/decision-register-desktop-1440.png",
+        "craft/runs/complyeaze-public-family-s11/evidence/decision-register-mobile-390.png",
+        "craft/runs/complyeaze-public-family-s11/evidence/decision-register-semantic-blind.webp",
+        "craft/runs/complyeaze-public-family-s11/evidence/decision-register-identity-blind.webp",
+        "craft/runs/complyeaze-public-family-s11/evidence/decision-register-recognition-evidence.md",
+        "craft/runs/complyeaze-public-family-s11/evidence/review-summary.md"
+      ],
+      "qualified": true,
+      "preference": { "reviewers": 4, "preferredToBaseline": 4, "preferredToControl": 4 },
+      "medians": { "relevance": 4, "distinctiveness": 3.5, "craft": 4, "trust": 4 },
+      "recognition": {
+        "semanticBlind": { "artifact": "craft/runs/complyeaze-public-family-s11/evidence/decision-register-semantic-blind.webp", "matcherCount": 3, "correctMatchers": 3, "colorOnly": false },
+        "identityBlind": { "artifact": "craft/runs/complyeaze-public-family-s11/evidence/decision-register-identity-blind.webp", "matcherCount": 3, "correctMatchers": 3, "colorOnly": false }
+      },
+      "disqualificationReasons": []
+    }
+  ],
+  "iterations": [],
+  "reviews": [
+    {
+      "reviewerId": "s11-brand-proxy",
+      "reviewRound": 1,
+      "role": "brand",
+      "producer": false,
+      "calibration": { "passed": true, "detectedFailures": ["generic-purple-gradient", "glass-bento-cliche", "unsupported-accuracy-and-speed-claims", "generic-ai-copy", "attractive-but-off-brief", "serif-theatre", "mono-heavy-metadata", "text-only-poster-without-product-proof", "fake-government-seal", "unsupported-ministry-approval", "guaranteed-statutory-accuracy", "automated-compliance-judgment"], "corrections": 0, "fullReruns": 0 },
+      "evidenceLabels": ["ai-visual-proxy", "not-user-validated"],
+      "scores": { "relevance": 4, "distinctiveness": 4, "craft": 4, "trust": 3 },
+      "directionScores": {
+        "evidence-rail": { "relevance": 3, "distinctiveness": 3, "craft": 3, "trust": 3 },
+        "custody-cascade": { "relevance": 3, "distinctiveness": 2, "craft": 2, "trust": 3 },
+        "decision-register": { "relevance": 4, "distinctiveness": 4, "craft": 4, "trust": 3 }
+      },
+      "vetoes": [],
+      "preference": ["decision-register"],
+      "directionComparisons": {
+        "evidence-rail": { "baseline": false, "withoutSkillControl": false },
+        "custody-cascade": { "baseline": false, "withoutSkillControl": false },
+        "decision-register": { "baseline": true, "withoutSkillControl": true }
+      }
+    },
+    {
+      "reviewerId": "s11-craft-proxy",
+      "reviewRound": 1,
+      "role": "craft",
+      "producer": false,
+      "calibration": { "passed": true, "detectedFailures": ["generic-purple-gradient", "glass-bento-cliche", "unsupported-accuracy-and-speed-claims", "generic-ai-copy", "attractive-but-off-brief", "serif-theatre", "mono-heavy-metadata", "text-only-poster-without-product-proof", "low-text-contrast", "sub-44px-targets", "motion-only-status", "color-only-state", "long-identifier-overflow"], "corrections": 0, "fullReruns": 0 },
+      "evidenceLabels": ["ai-visual-proxy", "not-user-validated"],
+      "scores": { "relevance": 4, "distinctiveness": 3, "craft": 4, "trust": 4 },
+      "directionScores": {
+        "evidence-rail": { "relevance": 3, "distinctiveness": 3, "craft": 2, "trust": 3 },
+        "custody-cascade": { "relevance": 3, "distinctiveness": 2, "craft": 2, "trust": 3 },
+        "decision-register": { "relevance": 4, "distinctiveness": 3, "craft": 4, "trust": 4 }
+      },
+      "vetoes": [],
+      "preference": ["decision-register"],
+      "directionComparisons": {
+        "evidence-rail": { "baseline": false, "withoutSkillControl": false },
+        "custody-cascade": { "baseline": false, "withoutSkillControl": false },
+        "decision-register": { "baseline": true, "withoutSkillControl": true }
+      }
+    },
+    {
+      "reviewerId": "s11-trust-proxy",
+      "reviewRound": 1,
+      "role": "trust",
+      "producer": false,
+      "calibration": { "passed": true, "detectedFailures": ["generic-purple-gradient", "glass-bento-cliche", "unsupported-accuracy-and-speed-claims", "generic-ai-copy", "fake-government-seal", "unsupported-ministry-approval", "guaranteed-statutory-accuracy", "automated-compliance-judgment", "low-text-contrast", "sub-44px-targets", "motion-only-status", "color-only-state", "long-identifier-overflow"], "corrections": 0, "fullReruns": 0 },
+      "evidenceLabels": ["ai-visual-proxy", "not-user-validated"],
+      "scores": { "relevance": 4, "distinctiveness": 4, "craft": 4, "trust": 4 },
+      "directionScores": {
+        "evidence-rail": { "relevance": 3, "distinctiveness": 3, "craft": 3, "trust": 3 },
+        "custody-cascade": { "relevance": 3, "distinctiveness": 2, "craft": 2, "trust": 3 },
+        "decision-register": { "relevance": 4, "distinctiveness": 4, "craft": 4, "trust": 4 }
+      },
+      "vetoes": [],
+      "preference": ["decision-register"],
+      "directionComparisons": {
+        "evidence-rail": { "baseline": false, "withoutSkillControl": false },
+        "custody-cascade": { "baseline": false, "withoutSkillControl": false },
+        "decision-register": { "baseline": true, "withoutSkillControl": true }
+      }
+    },
+    {
+      "reviewerId": "s11-accessibility-proxy",
+      "reviewRound": 1,
+      "role": "accessibility",
+      "producer": false,
+      "calibration": { "passed": true, "detectedFailures": ["low-text-contrast", "sub-44px-targets", "motion-only-status", "color-only-state", "long-identifier-overflow"], "corrections": 0, "fullReruns": 0 },
+      "evidenceLabels": ["ai-visual-proxy", "not-user-validated"],
+      "scores": { "relevance": 4, "distinctiveness": 3, "craft": 4, "trust": 4 },
+      "directionScores": {
+        "evidence-rail": { "relevance": 3, "distinctiveness": 3, "craft": 2, "trust": 3 },
+        "custody-cascade": { "relevance": 3, "distinctiveness": 2, "craft": 2, "trust": 3 },
+        "decision-register": { "relevance": 4, "distinctiveness": 3, "craft": 4, "trust": 4 }
+      },
+      "vetoes": [],
+      "preference": ["decision-register"],
+      "directionComparisons": {
+        "evidence-rail": { "baseline": false, "withoutSkillControl": false },
+        "custody-cascade": { "baseline": false, "withoutSkillControl": false },
+        "decision-register": { "baseline": true, "withoutSkillControl": true }
+      }
+    }
+  ],
+  "ownerDecision": "approved",
+  "selectedDirectionId": "decision-register",
+  "assets": [],
+  "evidenceDigests": {},
+  "reconciliation": [{
+    "scope": "ComplyEaze public homepage product-family section",
+    "decision": "Retain only the owner-selected Decision Register integration.",
+    "evidenceRefs": [
+        "craft/runs/complyeaze-public-family-s11/evidence/local-repository-gates.md",
+        "craft/runs/complyeaze-public-family-s11/evidence/local-browser-accessibility.md",
+        "craft/runs/complyeaze-public-family-s11/evidence/local-mobile-performance.json",
+        "craft/runs/complyeaze-public-family-s11/evidence/rollback-plan.md",
+        "craft/runs/complyeaze-public-family-s11/evidence/canonical-validator-validation.md"
+      ],
+    "remainingGate": "Distinct owner production approval, current-head GitHub review, merge, deployment, and live smoke remain required."
+  }],
+  "evidenceLoop": {
+    "id": "complyeaze-public-family-s11-evidence-v1",
+    "trustBrief": {
+      "id": "complyeaze-public-family-s11-trust-v1",
+      "consumerMode": "external/operational-saas",
+      "register": "product",
+      "surface": "/",
+      "userJob": "Understand one regulated decision and its evidence before acting.",
+      "primaryDecision": "Decide whether the direction is safe to explore.",
+      "dataSensitivity": ["public-copy"],
+      "trustBoundaries": ["Synthetic evidence only; human accountability remains visible."],
+      "evidenceRequirements": ["Source, uncertainty, review state, and owner decision remain distinct."],
+      "selectedPatterns": [{ "name": "EvidencePanel", "states": ["pending-review"] }],
+      "claims": [{ "claim": "Synthetic pilot evidence", "evidence": "Repository-owned fixture and review record" }],
+      "nonGoals": ["No AI runtime, compliance judgment, customer evidence, or app scaffolding."],
+      "verificationGates": ["wcag-22-aa", "keyboard-focus", "non-color-state", "desktop-render", "mobile-render", "reduced-motion", "rollback-path"]
+    },
+    "designBrief": {
+      "id": "complyeaze-public-family-s11-design-v1",
+      "trustBrief": {
+        "id": "complyeaze-public-family-s11-trust-v1",
+        "consumerMode": "external/operational-saas",
+        "register": "product",
+        "surface": "/",
+        "userJob": "Understand one regulated decision and its evidence before acting.",
+        "primaryDecision": "Decide whether the direction is safe to explore.",
+        "dataSensitivity": ["public-copy"],
+        "trustBoundaries": ["Synthetic evidence only; human accountability remains visible."],
+        "evidenceRequirements": ["Source, uncertainty, review state, and owner decision remain distinct."],
+        "selectedPatterns": [{ "name": "EvidencePanel", "states": ["pending-review"] }],
+        "claims": [{ "claim": "Synthetic pilot evidence", "evidence": "Repository-owned fixture and review record" }],
+        "nonGoals": ["No AI runtime, compliance judgment, customer evidence, or app scaffolding."],
+        "verificationGates": ["wcag-22-aa", "keyboard-focus", "non-color-state", "desktop-render", "mobile-render", "reduced-motion", "rollback-path"]
+      },
+      "register": "product",
+      "surface": "/",
+      "firstViewportSignal": "One source-backed decision and its human review boundary are visible immediately.",
+      "emotionalIntent": "Prepared, clear, and accountable under pressure.",
+      "narrativeArc": ["Reveal the source", "Separate interpretation", "Pause at accountable human review"],
+      "informationPriority": ["Source", "Uncertainty", "Human decision", "Next safe action"],
+      "responsiveConstraints": ["Mobile keeps source and decision in reading order.", "Desktop preserves their visual separation."],
+      "interactionStates": ["focus", "hover", "selected", "blocked"],
+      "visualQualityGates": ["not-generic-saas", "first-viewport-product-signal", "source-visible", "human-review-visible", "responsive-fit", "keyboardable", "reduced-motion", "performance-budget"],
+      "verificationEvidence": ["Desktop render", "Mobile render", "Keyboard and reduced-motion notes"],
+      "nonGoals": ["No dashboard shell, fake authority, rasterized UI, or motion-gated content."]
+    },
+    "renderEvidence": [
+      { "type": "desktop-screenshot", "artifact": "craft/runs/complyeaze-public-family-s11/evidence/decision-register-desktop-1440.png", "finding": "A 1440px render preserves the source, proof, and next-action columns as one readable register." },
+      { "type": "mobile-screenshot", "artifact": "craft/runs/complyeaze-public-family-s11/evidence/decision-register-mobile-390.webp", "finding": "A genuine 390px render retains product, custody, proof, and next action in reading order." },
+      { "type": "accessibility-note", "artifact": "craft/runs/complyeaze-public-family-s11/evidence/local-browser-accessibility.md", "finding": "The current build passed the complete 25-route, three-viewport local browser matrix; production browser verification remains required." },
+      { "type": "manual-review-note", "artifact": "craft/runs/complyeaze-public-family-s11/evidence/local-mobile-performance.json", "finding": "Three comparable 390px cold-cache laboratory measurements passed the LCP and CLS thresholds." }
+    ],
+    "adoptionEvidence": {
+      "consumerRepo": "lamemustafa/complyeaze-public",
+      "consumerSurface": "/",
+      "status": "implemented",
+      "changedFiles": ["apps/complyeaze/src/components/PublicHomePage.astro", "apps/complyeaze/src/styles/p4-register.css"],
+      "verificationRun": "Local source, build, public, metadata, link, smoke, 25-page visual, browser/accessibility, and three-run mobile performance checks passed before production approval.",
+      "rollbackPlan": "Revert the selected product-family section commit and redeploy the previous public artifact."
+    },
+    "decision": "needs-verification",
+    "residualRisks": ["Owner production approval and deployment evidence remain pending."],
+    "nextActions": ["Reconcile retained evidence, request owner production approval, then verify the deployed public route."]
+  },
+  "nextAction": "Await distinct S11 owner production approval, then perform current-head GitHub review, merge, deployment, and post-deploy smoke."
+}

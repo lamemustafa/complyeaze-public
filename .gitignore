@@ -10,6 +10,7 @@ test-results/
 playwright-report/
 blob-report/
 .playwright/
+.playwright-cli/
 .env
 .env.*
 !.env.example
