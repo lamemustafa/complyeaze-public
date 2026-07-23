@@ -201,9 +201,10 @@
         "craft/runs/complyeaze-public-family-s11/evidence/local-browser-accessibility.md",
         "craft/runs/complyeaze-public-family-s11/evidence/local-mobile-performance.json",
         "craft/runs/complyeaze-public-family-s11/evidence/rollback-plan.md",
-        "craft/runs/complyeaze-public-family-s11/evidence/canonical-validator-validation.md"
+        "craft/runs/complyeaze-public-family-s11/evidence/canonical-validator-validation.md",
+        "craft/runs/complyeaze-public-family-s11/evidence/master-rollout.md"
       ],
-    "remainingGate": "Distinct owner production approval, current-head GitHub review, merge, deployment, and live smoke remain required."
+    "remainingGate": "The owner-approved PR is merged to master and post-merge CI passed. A separate host deployment and live smoke remain required before the terminal craft production gate can close."
   }],
   "evidenceLoop": {
     "id": "complyeaze-public-family-s11-evidence-v1",
@@ -266,8 +267,8 @@
       "rollbackPlan": "Revert the selected product-family section commit and redeploy the previous public artifact."
     },
     "decision": "needs-verification",
-    "residualRisks": ["Owner production approval and deployment evidence remain pending."],
-    "nextActions": ["Reconcile retained evidence, request owner production approval, then verify the deployed public route."]
+    "residualRisks": ["No deployment target exists: the guarded Pages workflow was skipped, so there is no live-route evidence."],
+    "nextActions": ["Obtain separate authorization for a host deployment or cutover, then verify the deployed public route and record post-deploy smoke evidence."]
   },
-  "nextAction": "Await distinct S11 owner production approval, then perform current-head GitHub review, merge, deployment, and post-deploy smoke."
+  "nextAction": "Await separately authorized host deployment or cutover, then run and retain post-deploy smoke before requesting terminal craft verification."
 }
