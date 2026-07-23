@@ -197,11 +197,12 @@
     "scope": "ComplyEaze public homepage product-family section",
     "decision": "Retain only the owner-selected Decision Register integration.",
     "evidenceRefs": [
-      "craft/runs/complyeaze-public-family-s11/evidence/local-repository-gates.md",
-      "craft/runs/complyeaze-public-family-s11/evidence/local-browser-accessibility.md",
-      "craft/runs/complyeaze-public-family-s11/evidence/local-mobile-performance.json",
-      "craft/runs/complyeaze-public-family-s11/evidence/rollback-plan.md"
-    ],
+        "craft/runs/complyeaze-public-family-s11/evidence/local-repository-gates.md",
+        "craft/runs/complyeaze-public-family-s11/evidence/local-browser-accessibility.md",
+        "craft/runs/complyeaze-public-family-s11/evidence/local-mobile-performance.json",
+        "craft/runs/complyeaze-public-family-s11/evidence/rollback-plan.md",
+        "craft/runs/complyeaze-public-family-s11/evidence/canonical-validator-validation.md"
+      ],
     "remainingGate": "Distinct owner production approval, current-head GitHub review, merge, deployment, and live smoke remain required."
   }],
   "evidenceLoop": {

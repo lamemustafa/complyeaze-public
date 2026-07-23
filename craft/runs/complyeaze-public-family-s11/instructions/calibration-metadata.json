@@ -7,9 +7,9 @@
       "id": "current-baseline",
       "file": "current-baseline.webp",
       "mediaType": "image/webp",
-      "sha256": "5e52686bc54390368deb742f4dcd6d6b6ac64d74f80e03ac07dcbc8a8f1da2bc",
+      "sha256": "69c13aab4a9a628771dc1eaa1a78557bc56212274ffc2d38108fe35c38fac3f2",
       "viewport": { "width": 1440, "height": 900 },
-      "source": "Browser capture of the Sanchika v0.1.1 production landing page on 2026-07-16.",
+      "source": "Deterministic plain-request control; no production capture retained.",
       "seededFailures": [],
       "relevantRoles": ["brand", "craft", "trust", "accessibility"]
     },

@@ -10,7 +10,7 @@ import {
 import { tmpdir } from "node:os";
 import path from "node:path";
 
-const ignoredDirectories = new Set([".git", ".playwright-cli", "node_modules", "dist", "out", ".next", "test-results"]);
+const ignoredDirectories = new Set([".git", "node_modules", "dist", "out", ".next", "test-results"]);
 const allowedFixtureFiles = new Set(["scripts/public-checks/sensitive-content.mjs"]);
 const textExtensions = new Set([
   ".css",
