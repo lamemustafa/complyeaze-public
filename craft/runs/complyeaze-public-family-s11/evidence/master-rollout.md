@@ -9,4 +9,4 @@
 
 ## Result
 
-The reviewed S11 source is on `master` and the master CI gate is green. This is not post-deploy smoke evidence: no deployment URL was produced, and no live host or browser claim is made here. The craft run remains in `reconcile/active` until a separately authorized host deployment creates a deploy target for the required live smoke.
+The reviewed S11 source is on `master` and the master CI gate is green. This is not post-deploy smoke evidence: no deployment URL was produced, and no live host or browser claim is made here. The craft run remains in `reconcile/active` until a distinct retained owner production approval and a separately authorized host deployment create the conditions for the required live smoke.

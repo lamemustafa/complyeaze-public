@@ -205,7 +205,7 @@
         "craft/runs/complyeaze-public-family-s11/evidence/master-rollout.md",
         "craft/runs/complyeaze-public-family-s11/evidence/github-merge-verification.md"
       ],
-    "remainingGate": "The owner-approved PR is merged to master and post-merge CI passed. A separate host deployment and live smoke remain required before the terminal craft production gate can close."
+    "remainingGate": "The owner-approved direction is implemented and the PR is merged to master with post-merge CI passed. A distinct retained owner production approval, separate host deployment, and live smoke remain required before the terminal craft production gate can close."
   }],
   "evidenceLoop": {
     "id": "complyeaze-public-family-s11-evidence-v1",
@@ -268,8 +268,8 @@
       "rollbackPlan": "Revert the selected product-family section commit and redeploy the previous public artifact."
     },
     "decision": "needs-verification",
-    "residualRisks": ["No deployment target exists: the guarded Pages workflow was skipped, so there is no live-route evidence."],
-    "nextActions": ["Obtain separate authorization for a host deployment or cutover, then verify the deployed public route and record post-deploy smoke evidence."]
+    "residualRisks": ["No deployment target exists: the guarded Pages workflow was skipped, so there is no live-route evidence.", "No distinct retained owner production approval exists for terminal craft verification."],
+    "nextActions": ["Obtain and retain a distinct owner production approval, obtain separate authorization for a host deployment or cutover, then verify the deployed public route and record post-deploy smoke evidence."]
   },
-  "nextAction": "Await separately authorized host deployment or cutover, then run and retain post-deploy smoke before requesting terminal craft verification."
+  "nextAction": "Await a distinct retained owner production approval and separately authorized host deployment or cutover, then run and retain post-deploy smoke before requesting terminal craft verification."
 }
