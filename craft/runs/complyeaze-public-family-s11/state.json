@@ -202,7 +202,8 @@
         "craft/runs/complyeaze-public-family-s11/evidence/local-mobile-performance.json",
         "craft/runs/complyeaze-public-family-s11/evidence/rollback-plan.md",
         "craft/runs/complyeaze-public-family-s11/evidence/canonical-validator-validation.md",
-        "craft/runs/complyeaze-public-family-s11/evidence/master-rollout.md"
+        "craft/runs/complyeaze-public-family-s11/evidence/master-rollout.md",
+        "craft/runs/complyeaze-public-family-s11/evidence/github-merge-verification.md"
       ],
     "remainingGate": "The owner-approved PR is merged to master and post-merge CI passed. A separate host deployment and live smoke remain required before the terminal craft production gate can close."
   }],
