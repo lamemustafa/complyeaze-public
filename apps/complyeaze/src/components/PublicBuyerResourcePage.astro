@@ -14,7 +14,6 @@ const isContact = route.urlPath === "/contact/";
 <article class={`p4-page p4-resource ${isContact ? "p4-contact" : "p4-about"}`} data-p4-register="true">
   <header class:list={["p4-hero p4-hero--compact", patternClassName("PublicHero", { variant: "editorial", state: "with-proof-artifact" })]} aria-labelledby="page-title">
     <div class="p4-hero__copy">
-      <p class="p4-register">{route.eyebrow}</p>
       <h1 id="page-title">{route.heading}</h1>
       <p class="p4-lead">{route.summary}</p>
       <nav class="p4-actions" aria-label={`${isContact ? "Contact" : "About"} actions`}>
@@ -26,13 +25,13 @@ const isContact = route.urlPath === "/contact/";
   </header>
 
   <section class:list={["p4-boundary-ledger", patternClassName("ProductRouteMap", { variant: "family", state: "default" })]} aria-label={isContact ? "Contact channels" : "Public product boundaries"}>
-    {route.sections.map((section, index) => (
-      <article><span>0{index + 1}</span><div><h2>{section.title}</h2>{section.meta && <strong>{section.meta}</strong>}</div><p>{section.body}</p></article>
+    {route.sections.map((section) => (
+      <article><div><h2>{section.title}</h2>{section.meta && <strong>{section.meta}</strong>}</div><p>{section.body}</p></article>
     ))}
   </section>
 
   <section class="p4-product-destinations" aria-labelledby="product-destinations-title">
-    <header class="p4-section-heading"><p>{isContact ? "Product destinations" : "Distinct owners"}</p><h2 id="product-destinations-title">Continue with the product that owns the work</h2></header>
+    <header class="p4-section-heading"><h2 id="product-destinations-title">Continue with the product that owns the work</h2></header>
     <div>
       {products.map((product) => (
         <article class={`p4-product--${product.name.toLowerCase()}`}>

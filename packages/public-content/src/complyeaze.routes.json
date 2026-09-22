@@ -6,34 +6,42 @@
     {
       "slug": "index",
       "urlPath": "/",
-      "title": "ComplyEaze | Choose the right compliance surface",
-      "description": "Compare the public job, evidence, and custody boundary for Axal, Pack, and Tools before choosing where to continue.",
-      "eyebrow": "ComplyEaze product family",
-      "heading": "Know where the work belongs before you act.",
+      "title": "ComplyEaze | Compliance tools that show their work",
+      "description": "Free, open-source GST tools for Indian CA firms. Pack saves filed returns to your computer, and Tools drafts review work inside your browser.",
+      "eyebrow": "For Indian CA and CS firms",
+      "heading": "Compliance tools that show their work.",
       "kind": "home",
-      "summary": "Start with the job. Then compare who owns the workflow, where the working context stays, and which public evidence supports the next step.",
+      "summary": "Free, open-source tools for Indian CA firms. They run in your browser, and your GST password never reaches us.",
       "robots": "noindex, nofollow",
-      "signalTerms": ["ComplyEaze", "Axal", "Pack", "Tools"],
+      "signalTerms": ["ComplyEaze", "Pack", "Tools", "Axal"],
       "primaryAction": {
-        "label": "Explore the product family",
-        "href": "/products/"
+        "label": "Install Pack",
+        "href": "https://chromewebstore.google.com/detail/nfnbhekccajjfgkppolomflaeledoccb"
       },
       "secondaryAction": {
-        "label": "Review public trust evidence",
-        "href": "/trust/"
+        "label": "See the free tools",
+        "href": "/products/tools/"
       },
       "sections": [
         {
-          "title": "Choose by work, not by feature count",
-          "body": "Axal coordinates professional practice work, Pack collects a narrow set of portal evidence locally, and Tools prepares browser-local drafts. The job determines the destination."
+          "title": "Your GST password",
+          "meta": "never reaches us.",
+          "body": "Pack works inside the GST portal tab you signed in to yourself. It does not read or keep passwords, OTPs, CAPTCHAs or cookies."
         },
         {
-          "title": "Treat custody as part of the product",
-          "body": "Authenticated firm context, extension-local artifacts, and browser-local drafts carry different privacy and operational boundaries. Those boundaries stay visible before the product action."
+          "title": "Your client files",
+          "meta": "stay on your computer.",
+          "body": "Filed returns save to your own Downloads folder. Tools work on pasted rows inside the browser tab. Nothing is uploaded."
         },
         {
-          "title": "Check the proof before relying",
-          "body": "Public source, release, privacy, security, and limitation evidence belongs beside each product description—not behind a generic promise."
+          "title": "Our code",
+          "meta": "is open to read.",
+          "body": "Pack, Tools and this website are open source under Apache 2.0, so your firm can check what runs before trusting it."
+        },
+        {
+          "title": "The final call",
+          "meta": "stays with the CA.",
+          "body": "Tools prepare drafts and flags for a reviewer. Nothing is filed with the portal for you."
         }
       ]
     },
@@ -64,42 +72,55 @@
       ],
       "products": [
         {
-          "name": "Axal",
-          "role": "Compliance review workspace",
-          "job": "Coordinate matters, obligations, evidence, clients, documents, and tasks for CA practice teams.",
-          "proof": "The public route family documents workspace-first, permission-aware, source-led compliance review concepts.",
-          "boundary": "Account, workspace, role, and saved operational context belong to the authenticated product.",
-          "status": "Authenticated workspace; public marketing preview limited",
-          "href": "https://axal.complyeaze.com/",
-          "evidence": {
-            "label": "Review Axal public source",
-            "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/packages/public-content/src/axal.routes.json"
-          }
-        },
-        {
           "name": "Pack",
-          "role": "Local GST evidence utility",
-          "job": "Collect filed-return evidence for a narrow GST Portal task while retaining local artifact control.",
-          "proof": "Pack owns its public extension source, release evidence, privacy posture, security policy, and support facts.",
-          "boundary": "Browser extension and local artifacts; no shared workspace custody or backend-upload claim.",
-          "status": "Public extension; current release evidence owned by Pack",
+          "role": "Chrome extension for filed GST returns",
+          "job": "Saves filed GSTR-3B and GSTR-1 PDFs, the GSTR-1 e-invoice Excel and the GSTR-2B summary PDF from the GST portal to your computer.",
+          "proof": "Open source under Apache 2.0, with release notes, privacy policy and security policy on GitHub.",
+          "boundary": "Runs in your browser. No ComplyEaze account, no uploads and no telemetry.",
+          "status": "Public beta",
           "href": "/products/pack/",
           "evidence": {
-            "label": "Review Pack source",
+            "label": "Read the Pack source",
             "href": "https://github.com/lamemustafa/pack"
           }
         },
         {
           "name": "Tools",
-          "role": "Browser-local compliance utilities",
-          "job": "Create focused review artifacts from pasted rows or plain text without opening an account.",
-          "proof": "The Tools repository owns the utility registry, browser-local runtime, release facts, and source evidence.",
-          "boundary": "Browser-local drafts; no account, upload, tenant state, or saved operational context.",
-          "status": "Public utilities",
+          "role": "Free browser tools for review work",
+          "job": "Turn pasted rows into first drafts: GSTR-2B reconciliation triage, vendor follow-ups, AIS and 26AS mismatches, MSME payables and notice evidence memos.",
+          "proof": "Open source, with the full tool list and release notes on GitHub.",
+          "boundary": "Works inside the browser tab. No account, no upload and nothing saved on our side.",
+          "status": "Free to use",
           "href": "/products/tools/",
           "evidence": {
-            "label": "Review Tools source",
+            "label": "Read the Tools source",
             "href": "https://github.com/lamemustafa/complyeaze-tools"
+          }
+        },
+        {
+          "name": "Axal",
+          "role": "Practice workspace for CA firms",
+          "job": "Tracks each client’s GST, income tax and MCA obligations, portal notices, documents and review queue in one shared workspace.",
+          "proof": "Public product pages describe the workspace; the app and its data stay private to your firm.",
+          "boundary": "Signed-in workspace with roles and permissions for your team.",
+          "status": "Temporarily unavailable",
+          "href": "https://axal.complyeaze.com/",
+          "evidence": {
+            "label": "Read the Axal page source",
+            "href": "https://github.com/lamemustafa/complyeaze-public/blob/master/packages/public-content/src/axal.routes.json"
+          }
+        },
+        {
+          "name": "Bridge",
+          "role": "TallyPrime connector for AI assistants",
+          "job": "Lets an assistant such as Claude Desktop read TallyPrime on your computer and prepare vouchers that you approve before anything posts.",
+          "proof": "Open source preview builds on GitHub, with a local log of every action it takes.",
+          "boundary": "Connects only to Tally on the same computer.",
+          "status": "Preview",
+          "href": "https://github.com/lamemustafa/bridge",
+          "evidence": {
+            "label": "Read the Bridge source",
+            "href": "https://github.com/lamemustafa/bridge/releases"
           }
         }
       ]
@@ -762,15 +783,43 @@
       "summary": "A production-quality review excerpt for evaluating product-family ownership, evidence posture, and human review before public rebuild work begins.",
       "robots": "noindex, nofollow",
       "signalTerms": ["ComplyEaze", "synthetic", "craft review", "evidence register"],
-      "sections": [{ "title": "Review boundary", "body": "This synthetic route demonstrates composition and visual language only. It does not expose private operations or grant C3 approval." }],
+      "sections": [
+        {
+          "title": "Review boundary",
+          "body": "This synthetic route demonstrates composition and visual language only. It does not expose private operations or grant C3 approval."
+        }
+      ],
       "discoverability": "review-only",
       "reviewEvidence": {
         "accessibility": ["axe", "keyboard", "reduced-motion", "forced-colors"],
-        "budgets": { "authoredJavaScriptBytes": 0, "criticalFonts": 2, "cssGzipBytes": 61440, "maxCls": 0.05 },
-        "compositions": ["PublicHero", "ProductRouteMap", "ProofStrip", "ReviewDeskPreview", "EvidencePanel", "HumanReviewCheckpoint"],
+        "budgets": {
+          "authoredJavaScriptBytes": 0,
+          "criticalFonts": 2,
+          "cssGzipBytes": 61440,
+          "maxCls": 0.05
+        },
+        "compositions": [
+          "PublicHero",
+          "ProductRouteMap",
+          "ProofStrip",
+          "ReviewDeskPreview",
+          "EvidencePanel",
+          "HumanReviewCheckpoint"
+        ],
         "contentMode": "synthetic",
         "interactionMode": "zero-js",
-        "measurementCeilings": { "authoredJavaScriptBytes": 0, "cls": { "desktop": 0, "tablet": 0, "mobile": 0 }, "criticalFonts": 0, "cssGzipBytes": 15100, "maxCls": 0, "viewports": ["desktop", "tablet", "mobile"] },
+        "measurementCeilings": {
+          "authoredJavaScriptBytes": 0,
+          "cls": {
+            "desktop": 0,
+            "tablet": 0,
+            "mobile": 0
+          },
+          "criticalFonts": 0,
+          "cssGzipBytes": 15100,
+          "maxCls": 0,
+          "viewports": ["desktop", "tablet", "mobile"]
+        },
         "reviewStatus": "C3 human craft approval pending",
         "sanchikaRelease": "v0.1.1"
       }

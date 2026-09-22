@@ -1,0 +1,405 @@
+/* ComplyEaze homepage: the acknowledgement slip, the declarations, the product files, the worksheet, the counterfoil. */
+
+.ce-home { color: var(--ce-carbon); font-family: var(--ce-font-body); }
+.ce-home :where(h1, h2, h3, p, dl, dd, figure, ul) { margin: 0; }
+.ce-home :where(h1, h2, h3) { text-wrap: balance; }
+.ce-home p { text-wrap: pretty; }
+.ce-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.ce-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+/* ---------- Hero ---------- */
+
+.ce-home .ce-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.42fr) minmax(19rem, 0.68fr);
+  align-items: center;
+  gap: clamp(2.5rem, 6vw, 6rem);
+  padding: clamp(0.5rem, 2vw, 2rem) 0 clamp(3.5rem, 6vw, 5.5rem);
+  border-block-end: 1px solid var(--ce-carbon);
+}
+
+.ce-hero__copy { display: grid; gap: clamp(1.25rem, 2.4vw, 2rem); }
+
+.ce-home .ce-hero h1 {
+  max-width: 15ch;
+  font: 760 clamp(3.3rem, 6.3vw, 5.9rem)/0.9 var(--ce-font-display);
+  font-stretch: 76%;
+  letter-spacing: -0.025em;
+  color: var(--ce-carbon);
+}
+
+.ce-hero__lede {
+  max-width: 34ch;
+  color: var(--ce-carbon-soft);
+  font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+  line-height: 1.45;
+}
+
+/* The acknowledgement slip */
+.ce-slip {
+  position: relative;
+  justify-self: end;
+  width: min(100%, 26.5rem);
+  rotate: 1.5deg;
+  animation: ce-slip-feed 900ms var(--ce-ease-out) 80ms both;
+}
+
+.ce-slip__sheet {
+  --ce-perf: 7px;
+  position: relative;
+  padding: 2rem 1.6rem 1.5rem;
+  background: var(--ce-paper-sheet);
+  box-shadow: 0 1px 0 var(--ce-ink-hair), 0 18px 40px -22px color-mix(in srgb, var(--ce-ink-deep) 45%, transparent);
+  /* Perforated top edge, torn from the roll. */
+  mask:
+    radial-gradient(circle var(--ce-perf) at 50% 0, #0000 96%, #000) 50% 0 / 20px 100% repeat-x;
+}
+
+.ce-slip__title {
+  padding-block-end: 0.9rem;
+  border-block-end: 2px solid var(--ce-carbon);
+  font: 700 0.95rem/1.2 var(--ce-font-field);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ce-slip__fields { display: grid; margin-block-start: 0.4rem; }
+.ce-slip__fields > div {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+  padding-block: 0.6rem;
+  border-block-end: 1px dashed var(--ce-ink-rule);
+}
+.ce-slip__fields dt { color: var(--ce-carbon-soft); font-size: 0.875rem; }
+.ce-slip__fields dd { font: 400 0.95rem/1.35 var(--ce-font-field); }
+.ce-slip__answer dt { color: var(--ce-carbon); font-weight: 600; }
+.ce-slip__answer dd { color: var(--ce-ink); font-weight: 700; font-size: 1.05rem; }
+
+.ce-cells { display: flex; flex-wrap: wrap; gap: 2px; }
+.ce-cells span {
+  width: 1.05rem;
+  height: 1.35rem;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--ce-ink-rule);
+  font: 700 0.8rem/1 var(--ce-font-field);
+}
+.ce-cells span:empty { background: repeating-linear-gradient(135deg, var(--ce-ink-hair) 0 2px, transparent 2px 5px); }
+
+.ce-slip__sign {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.6rem;
+  margin-block-start: 1.6rem;
+  color: var(--ce-carbon-soft);
+  font-size: 0.875rem;
+}
+.ce-slip__sign span { flex: 1; border-block-end: 1px solid var(--ce-carbon); }
+
+.ce-slip__stamp {
+  position: absolute;
+  inset: auto -1.25rem 3.8rem auto;
+  --ce-stamp-turn: -9deg;
+  font-size: 1.35rem;
+  padding: 0.6rem 1rem 0.5rem;
+  animation: ce-stamp-land 520ms var(--ce-ease-out) 900ms both;
+}
+
+.ce-slip figcaption {
+  margin-block-start: 2.4rem;
+  color: var(--ce-carbon-soft);
+  font-size: 0.875rem;
+}
+
+/* ---------- Declarations ---------- */
+
+.ce-declare { padding-block: clamp(4.5rem, 10vw, 8rem) 0; }
+.ce-declare h2, .ce-family h2, .ce-worksheet h2 {
+  max-width: 16ch;
+  font: 740 clamp(2.2rem, 4.6vw, 3.9rem)/0.95 var(--ce-font-display);
+  font-stretch: 80%;
+  letter-spacing: -0.02em;
+}
+
+.ce-declare__list { margin-block-start: clamp(2rem, 5vw, 3.5rem); border-block-start: 2px solid var(--ce-carbon); }
+.ce-declare__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.2em;
+  padding-block: clamp(1.6rem, 3.2vw, 2.4rem);
+  border-block-end: 1px solid var(--ce-ink-rule);
+  font: 700 clamp(2rem, 4.8vw, 4rem)/1 var(--ce-font-display);
+  font-stretch: 78%;
+  letter-spacing: -0.015em;
+}
+.ce-declare__row dt { color: var(--ce-ink); }
+.ce-declare__row dd { display: contents; }
+.ce-declare__row strong { font: inherit; color: var(--ce-carbon); }
+.ce-declare__row p {
+  flex-basis: 100%;
+  max-width: 58ch;
+  margin-block-start: 0.9rem;
+  margin-inline-start: clamp(0rem, 30vw, 24rem);
+  color: var(--ce-carbon-soft);
+  font: 400 1.0625rem/1.55 var(--ce-font-body);
+  letter-spacing: 0;
+}
+
+/* ---------- Product files ---------- */
+
+.ce-home .ce-family {
+  display: block;
+  padding: clamp(5rem, 11vw, 9rem) 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ce-carbon);
+}
+.ce-home .ce-family :is(h2, h3, p, dt, dd) { color: inherit; }
+.ce-family__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin-block-start: clamp(2rem, 5vw, 3.5rem);
+}
+
+.ce-product {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+  padding: clamp(1.4rem, 2.6vw, 2.2rem);
+  padding-block-start: clamp(1.8rem, 3vw, 2.6rem);
+  border: 1px solid var(--ce-ink-rule);
+  border-block-start: 0;
+  background: var(--ce-paper-sheet);
+  box-shadow: 0 14px 30px -24px color-mix(in srgb, var(--ce-ink-deep) 40%, transparent);
+}
+/* Each slip is torn from the same perforated roll as the hero receipt. */
+.ce-product::before {
+  content: "";
+  position: absolute;
+  inset: -1px -1px auto;
+  height: 10px;
+  background: radial-gradient(circle 5px at 50% 0, var(--ce-paper) 96%, transparent) 0 0 / 16px 100% repeat-x;
+}
+.ce-product--pack { grid-column: span 7; }
+.ce-product--tools { grid-column: span 5; }
+.ce-product--axal { grid-column: span 5; }
+.ce-product--bridge { grid-column: span 7; }
+
+.ce-product h3 { font: 760 clamp(2rem, 3.6vw, 3rem)/1 var(--ce-font-display); font-stretch: 80%; letter-spacing: -0.015em; }
+.ce-product h3 a { min-height: 44px; display: inline-flex; align-items: center; color: inherit; text-decoration: none; }
+.ce-product h3 a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+.ce-home .ce-family .ce-product__role { color: var(--ce-carbon-soft); font-size: 1.0625rem; font-weight: 560; }
+.ce-product__job { max-width: 52ch; font-size: 1.0625rem; line-height: 1.55; }
+.ce-product__facts { display: grid; gap: 0.75rem; margin-block-start: 0.4rem; padding-block-start: 1rem; border-block-start: 1px dashed var(--ce-ink-rule); }
+.ce-product__facts > div:not(.ce-visually-hidden) { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0.75rem; }
+.ce-home .ce-family .ce-product__facts dt { color: var(--ce-carbon-soft); font-size: 0.875rem; padding-block-start: 0.15rem; }
+.ce-product__facts dd { font-size: 0.975rem; line-height: 1.5; }
+.ce-product__facts a { min-height: 44px; display: inline-flex; align-items: center; color: inherit; text-decoration-color: var(--ce-ink-rule); }
+.ce-product__facts a:hover { text-decoration-color: currentColor; }
+
+.ce-product__stamp {
+  justify-self: start;
+  margin-block-start: 0.8rem;
+  --ce-stamp-turn: -4deg;
+  font-size: 0.85rem;
+}
+/* Stamp size tracks how final a state is: shipping states print larger than paused or preview ones. */
+.ce-product--pack .ce-product__stamp { font-size: 1.05rem; --ce-stamp-turn: -6deg; --ce-stamp-ink: url(#ce-ink-2); }
+.ce-product--tools .ce-product__stamp { font-size: 1.05rem; --ce-stamp-turn: 3deg; --ce-stamp-ink: url(#ce-ink-3); }
+.ce-product--axal .ce-product__stamp { --ce-stamp-turn: -2deg; }
+.ce-product--bridge .ce-product__stamp { --ce-stamp-turn: 4deg; --ce-stamp-ink: url(#ce-ink-2); }
+
+.ce-product--pack h3 { font-size: clamp(3rem, 6vw, 4.8rem); }
+.ce-product--pack .ce-product__job { font-size: clamp(1.15rem, 1.7vw, 1.4rem); line-height: 1.45; max-width: 38ch; color: var(--ce-carbon); }
+
+/* ---------- Worksheet ---------- */
+
+.ce-worksheet {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.5fr);
+  align-items: start;
+  gap: clamp(2rem, 5vw, 5rem);
+  padding-block: clamp(5rem, 11vw, 9rem) 0;
+}
+.ce-worksheet__intro { display: grid; gap: 1.25rem; position: sticky; top: 2rem; }
+.ce-worksheet__intro p { max-width: 36ch; color: var(--ce-carbon-soft); font-size: 1.125rem; line-height: 1.55; }
+
+.ce-sheet {
+  position: relative;
+  padding: 1.25rem clamp(1rem, 2.4vw, 1.75rem) 2.25rem;
+  background: var(--ce-paper-sheet);
+  border: 1px solid var(--ce-ink-rule);
+  box-shadow: 0 18px 40px -26px color-mix(in srgb, var(--ce-ink-deep) 40%, transparent);
+}
+.ce-sheet figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block-end: 0.9rem;
+  border-block-end: 2px solid var(--ce-carbon);
+  font: 700 0.9rem/1.3 var(--ce-font-field);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.ce-sheet figcaption span { color: var(--ce-ink); }
+.ce-sheet__scroll { overflow-x: auto; }
+.ce-sheet__scroll:focus-visible { outline: 2px solid var(--ce-ink); outline-offset: 4px; }
+.ce-sheet table { width: 100%; min-width: 38rem; border-collapse: collapse; font-variant-numeric: tabular-nums lining-nums; }
+.ce-sheet :is(th, td) { padding: 0.8rem 0.75rem 0.8rem 0; text-align: start; vertical-align: baseline; }
+.ce-sheet thead th { color: var(--ce-carbon-soft); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; border-block-end: 1px solid var(--ce-carbon); }
+.ce-sheet tbody th { font-weight: 600; }
+.ce-sheet tbody tr + tr > * { border-block-start: 1px dashed var(--ce-ink-hair); }
+.ce-sheet td { font: 400 0.95rem/1.3 var(--ce-font-field); }
+.ce-sheet td:nth-child(3), .ce-sheet td:nth-child(4) { text-align: end; padding-inline-end: 1.5rem; }
+.ce-sheet thead th:nth-child(3), .ce-sheet thead th:nth-child(4) { text-align: end; padding-inline-end: 1.5rem; }
+.ce-flag { display: inline-block; font-family: var(--ce-font-body); font-size: 0.95rem; }
+.needs-look .ce-flag {
+  position: relative;
+  color: var(--ce-ink);
+  font-weight: 650;
+}
+/* A reviewer's ballpoint loop around every flag that needs a look. */
+.needs-look .ce-flag::after {
+  content: "";
+  position: absolute;
+  inset: -0.35rem -0.6rem;
+  border: 1.5px solid var(--ce-ink);
+  border-radius: 50% 46% 52% 44% / 60% 50% 55% 48%;
+  rotate: -2deg;
+  filter: url(#ce-ink);
+  pointer-events: none;
+}
+
+.ce-sheet__stamp {
+  position: absolute;
+  inset: auto 1.5rem -1.1rem auto;
+  --ce-stamp-turn: 5deg;
+  --ce-stamp-ink: url(#ce-ink-3);
+  font-size: 1.2rem;
+  background: color-mix(in srgb, var(--ce-paper-sheet) 55%, transparent);
+}
+
+/* ---------- Counterfoil close ---------- */
+
+.ce-counterfoil {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(16rem, 0.7fr);
+  margin-block-start: clamp(6rem, 12vw, 10rem);
+  background: var(--ce-paper-sheet);
+  border: 1px solid var(--ce-ink-rule);
+}
+/* Punched notches: page-coloured discs with their inner half outlined. */
+.ce-counterfoil::before,
+.ce-counterfoil::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--ce-ink-rule);
+  border-radius: 50%;
+  background: var(--ce-paper);
+  translate: -50% -50%;
+  clip-path: inset(-2px -2px -2px 50%);
+}
+.ce-counterfoil::before { left: 0; }
+.ce-counterfoil::after { left: 100%; clip-path: inset(-2px 50% -2px -2px); }
+.ce-counterfoil__body { display: grid; gap: 1.25rem; padding: clamp(2rem, 5vw, 4rem); }
+.ce-counterfoil h2 {
+  font: 760 clamp(2.6rem, 5.6vw, 4.8rem)/0.92 var(--ce-font-display);
+  font-stretch: 78%;
+  letter-spacing: -0.02em;
+}
+.ce-counterfoil__body p { max-width: 40ch; color: var(--ce-carbon-soft); font-size: 1.125rem; }
+.ce-counterfoil__stub {
+  display: grid;
+  align-content: center;
+  gap: 1rem;
+  padding: clamp(2rem, 4vw, 3rem);
+  border-inline-start: 2px dashed var(--ce-ink-rule);
+}
+.ce-counterfoil__stub h3 { font: 740 1.6rem/1 var(--ce-font-display); font-stretch: 80%; }
+.ce-counterfoil__stub ul { display: grid; gap: 0.25rem; padding: 0; list-style: none; }
+.ce-counterfoil__stub a { min-height: 44px; display: inline-flex; align-items: center; color: var(--ce-carbon); font: 400 0.95rem/1.3 var(--ce-font-field); overflow-wrap: anywhere; }
+.ce-counterfoil__stub a:hover { color: var(--ce-ink); }
+
+/* ---------- Motion: the slip feeds out, then the stamp lands. ---------- */
+
+@keyframes ce-slip-feed {
+  from { translate: 0 1.5rem; rotate: -1deg; }
+}
+
+@keyframes ce-stamp-land {
+  0% { opacity: 0; scale: 1.8; }
+  55% { opacity: 1; scale: 0.94; }
+  78% { scale: 1.025; }
+  100% { opacity: 1; scale: 1; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .ce-product__stamp, .ce-sheet__stamp {
+      animation: ce-stamp-land linear both;
+      animation-timeline: view();
+      animation-range: entry 55% cover 40%;
+    }
+  }
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 62rem) {
+  .ce-home .ce-hero { grid-template-columns: minmax(0, 1fr); }
+  .ce-slip { justify-self: start; }
+  .ce-family__grid > .ce-product { grid-column: span 12; grid-row: auto; }
+  .ce-worksheet { grid-template-columns: minmax(0, 1fr); }
+  .ce-worksheet__intro { position: static; }
+}
+
+@media (max-width: 44rem) {
+  .ce-slip { width: 100%; rotate: 0.75deg; }
+  .ce-slip__stamp { inset-inline-end: 0.25rem; font-size: 1.1rem; }
+  .ce-slip__fields > div { grid-template-columns: 6.25rem minmax(0, 1fr); }
+  .ce-declare__row { grid-template-columns: minmax(0, 1fr); }
+  .ce-declare__row dt { padding-block-start: 0; }
+  .ce-product__facts > div:not(.ce-visually-hidden) { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; }
+  .ce-counterfoil { grid-template-columns: minmax(0, 1fr); }
+  .ce-counterfoil::before, .ce-counterfoil::after { display: none; }
+  .ce-declare__row p { margin-inline-start: 0; }
+  .ce-sheet table { min-width: 0; }
+  .ce-sheet thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .ce-sheet tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.35rem 1rem;
+    padding-block: 0.9rem;
+  }
+  .ce-sheet tbody tr + tr { border-block-start: 1px dashed var(--ce-ink-hair); }
+  .ce-sheet tbody tr + tr > * { border-block-start: 0; }
+  .ce-sheet tbody :is(th, td) { padding: 0; text-align: start; }
+  .ce-sheet tbody th { grid-column: 1; }
+  .ce-sheet tbody td:nth-child(5) { grid-column: 2; grid-row: 1; justify-self: end; }
+  .ce-sheet tbody td:is(:nth-child(2), :nth-child(3), :nth-child(4)) {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    padding-inline-end: 0;
+    font-size: 0.875rem;
+  }
+  .ce-sheet tbody td:is(:nth-child(2), :nth-child(3), :nth-child(4))::before {
+    content: attr(data-label);
+    color: var(--ce-carbon-soft);
+    font-family: var(--ce-font-body);
+  }
+  .ce-sheet figcaption { flex-direction: column; gap: 0.25rem; }
+  .ce-counterfoil__stub { border-inline-start: 0; border-block-start: 2px dashed var(--ce-ink-rule); }
+  .ce-actions .ce-button { flex: 1 1 12rem; }
+}
