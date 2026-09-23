@@ -33,7 +33,7 @@ const visualTargetSlugs = visualTargets.map((target) => target.slug);
 if (new Set(visualTargetSlugs).size !== visualTargetSlugs.length) {
   throw new Error("Visual page slugs must be unique across typed Astro targets");
 }
-const expectedVisualTargetCount = 25;
+const expectedVisualTargetCount = 28;
 if (visualTargets.length !== expectedVisualTargetCount) {
   throw new Error(
     `Expected ${expectedVisualTargetCount} visual pages, received ${visualTargets.length}`,

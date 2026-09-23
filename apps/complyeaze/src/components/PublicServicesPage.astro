@@ -1,0 +1,38 @@
+---
+import type { PublicServicesRoute } from "@complyeaze-public/content";
+import ServiceContact from "./ServiceContact.astro";
+
+interface Props {
+  route: PublicServicesRoute;
+}
+
+const { route } = Astro.props;
+---
+
+<article class="ce-svc ce-svc--index">
+  <header class="ce-svc__intro" aria-labelledby="page-title">
+    <h1 id="page-title">{route.heading}</h1>
+    <p class="ce-svc__lede">{route.summary}</p>
+    {route.sections.map((section) => <p class="ce-svc__intro-note">{section.body}</p>)}
+  </header>
+
+  <section class="ce-svc__listing" aria-label="Services">
+    {route.services.map((service) => (
+      <article class="ce-svc__entry">
+        <h2><a href={service.href}>{service.name}</a></h2>
+        <p class="ce-svc__entry-audience">{service.audience}</p>
+        <p>{service.summary}</p>
+        <p class="ce-svc__entry-price">{service.price}</p>
+      </article>
+    ))}
+  </section>
+
+  <section class="ce-svc__operator" aria-labelledby="operator-title">
+    <h2 id="operator-title">Who does the work.</h2>
+    <div>
+      {route.operator.map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+  </section>
+
+  <ServiceContact contact={route.contact} heading="Ask a question first." />
+</article>

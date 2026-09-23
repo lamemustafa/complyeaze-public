@@ -1,0 +1,377 @@
+/* US service pages: a rate slip, sourced declarations, an adding-machine tape, a rate sheet, a counterfoil. */
+
+.ce-svc { color: var(--ce-carbon); font-family: var(--ce-font-body); }
+.ce-svc :where(h1, h2, h3, p, dl, dd, figure, ul, ol) { margin: 0; }
+.ce-svc :where(h1, h2, h3) { text-wrap: balance; }
+.ce-svc p { text-wrap: pretty; }
+.ce-svc :where(ul, ol) { padding: 0; list-style: none; }
+
+.ce-svc__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+.ce-svc > section > h2 {
+  max-width: 18ch;
+  font: 740 clamp(2.2rem, 4.4vw, 3.6rem)/0.95 var(--ce-font-display);
+  font-stretch: 80%;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Hero: the claim beside the slip that proves it ---------- */
+
+.ce-svc__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(20rem, 0.85fr);
+  align-items: center;
+  gap: clamp(2.5rem, 5vw, 5rem);
+  padding: clamp(0.5rem, 2vw, 2rem) 0 clamp(3.5rem, 6vw, 5.5rem);
+  border-block-end: 1px solid var(--ce-carbon);
+}
+.ce-svc__hero-copy { display: grid; gap: clamp(1.25rem, 2.4vw, 2rem); }
+.ce-svc h1 {
+  max-width: 17ch;
+  font: 760 clamp(2.7rem, 4.9vw, 4.6rem)/0.93 var(--ce-font-display);
+  font-stretch: 76%;
+  letter-spacing: -0.025em;
+}
+.ce-svc__lede {
+  max-width: 38ch;
+  color: var(--ce-carbon-soft);
+  font-size: clamp(1.125rem, 1.6vw, 1.35rem);
+  line-height: 1.45;
+}
+
+.ce-svc__slip {
+  position: relative;
+  justify-self: end;
+  width: min(100%, 29rem);
+  rotate: 1.2deg;
+}
+.ce-svc__slip-sheet {
+  --ce-perf: 7px;
+  padding: 2rem 1.5rem 1.4rem;
+  background: var(--ce-paper-sheet);
+  box-shadow: 0 1px 0 var(--ce-ink-hair), 0 18px 40px -22px color-mix(in srgb, var(--ce-ink-deep) 45%, transparent);
+  mask: radial-gradient(circle var(--ce-perf) at 50% 0, #0000 96%, #000) 50% 0 / 20px 100% repeat-x;
+}
+.ce-svc__slip-title {
+  padding-block-end: 0.85rem;
+  border-block-end: 2px solid var(--ce-carbon);
+  font: 700 0.875rem/1.3 var(--ce-font-field);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.ce-svc__slip table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums lining-nums; }
+.ce-svc__slip :is(th, td) { padding: 0.6rem 0.5rem 0.6rem 0; text-align: start; vertical-align: baseline; border-block-end: 1px dashed var(--ce-ink-rule); }
+.ce-svc__slip thead th { padding-block: 0.7rem 0.45rem; color: var(--ce-carbon-soft); font-size: 0.8125rem; font-weight: 600; }
+.ce-svc__slip tbody th { font-size: 0.95rem; font-weight: 600; }
+.ce-svc__slip td { font: 400 0.95rem/1.3 var(--ce-font-field); }
+.ce-svc__slip :is(th, td):last-child { padding-inline-end: 0; text-align: end; }
+.ce-svc__slip tbody tr:last-child > * { border-block-end: 2px solid var(--ce-carbon); }
+.ce-svc__slip-note { margin-block-start: 0.9rem; color: var(--ce-carbon-soft); font-size: 0.9rem; line-height: 1.45; }
+.ce-svc__source { margin-block-start: 0.6rem; color: var(--ce-carbon-soft); font-size: 0.8125rem; line-height: 1.4; }
+/* Vertical padding gives the inline link a full hit area without breaking the sentence. */
+.ce-svc__source a { padding-block: 0.8rem; color: inherit; text-decoration-color: var(--ce-ink-rule); }
+.ce-svc__source a:hover { color: var(--ce-ink); text-decoration-color: currentColor; }
+
+.ce-svc__stamp {
+  position: absolute;
+  inset: -1.4rem 0.75rem auto auto;
+  --ce-stamp-turn: 7deg;
+  --ce-stamp-ink: url(#ce-ink-2);
+  font-size: 1rem;
+  background: color-mix(in srgb, var(--ce-paper-sheet) 60%, transparent);
+}
+
+/* ---------- Declarations: the figure in ink, the claim, the source ---------- */
+
+.ce-svc__facts { padding-block: clamp(4.5rem, 10vw, 8rem) 0; }
+.ce-svc__facts-note { max-width: 58ch; margin-block-start: 1rem; color: var(--ce-carbon-soft); font-size: 1.0625rem; }
+.ce-svc__fact-list { margin-block-start: clamp(2rem, 5vw, 3.5rem); border-block-start: 2px solid var(--ce-carbon); }
+.ce-svc__fact {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
+  gap: 0.75rem clamp(2rem, 5vw, 4rem);
+  padding-block: clamp(1.5rem, 3vw, 2.25rem);
+  border-block-end: 1px solid var(--ce-ink-rule);
+}
+.ce-svc__fact dt { display: grid; gap: 0.5rem; align-content: start; }
+.ce-svc__figure {
+  color: var(--ce-ink);
+  font: 740 clamp(2rem, 4vw, 3.3rem)/0.95 var(--ce-font-display);
+  font-stretch: 78%;
+  letter-spacing: -0.015em;
+}
+.ce-svc__fact-title { font-size: 1.125rem; font-weight: 650; }
+.ce-svc__fact dd { display: grid; gap: 0.85rem; align-content: start; }
+.ce-svc__fact dd > p { max-width: 58ch; color: var(--ce-carbon-soft); font-size: 1.0625rem; line-height: 1.55; }
+.ce-svc__sources { display: grid; gap: 0.1rem; font-size: 0.875rem; }
+.ce-svc__sources a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--ce-carbon);
+  text-decoration-color: var(--ce-ink-rule);
+}
+.ce-svc__sources a:hover { color: var(--ce-ink); text-decoration-color: currentColor; }
+
+/* The adding-machine tape: invented inputs, printed as arithmetic. */
+.ce-svc__tape-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
+  gap: 0 clamp(2rem, 5vw, 4rem);
+  margin-block-start: clamp(2.5rem, 5vw, 3.5rem);
+}
+.ce-svc__tape {
+  grid-column: 2;
+  width: min(100%, 30rem);
+  padding: 1.25rem 1.4rem 1.1rem;
+  background: var(--ce-paper-sheet);
+  border-inline: 1px solid var(--ce-ink-hair);
+  box-shadow: 0 16px 34px -26px color-mix(in srgb, var(--ce-ink-deep) 45%, transparent);
+  rotate: -0.8deg;
+  font: 400 0.95rem/1.5 var(--ce-font-field);
+}
+.ce-svc__tape figcaption {
+  padding-block-end: 0.6rem;
+  margin-block-end: 0.5rem;
+  border-block-end: 1px dashed var(--ce-ink-rule);
+  color: var(--ce-ink);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.ce-svc__tape li { padding-block: 0.15rem; }
+.ce-svc__tape-total {
+  margin-block-start: 0.6rem;
+  padding-block-start: 0.6rem;
+  border-block-start: 3px double var(--ce-carbon);
+  font-weight: 700;
+}
+
+/* ---------- Approach: a short register beside its heading ---------- */
+
+.ce-svc__approach {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.5fr);
+  align-items: start;
+  gap: clamp(2rem, 5vw, 5rem);
+  padding-block: clamp(5rem, 11vw, 8.5rem) 0;
+}
+.ce-svc__approach > h2 { position: sticky; top: 2rem; }
+.ce-svc__approach dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 clamp(1.5rem, 3vw, 2.5rem); }
+.ce-svc__approach dl > div { display: grid; gap: 0.4rem; align-content: start; padding-block: 1.25rem 1.5rem; border-block-start: 1px dashed var(--ce-ink-rule); }
+.ce-svc__approach dt { font-size: 1.125rem; font-weight: 650; }
+.ce-svc__approach dd { color: var(--ce-carbon-soft); line-height: 1.55; }
+
+/* ---------- Rate sheet ---------- */
+
+.ce-svc__rates { padding-block: clamp(5rem, 11vw, 8.5rem) 0; }
+.ce-svc__sheet {
+  margin-block-start: clamp(2rem, 5vw, 3rem);
+  padding: 0.5rem clamp(1rem, 2.4vw, 1.75rem) 0.75rem;
+  background: var(--ce-paper-sheet);
+  border: 1px solid var(--ce-ink-rule);
+  box-shadow: 0 18px 40px -26px color-mix(in srgb, var(--ce-ink-deep) 40%, transparent);
+}
+.ce-svc__sheet table { width: 100%; border-collapse: collapse; }
+.ce-svc__sheet :is(th, td) { padding: 1.1rem 1.25rem 1.1rem 0; text-align: start; vertical-align: baseline; }
+.ce-svc__sheet thead th { padding-block: 0.9rem 0.6rem; border-block-end: 1px solid var(--ce-carbon); color: var(--ce-carbon-soft); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.ce-svc__sheet thead th:last-child { text-align: end; padding-inline-end: 0; }
+.ce-svc__sheet tbody tr + tr > * { border-block-start: 1px dashed var(--ce-ink-hair); }
+.ce-svc__sheet tbody th { width: 26%; font: 700 1.3rem/1.1 var(--ce-font-display); font-stretch: 84%; }
+.ce-svc__sheet td ul { display: grid; gap: 0.35rem; color: var(--ce-carbon-soft); line-height: 1.45; }
+.ce-svc__sheet .ce-svc__price {
+  width: 25%;
+  padding-inline-end: 0;
+  text-align: end;
+  color: var(--ce-ink);
+  font: 700 1rem/1.35 var(--ce-font-field);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.ce-svc__terms {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem clamp(2rem, 5vw, 4rem);
+  margin-block-start: clamp(1.75rem, 3vw, 2.5rem);
+}
+.ce-svc__terms > p { max-width: 50ch; font-size: 1.0625rem; line-height: 1.55; }
+.ce-svc__terms ul { display: grid; gap: 0.55rem; }
+.ce-svc__terms li { display: grid; grid-template-columns: 0.5rem minmax(0, 1fr); gap: 0.75rem; color: var(--ce-carbon-soft); line-height: 1.45; }
+.ce-svc__terms li::before { content: ""; width: 0.45rem; height: 0.45rem; margin-block-start: 0.5em; background: var(--ce-ink); }
+
+/* ---------- Proof: the free check and the sample document ---------- */
+
+.ce-svc__proof {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: start;
+  padding-block: clamp(5rem, 11vw, 8.5rem) 0;
+}
+.ce-svc__proof > h2 { grid-column: 1 / -1; }
+.ce-svc__proof--single { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.5fr); gap: clamp(2rem, 5vw, 5rem); }
+.ce-svc__proof--single > h2 { grid-column: auto; }
+.ce-svc__free { display: grid; gap: 1rem; justify-items: start; padding-block-start: 1.25rem; border-block-start: 2px solid var(--ce-carbon); }
+.ce-svc__proof h3 { font: 740 clamp(1.5rem, 2.4vw, 1.9rem)/1.05 var(--ce-font-display); font-stretch: 82%; }
+.ce-svc__free p { max-width: 46ch; color: var(--ce-carbon-soft); font-size: 1.0625rem; line-height: 1.55; }
+.ce-svc__doc {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+  padding: clamp(1.6rem, 3vw, 2.2rem);
+  background: var(--ce-paper-sheet);
+  border: 1px solid var(--ce-ink-rule);
+  border-block-start: 0;
+  box-shadow: 0 14px 30px -24px color-mix(in srgb, var(--ce-ink-deep) 40%, transparent);
+}
+/* Torn from the same perforated roll as the hero slip. */
+.ce-svc__doc::before {
+  content: "";
+  position: absolute;
+  inset: -1px -1px auto;
+  height: 10px;
+  background: radial-gradient(circle 5px at 50% 0, var(--ce-paper) 96%, transparent) 0 0 / 16px 100% repeat-x;
+}
+.ce-svc__doc p { max-width: 50ch; color: var(--ce-carbon-soft); line-height: 1.55; }
+.ce-svc__doc .ce-svc__doc-flag { color: var(--ce-ink); font: 700 0.8125rem/1.3 var(--ce-font-field); letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* ---------- Operator ---------- */
+
+.ce-svc__operator { padding-block: clamp(5rem, 11vw, 8.5rem) 0; }
+.ce-svc__operator > div { display: grid; gap: 1rem; max-width: 62ch; margin-block-start: clamp(1.5rem, 3vw, 2.25rem); }
+.ce-svc__operator p { color: var(--ce-carbon-soft); font-size: 1.125rem; line-height: 1.55; }
+.ce-svc__operator p:first-child { color: var(--ce-carbon); }
+
+/* ---------- Counterfoil close ---------- */
+
+.ce-svc__counterfoil {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(16rem, 0.7fr);
+  margin-block-start: clamp(6rem, 12vw, 9rem);
+  background: var(--ce-paper-sheet);
+  border: 1px solid var(--ce-ink-rule);
+}
+.ce-svc__counterfoil--solo { grid-template-columns: minmax(0, 1fr); max-width: 44rem; }
+.ce-svc__counterfoil::before,
+.ce-svc__counterfoil::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--ce-ink-rule);
+  border-radius: 50%;
+  background: var(--ce-paper);
+  translate: -50% -50%;
+  clip-path: inset(-2px -2px -2px 50%);
+}
+.ce-svc__counterfoil::before { left: 0; }
+.ce-svc__counterfoil::after { left: 100%; clip-path: inset(-2px 50% -2px -2px); }
+.ce-svc__counterfoil-body { display: grid; gap: 1.25rem; padding: clamp(2rem, 5vw, 4rem); }
+.ce-svc__counterfoil h2 {
+  font: 760 clamp(2.4rem, 5vw, 4.2rem)/0.92 var(--ce-font-display);
+  font-stretch: 78%;
+  letter-spacing: -0.02em;
+}
+.ce-svc__counterfoil-body p { max-width: 44ch; color: var(--ce-carbon-soft); font-size: 1.125rem; }
+.ce-svc__address { min-height: 44px; display: inline-flex; align-items: center; color: var(--ce-ink); font-family: var(--ce-font-field); overflow-wrap: anywhere; }
+.ce-svc__counterfoil-stub {
+  display: grid;
+  align-content: center;
+  gap: 1rem;
+  padding: clamp(2rem, 4vw, 3rem);
+  border-inline-start: 2px dashed var(--ce-ink-rule);
+}
+.ce-svc__counterfoil-stub h3 { font: 740 1.5rem/1 var(--ce-font-display); font-stretch: 80%; }
+.ce-svc__counterfoil-stub ul { display: grid; gap: 0.25rem; }
+.ce-svc__counterfoil-stub a { min-height: 44px; display: inline-flex; align-items: center; color: var(--ce-carbon); }
+.ce-svc__counterfoil-stub a:hover { color: var(--ce-ink); }
+
+.ce-svc__notice { max-width: 72ch; margin-block-start: 2rem; color: var(--ce-carbon-soft); font-size: 0.875rem; line-height: 1.5; }
+
+/* ---------- Index ---------- */
+
+.ce-svc__intro { display: grid; gap: clamp(1.25rem, 2.4vw, 1.75rem); padding: clamp(0.5rem, 2vw, 2rem) 0 clamp(3rem, 5vw, 4.5rem); border-block-end: 1px solid var(--ce-carbon); }
+.ce-svc__intro-note { max-width: 58ch; color: var(--ce-carbon-soft); }
+.ce-svc--index h1 { max-width: 16ch; font-size: clamp(3rem, 6vw, 5.4rem); }
+.ce-svc__listing {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(1rem, 2vw, 1.5rem);
+  padding-block-start: clamp(3rem, 6vw, 4.5rem);
+}
+.ce-svc__entry {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+  padding: clamp(1.4rem, 2.6vw, 2.2rem);
+  padding-block-start: clamp(1.8rem, 3vw, 2.6rem);
+  background: var(--ce-paper-sheet);
+  border: 1px solid var(--ce-ink-rule);
+  border-block-start: 0;
+  box-shadow: 0 14px 30px -24px color-mix(in srgb, var(--ce-ink-deep) 40%, transparent);
+}
+.ce-svc__entry::before {
+  content: "";
+  position: absolute;
+  inset: -1px -1px auto;
+  height: 10px;
+  background: radial-gradient(circle 5px at 50% 0, var(--ce-paper) 96%, transparent) 0 0 / 16px 100% repeat-x;
+}
+.ce-svc__entry h2 { font: 760 clamp(1.9rem, 3.4vw, 2.8rem)/1 var(--ce-font-display); font-stretch: 80%; letter-spacing: -0.015em; }
+.ce-svc__entry h2 a { min-height: 44px; display: inline-flex; align-items: center; color: inherit; text-decoration: underline; text-decoration-color: var(--ce-ink-rule); text-decoration-thickness: 2px; }
+.ce-svc__entry h2 a:hover { text-decoration-color: var(--ce-ink); }
+.ce-svc__entry p { max-width: 50ch; color: var(--ce-carbon-soft); line-height: 1.55; }
+.ce-svc__entry .ce-svc__entry-audience { color: var(--ce-carbon); font-weight: 560; }
+.ce-svc__entry .ce-svc__entry-price { padding-block-start: 0.9rem; border-block-start: 1px dashed var(--ce-ink-rule); color: var(--ce-ink); font: 700 1rem/1.3 var(--ce-font-field); }
+
+/* ---------- Motion: the slip feeds out, then the stamp lands. ---------- */
+
+@keyframes ce-svc-feed {
+  from { translate: 0 1.5rem; rotate: -1deg; }
+}
+@keyframes ce-svc-stamp {
+  0% { opacity: 0; scale: 1.15; }
+  55% { opacity: 1; scale: 0.94; }
+  78% { scale: 1.025; }
+  100% { opacity: 1; scale: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ce-svc__slip { animation: ce-svc-feed 900ms var(--ce-ease-out) 80ms both; }
+  .ce-svc__stamp { animation: ce-svc-stamp 520ms var(--ce-ease-out) 900ms both; }
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 62rem) {
+  .ce-svc__hero, .ce-svc__approach, .ce-svc__listing { grid-template-columns: minmax(0, 1fr); }
+  .ce-svc__slip { justify-self: start; }
+  .ce-svc__approach > h2 { position: static; }
+}
+
+@media (max-width: 44rem) {
+  .ce-svc__slip { width: 100%; rotate: 0.6deg; }
+  .ce-svc__stamp { inset-inline-end: 0.25rem; font-size: 0.9rem; }
+  .ce-svc__fact, .ce-svc__terms, .ce-svc__proof, .ce-svc__proof--single, .ce-svc__approach dl { grid-template-columns: minmax(0, 1fr); }
+  .ce-svc__tape-row { grid-template-columns: minmax(0, 1fr); }
+  .ce-svc__tape { grid-column: 1; rotate: 0deg; }
+  .ce-svc__sheet thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .ce-svc__sheet tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.6rem 1rem; padding-block: 1.1rem; }
+  .ce-svc__sheet tbody tr + tr { border-block-start: 1px dashed var(--ce-ink-hair); }
+  .ce-svc__sheet tbody tr + tr > * { border-block-start: 0; }
+  .ce-svc__sheet tbody :is(th, td) { width: auto; padding: 0; }
+  .ce-svc__sheet tbody td:nth-child(2) { grid-column: 1 / -1; grid-row: 3; }
+  .ce-svc__sheet .ce-svc__price { grid-column: 1 / -1; grid-row: 2; width: auto; text-align: start; }
+  .ce-svc__counterfoil { grid-template-columns: minmax(0, 1fr); }
+  .ce-svc__counterfoil::before, .ce-svc__counterfoil::after { display: none; }
+  .ce-svc__counterfoil-stub { border-inline-start: 0; border-block-start: 2px dashed var(--ce-ink-rule); }
+  .ce-svc__actions .ce-button { flex: 1 1 12rem; }
+}
+
+@media (forced-colors: active) {
+  .ce-svc__terms li::before { background: CanvasText; }
+}
