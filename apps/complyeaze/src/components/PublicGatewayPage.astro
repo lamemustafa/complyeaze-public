@@ -10,7 +10,6 @@ const productClass = route.product.toLowerCase();
 <article class={`p4-page p4-gateway p4-gateway--${productClass}`} data-p4-register="true">
   <header class:list={["p4-hero p4-hero--gateway", patternClassName("PublicHero", { variant: "editorial", state: "with-proof-artifact" })]} aria-labelledby="page-title">
     <div class="p4-hero__copy">
-      <p class="p4-register">{route.eyebrow}</p>
       <h1 id="page-title">{route.heading}</h1>
       <p class="p4-lead">{route.summary}</p>
       <nav class="p4-actions" aria-label={`${route.product} gateway actions`}>
@@ -26,13 +25,13 @@ const productClass = route.product.toLowerCase();
   </header>
 
   <section class:list={["p4-boundary-ledger", patternClassName("ProductRouteMap", { variant: "family", state: "default" })]} aria-label={`${route.product} job and custody boundaries`}>
-    {route.sections.map((section, index) => (
-      <article><span>0{index + 1}</span><h2>{section.title}</h2><p>{section.body}</p></article>
+    {route.sections.map((section) => (
+      <article><h2>{section.title}</h2><p>{section.body}</p></article>
     ))}
   </section>
 
   <section class="p4-evidence" aria-labelledby="gateway-evidence-title">
-    <header class="p4-section-heading"><p>Product-owned proof</p><h2 id="gateway-evidence-title">Check the current evidence before relying</h2></header>
+    <header class="p4-section-heading"><h2 id="gateway-evidence-title">Check the current evidence before relying</h2></header>
     <ul>
       {route.evidenceLinks.map((link) => (
         <li><a href={link.href}>{link.label}<span aria-hidden="true"> ↗</span></a><p>{link.description}</p></li>

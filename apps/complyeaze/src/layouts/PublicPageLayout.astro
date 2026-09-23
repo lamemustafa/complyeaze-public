@@ -3,6 +3,7 @@ import type { PublicRoute } from "@complyeaze-public/content";
 import { canonicalUrl } from "@complyeaze-public/shell";
 import p4CssUrl from "../styles/p4-register.css?url";
 import "../styles/sanchika.css";
+import inkCssUrl from "../styles/ink.css?url";
 
 interface Props {
   origin: string;
@@ -35,8 +36,10 @@ const schemaGraph = {
 const schemaJson = JSON.stringify(schemaGraph).replace(/</g, "\\u003c");
 const p4Paths = new Set(["/", "/products/", "/products/pack/", "/products/tools/", "/about/", "/contact/"]);
 const isP4Route = p4Paths.has(route.urlPath);
+// The craft review route ships under fixed CSS and font budgets, so it keeps the system stack.
+const loadsBrandType = route.kind !== "public-craft-review";
+const packInstallHref = "https://chromewebstore.google.com/detail/nfnbhekccajjfgkppolomflaeledoccb";
 const primaryNavigation = [
-  { href: "/", label: "Home" },
   { href: "/products/", label: "Products" },
   { href: "/about/", label: "About" },
   { href: "/trust/", label: "Trust" },
@@ -62,40 +65,21 @@ function isCurrentPrimaryNavItem(href: string, urlPath: string): boolean {
     <script is:inline type="application/ld+json" set:html={schemaJson}></script>
     <title>{route.title}</title>
     {isP4Route && <link rel="stylesheet" href={p4CssUrl} />}
+    {loadsBrandType && <link rel="preload" href="/fonts/anek/AnekLatin-Variable.woff2" as="font" type="font/woff2" crossorigin />}
+    {loadsBrandType && <link rel="stylesheet" href={inkCssUrl} />}
     <style is:global>
-      :root { color-scheme: light; font-family: var(--sk-font-body); }
       * { box-sizing: border-box; }
-      body { margin: 0; color: var(--sk-color-ink-primary); background: var(--sk-color-canvas); line-height: var(--sk-line-height-body); }
-      body.p4-shell { background: #f7faf9; }
-      a { color: var(--sk-color-link); text-underline-offset: 0.2em; }
-      a:focus-visible { outline: var(--sk-focus-outline-width) solid var(--sk-color-focus); outline-offset: var(--sk-focus-outline-offset); }
-      .skip-link { position: fixed; inset: 0 auto auto 1rem; z-index: 10; padding: var(--sk-space-3) var(--sk-space-4); background: var(--sk-color-brand-primary); color: var(--sk-color-ink-inverse); transform: translateY(-140%); }
+      body { margin: 0; line-height: 1.55; }
+      .skip-link { position: fixed; inset: 0 auto auto 1rem; z-index: 10; padding: 0.75rem 1rem; background: var(--ce-ink, #4b2e9e); color: var(--ce-paper-sheet, #fbfcfe); transform: translateY(-140%); }
       .skip-link:focus { transform: translateY(1rem); }
-      .service-notice { margin: 0; padding: 0.625rem 1rem; background: #073c37; color: #f7faf9; font-size: 0.9375rem; line-height: 1.4; text-align: center; }
-      .service-notice strong { font-weight: 700; }
-      .site-header, .site-footer { border-block: var(--sk-border-width-default) solid var(--sk-color-border-subtle); background: var(--sk-color-surface); }
-      .site-header > div, .site-footer > div, main { width: min(100% - 2rem, 72rem); margin-inline: auto; }
-      .site-header > div, .site-footer > div { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1rem; }
-      .brand { min-height: 44px; display: inline-flex; align-items: center; color: var(--sk-color-ink-primary); font-weight: var(--sk-font-weight-bold); text-decoration: none; }
-      .site-header nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
-      .site-header nav a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; color: var(--sk-color-ink-primary); }
-      .site-header nav a[aria-current="page"] { font-weight: 750; text-decoration-thickness: 0.16em; }
-      body.p4-shell > .site-header { border-color: #91aaa5; background: #f7faf9; }
-      body.p4-shell .brand { color: #073c37; font-size: 1.1rem; letter-spacing: -0.02em; }
-      body.p4-shell > .site-header nav a { color: #102522; font-weight: 700; }
-      body.p4-shell > .site-header nav a[aria-current="page"] { color: #073c37; }
-      main { padding-block: clamp(3rem, 8vw, 7rem); }
-      .site-footer { border-block-end: 0; }
-      .site-footer p { margin: 0; }
-      .site-footer .footer-copy { display: grid; gap: 0.25rem; }
-      .site-footer .colophon { min-height: 44px; display: inline-flex; align-items: center; }
-      .site-footer nav { display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; }
-      .site-footer a { min-height: 44px; display: inline-flex; align-items: center; }
-      @media (max-width: 42rem) {
-        .site-header > div, .site-footer > div { align-items: flex-start; flex-direction: column; }
-      }
+      :where(a):focus-visible { outline: 2px solid var(--sk-color-focus); outline-offset: 3px; }
+      :where(.site-header, .site-footer) > div { width: min(100% - 2rem, 78rem); margin-inline: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
+      :where(.site-header, .site-footer) a { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; }
+      :where(.site-header, .site-footer) nav { display: flex; flex-wrap: wrap; gap: 0 1.25rem; }
+      main { width: min(100% - 2rem, 78rem); margin-inline: auto; padding-block: clamp(3rem, 8vw, 6rem) 0; }
+      body.p4-shell main { padding-block-start: clamp(1.5rem, 4vw, 3rem); }
       @media (prefers-reduced-motion: reduce) {
-        *, *::before, *::after { animation-duration: 0s !important; scroll-behavior: auto !important; transition-duration: 0s !important; }
+        *, *::before, *::after { animation-duration: 0s !important; animation-delay: 0s !important; scroll-behavior: auto !important; transition-duration: 0s !important; }
       }
     </style>
   </head>
@@ -106,13 +90,14 @@ function isCurrentPrimaryNavItem(href: string, urlPath: string): boolean {
     </p>
     <header class="site-header">
       <div>
-        <a class="brand" href={`${origin}/`}>ComplyEaze</a>
-        <nav aria-label="Primary navigation">
+        <a class="brand" href={`${origin}/`}><span class="brand__mark" aria-hidden="true">CE</span>ComplyEaze</a>
+        <nav class="site-nav" aria-label="Primary navigation">
           {primaryNavigation.map((item) => (
             <a href={item.href} aria-current={isCurrentPrimaryNavItem(item.href, route.urlPath) ? "page" : undefined}>
               {item.label}
             </a>
           ))}
+          <a class="site-nav__install" href={packInstallHref}>Install Pack</a>
         </nav>
       </div>
     </header>
@@ -122,15 +107,51 @@ function isCurrentPrimaryNavItem(href: string, urlPath: string): boolean {
     <footer class="site-footer">
       <div>
         <div class="footer-copy">
-          <p>Public product facts and evidence. Sensitive operational data stays private.</p>
-          <p><span class="sk-badge sk-tone-neutral sk-size-sm">Sanchika v0.1</span></p>
-          <a class="colophon" href="/sanchika/">Inspect the adopted design evidence.</a>
+          <p class="footer-brand">ComplyEaze</p>
+          <p>Compliance tools for Indian CA and CS firms. Not affiliated with GSTN, CBIC or any government body, and nothing here is tax advice.</p>
+          <p class="colophon">Open source under <span class="sk-badge sk-tone-neutral sk-size-sm footer-license">Apache 2.0</span>. Set in Anek by Ek Type and Courier Prime.</p>
         </div>
         <nav aria-label="Policy navigation">
+          <a href="/products/" aria-current={route.urlPath === "/products/" ? "page" : undefined}>Products</a>
+          <a href="/trust/" aria-current={route.urlPath === "/trust/" ? "page" : undefined}>Trust</a>
           <a href="/privacy/" aria-current={route.urlPath === "/privacy/" ? "page" : undefined}>Privacy</a>
           <a href="/terms/" aria-current={route.urlPath === "/terms/" ? "page" : undefined}>Terms</a>
+          <a href="/about/" aria-current={route.urlPath === "/about/" ? "page" : undefined}>About</a>
+          <a href="https://github.com/lamemustafa/complyeaze-public">Source on GitHub</a>
         </nav>
       </div>
     </footer>
+    <svg class="ce-filters" width="0" height="0" aria-hidden="true" focusable="false">
+      <filter id="ce-ink" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="3" seed="7" result="warp" />
+        <feDisplacementMap in="SourceGraphic" in2="warp" scale="2.6" xChannelSelector="R" yChannelSelector="G" result="pressed" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="2" seed="21" result="grain" />
+        <feColorMatrix in="grain" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.7 1" result="gaps" />
+        <feComposite in="pressed" in2="gaps" operator="out" result="worn" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="1" seed="3" result="pressure" />
+        <feColorMatrix in="pressure" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.1 0 0 0 0.4" result="weight" />
+        <feComposite in="worn" in2="weight" operator="in" />
+      </filter>
+      <filter id="ce-ink-2" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="3" seed="11" result="warp" />
+        <feDisplacementMap in="SourceGraphic" in2="warp" scale="2.6" xChannelSelector="R" yChannelSelector="G" result="pressed" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="2" seed="5" result="grain" />
+        <feColorMatrix in="grain" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.7 1" result="gaps" />
+        <feComposite in="pressed" in2="gaps" operator="out" result="worn" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="1" seed="9" result="pressure" />
+        <feColorMatrix in="pressure" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.1 0 0 0 0.4" result="weight" />
+        <feComposite in="worn" in2="weight" operator="in" />
+      </filter>
+      <filter id="ce-ink-3" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="3" seed="19" result="warp" />
+        <feDisplacementMap in="SourceGraphic" in2="warp" scale="2.6" xChannelSelector="R" yChannelSelector="G" result="pressed" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="2" seed="13" result="grain" />
+        <feColorMatrix in="grain" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.7 1" result="gaps" />
+        <feComposite in="pressed" in2="gaps" operator="out" result="worn" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="1" seed="27" result="pressure" />
+        <feColorMatrix in="pressure" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.1 0 0 0 0.4" result="weight" />
+        <feComposite in="worn" in2="weight" operator="in" />
+      </filter>
+    </svg>
   </body>
 </html>

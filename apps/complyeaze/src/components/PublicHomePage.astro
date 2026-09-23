@@ -1,6 +1,7 @@
 ---
 import { patternClassName } from "@sanchika/patterns";
 import type { PublicHomeRoute, PublicProduct } from "@complyeaze-public/content";
+import "../styles/home.css";
 
 interface Props {
   products: PublicProduct[];
@@ -8,63 +9,141 @@ interface Props {
 }
 
 const { products, route } = Astro.props;
+
+// Synthetic GSTIN: state code shown, every other character masked the way Tools review copies do.
+const gstinCells = ["2", "7", ...Array.from({ length: 13 }, () => "")];
+
+// Synthetic triage rows for the sample worksheet. Names and amounts are invented.
+const sampleRows = [
+  { vendor: "Sharma Traders", invoice: "ST/2291", books: "₹1,18,000", portal: "₹1,18,000", flag: "Matched", attention: false },
+  { vendor: "Kaveri Packaging", invoice: "KP-0457", books: "₹42,480", portal: "Not in 2B", flag: "Ask vendor to file", attention: true },
+  { vendor: "Patel Steel Works", invoice: "PSW/118", books: "₹2,36,000", portal: "₹2,26,560", flag: "Differs by ₹9,440", attention: true },
+  { vendor: "Nandi Logistics", invoice: "NL-0073", books: "₹17,700", portal: "₹17,700", flag: "Matched", attention: false },
+  { vendor: "Deccan Office Supplies", invoice: "2026/341", books: "₹8,850", portal: "₹8,850", flag: "Invoice date differs", attention: true },
+];
+
+const repositories = [
+  { label: "lamemustafa/pack", href: "https://github.com/lamemustafa/pack" },
+  { label: "lamemustafa/complyeaze-tools", href: "https://github.com/lamemustafa/complyeaze-tools" },
+  { label: "lamemustafa/complyeaze-public", href: "https://github.com/lamemustafa/complyeaze-public" },
+];
+
+const productSlug = (product: PublicProduct) => product.name.toLowerCase();
 ---
 
-<article class="p4-page p4-home" data-p4-register="true">
-  <header class:list={["p4-hero", patternClassName("PublicHero", { variant: "editorial", state: "with-proof-artifact" })]} aria-labelledby="page-title">
-    <div class="p4-hero__copy">
-      <p class="p4-register">{route.eyebrow}</p>
+<article class="ce-home" data-p4-register="true">
+  <header class:list={["ce-hero", patternClassName("PublicHero", { variant: "editorial", state: "with-proof-artifact" })]} aria-labelledby="page-title">
+    <div class="ce-hero__copy">
       <h1 id="page-title">{route.heading}</h1>
+      <p class="ce-hero__lede">{route.summary}</p>
+      <div class="ce-actions">
+        <a class="ce-button" href={route.primaryAction.href}>{route.primaryAction.label}</a>
+        <a class="ce-button ce-button--plain" href={route.secondaryAction.href}>{route.secondaryAction.label}</a>
+      </div>
     </div>
-    <dl class="p4-hero__index" aria-label="Product choices">
-      {products.map((product) => (
-        <div><dt>{product.name}</dt><dd><a href={product.href}>{product.role}</a></dd></div>
-      ))}
-    </dl>
-    <div class="p4-hero__support">
-      <p class="p4-lead">{route.summary}</p>
-      <nav class="p4-actions" aria-label="Homepage actions">
-        <a class="p4-action p4-action--primary" href={route.primaryAction.href}>{route.primaryAction.label}</a>
-        <a class="p4-action" href={route.secondaryAction.href}>{route.secondaryAction.label}</a>
-      </nav>
-    </div>
+
+    <figure class="ce-slip" aria-labelledby="slip-caption">
+      <div class="ce-slip__sheet">
+        <p class="ce-slip__title">GSTR-3B download</p>
+        <dl class="ce-slip__fields">
+          <div><dt>Return</dt><dd>GSTR-3B, filed copy (PDF)</dd></div>
+          <div><dt>Tax period</dt><dd>August 2026</dd></div>
+          <div>
+            <dt>GSTIN</dt>
+            <dd class="ce-cells" aria-label="GSTIN masked except the state code 27">
+              {gstinCells.map((cell) => <span aria-hidden="true">{cell}</span>)}
+            </dd>
+          </div>
+          <div><dt>Saved to</dt><dd>This computer, Downloads</dd></div>
+          <div class="ce-slip__answer"><dt>Sent to ComplyEaze</dt><dd>Nothing</dd></div>
+          <div class="ce-slip__answer"><dt>Password read</dt><dd>No</dd></div>
+        </dl>
+        <p class="ce-slip__sign">Checked by<span aria-hidden="true"></span></p>
+      </div>
+      <span class="ce-stamp ce-slip__stamp" aria-hidden="true">Saved locally<small>on your computer</small></span>
+      <figcaption id="slip-caption">Sample data. Pack saves the filed PDF to your computer and sends nothing to ComplyEaze.</figcaption>
+    </figure>
   </header>
 
-  <section class:list={["p4-product-map", patternClassName("ProductRouteMap", { variant: "family", state: "default" })]} aria-labelledby="product-route-title">
-    <header class="p4-section-heading">
-      <p>Three routes, one explicit choice</p>
-      <h2 id="product-route-title">Match the work to the boundary</h2>
-    </header>
-    <div class="p4-product-register">
-      <div class="p4-product-register__head" aria-hidden="true">
-        <span>Product</span>
-        <span>Job, custody, proof</span>
-        <span>Next action</span>
-      </div>
-      {products.map((product, index) => (
-        <article class={`p4-product p4-product--${product.name.toLowerCase()}`}>
-          <div class="p4-product__identity">
-            <span aria-hidden="true">0{index + 1}</span>
-            <h3><a href={product.href}>{product.name}</a></h3>
-            <p>{product.role}</p>
-          </div>
-          <div class="p4-product__decision">
-            <p>{product.job}</p>
-            <dl>
-              <div><dt>Custody</dt><dd>{product.boundary}</dd></div>
-              <div><dt>Proof</dt><dd><a href={product.evidence.href}>{product.proof}</a></dd></div>
-              <div><dt>Posture</dt><dd>{product.status}</dd></div>
-            </dl>
-          </div>
-          <a class="p4-product__action" href={product.href}>Continue to {product.name}<span aria-hidden="true"> →</span></a>
+  <section class="ce-declare" aria-labelledby="declare-title">
+    <h2 id="declare-title">The fine print, in large print.</h2>
+    <dl class="ce-declare__list">
+      {route.sections.map((section) => (
+        <div class="ce-declare__row">
+          <dt>{section.title}</dt>
+          <dd>
+            <strong>{section.meta}</strong>
+            <p>{section.body}</p>
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section class:list={["ce-family", patternClassName("ProductRouteMap", { variant: "family", state: "default" })]} aria-labelledby="family-title">
+    <h2 id="family-title">What ComplyEaze makes</h2>
+    <div class="ce-family__grid">
+      {products.map((product) => (
+        <article class={`ce-product ce-product--${productSlug(product)}`}>
+          <h3><a href={product.href}>{product.name}</a></h3>
+          <p class="ce-product__role">{product.role}</p>
+          <p class="ce-product__job">{product.job}</p>
+          <dl class="ce-product__facts">
+            <div><dt>Where it runs</dt><dd>{product.boundary}</dd></div>
+            <div><dt>Check it</dt><dd><a href={product.evidence.href}>{product.proof}</a></dd></div>
+            <div class="ce-visually-hidden"><dt>Status</dt><dd>{product.status}</dd></div>
+          </dl>
+          <span class="ce-stamp ce-product__stamp" aria-hidden="true">{product.status}</span>
         </article>
       ))}
     </div>
   </section>
 
-  <section class:list={["p4-proof-strip", patternClassName("ProofStrip", { variant: "inline", state: "verified" })]} aria-label="Product-family proof">
-    {route.sections.map((section) => (
-      <article><h2>{section.title}</h2><p>{section.body}</p></article>
-    ))}
+  <section class="ce-worksheet" aria-labelledby="worksheet-title">
+    <div class="ce-worksheet__intro">
+      <h2 id="worksheet-title">A draft you can check line by line.</h2>
+      <p>Tools sort pasted rows into what matches and what needs a look, inside your browser tab. The reviewer makes the call.</p>
+    </div>
+    <figure class="ce-sheet">
+      <figcaption>GSTR-2B purchase triage <span>Sample data</span></figcaption>
+      <div class="ce-sheet__scroll" role="region" aria-label="Sample GSTR-2B purchase triage" tabindex="0">
+        <table>
+          <thead>
+            <tr><th scope="col">Vendor</th><th scope="col">Invoice</th><th scope="col">In your books</th><th scope="col">In GSTR-2B</th><th scope="col">Flag</th></tr>
+          </thead>
+          <tbody>
+            {sampleRows.map((row) => (
+              <tr class:list={{ "needs-look": row.attention }}>
+                <th scope="row">{row.vendor}</th>
+                <td data-label="Invoice">{row.invoice}</td>
+                <td data-label="In your books">{row.books}</td>
+                <td data-label="In GSTR-2B">{row.portal}</td>
+                <td data-label="Flag"><span class="ce-flag">{row.flag}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <span class="ce-stamp ce-sheet__stamp" aria-hidden="true">Reviewed<small>by the CA</small></span>
+    </figure>
+  </section>
+
+  <section class="ce-counterfoil" aria-labelledby="close-title">
+    <div class="ce-counterfoil__body">
+      <h2 id="close-title">Start with the free tools.</h2>
+      <p>Pack and Tools need no account. Try them on one client this week.</p>
+      <div class="ce-actions">
+        <a class="ce-button" href={route.primaryAction.href}>{route.primaryAction.label}</a>
+        <a class="ce-button ce-button--plain" href={route.secondaryAction.href}>{route.secondaryAction.label}</a>
+      </div>
+    </div>
+    <div class="ce-counterfoil__stub">
+      <h3>Read the code</h3>
+      <ul>
+        {repositories.map((repository) => (
+          <li><a href={repository.href}>{repository.label}</a></li>
+        ))}
+      </ul>
+    </div>
   </section>
 </article>

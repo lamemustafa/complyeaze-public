@@ -1,0 +1,253 @@
+/* ComplyEaze public world: bond paper, carbon type, one violet stamp-pad ink. */
+
+@font-face {
+  font-family: "Anek Latin";
+  src: url("/fonts/anek/AnekLatin-Variable.woff2") format("woff2");
+  font-weight: 100 800;
+  font-stretch: 75% 125%;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Courier Prime";
+  src: url("/fonts/courier-prime/CourierPrime-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Courier Prime";
+  src: url("/fonts/courier-prime/CourierPrime-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root:root {
+  color-scheme: light;
+
+  --ce-paper: #f3f5fa;
+  --ce-paper-sheet: #fbfcfe;
+  --ce-carbon: #16161d;
+  --ce-carbon-soft: #3d3b4d;
+  --ce-ink: #4b2e9e;
+  --ce-ink-deep: #37207a;
+  --ce-ink-wash: #e6e0f6;
+  --ce-ink-rule: #b9addf;
+  --ce-ink-hair: #d8d2ec;
+
+  --ce-font-display: "Anek Latin", "Arial Narrow", system-ui, sans-serif;
+  --ce-font-body: "Anek Latin", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ce-font-field: "Courier Prime", "Courier New", ui-monospace, monospace;
+
+  --ce-page: min(100% - 2rem, 78rem);
+  --ce-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Sanchika tokens re-pointed at the ComplyEaze world for inner pages. */
+  --sk-color-canvas: var(--ce-paper);
+  --sk-color-surface: var(--ce-paper-sheet);
+  --sk-color-ink-primary: var(--ce-carbon);
+  --sk-color-ink-secondary: var(--ce-carbon-soft);
+  --sk-color-link: var(--ce-ink);
+  --sk-color-focus: var(--ce-ink);
+  --sk-color-brand-primary: var(--ce-ink);
+  --sk-color-border-subtle: var(--ce-ink-hair);
+  --sk-font-body: var(--ce-font-body);
+}
+
+html {
+  background: var(--ce-paper);
+  scrollbar-color: var(--ce-ink-rule) var(--ce-paper);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--ce-font-body);
+  font-size: 1.0625rem;
+  font-stretch: 100%;
+  background: var(--ce-paper);
+  color: var(--ce-carbon);
+  caret-color: var(--ce-ink);
+  accent-color: var(--ce-ink);
+}
+
+/* Bond paper grain: one fixed layer so scrolling never repaints it. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .29 0 0 0 0 .18 0 0 0 0 .62 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+body > * { position: relative; z-index: 1; }
+
+::selection { background: var(--ce-ink); color: var(--ce-paper-sheet); }
+
+a { color: var(--ce-ink); text-decoration-thickness: 1px; text-underline-offset: 0.22em; }
+a:hover { text-decoration-thickness: 2px; }
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--ce-ink);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* Service notice: a typed strip above the letterhead. */
+.service-notice {
+  margin: 0;
+  padding: 0.6rem 1rem;
+  border-block-end: 1px solid var(--ce-ink-rule);
+  background: var(--ce-ink-wash);
+  color: var(--ce-ink-deep);
+  font: 400 0.9375rem/1.45 var(--ce-font-field);
+  text-align: center;
+}
+.service-notice strong { font-weight: 700; }
+
+/* Letterhead */
+.site-header {
+  border-block-end: 1px solid var(--ce-carbon);
+  background: color-mix(in srgb, var(--ce-paper) 88%, transparent);
+}
+.site-header > div {
+  width: var(--ce-page);
+  margin-inline: auto;
+  min-height: 4.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.brand {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--ce-carbon);
+  font: 780 1.35rem/1 var(--ce-font-display);
+  font-stretch: 82%;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+.brand__mark {
+  display: inline-grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border: 2px solid var(--ce-ink);
+  outline: 1px solid var(--ce-ink);
+  outline-offset: 2px;
+  color: var(--ce-ink);
+  font: 700 0.8rem/1 var(--ce-font-field);
+  letter-spacing: 0.02em;
+  rotate: -6deg;
+  filter: url(#ce-ink);
+}
+.site-nav { display: flex; align-items: center; gap: 0.25rem 1.6rem; }
+.site-nav a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--ce-carbon);
+  font-weight: 560;
+  text-decoration: none;
+}
+.site-nav a:hover { color: var(--ce-ink); text-decoration: underline; text-decoration-thickness: 1px; }
+.site-nav a[aria-current="page"] { color: var(--ce-ink); text-decoration: underline; text-decoration-thickness: 2px; }
+.site-nav .site-nav__install {
+  padding-inline: 1rem;
+  border: 1.5px solid var(--ce-ink);
+  color: var(--ce-ink);
+  font-weight: 650;
+}
+.site-nav .site-nav__install:hover { background: var(--ce-ink); color: var(--ce-paper-sheet); text-decoration: none; }
+
+/* Buttons shared by every page in the world */
+.ce-button {
+  min-height: 3.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 1.5rem;
+  border: 1.5px solid var(--ce-ink);
+  background: var(--ce-ink);
+  color: var(--ce-paper-sheet);
+  font: 650 1.0625rem/1 var(--ce-font-body);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 160ms var(--ce-ease-out), translate 120ms var(--ce-ease-out);
+}
+.ce-button:hover { background: var(--ce-ink-deep); border-color: var(--ce-ink-deep); text-decoration: none; }
+.ce-button:active { translate: 0 1px; }
+.ce-button--plain { background: transparent; color: var(--ce-ink); }
+.ce-button--plain:hover { background: var(--ce-ink-wash); color: var(--ce-ink-deep); }
+
+/* Rubber stamp: bordered ink, rotated, worn by the #ce-ink filter, multiplied over type. */
+.ce-stamp {
+  display: inline-grid;
+  justify-items: center;
+  gap: 0.15rem;
+  padding: 0.45rem 0.8rem 0.4rem;
+  border: 3px solid var(--ce-ink);
+  outline: 1.5px solid var(--ce-ink);
+  outline-offset: 3px;
+  color: var(--ce-ink);
+  font: 700 1rem/1 var(--ce-font-field);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  mix-blend-mode: multiply;
+  filter: var(--ce-stamp-ink, url(#ce-ink));
+  pointer-events: none;
+  user-select: none;
+  rotate: var(--ce-stamp-turn, -6deg);
+}
+.ce-stamp small { font-size: 0.68em; letter-spacing: 0.12em; }
+
+/* Imprint of the page footer */
+.site-footer {
+  margin-block-start: clamp(4rem, 9vw, 7rem);
+  border-block-start: 1px solid var(--ce-carbon);
+}
+.site-footer > div {
+  width: var(--ce-page);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 2rem clamp(2rem, 6vw, 6rem);
+  padding-block: 2.5rem 3rem;
+}
+.site-footer p { margin: 0; max-width: 46ch; color: var(--ce-carbon-soft); }
+.site-footer .footer-copy { display: grid; gap: 0.75rem; align-content: start; }
+.site-footer .footer-brand { color: var(--ce-carbon); font: 780 1.5rem/1 var(--ce-font-display); font-stretch: 82%; }
+.site-footer .footer-license {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+.site-footer .colophon { font-size: 0.9375rem; }
+.site-footer nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, max-content));
+  gap: 0 2.5rem;
+  align-content: start;
+  justify-content: end;
+}
+.site-footer nav a { min-height: 44px; display: inline-flex; align-items: center; color: var(--ce-carbon); }
+.site-footer nav a:hover { color: var(--ce-ink); }
+
+@media (max-width: 48rem) {
+  .site-header > div { flex-wrap: wrap; row-gap: 0; padding-block: 0.4rem; }
+  .site-nav { width: 100%; justify-content: space-between; gap: 0.25rem 1rem; }
+  .site-nav .site-nav__install { padding-inline: 0.75rem; }
+  .site-footer > div { grid-template-columns: 1fr; }
+  .site-footer nav { justify-content: start; }
+}
+
+@media (forced-colors: active) {
+  .ce-stamp, .brand__mark { filter: none; mix-blend-mode: normal; border-color: CanvasText; color: CanvasText; }
+  .ce-button { border: 2px solid ButtonText; }
+}

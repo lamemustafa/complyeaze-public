@@ -83,6 +83,10 @@ export function assertP4ComplyEazeSources(root) {
   if (findings.length > 0) throw new Error(`P4 ComplyEaze source findings:\n${findings.join("\n")}`);
 }
 
+function escapeHtmlText(text) {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
 export function assertP4ComplyEazeBuild(root) {
   const findings = [];
   const manifest = JSON.parse(
@@ -105,17 +109,17 @@ export function assertP4ComplyEazeBuild(root) {
     const head = html.match(/<head>([\s\S]*?)<\/head>/i)?.[1] ?? "";
     if (!head.includes("p4-register")) findings.push(`${route.urlPath}: P4 stylesheet must load in the document head`);
     if (route.urlPath === "/") {
-      const productIndexPosition = html.indexOf('class="p4-hero__index"');
-      const supportPosition = html.indexOf('class="p4-hero__support"');
-      if (productIndexPosition === -1 || supportPosition === -1 || productIndexPosition > supportPosition) {
-        findings.push("/: product choices must precede supporting copy and actions in mobile reading order");
+      const hero = html.match(/<header[^>]*class="[^"]*ce-hero[^"]*"[\s\S]*?<\/header>/i)?.[0] ?? "";
+      const homeRoute = manifest.routes.find((entry) => entry.urlPath === "/");
+      if (!hero.includes(homeRoute?.primaryAction?.href ?? "missing primary action")) {
+        findings.push("/: first viewport must carry the primary action");
       }
+      if (!hero.includes("Sample data")) findings.push("/: the hero receipt must be labelled as sample data");
+      const rendersText = (text) => html.includes(text) || html.includes(escapeHtmlText(text));
       for (const product of productsRoute?.products ?? []) {
-        if (!html.includes(product.proof)) findings.push(`/: missing ${product.name} proof in the decision register`);
-        const hero = html.match(/<header[^>]*class="[^"]*p4-hero[^"]*"[\s\S]*?<\/header>/i)?.[0] ?? "";
-        if (!hero.includes(product.name) || !hero.includes(product.role)) {
-          findings.push(`/: first viewport must identify ${product.name}`);
-        }
+        if (!rendersText(product.proof)) findings.push(`/: missing ${product.name} proof in the product files`);
+        if (!rendersText(product.job)) findings.push(`/: missing ${product.name} job in the product files`);
+        if (!rendersText(product.status)) findings.push(`/: missing ${product.name} status in the product files`);
       }
     }
     if (["/about/", "/contact/"].includes(route.urlPath)) {

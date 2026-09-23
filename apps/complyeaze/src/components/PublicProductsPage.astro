@@ -9,7 +9,6 @@ const { route } = Astro.props;
 <article class="p4-page p4-products" data-p4-register="true">
   <header class:list={["p4-hero p4-hero--compact", patternClassName("PublicHero", { variant: "editorial", state: "with-proof-artifact" })]} aria-labelledby="page-title">
     <div class="p4-hero__copy">
-      <p class="p4-register">{route.eyebrow}</p>
       <h1 id="page-title">{route.heading}</h1>
       <p class="p4-lead">{route.summary}</p>
     </div>
@@ -18,12 +17,11 @@ const { route } = Astro.props;
 
   <section class:list={["p4-comparison", patternClassName("ProductRouteMap", { variant: "family", state: "default" })]} aria-labelledby="comparison-title">
     <header class="p4-section-heading">
-      <p>Buyer comparison register</p>
       <h2 id="comparison-title">One row per product owner</h2>
     </header>
-    {route.products.map((product, index) => (
+    {route.products.map((product) => (
       <article class={`p4-comparison-row p4-product--${product.name.toLowerCase()}`}>
-        <div class="p4-comparison-row__identity"><span>0{index + 1}</span><h3>{product.name}</h3><p>{product.role}</p></div>
+        <div class="p4-comparison-row__identity"><h3>{product.name}</h3><p>{product.role}</p></div>
         <dl class="p4-comparison-row__facts">
           <div><dt>Job</dt><dd>{product.job}</dd></div>
           <div><dt>Custody</dt><dd>{product.boundary}</dd></div>
