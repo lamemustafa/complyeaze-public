@@ -572,7 +572,7 @@
         },
         {
           "title": "Migration posture",
-          "body": "The typed manifests now own 16 ComplyEaze routes, seven Axal routes, and two Pack routes, including three noindex craft-review records. The old string renderer and its duplicate adapters are removed. Hosting and path routing remain pending, and route-level cleanup stays blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
+          "body": "The typed manifests now own 19 ComplyEaze routes, seven Axal routes, and two Pack routes, including three noindex craft-review records. The old string renderer and its duplicate adapters are removed. Hosting and path routing remain pending, and route-level cleanup stays blocked until hosted routing, canonical URLs, redirect behavior, rollback evidence, and a separate private-app cleanup PR are reviewed."
         },
         {
           "title": "Hosting posture",
@@ -823,6 +823,433 @@
         "reviewStatus": "C3 human craft approval pending",
         "sanchikaRelease": "v0.1.1"
       }
+    },
+    {
+      "slug": "services",
+      "urlPath": "/services/",
+      "title": "Integration and reconciliation services for US firms | ComplyEaze",
+      "description": "Two fixed-price services for US firms: accounting-integration work for SaaS teams and trust-account reconciliation for property managers.",
+      "eyebrow": "US services",
+      "heading": "Two fixed-price services for US firms.",
+      "kind": "services",
+      "summary": "Accounting-integration work for SaaS teams, and trust-account reconciliation for property managers. Prices are on each page.",
+      "robots": "noindex, nofollow",
+      "signalTerms": ["QuickBooks", "trust account", "services"],
+      "forbiddenTerms": ["unlock", "seamless", "supercharge", "empower", "cutting-edge", "fast-paced", "trusted by", "testimonial"],
+      "sections": [
+        {
+          "title": "How both work",
+          "body": "Fixed prices, half up front, under an NDA. I work from the files and logs you choose to share, or in your repository and sandbox companies. I never ask for bank logins."
+        }
+      ],
+      "services": [
+        {
+          "name": "Accounting-integration work",
+          "audience": "For SaaS teams whose product syncs with QuickBooks Online, Xero or NetSuite.",
+          "summary": "Fewer metered QuickBooks reads, the Xero granular-scope migration, repairs, and upkeep after a project.",
+          "price": "Sprints from US$1,500",
+          "href": "/services/accounting-integrations/"
+        },
+        {
+          "name": "Trust-account reconciliation",
+          "audience": "For property-management bookkeeping firms and broker-owners.",
+          "summary": "Bank, books and every owner and tenant ledger tied, with each exception explained, for the broker to sign.",
+          "price": "From US$150 per account-month",
+          "href": "/services/trust-reconciliation/"
+        }
+      ],
+      "operator": [
+        "The work is done by one person, Tapish Khandelwal, based in India. It is a paid service, separate from the ComplyEaze software products.",
+        "Four years as a senior engineer at G2, where I built and maintained QuickBooks, Xero and NetSuite integrations."
+      ],
+      "contact": {
+        "email": "tapish@complyeaze.com",
+        "subject": "Services enquiry",
+        "label": "Email Tapish"
+      }
+    },
+    {
+      "slug": "services/accounting-integrations",
+      "urlPath": "/services/accounting-integrations/",
+      "title": "QuickBooks and Xero integration work for SaaS teams | ComplyEaze",
+      "description": "Fixed-price work for SaaS products that sync with QuickBooks Online, Xero or NetSuite: fewer metered QuickBooks reads, Xero granular-scope migration, repairs and upkeep.",
+      "eyebrow": "US services",
+      "heading": "Intuit now meters the reads your QuickBooks sync makes.",
+      "kind": "service",
+      "summary": "Fixed-price work that cuts metered QuickBooks reads and moves your Xero app to granular scopes before 13 September 2027.",
+      "robots": "noindex, nofollow",
+      "signalTerms": ["QuickBooks", "Xero", "integration"],
+      "forbiddenTerms": ["unlock", "seamless", "supercharge", "empower", "cutting-edge", "fast-paced", "trusted by", "testimonial"],
+      "headings": {
+        "facts": "What the platforms now charge.",
+        "approach": "What I change in your connector.",
+        "offers": "What you get, and what it costs.",
+        "proof": "Judge the work before you pay for it.",
+        "operator": "Who does the work.",
+        "contact": "Start with the teardown."
+      },
+      "proofTable": {
+        "caption": "Intuit App Partner Program, CorePlus calls per month",
+        "columns": [
+          "Tier",
+          "Included calls",
+          "Program fee"
+        ],
+        "rows": [
+          [
+            "Builder",
+            "500,000, then blocked",
+            "US$0"
+          ],
+          [
+            "Silver",
+            "1 million",
+            "US$300"
+          ],
+          [
+            "Gold",
+            "10 million",
+            "US$1,700"
+          ],
+          [
+            "Platinum",
+            "75 million",
+            "US$4,500"
+          ]
+        ],
+        "note": "CorePlus calls are most data-out operations: reads, queries and reports. Most writes are Core calls, which are not charged. Paid tiers pay per 1,000 calls above what is included.",
+        "source": {
+          "label": "Intuit App Partner Program Guide (PDF, v1.2, March 2026)",
+          "href": "https://static.developer.intuit.com/resources/Intuit_App_Partner_Program_Guide.pdf"
+        },
+        "stamp": "Fees from 1 Nov 2025"
+      },
+      "facts": [
+        {
+          "title": "QuickBooks reads have a ceiling",
+          "figure": "500,000 a month",
+          "body": "On the free Builder tier, CorePlus calls above 500,000 in a calendar month are blocked. The next tier, Silver, is US$300 a month for 1 million. For US partners, usage fees have applied since 1 November 2025.",
+          "sources": [
+            {
+              "label": "Intuit App Partner Program Guide (PDF, v1.2, March 2026)",
+              "href": "https://static.developer.intuit.com/resources/Intuit_App_Partner_Program_Guide.pdf"
+            },
+            {
+              "label": "Intuit Developer: Introducing the Intuit App Partner Program (15 May 2025)",
+              "href": "https://blogs.intuit.com/2025/05/15/introducing-the-intuit-app-partner-program/"
+            }
+          ]
+        },
+        {
+          "title": "Xero apps pay by tier",
+          "figure": "A$35 to A$1,445",
+          "body": "Since 2 March 2026, Xero's paid app tiers run Core A$35, Plus A$245 and Advanced A$1,445 a month, tax exclusive, capped at 50, 1,000 and 10,000 connections, with 10, 50 and 250 GB of data a month included.",
+          "sources": [
+            {
+              "label": "Xero Developer: pricing",
+              "href": "https://developer.xero.com/pricing"
+            }
+          ]
+        },
+        {
+          "title": "Journals decide the tier",
+          "figure": "A$1,445 a month",
+          "body": "The Journals endpoint is available only from the Advanced tier up, after a security assessment and use-case approval. An app that needs it pays A$1,445 a month where Plus at A$245 might cover its connections: A$1,200 a month more.",
+          "sources": [
+            {
+              "label": "Xero Developer: pricing and policy FAQ",
+              "href": "https://developer.xero.com/faq/pricing-and-policy-updates"
+            },
+            {
+              "label": "Xero Developer: pricing",
+              "href": "https://developer.xero.com/pricing"
+            }
+          ]
+        },
+        {
+          "title": "Every Xero connection re-consents",
+          "figure": "13 Sep 2027",
+          "body": "Existing Xero apps have until 13 September 2027 to move to granular scopes. Existing tokens are not upgraded: each customer has to authorise your app again.",
+          "sources": [
+            {
+              "label": "Xero Developer changelog: broad scopes deprecation (6 Aug 2026)",
+              "href": "https://developer.xero.com/changelog"
+            },
+            {
+              "label": "Xero Developer: granular scopes FAQ",
+              "href": "https://developer.xero.com/faq/granular-scopes"
+            }
+          ]
+        }
+      ],
+      "example": {
+        "title": "Worked example: arithmetic, not a client",
+        "lines": [
+          "180 connected companies",
+          "polled every 15 minutes on one object: 96 calls a day each",
+          "180 x 96 x 30 days"
+        ],
+        "result": "518,400 CorePlus calls a month, past Builder's 500,000 ceiling."
+      },
+      "sections": [
+        {
+          "title": "Replace polling with change feeds",
+          "body": "Webhooks say what changed and ChangeDataCapture fetches it in one call, so only the deltas get read."
+        },
+        {
+          "title": "Cache what does not change",
+          "body": "Closed-period reports and reference lists are read once and cached instead of pulled every hour."
+        },
+        {
+          "title": "Make retries safe",
+          "body": "Check for an existing document before retrying a write, and honour rate-limit responses, so customers do not get duplicate invoices."
+        },
+        {
+          "title": "Map every Xero call to its scope",
+          "body": "Each endpoint you call gets its granular scope, then a new consent URL and a reconnect flow for customers."
+        },
+        {
+          "title": "Test whether you need Journals",
+          "body": "Some views can be rebuilt from other endpoints such as manual journals, which Xero keeps on every tier."
+        }
+      ],
+      "offers": [
+        {
+          "name": "QuickBooks read-reduction sprint",
+          "price": "US$1,500-2,500",
+          "deliverables": [
+            "Your CorePlus calls counted by endpoint and reason, from 30 days of request logs",
+            "The changes as a pull request: webhooks, ChangeDataCapture, caching and safe retries",
+            "Projected call counts after the changes, from the same logs"
+          ]
+        },
+        {
+          "name": "Xero granular-scope migration",
+          "price": "US$1,500-3,000",
+          "deliverables": [
+            "A map from every Xero endpoint you call to its granular scope",
+            "A pull request with the new consent URL and a reconnect flow",
+            "A plan for customers who have not reconnected"
+          ]
+        },
+        {
+          "name": "Build or repair an integration",
+          "price": "Quoted per scope",
+          "deliverables": [
+            "QuickBooks Online, Xero or NetSuite",
+            "A written scope and fixed price before work starts"
+          ]
+        },
+        {
+          "name": "Upkeep after a delivered project",
+          "price": "US$600 a month",
+          "deliverables": [
+            "API changes and deprecations handled",
+            "Sync failures and customer-escalated sync bugs handled",
+            "A response within 2 business days"
+          ]
+        }
+      ],
+      "terms": "Fixed prices, half up front. I work under an NDA, in your repository and sandbox companies. I need request logs (endpoint, status, response size, tenant, retry flag), not your customers' financial data.",
+      "boundaries": [
+        "No production ledger access",
+        "No customer financial data",
+        "You review and merge every change"
+      ],
+      "freeCheck": {
+        "title": "A free one-page teardown first",
+        "body": "Before any call, I write a one-page teardown of your connector from your public docs only: help centre, app listing and changelog. It estimates your tier and names the likely waste. Ask and I send it."
+      },
+      "sample": {
+        "label": "Sample connector audit (PDF, 2 pages)",
+        "body": "Built on a synthetic 30-day log for an invented vendor. It shows the measurement that opens a sprint: findings, fixes and the tier each change moves you to.",
+        "href": "/samples/sample-connector-health-audit.pdf"
+      },
+      "operator": [
+        "The work is done by one person, Tapish Khandelwal, based in India. It is a paid service, separate from the ComplyEaze software products.",
+        "Four years as a senior engineer at G2, where I built and maintained QuickBooks, Xero and NetSuite integrations.",
+        "The service is new, so there are no client references yet. The teardown and the sample are how to judge the work."
+      ],
+      "contact": {
+        "email": "tapish@complyeaze.com",
+        "subject": "Teardown request",
+        "label": "Ask for a free teardown"
+      },
+      "related": {
+        "label": "Trust-account reconciliation for property managers",
+        "href": "/services/trust-reconciliation/"
+      },
+      "notice": "QuickBooks and Intuit are trademarks of Intuit Inc. Xero is a trademark of Xero Limited. NetSuite is a trademark of Oracle. This service is not affiliated with or endorsed by any of them."
+    },
+    {
+      "slug": "services/trust-reconciliation",
+      "urlPath": "/services/trust-reconciliation/",
+      "title": "Trust-account reconciliation for property managers | ComplyEaze",
+      "description": "Catch-up three-way reconciliation, migration tie-outs and monthly capacity for bookkeeping firms: bank, books and every owner and tenant ledger, prepared for the broker to sign.",
+      "eyebrow": "US services",
+      "heading": "A trust account can balance three ways and still be short.",
+      "kind": "service",
+      "summary": "Catch-up reconciliation, migration tie-outs and monthly capacity for bookkeeping firms: bank, books and every owner and tenant ledger, tied.",
+      "robots": "noindex, nofollow",
+      "signalTerms": ["trust account", "reconciliation", "broker"],
+      "forbiddenTerms": ["audit", "certif", "attest", "compliant", "CPA-reviewed", "guarantee", "unlock", "seamless", "supercharge", "empower", "cutting-edge", "fast-paced", "trusted by", "testimonial"],
+      "headings": {
+        "facts": "What California's rules ask for.",
+        "approach": "What the review does.",
+        "offers": "What you get, and what it costs.",
+        "proof": "See a finished review first.",
+        "operator": "Who does the work.",
+        "contact": "Tell me what needs reconciling."
+      },
+      "proofTable": {
+        "caption": "One month-end, invented figures",
+        "columns": [
+          "Figure",
+          "Amount"
+        ],
+        "rows": [
+          [
+            "Adjusted bank balance",
+            "$99,000"
+          ],
+          [
+            "Book balance",
+            "$99,000"
+          ],
+          [
+            "Sum of beneficiary ledgers",
+            "$99,000"
+          ],
+          [
+            "Owed to owners with positive balances",
+            "$101,000"
+          ],
+          [
+            "One owner ledger below zero",
+            "-$2,000"
+          ],
+          [
+            "Short on the positive-balance test",
+            "$2,000"
+          ]
+        ],
+        "note": "Bank, books and ledgers agree, so a bank-to-book check passes. The account still holds $2,000 less than it owes: one owner was paid with other owners' money.",
+        "source": {
+          "label": "California DRE, Trust Funds guide (RE 13)",
+          "href": "https://dre.ca.gov/files/pdf/re13.pdf"
+        }
+      },
+      "factsNote": "California's rules are shown here. Other states set their own trust-account rules.",
+      "facts": [
+        {
+          "title": "California requires it every month",
+          "figure": "10 CCR 2831.2",
+          "body": "Each beneficiary's record must be reconciled with the record of all trust funds received and paid out at least once a month, except in months with no account activity. The record must show the broker's liability to each beneficiary.",
+          "sources": [
+            {
+              "label": "10 CCR 2831.2, Cornell Legal Information Institute",
+              "href": "https://www.law.cornell.edu/regulations/california/10-CCR-2831.2"
+            }
+          ]
+        },
+        {
+          "title": "Negative ledgers do not cancel out",
+          "figure": "Positive balances only",
+          "body": "California's regulator totals only the positive balances owed to beneficiaries when it measures what the broker owes. For example, an owner at -$500 means $500 of someone else's money was paid out.",
+          "sources": [
+            {
+              "label": "California DRE, Trust Funds guide (RE 13)",
+              "href": "https://dre.ca.gov/files/pdf/re13.pdf"
+            }
+          ]
+        },
+        {
+          "title": "Going below what is owed needs consent",
+          "figure": "10 CCR 2832.1",
+          "body": "A broker needs written consent from every owner of the funds before a payment that takes the account below the total owed to all of them.",
+          "sources": [
+            {
+              "label": "10 CCR 2832.1, Cornell Legal Information Institute",
+              "href": "https://www.law.cornell.edu/regulations/california/10-CCR-2832.1"
+            }
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "title": "Tie bank to books",
+          "body": "Every book line is matched to the bank statement by check number, e-pay batch, reference, or amount and date."
+        },
+        {
+          "title": "Tie books to every ledger",
+          "body": "Each owner, tenant deposit and prepaid-rent balance is listed, and the total is compared with the book balance."
+        },
+        {
+          "title": "Run the shortage test",
+          "body": "Only positive balances count toward what is owed. Any ledger below zero is flagged with the transaction that caused it."
+        },
+        {
+          "title": "Explain every exception",
+          "body": "Each item that does not tie gets the record behind it: which owner, what happened, since when, and a suggested fix."
+        }
+      ],
+      "offers": [
+        {
+          "name": "Catch-up reconciliation",
+          "price": "US$150-250 per account-month",
+          "deliverables": [
+            "Unreconciled months brought current: bank to books to every owner and tenant ledger",
+            "An exceptions list with the record behind each item",
+            "A sign-off sheet for the broker"
+          ]
+        },
+        {
+          "name": "Migration or merger tie-out",
+          "price": "US$750 fixed",
+          "deliverables": [
+            "The old system's closing balances against the new system's opening balances",
+            "Checked per owner and per tenant deposit",
+            "Every difference listed with the records behind it"
+          ]
+        },
+        {
+          "name": "Capacity for bookkeeping firms",
+          "price": "US$300-400 per client-month",
+          "deliverables": [
+            "The monthly three-way reconciliation for your property-management clients, under your name",
+            "Exceptions explained before your close",
+            "Your first client-month is US$150, so you can judge the work"
+          ]
+        }
+      ],
+      "terms": "Fixed prices, half up front. I prepare the reconciliation; the broker, or your firm, reviews and signs it.",
+      "boundaries": [
+        "Read-only exports: bank statements, ledgers, owner and deposit balances",
+        "Never bank logins or credentials",
+        "I never move money or change entries; the broker decides every fix",
+        "A review the broker signs, not legal advice"
+      ],
+      "sample": {
+        "label": "Sample monthly review (PDF, 3 pages)",
+        "body": "One month for an invented firm with two trust accounts: a shortage, two owner ledgers below zero, a deposit in the wrong account and ten more findings, each with the record behind it.",
+        "href": "/samples/sample-trust-review-2026-08.pdf"
+      },
+      "operator": [
+        "The work is done by one person, Tapish Khandelwal, based in India. It is a paid service, separate from the ComplyEaze software products.",
+        "Four years as a senior engineer at G2, where I built and maintained QuickBooks, Xero and NetSuite integrations.",
+        "I am not a CPA or a licensed real estate broker. The matching runs on a tool I wrote, and every exception is then checked by hand.",
+        "The service is new, so there are no client references yet. The sample is what you would receive."
+      ],
+      "contact": {
+        "email": "tapish@complyeaze.com",
+        "subject": "Trust reconciliation",
+        "label": "Ask about a reconciliation"
+      },
+      "related": {
+        "label": "Accounting-integration work for SaaS teams",
+        "href": "/services/accounting-integrations/"
+      },
+      "notice": "Regulations are summarised for reference and linked to their text. Nothing here is legal advice."
     }
   ]
 }

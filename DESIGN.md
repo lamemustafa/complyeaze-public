@@ -86,6 +86,13 @@ numbers above headings.
   becomes a stacked record.
 - **Counterfoil:** the closing call to action, with punched half-disc notches
   and a dashed perforation separating the stub.
+- **Service pages (`/services/`):** the same world for the owner's US
+  services. A rate slip beside the hero claim carries a sourced reference
+  table; declaration rows print each figure in ink with its claim, body and
+  source links; an adding-machine tape shows labelled arithmetic; a rate sheet
+  lists service, deliverables and price; a counterfoil closes with the email
+  address. The trust-reconciliation page never carries a stamp, because a
+  stamp reads as an attestation mark on that work.
 - **Buttons:** solid ink primary, outlined ink secondary, square corners,
   one label per intent across the page.
 

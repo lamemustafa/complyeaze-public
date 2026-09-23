@@ -1,0 +1,146 @@
+---
+import type { PublicServiceRoute } from "@complyeaze-public/content";
+import ServiceContact from "./ServiceContact.astro";
+
+interface Props {
+  route: PublicServiceRoute;
+}
+
+const { route } = Astro.props;
+const mailto = `mailto:${route.contact.email}?subject=${encodeURIComponent(route.contact.subject)}`;
+const sampleLabel = "Download the sample (PDF)";
+---
+
+<article class="ce-svc">
+  <header class="ce-svc__hero" aria-labelledby="page-title">
+    <div class="ce-svc__hero-copy">
+      <h1 id="page-title">{route.heading}</h1>
+      <p class="ce-svc__lede">{route.summary}</p>
+      <div class="ce-svc__actions">
+        <a class="ce-button" href={mailto}>{route.contact.label}</a>
+        <a class="ce-button ce-button--plain" href={route.sample.href} download>{sampleLabel}</a>
+      </div>
+    </div>
+
+    <figure class="ce-svc__slip" aria-labelledby="slip-caption">
+      <div class="ce-svc__slip-sheet">
+        <p class="ce-svc__slip-title" id="slip-caption">{route.proofTable.caption}</p>
+        <table>
+          <thead>
+            <tr>{route.proofTable.columns.map((column) => <th scope="col">{column}</th>)}</tr>
+          </thead>
+          <tbody>
+            {route.proofTable.rows.map((row) => (
+              <tr>
+                <th scope="row">{row[0]}</th>
+                {row.slice(1).map((cell) => <td>{cell}</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="ce-svc__slip-note">{route.proofTable.note}</p>
+        <p class="ce-svc__source">Source: <a href={route.proofTable.source.href}>{route.proofTable.source.label}</a></p>
+      </div>
+      {route.proofTable.stamp && <span class="ce-stamp ce-svc__stamp" aria-hidden="true">{route.proofTable.stamp}</span>}
+    </figure>
+  </header>
+
+  <section class="ce-svc__facts" aria-labelledby="facts-title">
+    <h2 id="facts-title">{route.headings.facts}</h2>
+    {route.factsNote && <p class="ce-svc__facts-note">{route.factsNote}</p>}
+    <dl class="ce-svc__fact-list">
+      {route.facts.map((fact) => (
+        <div class="ce-svc__fact">
+          <dt>
+            <span class="ce-svc__figure">{fact.figure}</span>
+            <span class="ce-svc__fact-title">{fact.title}</span>
+          </dt>
+          <dd>
+            <p>{fact.body}</p>
+            <ul class="ce-svc__sources" aria-label="Sources">
+              {fact.sources.map((source) => <li><a href={source.href}>{source.label}</a></li>)}
+            </ul>
+          </dd>
+        </div>
+      ))}
+    </dl>
+
+    {route.example && (
+      <div class="ce-svc__tape-row">
+        <figure class="ce-svc__tape" aria-labelledby="example-title">
+          <figcaption id="example-title">{route.example.title}</figcaption>
+          <ol>
+            {route.example.lines.map((line) => <li>{line}</li>)}
+          </ol>
+          <p class="ce-svc__tape-total">{route.example.result}</p>
+        </figure>
+      </div>
+    )}
+  </section>
+
+  <section class="ce-svc__approach" aria-labelledby="approach-title">
+    <h2 id="approach-title">{route.headings.approach}</h2>
+    <dl>
+      {route.sections.map((section) => (
+        <div>
+          <dt>{section.title}</dt>
+          <dd>{section.body}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section class="ce-svc__rates" aria-labelledby="offers-title">
+    <h2 id="offers-title">{route.headings.offers}</h2>
+    <div class="ce-svc__sheet">
+      <table>
+        <thead>
+          <tr><th scope="col">Service</th><th scope="col">What you get</th><th scope="col">Price</th></tr>
+        </thead>
+        <tbody>
+          {route.offers.map((offer) => (
+            <tr>
+              <th scope="row">{offer.name}</th>
+              <td>
+                <ul>{offer.deliverables.map((item) => <li>{item}</li>)}</ul>
+              </td>
+              <td class="ce-svc__price">{offer.price}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <div class="ce-svc__terms">
+      <p>{route.terms}</p>
+      <ul aria-label="Boundaries">
+        {route.boundaries.map((boundary) => <li>{boundary}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class:list={["ce-svc__proof", { "ce-svc__proof--single": !route.freeCheck }]} aria-labelledby="proof-title">
+    <h2 id="proof-title">{route.headings.proof}</h2>
+    {route.freeCheck && (
+      <div class="ce-svc__free">
+        <h3>{route.freeCheck.title}</h3>
+        <p>{route.freeCheck.body}</p>
+        <a class="ce-button" href={mailto}>{route.contact.label}</a>
+      </div>
+    )}
+    <div class="ce-svc__doc">
+      <h3>{route.sample.label}</h3>
+      <p>{route.sample.body}</p>
+      <p class="ce-svc__doc-flag">Fictional data throughout.</p>
+      <a class="ce-button ce-button--plain" href={route.sample.href} download>{sampleLabel}</a>
+    </div>
+  </section>
+
+  <section class="ce-svc__operator" aria-labelledby="operator-title">
+    <h2 id="operator-title">{route.headings.operator}</h2>
+    <div>{route.operator.map((paragraph) => <p>{paragraph}</p>)}</div>
+  </section>
+
+  <ServiceContact contact={route.contact} heading={route.headings.contact} related={route.related} />
+
+  {route.notice && <p class="ce-svc__notice">{route.notice}</p>}
+</article>

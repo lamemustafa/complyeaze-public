@@ -1,0 +1,32 @@
+---
+import type { PublicAction, PublicServiceContact } from "@complyeaze-public/content";
+
+interface Props {
+  contact: PublicServiceContact;
+  heading: string;
+  related?: PublicAction;
+}
+
+const { contact, heading, related } = Astro.props;
+const mailto = `mailto:${contact.email}?subject=${encodeURIComponent(contact.subject)}`;
+---
+
+<section class:list={["ce-svc__counterfoil", { "ce-svc__counterfoil--solo": !related }]} aria-labelledby="contact-title">
+  <div class="ce-svc__counterfoil-body">
+    <h2 id="contact-title">{heading}</h2>
+    <p>Email <a class="ce-svc__address" href={mailto}>{contact.email}</a></p>
+    <div class="ce-svc__actions">
+      <a class="ce-button" href={mailto}>{contact.label}</a>
+      {contact.bookingHref && <a class="ce-button ce-button--plain" href={contact.bookingHref}>Book a call</a>}
+    </div>
+  </div>
+  {related && (
+    <div class="ce-svc__counterfoil-stub">
+      <h3>Also offered</h3>
+      <ul>
+        <li><a href={related.href}>{related.label}</a></li>
+        <li><a href="/services/">All US services</a></li>
+      </ul>
+    </div>
+  )}
+</section>

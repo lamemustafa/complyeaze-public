@@ -18,6 +18,8 @@ const requiredFiles = [
   "apps/complyeaze/src/components/PublicProductsPage.astro",
   "apps/complyeaze/src/components/PublicResourcePage.astro",
   "apps/complyeaze/src/components/PublicSanchikaAdoptionPage.astro",
+  "apps/complyeaze/src/components/PublicServicePage.astro",
+  "apps/complyeaze/src/components/PublicServicesPage.astro",
   "apps/complyeaze/src/layouts/PublicPageLayout.astro",
   "apps/complyeaze/src/pages/[...slug].astro",
   "apps/complyeaze/src/pages/index.astro",
@@ -30,6 +32,7 @@ const requiredRoutes = [
   "/migration/", "/about/", "/contact/", "/privacy/", "/terms/", "/status/",
   "/changelog/", "/release-evidence/", "/sanchika/",
   "/review/craft/",
+  "/services/", "/services/accounting-integrations/", "/services/trust-reconciliation/",
 ];
 
 export function assertAstroCoreRouteSources(root) {
@@ -37,7 +40,7 @@ export function assertAstroCoreRouteSources(root) {
     .filter((filePath) => !existsSync(path.join(root, filePath)))
     .map((filePath) => `${filePath}: missing`);
   const routes = publicRouteRegistry.filter((route) => route.app === "complyeaze");
-  if (routes.length !== 16) findings.push(`expected 16 ComplyEaze routes, found ${routes.length}`);
+  if (routes.length !== 19) findings.push(`expected 19 ComplyEaze routes, found ${routes.length}`);
   for (const routePath of requiredRoutes) {
     if (!routes.some((route) => route.urlPath === routePath)) findings.push(`missing ${routePath}`);
   }
@@ -57,7 +60,7 @@ export function assertAstroCoreRouteSources(root) {
     if (!index.includes("definePublicRouteManifest") || !index.includes("PublicHomePage")) {
       findings.push("ComplyEaze root must render the canonical home route");
     }
-    for (const kind of ["resource", "policy", "evidence", "gateway", "products", "migration", "adoption", "public-craft-review"]) {
+    for (const kind of ["resource", "policy", "evidence", "gateway", "products", "migration", "adoption", "public-craft-review", "service", "services"]) {
       if (!catchAll.includes(`route.kind === "${kind}"`)) findings.push(`catch-all missing ${kind} branch`);
     }
     if (!catchAll.includes("assertNever(route)")) findings.push("catch-all rendering is not exhaustive");
@@ -97,11 +100,42 @@ export function assertAstroCoreRouteFixtures() {
   let rejected = false;
   try { definePublicRouteManifest(invalid); } catch { rejected = true; }
   if (!rejected) throw new Error("public route fixture accepted indexing before cutover");
+  assertServiceRouteFixtures();
+}
+
+// The trust-reconciliation page must never print its banned vocabulary, and service
+// downloads and contact addresses stay inside their narrow shapes.
+function assertServiceRouteFixtures() {
+  const manifest = JSON.parse(readFileSync(
+    path.join(import.meta.dirname, "../../packages/public-content/src/complyeaze.routes.json"),
+    "utf8",
+  ));
+  const trust = manifest.routes.find((route) => route.urlPath === "/services/trust-reconciliation/");
+  if (!trust?.forbiddenTerms?.includes("audit")) {
+    throw new Error("trust-reconciliation route must forbid the word audit");
+  }
+  const mutations = [
+    ["banned word in copy", "forbidden term", (route) => { route.summary = `${route.summary} Think of it as an audit.`; }],
+    ["banned word nested in a table cell", "forbidden term", (route) => { route.proofTable.rows[0][0] = "Audited bank balance"; }],
+    ["banned word hidden by a zero-width space", "forbidden term", (route) => { route.facts[0].body = "We gua\u200Brantee it."; }],
+    ["sample outside /samples/", "sample.href", (route) => { route.sample.href = "/files/sample.pdf"; }],
+    ["contact email with a scheme", "contact.email", (route) => { route.contact.email = `mailto:${route.contact.email}`; }],
+    ["unsourced fact", "sources must not be empty", (route) => { route.facts[0].sources = []; }],
+  ];
+  for (const [label, reason, mutate] of mutations) {
+    const candidate = structuredClone(manifest);
+    mutate(candidate.routes.find((route) => route.urlPath === trust.urlPath));
+    let message = "";
+    try { definePublicRouteManifest(candidate); } catch (error) { message = String(error.message); }
+    if (!message.includes(reason)) {
+      throw new Error(`service route fixture "${label}" was not rejected for ${reason}: ${message || "accepted"}`);
+    }
+  }
 }
 
 export function assertAstroCoreRouteBuild(root) {
   const evidence = createReleaseEvidenceFromBuild(root, publicRouteRegistry);
-  if (evidence.pageCount !== 25) throw new Error(`expected 25 Astro outputs, found ${evidence.pageCount}`);
+  if (evidence.pageCount !== 28) throw new Error(`expected 28 Astro outputs, found ${evidence.pageCount}`);
   const complyeazeDist = path.join(root, "apps/complyeaze/dist");
   const robots = readFileSync(path.join(complyeazeDist, "robots.txt"), "utf8");
   const sitemap = readFileSync(path.join(complyeazeDist, "sitemap.xml"), "utf8");

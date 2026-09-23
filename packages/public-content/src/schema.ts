@@ -4,6 +4,7 @@ import type {
   PublicProductsRoute,
 } from "./customer-route-types.ts";
 import type { PublicGatewayRoute } from "./gateway-route-types.ts";
+import type { PublicServiceRoute, PublicServicesRoute } from "./service-route-types.ts";
 import { defineCraftReviewEvidence } from "./craft-review-schema.ts";
 import type { CraftReviewEvidence } from "./craft-review-types.ts";
 export { defineCraftReviewEvidence } from "./craft-review-schema.ts";
@@ -24,6 +25,11 @@ export type {
   PublicProductsRoute,
 } from "./customer-route-types.ts";
 export type { PublicGatewayRoute } from "./gateway-route-types.ts";
+export type {
+  PublicServiceContact,
+  PublicServiceRoute,
+  PublicServicesRoute,
+} from "./service-route-types.ts";
 
 export interface PublicAction {
   href: string;
@@ -51,7 +57,9 @@ export interface PublicRouteBase {
   description: string;
   eyebrow: string;
   heading: string;
-  kind: "adoption" | "evidence" | "gateway" | "home" | "migration" | "policy" | "products" | "public-craft-review" | "resource";
+  kind: "adoption" | "evidence" | "gateway" | "home" | "migration" | "policy" | "products" | "public-craft-review" | "resource" | "service" | "services";
+  /** Words this route must never print; checked against every other field of the route. */
+  forbiddenTerms?: string[];
   robots: "noindex, nofollow";
   sections: PublicSection[];
   signalTerms: string[];
@@ -108,7 +116,9 @@ export type PublicRoute =
   | PublicPolicyRoute
   | PublicCraftReviewRoute
   | PublicProductsRoute
-  | PublicResourceRoute;
+  | PublicResourceRoute
+  | PublicServiceRoute
+  | PublicServicesRoute;
 
 export interface PublicRouteManifest {
   app: string;
@@ -155,6 +165,41 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
   assert(Array.isArray(value.sections) && value.sections.length > 0, `${label}.sections must not be empty`);
   value.sections.forEach((section, index) => validateSection(section, `${label}.sections[${index}]`));
   assertStringArray(value.signalTerms, `${label}.signalTerms`);
+  if (value.forbiddenTerms !== undefined) validateForbiddenTerms(value, label);
+  if (value.kind === "service" || value.kind === "services") {
+    for (const field of [
+      "evidenceLinks",
+      "policySummary",
+      "primaryAction",
+      "product",
+      "products",
+      "proof",
+      "secondaryAction",
+      "steps",
+    ] as const) {
+      assert(value[field] === undefined, `${label}.${field} is not valid for ${value.kind} routes`);
+    }
+    assert(
+      value.kind === "services" ? urlPath === "/services/" : /^\/services\/[a-z0-9-]+\/$/.test(urlPath),
+      `${label}.urlPath must be /services/ for the index or one level below it for a service`,
+    );
+    validateServiceContact(value.contact, `${label}.contact`);
+    assertStringArray(value.operator, `${label}.operator`);
+    if (value.kind === "services") {
+      assert(Array.isArray(value.services) && value.services.length > 0, `${label}.services must not be empty`);
+      value.services.forEach((entry, index) => {
+        const entryLabel = `${label}.services[${index}]`;
+        assertRecord(entry, entryLabel);
+        for (const field of ["audience", "name", "price", "summary"] as const) {
+          assertString(entry[field], `${entryLabel}.${field}`);
+        }
+        assertInternalHref(entry.href, `${entryLabel}.href`);
+      });
+      return;
+    }
+    validateServiceRoute(value, label);
+    return;
+  }
   if (value.kind === "home") {
     for (const field of ["evidenceLinks", "policySummary", "product", "products", "proof", "steps"] as const) {
       assert(value[field] === undefined, `${label}.${field} is not valid for home routes`);
@@ -304,7 +349,7 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
   }
   assert(
     value.kind === "policy",
-    `${label}.kind must be adoption, evidence, gateway, home, migration, policy, products, public-craft-review, or resource`,
+    `${label}.kind must be adoption, evidence, gateway, home, migration, policy, products, public-craft-review, resource, service, or services`,
   );
   for (const field of [
     "evidenceLinks",
@@ -318,6 +363,105 @@ function validateRoute(value: unknown, label: string): asserts value is PublicRo
     assert(value[field] === undefined, `${label}.${field} is not valid for policy routes`);
   }
   validatePolicySummary(value.policySummary, `${label}.policySummary`);
+}
+
+function validateServiceRoute(value: Record<string, unknown>, label: string): void {
+  assertRecord(value.headings, `${label}.headings`);
+  for (const field of ["approach", "contact", "facts", "offers", "operator", "proof"] as const) {
+    assertString(value.headings[field], `${label}.headings.${field}`);
+  }
+  assert(Array.isArray(value.facts) && value.facts.length > 0, `${label}.facts must not be empty`);
+  value.facts.forEach((fact, index) => {
+    const factLabel = `${label}.facts[${index}]`;
+    assertRecord(fact, factLabel);
+    for (const field of ["body", "figure", "title"] as const) assertString(fact[field], `${factLabel}.${field}`);
+    assert(Array.isArray(fact.sources) && fact.sources.length > 0, `${factLabel}.sources must not be empty`);
+    fact.sources.forEach((source, sourceIndex) => validateServiceSource(source, `${factLabel}.sources[${sourceIndex}]`));
+  });
+
+  const table = value.proofTable;
+  assertRecord(table, `${label}.proofTable`);
+  assertString(table.caption, `${label}.proofTable.caption`);
+  assertString(table.note, `${label}.proofTable.note`);
+  const { columns } = table;
+  assertStringArray(columns, `${label}.proofTable.columns`);
+  assert(Array.isArray(table.rows) && table.rows.length > 0, `${label}.proofTable.rows must not be empty`);
+  table.rows.forEach((row, index) => {
+    assertStringArray(row, `${label}.proofTable.rows[${index}]`);
+    assert(row.length === columns.length, `${label}.proofTable.rows[${index}] must match the column count`);
+  });
+  validateServiceSource(table.source, `${label}.proofTable.source`);
+  if (table.stamp !== undefined) assertString(table.stamp, `${label}.proofTable.stamp`);
+
+  if (value.example !== undefined) {
+    assertRecord(value.example, `${label}.example`);
+    assertString(value.example.title, `${label}.example.title`);
+    assertString(value.example.result, `${label}.example.result`);
+    assertStringArray(value.example.lines, `${label}.example.lines`);
+  }
+  if (value.freeCheck !== undefined) {
+    assertRecord(value.freeCheck, `${label}.freeCheck`);
+    assertString(value.freeCheck.title, `${label}.freeCheck.title`);
+    assertString(value.freeCheck.body, `${label}.freeCheck.body`);
+  }
+  if (value.notice !== undefined) assertString(value.notice, `${label}.notice`);
+  if (value.factsNote !== undefined) assertString(value.factsNote, `${label}.factsNote`);
+
+  assert(Array.isArray(value.offers) && value.offers.length > 0, `${label}.offers must not be empty`);
+  value.offers.forEach((offer, index) => {
+    const offerLabel = `${label}.offers[${index}]`;
+    assertRecord(offer, offerLabel);
+    assertString(offer.name, `${offerLabel}.name`);
+    assertString(offer.price, `${offerLabel}.price`);
+    assertStringArray(offer.deliverables, `${offerLabel}.deliverables`);
+  });
+  assertString(value.terms, `${label}.terms`);
+
+  assertRecord(value.sample, `${label}.sample`);
+  assertString(value.sample.body, `${label}.sample.body`);
+  assertString(value.sample.label, `${label}.sample.label`);
+  assertString(value.sample.href, `${label}.sample.href`);
+  assert(
+    /^\/samples\/[a-z0-9-]+\.pdf$/.test(value.sample.href),
+    `${label}.sample.href must be a /samples/*.pdf download`,
+  );
+
+  assertStringArray(value.boundaries, `${label}.boundaries`);
+  validateAction(value.related, `${label}.related`);
+  assertInternalHref(value.related.href, `${label}.related.href`);
+}
+
+function validateServiceContact(value: unknown, label: string): void {
+  assertRecord(value, label);
+  assertString(value.email, `${label}.email`);
+  assert(/^[a-z0-9._-]+@[a-z0-9-]+(?:\.[a-z0-9-]+)+$/.test(value.email), `${label}.email must be a plain address`);
+  assertString(value.label, `${label}.label`);
+  assertString(value.subject, `${label}.subject`);
+  if (value.bookingHref !== undefined) assertHttpsHref(value.bookingHref, `${label}.bookingHref`);
+}
+
+function validateServiceSource(value: unknown, label: string): void {
+  assertRecord(value, label);
+  assertString(value.label, `${label}.label`);
+  assertHttpsHref(value.href, `${label}.href`);
+}
+
+function validateForbiddenTerms(value: Record<string, unknown>, label: string): void {
+  assertStringArray(value.forbiddenTerms, `${label}.forbiddenTerms`);
+  const { forbiddenTerms, ...printed } = value;
+  const text = normalizeForTermMatch(JSON.stringify(printed));
+  for (const term of forbiddenTerms) {
+    assert(!text.includes(normalizeForTermMatch(term)), `${label} prints forbidden term "${term}"`);
+  }
+}
+
+/** Fold case, compatibility forms, invisible characters and whitespace so a banned term cannot hide. */
+export function normalizeForTermMatch(value: string): string {
+  return value
+    .normalize("NFKC")
+    .replace(/[\u00AD\u200B-\u200D\u2060\uFEFF]/g, "")
+    .replace(/\s+/g, " ")
+    .toLowerCase();
 }
 
 function validateProduct(value: unknown, label: string): asserts value is PublicProduct {

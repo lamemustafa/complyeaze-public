@@ -16,6 +16,7 @@ export const publicRouteRegistry = manifests.flatMap((manifest) =>
     app: manifest.app,
     description: route.description,
     discoverability: route.discoverability ?? "standard",
+    forbiddenTerms: "forbiddenTerms" in route ? route.forbiddenTerms : undefined,
     heading: route.heading,
     origin: manifest.origin,
     outputPath: routeOutputPath(route.urlPath),

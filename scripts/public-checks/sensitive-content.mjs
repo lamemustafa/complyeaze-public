@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import {
   existsSync,
   mkdtempSync,
@@ -27,7 +28,12 @@ const textExtensions = new Set([
   ".yaml"
 ]);
 const checkedArtifactExtensions = new Set([".gif", ".har", ".jpeg", ".jpg", ".pdf", ".png", ".webp", ".zip"]);
-const allowedArtifactFiles = new Set([]);
+// Reviewed synthetic downloads, pinned by SHA-256 so a replacement file needs a fresh review
+// (invented firms and figures, owner name only; see docs/evidence/us-services-claims.md).
+const allowedArtifactFiles = new Map([
+  ["apps/complyeaze/public/samples/sample-connector-health-audit.pdf", "63c8c8b9279cda0c95982406e53d17a03fb00f8b4fb4414b412d4593a56e7e13"],
+  ["apps/complyeaze/public/samples/sample-trust-review-2026-08.pdf", "e3c805d75fa523aa59589fe280b55a1fd49fee851199363c9424bdc24f27382b"],
+]);
 const approvedCraftArtifactFiles = new Set([
   "craft/runs/complyeaze-public-family-s11/evidence/current-complyeaze-baseline-desktop-1440.png",
   "craft/runs/complyeaze-public-family-s11/evidence/custody-cascade-desktop-1440.png",
@@ -223,7 +229,14 @@ function assertNoUncheckedArtifacts(root) {
   const findings = [];
   for (const filePath of walkFiles(root)) {
     const relativePath = path.relative(root, filePath);
-    if (allowedArtifactFiles.has(relativePath) || approvedCraftArtifactFiles.has(relativePath)) continue;
+    if (allowedArtifactFiles.has(relativePath)) {
+      const digest = createHash("sha256").update(readFileSync(filePath)).digest("hex");
+      if (digest !== allowedArtifactFiles.get(relativePath)) {
+        findings.push(`${relativePath} (changed since review; re-review and update its pinned SHA-256)`);
+      }
+      continue;
+    }
+    if (approvedCraftArtifactFiles.has(relativePath)) continue;
     if (checkedArtifactExtensions.has(path.extname(filePath).toLowerCase())) {
       findings.push(relativePath);
     }

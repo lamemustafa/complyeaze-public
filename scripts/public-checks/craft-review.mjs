@@ -23,8 +23,8 @@ export async function assertCraftReviewSources(root) {
   const findings = requiredFiles
     .filter((filePath) => !existsSync(path.join(root, filePath)))
     .map((filePath) => `${filePath}: missing`);
-  if (publicRouteRegistry.length !== 25) {
-    findings.push(`canonical registry must contain 25 routes, found ${publicRouteRegistry.length}`);
+  if (publicRouteRegistry.length !== 28) {
+    findings.push(`canonical registry must contain 28 routes, found ${publicRouteRegistry.length}`);
   }
   for (const app of Object.keys(requiredCompositions)) {
     const routes = publicRouteRegistry.filter((route) => route.app === app && route.urlPath === "/review/craft/");

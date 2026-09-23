@@ -14,6 +14,8 @@ import PublicMigrationPage from "../components/PublicMigrationPage.astro";
 import PublicPolicyPage from "../components/PublicPolicyPage.astro";
 import PublicProductsPage from "../components/PublicProductsPage.astro";
 import PublicResourcePage from "../components/PublicResourcePage.astro";
+import PublicServicePage from "../components/PublicServicePage.astro";
+import PublicServicesPage from "../components/PublicServicesPage.astro";
 import PublicPageLayout from "../layouts/PublicPageLayout.astro";
 
 interface Props {
@@ -65,6 +67,10 @@ const buyerResourcePaths = new Set(["/about/", "/contact/"]);
     <PublicSanchikaAdoptionPage {route} />
   ) : route.kind === "public-craft-review" ? (
     <PublicCraftReviewPage {route} />
+  ) : route.kind === "service" ? (
+    <PublicServicePage {route} />
+  ) : route.kind === "services" ? (
+    <PublicServicesPage {route} />
   ) : (
     assertNever(route)
   )}

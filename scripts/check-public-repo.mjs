@@ -75,6 +75,7 @@ import {
 } from "./public-checks/sensitive-content.mjs";
 import { assertVisualGeometryFixtures } from "./public-checks/visual-geometry.mjs";
 import { appDistPath, publicRouteRegistry } from "./public-route-registry.mjs";
+import { normalizeForTermMatch } from "../packages/public-content/src/schema.ts";
 
 const root = process.cwd();
 const mode = process.argv.find((arg) => arg.startsWith("--")) ?? "--all";
@@ -236,7 +237,12 @@ function assertLinks() {
       if (href.startsWith("http") || href.startsWith("#") || href.startsWith("mailto:")) {
         continue;
       }
-      if (href.startsWith("/_astro/") || href.startsWith("/fonts/") || href === "/favicon.svg") {
+      if (
+        href.startsWith("/_astro/") ||
+        href.startsWith("/fonts/") ||
+        href.startsWith("/samples/") ||
+        href === "/favicon.svg"
+      ) {
         if (!existsSync(path.join(root, `apps/${page.app}/dist`, href))) {
           findings.push(`${appDistPath(page)}: missing asset ${href}`);
         }
@@ -252,6 +258,14 @@ function assertLinks() {
   }
 }
 
+function decodeHtmlEntities(text) {
+  const named = { amp: "&", apos: "'", gt: ">", lt: "<", nbsp: " ", quot: '"', shy: "" };
+  return text
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(Number.parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(Number(dec)))
+    .replace(/&([a-z]+);/gi, (entity, name) => named[name.toLowerCase()] ?? entity);
+}
+
 function assertPublicPages() {
   assertBuiltPages();
   const findings = [];
@@ -260,6 +274,17 @@ function assertPublicPages() {
     const html = readFileSync(path.join(root, appDistPath(page)), "utf8");
     if (!html.includes("<main")) findings.push(`${appDistPath(page)}: missing main landmark`);
     if (!html.includes(page.heading)) findings.push(`${appDistPath(page)}: missing page heading`);
+    // Banned vocabulary is checked on the rendered page too: layout, footer and component text included.
+    if (page.forbiddenTerms) {
+      const printed = normalizeForTermMatch(
+        decodeHtmlEntities(html.replace(/<(script|style)[\s\S]*?<\/\1>/g, " ").replace(/<[^>]+>/g, " ")),
+      );
+      for (const term of page.forbiddenTerms) {
+        if (printed.includes(normalizeForTermMatch(term))) {
+          findings.push(`${appDistPath(page)}: prints forbidden term "${term}"`);
+        }
+      }
+    }
     if (
       /Prisma|Redis|BullMQ|portal automation/.test(html) &&
       !privateBoundaryCopyAllowed.has(page.urlPath)
